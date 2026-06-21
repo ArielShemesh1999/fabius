@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="fabius architecture: one router over an always-on lean core and four specialists, producing end-to-end engineering">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0d1117"/>
+      <stop offset="1" stop-color="#0b0f14"/>
+    </linearGradient>
+    <linearGradient id="router" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e08763"/>
+      <stop offset="1" stop-color="#D97757"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#065f46"/>
+      <stop offset="1" stop-color="#0a7d5c"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="600" fill="url(#bg)"/>
+
+  <!-- title + maxim -->
+  <text x="600" y="58" text-anchor="middle" fill="#f0f3f6" font-size="40" font-weight="700" letter-spacing="-0.5">fabius</text>
+  <text x="600" y="88" text-anchor="middle" fill="#8b98a8" font-size="16" letter-spacing="3">SCOUT WIDE&#160;&#160;·&#160;&#160;STRIKE NARROW</text>
+
+  <!-- connectors: router -> five boxes -->
+  <g stroke="#2a3340" stroke-width="2" fill="none">
+    <path d="M600 168 L150 250"/>
+    <path d="M600 168 L375 250"/>
+    <path d="M600 168 L600 250"/>
+    <path d="M600 168 L825 250"/>
+    <path d="M600 168 L1050 250"/>
+  </g>
+
+  <!-- router -->
+  <rect x="470" y="118" width="260" height="50" rx="12" fill="url(#router)"/>
+  <text x="600" y="148" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="700">fabius — router</text>
+
+  <!-- always-on lean core (parcus) -->
+  <rect x="60" y="250" width="220" height="96" rx="14" fill="#241742" stroke="#8A2BE2" stroke-width="1.5"/>
+  <text x="170" y="288" text-anchor="middle" fill="#c4a8f5" font-size="18" font-weight="700">fabius-parcus</text>
+  <text x="170" y="312" text-anchor="middle" fill="#9b86c9" font-size="13">always-on lean core</text>
+  <text x="170" y="332" text-anchor="middle" fill="#6f5c97" font-size="12">say · build · change · assume less</text>
+
+  <!-- four specialists -->
+  <g>
+    <rect x="285" y="250" width="220" height="96" rx="14" fill="#161b22" stroke="#6E5494" stroke-width="1.5"/>
+    <text x="395" y="288" text-anchor="middle" fill="#e6ebf1" font-size="18" font-weight="700">fabius-disciplina</text>
+    <text x="395" y="312" text-anchor="middle" fill="#9aa6b4" font-size="13">engineering process</text>
+    <text x="395" y="332" text-anchor="middle" fill="#6b7785" font-size="12">brainstorm → plan → TDD → prove</text>
+  </g>
+  <g>
+    <rect x="510" y="250" width="220" height="96" rx="14" fill="#161b22" stroke="#6E5494" stroke-width="1.5"/>
+    <text x="620" y="288" text-anchor="middle" fill="#e6ebf1" font-size="18" font-weight="700">fabius-decor</text>
+    <text x="620" y="312" text-anchor="middle" fill="#9aa6b4" font-size="13">design system</text>
+    <text x="620" y="332" text-anchor="middle" fill="#6b7785" font-size="12">tokens · one accent · mobile-first</text>
+  </g>
+  <g>
+    <rect x="735" y="250" width="220" height="96" rx="14" fill="#161b22" stroke="#6E5494" stroke-width="1.5"/>
+    <text x="845" y="288" text-anchor="middle" fill="#e6ebf1" font-size="18" font-weight="700">fabius-cohors</text>
+    <text x="845" y="312" text-anchor="middle" fill="#9aa6b4" font-size="13">agent engineering</text>
+    <text x="845" y="332" text-anchor="middle" fill="#6b7785" font-size="12">least-privilege · orchestration</text>
+  </g>
+  <g>
+    <rect x="960" y="250" width="180" height="96" rx="14" fill="#161b22" stroke="#6E5494" stroke-width="1.5"/>
+    <text x="1050" y="288" text-anchor="middle" fill="#e6ebf1" font-size="17" font-weight="700">fabius-archivum</text>
+    <text x="1050" y="312" text-anchor="middle" fill="#9aa6b4" font-size="13">persistent memory</text>
+    <text x="1050" y="332" text-anchor="middle" fill="#6b7785" font-size="12">index + log · don't re-derive</text>
+  </g>
+
+  <!-- parcus runs underneath everything -->
+  <path d="M170 360 L170 392 L1050 392 L1050 360" fill="none" stroke="#8A2BE2" stroke-width="1.5" stroke-dasharray="5 5" opacity="0.7"/>
+  <text x="600" y="386" text-anchor="middle" fill="#9b86c9" font-size="12.5" font-style="italic">fabius-parcus runs underneath every layer</text>
+
+  <!-- connectors to capability -->
+  <g stroke="#2a3340" stroke-width="2" fill="none">
+    <path d="M395 392 L600 452"/>
+    <path d="M620 392 L600 452"/>
+    <path d="M845 392 L600 452"/>
+    <path d="M1050 392 L600 452"/>
+  </g>
+
+  <!-- capability bar -->
+  <rect x="300" y="452" width="600" height="62" rx="14" fill="url(#cap)" stroke="#10b981" stroke-width="1.5"/>
+  <text x="600" y="479" text-anchor="middle" fill="#eafff7" font-size="16" font-weight="700">end-to-end engineering</text>
+  <text x="600" y="501" text-anchor="middle" fill="#b6e8d6" font-size="13.5">code · prose · UI · agents · debug · memory</text>
+
+  <!-- spine footer -->
+  <text x="600" y="556" text-anchor="middle" fill="#5b6675" font-size="13">spine: references/ deep-dives&#160;&#160;·&#160;&#160;evals/ benchmark&#160;&#160;·&#160;&#160;AGENTS.md any-tool bridge</text>
+  <text x="600" y="580" text-anchor="middle" fill="#3f4855" font-size="12">one install · six coordinated skills · MIT</text>
+</svg>

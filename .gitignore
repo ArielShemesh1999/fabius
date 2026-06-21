@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+dist/
+*.log
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+evals/results.json
+evals/results.*.json

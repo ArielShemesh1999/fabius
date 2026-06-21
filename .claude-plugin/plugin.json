@@ -1,0 +1,34 @@
+{
+  "name": "fabius",
+  "version": "1.0.0",
+  "description": "fabius — one super-skill that equips Claude end-to-end under a single Fabian stance: scout wide, strike narrow. Write lean code and lean prose, run a disciplined brainstorm→plan→TDD→verify→debug loop, design ship-grade UI, build and orchestrate other agents, and keep a persistent memory so it stops re-deriving. One install, six coordinated zero-overlap skills: an always-on lean core, a router, and four engineering specialists. Capabilities: terse output, a YAGNI code ladder, root-cause debugging, design tokens + one-accent laws, least-privilege agent definitions, index+log knowledge base. Actions: write, build, fix, debug, refactor, review, design, plan, verify, remember. Lean by default, never flimsy.",
+  "author": {
+    "name": "Ariel Shemesh",
+    "url": "https://github.com/ArielShemesh1999"
+  },
+  "homepage": "https://github.com/ArielShemesh1999/fabius",
+  "repository": "https://github.com/ArielShemesh1999/fabius",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "claude-code",
+    "lean",
+    "yagni",
+    "tdd",
+    "debugging",
+    "design-system",
+    "agents",
+    "orchestration",
+    "memory",
+    "best-practices",
+    "workflow"
+  ],
+  "skills": [
+    "./skills/fabius",
+    "./skills/fabius-parcus",
+    "./skills/fabius-disciplina",
+    "./skills/fabius-decor",
+    "./skills/fabius-cohors",
+    "./skills/fabius-archivum"
+  ]
+}
