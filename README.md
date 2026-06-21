@@ -8,7 +8,7 @@
 
 <br/>
 
-<img src="assets/architecture.svg" alt="The fabius layer model: one router over a lean core and four specialists" width="100%" />
+<img src="assets/hero.webp" alt="fabius — six coordinated skills fusing into one super-skill" width="100%" />
 
 <br/>
 <br/>
@@ -61,7 +61,11 @@ That same instinct — *do the whole job right, ship the smallest correct thing*
 
 ## 🏗️ Architecture
 
-One router over an always-on lean core and four specialists, on a thin spine (`references/` deep-dives · `evals/` benchmark · `AGENTS.md` cross-tool bridge) — the diagram is up top. Process picks *how*, domain picks *what*; the lean core runs underneath everything.
+One router over an always-on lean core and four specialists, on a thin spine (`references/` deep-dives · `evals/` benchmark · `AGENTS.md` cross-tool bridge). Process picks *how*, domain picks *what*; the lean core runs underneath everything.
+
+<div align="center">
+<img src="assets/architecture.svg" alt="fabius layer model: one router over an always-on lean core and four specialists" width="100%" />
+</div>
 
 Full layer model, the single-owner coordination table, and the capability matrix: **[ARCHITECTURE.md](ARCHITECTURE.md)**.
 
