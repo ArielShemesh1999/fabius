@@ -6,7 +6,8 @@ description: >
   when-to-add-vector). Use when work spans sessions, when a fact or decision is worth keeping, when
   the user says "remember this", when a knowledge base is growing, or whenever the agent is about
   to redo research it (or a past session) already did. Directory schema and page conventions live in
-  references/memory-schema.md.
+  references/memory-schema.md; the knowledge engine itself — a vector engine, the wiki pattern, and a
+  working RAG pipeline — lives in references/knowledge/.
 ---
 
 # Fabius Archivum — don't re-derive what you already learned
@@ -53,6 +54,6 @@ Then the pattern is **hybrid**: narrow symbolically by id or metadata first (pro
 ingest (write) → index (catalog/embed) → query (read, cite, file back) → lint (maintain) → ↺
 ```
 
-The agent does all the bookkeeping — summarize, cross-reference, file, consistency-check. The human only curates sources and asks questions. Concrete directory schema, page frontmatter, and the index/log line formats live in `references/memory-schema.md`.
+The agent does all the bookkeeping — summarize, cross-reference, file, consistency-check. The human only curates sources and asks questions. Concrete directory schema, page frontmatter, and the index/log line formats live in `references/memory-schema.md`. When the corpus outgrows grep, the working engine — vector store, the wiki-pattern layout, and a runnable RAG indexer/query pipeline — is in `references/knowledge/`.
 
 Pairs with: `fabius-disciplina` (resolved facts and post-mortems get filed here), `fabius-cohors` (grounding and cross-session memory for agents), `fabius-parcus` (don't build the heavy retrieval engine before the corpus demands it).

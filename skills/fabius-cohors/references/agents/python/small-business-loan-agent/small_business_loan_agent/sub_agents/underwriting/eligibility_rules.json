@@ -1,0 +1,48 @@
+{
+  "rules": [
+    {
+      "id": "rule_001",
+      "description": "Approve if annual revenue exceeds $500K and business has 3+ years",
+      "conditions": {
+        "min_annual_revenue": 500000,
+        "min_years_in_business": 3,
+        "max_loan_to_revenue_ratio": 0.5
+      },
+      "action": "ELIGIBLE"
+    },
+    {
+      "id": "rule_002",
+      "description": "Review if revenue is between $200K-$500K with 2+ years",
+      "conditions": {
+        "min_annual_revenue": 200000,
+        "max_annual_revenue": 500000,
+        "min_years_in_business": 2
+      },
+      "action": "REVIEW"
+    },
+    {
+      "id": "rule_003",
+      "description": "Reject if business has less than 1 year of operations",
+      "conditions": {
+        "max_years_in_business": 1
+      },
+      "action": "INELIGIBLE"
+    },
+    {
+      "id": "rule_004",
+      "description": "Reject if loan-to-revenue ratio exceeds 75%",
+      "conditions": {
+        "min_loan_to_revenue_ratio": 0.75
+      },
+      "action": "INELIGIBLE"
+    },
+    {
+      "id": "rule_005",
+      "description": "Review if industry is in high-risk category",
+      "conditions": {
+        "high_risk_industries": ["Cannabis", "Cryptocurrency", "Gambling"]
+      },
+      "action": "REVIEW"
+    }
+  ]
+}

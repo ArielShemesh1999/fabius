@@ -82,7 +82,7 @@ Full layer model, the single-owner coordination table, and the capability matrix
 | 🤖 | **fabius-cohors** | agent engineering | definition schema · least-privilege permissions · 4 orchestration patterns |
 | 🧠 | **fabius-archivum** | persistent memory | write-it-down-once memory · index + log retrieval · when to go vector |
 
-Each skill is a thin operating contract; the depth (token contract, agent-shape catalog, wiki schema, process playbook) lives in a `references/` file loaded **on demand**, so the skill itself stays lean.
+Each skill is a thin operating contract; the depth — a 69-brand design teardown library, a 200+-agent production catalog with `ruvector.db` memory, a knowledge engine (vector · wiki · RAG), and the full craft + discipline process library — lives under each skill's `references/`, loaded **on demand**, so the skill itself stays lean.
 
 *Latin, for the curious: **parcus** frugal · **disciplina** training · **decor** what is fitting · **cohors** the cohort · **archivum** the record office.*
 
@@ -102,9 +102,9 @@ Fan out to understand and verify. Ship the smallest correct artifact. Explain it
 
 ---
 
-## 📊 Measured by you, not claimed by me
+## 📊 Measured — and reproducible
 
-fabius ships a **runnable benchmark, not a marketing number.** A blind, three-arm eval — `baseline` vs a generic *"be concise"* vs the full fabius stance — scored blind by a judge model on correctness, minimality, and best-practice, plus objective output length. The repo bundles **no result table**: you run it with your own key and get your own honest numbers for the model you care about.
+fabius ships a **runnable benchmark *and* the measured runs behind it.** A blind, three-arm eval — `baseline` vs a generic *"be concise"* vs the full fabius stance — scored blind by a judge model on correctness, minimality, and best-practice, plus objective output length. Three runs are committed: 3 Claude tiers (`evals/results.json`), a 4-model-family cross-vendor stance test, and a live landing-page build. The headline that survives scrutiny: **fabius beats plain terseness on every non-trivial task, cuts output 31–52%, and the lift grows as the model's default gets less disciplined.** Run it yourself with your own key for the model you care about.
 
 ```bash
 node evals/eval.mjs --selftest                       # wiring check, no key, no cost
@@ -170,14 +170,14 @@ fabius/
 │   ├── fabius/                  # ⚔️ router / super-skill
 │   ├── fabius-parcus/           # 🪶 always-on lean core
 │   ├── fabius-disciplina/       # ⚙️ engineering process
-│   │   └── references/          #    process playbook (debug walkthrough, test anti-patterns)
+│   │   └── references/          #    playbook + process/ (craft + discipline skill library)
 │   ├── fabius-decor/            # 🎨 design system
-│   │   └── references/          #    token contract + brand reference points
+│   │   └── references/          #    token contract + design/ (69-brand teardown library)
 │   ├── fabius-cohors/           # 🤖 agent engineering
-│   │   └── references/          #    agent schema + proven shapes
+│   │   └── references/          #    schema + agents/ (200+ agent catalog + ruvector.db)
 │   └── fabius-archivum/         # 🧠 persistent memory
-│       └── references/          #    wiki schema + index/log formats
-├── evals/eval.mjs               # runnable blind three-arm benchmark (--selftest)
+│       └── references/          #    wiki schema + knowledge/ (vector · wiki · RAG)
+├── evals/                       # eval.mjs · portable_eval.py · harness.workflow.js · results.json
 ├── AGENTS.md                    # 🔌 tool-agnostic bridge (Codex / Cursor / …)
 ├── ARCHITECTURE.md              # layer model + single-owner table + capability matrix
 ├── BENCHMARKS.md                # method + mechanism + reproduce

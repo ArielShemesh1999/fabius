@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+node_modules/
+.next/
+dist/
+build/
+.DS_Store
+ruvector.db
+*.lock
+uv.lock
+.env
+.env.local

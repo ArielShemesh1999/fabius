@@ -55,19 +55,19 @@ Each rule has exactly one owning layer; every other layer references it instead 
 
 ```
 prompt → fabius (router)
-         ├─ any output / any code         → fabius-parcus      (always, underneath)
-         ├─ build / fix / refactor / plan  → fabius-disciplina
-         ├─ UI / design / brand            → fabius-decor      → references/design-tokens.md
-         ├─ build / orchestrate agents     → fabius-cohors     → references/agent-patterns.md
-         └─ remember / knowledge base      → fabius-archivum   → references/memory-schema.md
+         ├─ any output / any code         → fabius-parcus      → references/lean/guidelines/
+         ├─ build / fix / refactor / plan  → fabius-disciplina  → references/process-playbook.md · references/process/
+         ├─ UI / design / brand            → fabius-decor      → references/design-tokens.md · references/design/ (69 brands)
+         ├─ build / orchestrate agents     → fabius-cohors     → references/agent-patterns.md · references/agents/ (catalog + ruvector.db)
+         └─ remember / knowledge base      → fabius-archivum   → references/memory-schema.md · references/knowledge/ (vector · wiki · rag)
 ```
 
 Skills self-surface by their `description`; the router composes them. "Build a landing page" resolves to `fabius-disciplina` (brainstorm the spec) → `fabius-decor` (execute at quality), all under `fabius-parcus`.
 
 ## The spine
 
-- **`references/`** — on-demand deep-dives bundled per layer (the token contract, the agent-shape catalog, the wiki schema, the process playbook). Loaded only when a layer needs depth, so the skills themselves stay lean.
-- **`evals/`** — a runnable, vendor-agnostic benchmark harness that scores a model with and without the fabius stance. See [BENCHMARKS.md](BENCHMARKS.md).
+- **`references/`** — on-demand depth bundled per layer, loaded only when a layer needs it so the skills stay lean. Each specialist ships a lean entry doc **plus a full library**: `fabius-decor` → a 69-brand design teardown library (`references/design/`); `fabius-cohors` → a 200+-agent production catalog with a `ruvector.db` memory index (`references/agents/`); `fabius-archivum` → a knowledge engine, wiki pattern, and RAG pipeline (`references/knowledge/`); `fabius-disciplina` → the craft + discipline process library (`references/process/`); `fabius-parcus` → the lean guidelines (`references/lean/`).
+- **`evals/`** — a runnable, vendor-agnostic benchmark harness that scores a model with and without the fabius stance: `eval.mjs` (Anthropic/OpenAI), `portable_eval.py` (cross-vendor), a `harness.workflow.js` multi-agent variant, and a committed `results.json` from a measured run. See [BENCHMARKS.md](BENCHMARKS.md).
 - **`AGENTS.md`** — the cross-tool bridge. The stance, compiled to plain markdown, so Codex / Cursor / Windsurf / Cline / Copilot / OpenCode / Gemini all run fabius.
 
 ## Capability matrix

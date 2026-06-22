@@ -79,4 +79,6 @@ Code first. Then at most three short lines: what you skipped, when to add it. If
 
 Pattern: `[code] → skipped: [X], add when [Y].`
 
+The extended lean rule set — the full caveman (prose-trim) and ponytail (code-trim) guidelines this layer distills — lives in `references/lean/guidelines/`.
+
 Boundary: the user insists on the full version → build it, no re-arguing. (The system kill-switch and the "governs HOW, not WHAT" rule live in `fabius`.)

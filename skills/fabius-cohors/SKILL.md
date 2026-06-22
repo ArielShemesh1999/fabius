@@ -5,8 +5,10 @@ description: >
   schema, the permission model, the single-vs-multi-agent decision, and the four orchestration
   patterns (sequential / parallel / hierarchical / human-in-the-loop). Use when the user wants to
   build an agent, a subagent, a tool-using assistant, a multi-agent system, a swarm, or an
-  orchestration workflow. A copy-from schema and a catalog of proven agent shapes live in
-  references/agent-patterns.md.
+  orchestration workflow. A copy-from schema and proven agent shapes live in
+  references/agent-patterns.md; the full production agent catalog (200+ agents across 15 domains
+  + Python/Go/Java/Kotlin/Android/TypeScript packs, with a ruvector.db memory index) lives in
+  references/agents/, indexed by references/agent-catalog.md.
 ---
 
 # Fabius Cohors — build agents that actually work
@@ -60,7 +62,7 @@ Compose them: a hierarchical coordinator whose investigate phase fans out in par
 
 - **Adversarial verify** — for a finding or a claim, spawn an independent skeptic prompted to *refute* it. Majority-refute kills it. This is what stops plausible-but-wrong output from surviving.
 
-More shapes — grounded/cited RAG, a safety guard that screens for prompt injection before execution, cross-session memory, an eval harness that scores skill-vs-baseline — are in `references/agent-patterns.md`. Grounding and memory lean on `fabius-archivum`.
+More shapes — grounded/cited RAG, a safety guard that screens for prompt injection before execution, cross-session memory, an eval harness that scores skill-vs-baseline — are in `references/agent-patterns.md`. The full catalog of production agents to copy and adapt (by domain and by language) is in `references/agents/`; start from `references/agent-catalog.md`. Grounding and memory lean on `fabius-archivum`.
 
 ## Build loop
 

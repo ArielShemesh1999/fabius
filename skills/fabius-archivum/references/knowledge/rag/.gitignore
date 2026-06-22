@@ -1,0 +1,6 @@
+.venv/
+.index/
+__pycache__/
+*.pyc
+ruvector.db
+*.lock

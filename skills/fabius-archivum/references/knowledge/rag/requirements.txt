@@ -1,0 +1,3 @@
+the-vector-engine
+fastembed
+numpy

@@ -5,12 +5,14 @@ description: >
   separate amateur UI from shipped UI, and a quality checklist. Use when building or reviewing any
   UI — a landing page, a component, a screen, an email, a slide, a brand surface — when the user
   references a brand look, or asks to make something "look good", "more polished", or "production
-  quality". The token contract and worked brand reference points live in references/design-tokens.md.
+  quality". The token contract lives in references/design-tokens.md; the full 69-brand teardown
+  library (DESIGN-apple.md, DESIGN-stripe.md, DESIGN-linear.app.md …) plus the open-design,
+  GSAP-animation, hyperframes and ui-ux-pro-max bundles live in references/design/.
 ---
 
 # Fabius Decor — what good actually looks like
 
-*Decor* — what is fitting, what becomes the thing. Good design is fitness to purpose, not decoration. Across dozens of teardowns of shipped brands, the same short list of laws holds. Amateur UI breaks them; shipped UI obeys them. Pick one brand as a concrete target (`references/design-tokens.md`), then enforce the laws below.
+*Decor* — what is fitting, what becomes the thing. Good design is fitness to purpose, not decoration. Across dozens of teardowns of shipped brands, the same short list of laws holds. Amateur UI breaks them; shipped UI obeys them. Pick one brand as a concrete target from the 69-brand library in `references/design/` (one `DESIGN-<brand>.md` each), then enforce the laws below.
 
 ## Define the tokens before you style anything
 
@@ -39,7 +41,7 @@ Design and verify the **mobile** layout first — it's the hardest constraint. D
 
 ## Using a brand spec as a target
 
-1. Pick the closest brand in `references/design-tokens.md` as the visual DNA.
+1. Pick the closest brand in `references/design/` (69 systems — `DESIGN-apple.md`, `DESIGN-stripe.md`, `DESIGN-linear.app.md` …) as the visual DNA; the token contract is in `references/design-tokens.md`.
 2. Lift its **principles**, not its pixels — the type ratios, the accent discipline, the spacing rhythm, the do/don'ts.
 3. Re-map to the project's own brand color and font. Keep the structure, swap the identity.
 4. Substitute fonts honestly: name the closest open-source match (Inter for SF Pro, Manrope for Gilroy) and nudge tracking and leading to match.

@@ -6,7 +6,10 @@ description: >
   root-cause debugging. Use before building any feature, fixing any bug, or refactoring — any
   task bigger than a one-line edit. Also use when the user says "plan this", "grill me",
   "debug this", "find the root cause", or "is this actually done?". Worked debug walkthrough and
-  test anti-patterns live in references/process-playbook.md.
+  test anti-patterns live in references/process-playbook.md; the full process library — the craft
+  skills (brainstorm, prototype, TDD, grill, handoff, writing) and the discipline skills
+  (systematic-debugging, writing-plans, verification-before-completion, parallel agents) — lives in
+  references/process/.
 ---
 
 # Fabius Disciplina — understand, plan, build proven, finish
@@ -74,5 +77,7 @@ A claim of success needs evidence. Before reporting complete:
 - Skipped a step? say so. Tests failing? show the output. Report outcomes faithfully.
 
 "Almost works" and a code-only answer don't count. Hit the real path and watch it.
+
+The full process library — craft skills (brainstorm, prototype, TDD, grill, handoff, writing) and discipline skills (systematic-debugging, writing-plans, verification-before-completion, parallel agents) — is in `references/process/`; the worked debug walkthrough and test anti-patterns in `references/process-playbook.md`.
 
 Pairs with: `fabius-parcus` (every artifact stays minimal), `fabius-archivum` (resolved facts and post-mortems get filed).
