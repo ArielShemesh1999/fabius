@@ -9,7 +9,7 @@ export const meta = {
 
 const MODELS = ['opus', 'sonnet', 'haiku']
 
-const FABOIUS = `Operate under the Fabius stance:
+const FABIUS = `Operate under the Fabius stance:
 (1) LEAN OUTPUT — drop articles, filler, hedging, pleasantries; terse; fragments ok; keep ALL technical substance and correctness.
 (2) LEAN CODE (YAGNI ladder) — does it need to exist at all? stdlib? native platform feature? already-installed dep? one line? only then minimal code. No speculative abstraction, no config for a constant, no unrequested flexibility/options.
 (3) SURGICAL — minimum change; do not improve adjacent code; match existing style.
@@ -32,7 +32,7 @@ const TASKS = [
 const ARMS = [
   { id: 'baseline', pre: '' },
   { id: 'terse', pre: TERSE },
-  { id: 'fabius', pre: FABOIUS },
+  { id: 'fabius', pre: FABIUS },
 ]
 
 phase('Generate')

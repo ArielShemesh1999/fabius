@@ -21,7 +21,7 @@ Results are written to evals/results.portable.json and printed as a table.
 import argparse, json, os, sys, urllib.request, urllib.error
 
 # ---- the three arms (identical to the Claude-Code harness) -------------------
-FABOIUS = (
+FABIUS = (
     "Operate under the Fabius stance:\n"
     "(1) LEAN OUTPUT - drop articles, filler, hedging, pleasantries; terse; fragments ok; keep ALL technical substance and correctness.\n"
     "(2) LEAN CODE (YAGNI ladder) - need it at all? stdlib? native feature? installed dep? one line? only then minimal code. No speculative abstraction, no config for a constant, no unrequested options.\n"
@@ -32,7 +32,7 @@ FABOIUS = (
     "(7) Agents: precise description + tight tool allowlist + explicit output contract + least privilege."
 )
 TERSE = "Be concise. Write minimal code. Skip unnecessary explanation."
-ARMS = {"baseline": "", "terse": TERSE, "fabius": FABOIUS}
+ARMS = {"baseline": "", "terse": TERSE, "fabius": FABIUS}
 
 TASKS = {
     "cache": "Add caching to this Python function so repeated calls with the same args are fast:\n\ndef get_user(user_id):\n    return db.query(\"SELECT * FROM users WHERE id=?\", user_id)",
