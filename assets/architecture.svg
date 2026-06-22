@@ -1,88 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="fabius architecture: one router over an always-on lean core and four specialists, producing end-to-end engineering">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 480" width="860" height="480" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#0d1117"/>
-      <stop offset="1" stop-color="#0b0f14"/>
-    </linearGradient>
-    <linearGradient id="router" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#e08763"/>
-      <stop offset="1" stop-color="#D97757"/>
-    </linearGradient>
-    <linearGradient id="cap" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#065f46"/>
-      <stop offset="1" stop-color="#0a7d5c"/>
-    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8c959f"/>
+    </marker>
   </defs>
 
-  <rect width="1200" height="600" fill="url(#bg)"/>
+  <rect x="1" y="1" width="858" height="478" rx="16" fill="#ffffff" stroke="#d0d7de" stroke-width="2"/>
 
-  <!-- title + maxim -->
-  <text x="600" y="58" text-anchor="middle" fill="#f0f3f6" font-size="40" font-weight="700" letter-spacing="-0.5">fabius</text>
-  <text x="600" y="88" text-anchor="middle" fill="#8b98a8" font-size="16" letter-spacing="3">SCOUT WIDE&#160;&#160;·&#160;&#160;STRIKE NARROW</text>
-
-  <!-- connectors: router -> five boxes -->
-  <g stroke="#2a3340" stroke-width="2" fill="none">
-    <path d="M600 168 L150 250"/>
-    <path d="M600 168 L375 250"/>
-    <path d="M600 168 L600 250"/>
-    <path d="M600 168 L825 250"/>
-    <path d="M600 168 L1050 250"/>
-  </g>
+  <!-- prompt -->
+  <rect x="375" y="22" width="110" height="38" rx="19" fill="#eaeef2" stroke="#d0d7de"/>
+  <text x="430" y="46" text-anchor="middle" font-size="15" fill="#1f2328">your prompt</text>
+  <line x1="430" y1="60" x2="430" y2="86" stroke="#8c959f" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- router -->
-  <rect x="470" y="118" width="260" height="50" rx="12" fill="url(#router)"/>
-  <text x="600" y="148" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="700">fabius — router</text>
+  <rect x="150" y="88" width="560" height="62" rx="11" fill="#1f6feb"/>
+  <text x="430" y="114" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">fabius — the router</text>
+  <text x="430" y="135" text-anchor="middle" font-size="13" fill="#cfe0ff">reads the job, sets the stance, picks the layer that fits</text>
 
-  <!-- always-on lean core (parcus) -->
-  <rect x="60" y="250" width="220" height="96" rx="14" fill="#241742" stroke="#8A2BE2" stroke-width="1.5"/>
-  <text x="170" y="288" text-anchor="middle" fill="#c4a8f5" font-size="18" font-weight="700">fabius-parcus</text>
-  <text x="170" y="312" text-anchor="middle" fill="#9b86c9" font-size="13">always-on lean core</text>
-  <text x="170" y="332" text-anchor="middle" fill="#6f5c97" font-size="12">say · build · change · assume less</text>
+  <!-- arrows router -> specialists -->
+  <line x1="430" y1="150" x2="120" y2="196" stroke="#8c959f" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="430" y1="150" x2="326" y2="196" stroke="#8c959f" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="430" y1="150" x2="534" y2="196" stroke="#8c959f" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="430" y1="150" x2="740" y2="196" stroke="#8c959f" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <!-- four specialists -->
-  <g>
-    <rect x="285" y="250" width="220" height="96" rx="14" fill="#161b22" stroke="#6E5494" stroke-width="1.5"/>
-    <text x="395" y="288" text-anchor="middle" fill="#e6ebf1" font-size="18" font-weight="700">fabius-disciplina</text>
-    <text x="395" y="312" text-anchor="middle" fill="#9aa6b4" font-size="13">engineering process</text>
-    <text x="395" y="332" text-anchor="middle" fill="#6b7785" font-size="12">brainstorm → plan → TDD → prove</text>
-  </g>
-  <g>
-    <rect x="510" y="250" width="220" height="96" rx="14" fill="#161b22" stroke="#6E5494" stroke-width="1.5"/>
-    <text x="620" y="288" text-anchor="middle" fill="#e6ebf1" font-size="18" font-weight="700">fabius-decor</text>
-    <text x="620" y="312" text-anchor="middle" fill="#9aa6b4" font-size="13">design system</text>
-    <text x="620" y="332" text-anchor="middle" fill="#6b7785" font-size="12">tokens · one accent · mobile-first</text>
-  </g>
-  <g>
-    <rect x="735" y="250" width="220" height="96" rx="14" fill="#161b22" stroke="#6E5494" stroke-width="1.5"/>
-    <text x="845" y="288" text-anchor="middle" fill="#e6ebf1" font-size="18" font-weight="700">fabius-cohors</text>
-    <text x="845" y="312" text-anchor="middle" fill="#9aa6b4" font-size="13">agent engineering</text>
-    <text x="845" y="332" text-anchor="middle" fill="#6b7785" font-size="12">least-privilege · orchestration</text>
-  </g>
-  <g>
-    <rect x="960" y="250" width="180" height="96" rx="14" fill="#161b22" stroke="#6E5494" stroke-width="1.5"/>
-    <text x="1050" y="288" text-anchor="middle" fill="#e6ebf1" font-size="17" font-weight="700">fabius-archivum</text>
-    <text x="1050" y="312" text-anchor="middle" fill="#9aa6b4" font-size="13">persistent memory</text>
-    <text x="1050" y="332" text-anchor="middle" fill="#6b7785" font-size="12">index + log · don't re-derive</text>
+  <!-- specialists -->
+  <g font-size="14">
+    <rect x="25"  y="198" width="190" height="86" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <text x="120" y="226" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-disciplina</text>
+    <text x="120" y="247" text-anchor="middle" font-size="12.5" fill="#57606a">process</text>
+    <text x="120" y="268" text-anchor="middle" font-size="12.5" fill="#57606a">plan, test, prove</text>
+
+    <rect x="231" y="198" width="190" height="86" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <text x="326" y="226" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-decor</text>
+    <text x="326" y="247" text-anchor="middle" font-size="12.5" fill="#57606a">design</text>
+    <text x="326" y="268" text-anchor="middle" font-size="12.5" fill="#57606a">tokens, mobile-first</text>
+
+    <rect x="437" y="198" width="190" height="86" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <text x="532" y="226" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-cohors</text>
+    <text x="532" y="247" text-anchor="middle" font-size="12.5" fill="#57606a">agents</text>
+    <text x="532" y="268" text-anchor="middle" font-size="12.5" fill="#57606a">least-privilege, swarm</text>
+
+    <rect x="643" y="198" width="190" height="86" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <text x="738" y="226" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-archivum</text>
+    <text x="738" y="247" text-anchor="middle" font-size="12.5" fill="#57606a">memory</text>
+    <text x="738" y="268" text-anchor="middle" font-size="12.5" fill="#57606a">remember, recall</text>
   </g>
 
-  <!-- parcus runs underneath everything -->
-  <path d="M170 360 L170 392 L1050 392 L1050 360" fill="none" stroke="#8A2BE2" stroke-width="1.5" stroke-dasharray="5 5" opacity="0.7"/>
-  <text x="600" y="386" text-anchor="middle" fill="#9b86c9" font-size="12.5" font-style="italic">fabius-parcus runs underneath every layer</text>
+  <!-- arrows specialists -> lean core -->
+  <line x1="120" y1="284" x2="120" y2="320" stroke="#8c959f" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="326" y1="284" x2="326" y2="320" stroke="#8c959f" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="532" y1="284" x2="532" y2="320" stroke="#8c959f" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="738" y1="284" x2="738" y2="320" stroke="#8c959f" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <!-- connectors to capability -->
-  <g stroke="#2a3340" stroke-width="2" fill="none">
-    <path d="M395 392 L600 452"/>
-    <path d="M620 392 L600 452"/>
-    <path d="M845 392 L600 452"/>
-    <path d="M1050 392 L600 452"/>
-  </g>
+  <!-- lean core -->
+  <rect x="25" y="322" width="808" height="58" rx="11" fill="#2ea44f"/>
+  <text x="430" y="347" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">fabius-parcus — the lean core</text>
+  <text x="430" y="367" text-anchor="middle" font-size="13" fill="#d7f4de">always on, runs beneath every layer: say less, build less</text>
 
-  <!-- capability bar -->
-  <rect x="300" y="452" width="600" height="62" rx="14" fill="url(#cap)" stroke="#10b981" stroke-width="1.5"/>
-  <text x="600" y="479" text-anchor="middle" fill="#eafff7" font-size="16" font-weight="700">end-to-end engineering</text>
-  <text x="600" y="501" text-anchor="middle" fill="#b6e8d6" font-size="13.5">code · prose · UI · agents · debug · memory</text>
+  <line x1="430" y1="380" x2="430" y2="406" stroke="#8c959f" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <!-- spine footer -->
-  <text x="600" y="556" text-anchor="middle" fill="#5b6675" font-size="13">spine: references/ deep-dives&#160;&#160;·&#160;&#160;evals/ benchmark&#160;&#160;·&#160;&#160;AGENTS.md any-tool bridge</text>
-  <text x="600" y="580" text-anchor="middle" fill="#3f4855" font-size="12">one install · six coordinated skills · MIT</text>
+  <!-- result -->
+  <rect x="300" y="408" width="260" height="38" rx="19" fill="#eaeef2" stroke="#d0d7de"/>
+  <text x="430" y="432" text-anchor="middle" font-size="14" fill="#1f2328">the smallest correct result</text>
+
+  <text x="430" y="468" text-anchor="middle" font-size="11.5" fill="#8c959f">depth in references/   ·   proof in evals/   ·   any tool via AGENTS.md</text>
 </svg>

@@ -61,30 +61,11 @@ Across four model families — Grok, Mistral, GPT, Claude — the pattern holds:
 
 One router over an always-on lean core and four specialists, on a thin spine. Process decides *how*, domain decides *what*, and the lean core runs beneath everything.
 
-```mermaid
-flowchart TD
-    P([ prompt ]) --> R
+<div align="center">
 
-    R["<b>fabius</b> · router<br/><i>reads the job → sets the stance → routes</i>"]:::router
+<img src="assets/architecture.svg" alt="How fabius works: your prompt goes to the fabius router, which routes to four specialists — disciplina (process), decor (design), cohors (agents), archivum (memory) — all running on the always-on fabius-parcus lean core, producing the smallest correct result." width="100%" />
 
-    R --> D["<b>fabius-disciplina</b><br/>process<br/>brainstorm → plan → test → prove"]:::layer
-    R --> G["<b>fabius-decor</b><br/>design<br/>tokens · one accent · mobile-first"]:::layer
-    R --> C["<b>fabius-cohors</b><br/>agents<br/>schema · least-privilege · swarm"]:::layer
-    R --> A["<b>fabius-archivum</b><br/>memory<br/>LLM-wiki · index + log · recall"]:::layer
-
-    D --> L
-    G --> L
-    C --> L
-    A --> L
-
-    L["<b>fabius-parcus</b> · lean core<br/><i>always on — runs beneath every layer</i>"]:::core
-    L --> S["references/ depth  ·  evals/ benchmark  ·  AGENTS.md any-tool bridge"]:::spine
-
-    classDef router fill:#1f6feb,stroke:#1158c7,color:#ffffff,font-weight:bold
-    classDef layer  fill:#161b22,stroke:#30363d,color:#e6edf3
-    classDef core   fill:#2ea44f,stroke:#238636,color:#ffffff
-    classDef spine  fill:#21262d,stroke:#30363d,color:#8b949e
-```
+</div>
 
 Each rule has exactly one owning layer; every other layer links to it instead of restating it. That single-owner contract is what keeps six skills from contradicting one another. Full layer model, coordination table, and capability matrix: **[ARCHITECTURE.md](ARCHITECTURE.md)**.
 
