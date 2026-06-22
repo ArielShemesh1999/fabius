@@ -36,12 +36,12 @@ Same model, one concentrated set of operating rules. The stance changes the *sha
 
 | You ask for | Typical model default | Under fabius |
 |---|---|---|
-| 💻 Code | verbose, over-engineered, may skip validation | minimal and surgical, validation and security kept |
-| 🐛 A bug fix | patches the symptom | reproduce → root cause → regression test |
-| 🎨 UI | inline styles, inconsistent, desktop-first | design tokens, one accent, mobile-first, accessible |
-| 🤖 An agent | broad tools, vague role | least privilege, precise output contract |
-| ✍️ An explanation | padded, hedged | tight, exact, no filler |
-| 🧠 Research / memory | re-derives every session | written down once, retrieved the next time |
+| Code | verbose, over-engineered, may skip validation | minimal and surgical, validation and security kept |
+| A bug fix | patches the symptom | reproduce → root cause → regression test |
+| UI | inline styles, inconsistent, desktop-first | design tokens, one accent, mobile-first, accessible |
+| An agent | broad tools, vague role | least privilege, precise output contract |
+| An explanation | padded, hedged | tight, exact, no filler |
+| Research / memory | re-derives every session | written down once, retrieved the next time |
 
 **Measured, blind, reproducible.** A three-arm evaluation — `baseline`, a generic *"be concise"* control, and the full fabius stance — scored by a judge model that is never told which arm produced which answer. Beating the *"be concise"* control, not the baseline, is the real test. fabius beats it on every tier while cutting output length:
 
