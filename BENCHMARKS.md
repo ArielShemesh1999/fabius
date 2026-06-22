@@ -25,6 +25,20 @@ The length numbers are bias-free (a character count can't be flattered). The qua
 
 Three separate runs, three different lenses. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.**
 
+### The margin, at a glance
+
+How much fabius surpasses plain *"be concise"* (TERSE — the real control), by task category, across the four measured families (FAB − TERSE, /15):
+
+```
+genuine build   +6 … +9   ████████████████████   ← largest  (rate limiter · CSV parser)
+trust / order   +4 … +7   ███████████████        (zero-downtime migration · file upload)
+YAGNI (pure)    +0 … +2   ████                   ← ~tie, by design (over-building adds nothing)
+
+same tasks, output length:   31–52 % SHORTER than baseline — and the blind judge scores it HIGHER.
+```
+
+The point isn't "fabius is shorter" (so is TERSE). It's that fabius is shorter **and** wins the quality score — the one move plain brevity can't make.
+
 ### 1 — In-repo eval, 3 Claude tiers (`evals/results.json`, run v2, 2026-06-20)
 
 8 tasks × 3 arms, blind judge (`claude-opus-4-8`). Total out of 15:
