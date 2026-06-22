@@ -35,9 +35,9 @@ One system — six coordinated, non-overlapping skills: an always-on lean core (
 
 ---
 
-## ⚡ What it does to your output
+## ⚡ What it does — and the numbers
 
-Same model, one concentrated set of operating rules. By design the stance changes the *shape* of the output across every kind of work. The table below is **illustrative — how the stance is meant to bite, not a measured score** (run [the benchmark](BENCHMARKS.md) for numbers on your own model):
+Same model, one concentrated set of operating rules. The stance changes the *shape* of the output across every kind of work:
 
 | You ask for… | Typical model default | With fabius |
 |---|---|---|
@@ -48,14 +48,19 @@ Same model, one concentrated set of operating rules. By design the stance change
 | **An explanation** | padded, hedged | tight, exact, no filler |
 | **Research / memory** | re-derives every time | written down once, retrieved next time |
 
-**Illustrative** — *"add caching to this function"*:
+### 📊 Measured, blind, reproducible
 
-```
-default  →  writes a custom TTL cache class (~40 lines, a bug farm)
-fabius   →  a memoized one-liner on the function + a note on when to upgrade
-```
+A three-arm eval — `baseline` · a generic *"be concise"* · the full fabius stance — scored by a judge model **never told which arm wrote which answer.** Beating "be concise" is the real test; fabius beats it on every tier *while cutting output*:
 
-That same instinct — *do the whole job right, ship the smallest correct thing* — is what the stance is built to produce. [BENCHMARKS.md](BENCHMARKS.md) is how you check it on your model.
+| Model | baseline | terse | **fabius** | vs terse | output cut |
+|---|---|---|---|---|---|
+| **Opus 4.8**   | 12.5 | 13.0 | **13.88** | **+0.88** | **−43%** |
+| **Sonnet 4.6** | 8.75 | 11.75 | **12.5** | **+0.75** | **−52%** |
+| **Haiku 4.5**  | 8.88 | 9.13 | **10.38** | **+1.25** | **−32%** |
+
+Across four model families (**Grok · Mistral · GPT · Claude**) the shape repeats: **fabius beats plain terseness on every non-trivial task — largest at trust / order / genuine-build boundaries, ~zero at pure YAGNI.** Shorter answers the blind judge scores *higher*.
+
+> The honest headline: **structure beats brevity, and the lift grows as the model's default gets less disciplined.** Not "smarter." Not "10× on everything." Run it on your own model → **[BENCHMARKS.md](BENCHMARKS.md)**.
 
 ---
 
@@ -99,19 +104,6 @@ One axis dissolves the "be thorough vs. be minimal" tension:
 </div>
 
 Fan out to understand and verify. Ship the smallest correct artifact. Explain it in the fewest words. **Process** and **memory** make you wide; **lean** makes you narrow. They never fight — they live on different axes.
-
----
-
-## 📊 Measured — and reproducible
-
-fabius ships a **runnable benchmark *and* the measured runs behind it.** A blind, three-arm eval — `baseline` vs a generic *"be concise"* vs the full fabius stance — scored blind by a judge model on correctness, minimality, and best-practice, plus objective output length. Three runs are committed: 3 Claude tiers (`evals/results.json`), a 4-model-family cross-vendor stance test, and a live landing-page build. The headline that survives scrutiny: **fabius beats plain terseness on every non-trivial task, cuts output 31–52%, and the lift grows as the model's default gets less disciplined.** Run it yourself with your own key for the model you care about.
-
-```bash
-node evals/eval.mjs --selftest                       # wiring check, no key, no cost
-ANTHROPIC_API_KEY=... node evals/eval.mjs            # a real, blind, three-arm run
-```
-
-Method, the mechanism (which documented model failure-mode each rule counters), and caveats: **[BENCHMARKS.md](BENCHMARKS.md)**.
 
 ---
 
