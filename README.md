@@ -36,12 +36,12 @@ Same model, one concentrated set of operating rules. The stance changes the *sha
 
 | You ask for | Typical model default | Under fabius |
 |---|---|---|
-| Code | verbose, over-engineered, may skip validation | minimal and surgical, validation and security kept |
-| A bug fix | patches the symptom | reproduce → root cause → regression test |
-| UI | inline styles, inconsistent, desktop-first | design tokens, one accent, mobile-first, accessible |
-| An agent | broad tools, vague role | least privilege, precise output contract |
-| An explanation | padded, hedged | tight, exact, no filler |
-| Research / memory | re-derives every session | written down once, retrieved the next time |
+| 💻 Code | verbose, over-engineered, may skip validation | minimal and surgical, validation and security kept |
+| 🐛 A bug fix | patches the symptom | reproduce → root cause → regression test |
+| 🎨 UI | inline styles, inconsistent, desktop-first | design tokens, one accent, mobile-first, accessible |
+| 🤖 An agent | broad tools, vague role | least privilege, precise output contract |
+| ✍️ An explanation | padded, hedged | tight, exact, no filler |
+| 🧠 Research / memory | re-derives every session | written down once, retrieved the next time |
 
 **Measured, blind, reproducible.** A three-arm evaluation — `baseline`, a generic *"be concise"* control, and the full fabius stance — scored by a judge model that is never told which arm produced which answer. Beating the *"be concise"* control, not the baseline, is the real test. fabius beats it on every tier while cutting output length:
 
@@ -61,25 +61,29 @@ Across four model families — Grok, Mistral, GPT, Claude — the pattern holds:
 
 One router over an always-on lean core and four specialists, on a thin spine. Process decides *how*, domain decides *what*, and the lean core runs beneath everything.
 
-```text
-prompt
-  │
-  ▼
-┌──────────────────────────────────────────────────────────────────────────┐
-│  fabius · router        reads the job → sets the stance → routes          │
-└──────────────────────────────────────────────────────────────────────────┘
-  │
-  ├──▶  fabius-disciplina   process    brainstorm → plan → test-first → prove
-  ├──▶  fabius-decor        design     design tokens · one accent · mobile-first
-  ├──▶  fabius-cohors       agents     definition schema · least-privilege · swarm
-  ├──▶  fabius-archivum     memory     LLM-wiki · index + log · cross-session recall
-  │
-┌──────────────────────────────────────────────────────────────────────────┐
-│  fabius-parcus · lean core    always on — runs beneath every layer above  │
-└──────────────────────────────────────────────────────────────────────────┘
-  │
-  ▼
-  references/  depth, on demand     evals/  blind benchmark     AGENTS.md  any-tool bridge
+```mermaid
+flowchart TD
+    P([ prompt ]) --> R
+
+    R["<b>fabius</b> · router<br/><i>reads the job → sets the stance → routes</i>"]:::router
+
+    R --> D["<b>fabius-disciplina</b><br/>process<br/>brainstorm → plan → test → prove"]:::layer
+    R --> G["<b>fabius-decor</b><br/>design<br/>tokens · one accent · mobile-first"]:::layer
+    R --> C["<b>fabius-cohors</b><br/>agents<br/>schema · least-privilege · swarm"]:::layer
+    R --> A["<b>fabius-archivum</b><br/>memory<br/>LLM-wiki · index + log · recall"]:::layer
+
+    D --> L
+    G --> L
+    C --> L
+    A --> L
+
+    L["<b>fabius-parcus</b> · lean core<br/><i>always on — runs beneath every layer</i>"]:::core
+    L --> S["references/ depth  ·  evals/ benchmark  ·  AGENTS.md any-tool bridge"]:::spine
+
+    classDef router fill:#1f6feb,stroke:#1158c7,color:#ffffff,font-weight:bold
+    classDef layer  fill:#161b22,stroke:#30363d,color:#e6edf3
+    classDef core   fill:#2ea44f,stroke:#238636,color:#ffffff
+    classDef spine  fill:#21262d,stroke:#30363d,color:#8b949e
 ```
 
 Each rule has exactly one owning layer; every other layer links to it instead of restating it. That single-owner contract is what keeps six skills from contradicting one another. Full layer model, coordination table, and capability matrix: **[ARCHITECTURE.md](ARCHITECTURE.md)**.
