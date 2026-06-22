@@ -3,14 +3,15 @@
 Portable fabius eval — works for ANY vendor, not just Claude.
 
 Runs the same three-arm design as the Claude-Code harness (baseline / generic-terse /
-fabius) against OpenAI (GPT/Codex), Mistral, and Anthropic models, then blind-judges
+fabius) against OpenAI (GPT/Codex), Mistral, Anthropic, and Gemini models, then blind-judges
 every answer and prints the per-model gain. Stdlib only — no pip install.
 
-This is how you get REAL Codex / Mistral numbers: set the keys and run it.
+This is how you get REAL Codex / Mistral / Gemini numbers: set the keys and run it.
 
     export OPENAI_API_KEY=...        # GPT-4o / gpt-4.1 / o-series (Codex family)
     export MISTRAL_API_KEY=...       # mistral-large-latest
     export ANTHROPIC_API_KEY=...     # claude-sonnet-4-6 etc.
+    export GEMINI_API_KEY=...        # gemini-2.5-pro (Google AI Studio key)
     python3 evals/portable_eval.py
 
 Pick which models to run with --models (default: every vendor whose key is set).
@@ -68,10 +69,18 @@ def call_anthropic(model, prompt, key):
               {"model": model, "max_tokens": 2048, "messages": [{"role": "user", "content": prompt}]})
     return "".join(b.get("text", "") for b in d["content"])
 
+def call_gemini(model, prompt, key):
+    # Google's OpenAI-compatible endpoint — same request/response shape as call_openai.
+    d = _post("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+              {"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+              {"model": model, "messages": [{"role": "user", "content": prompt}], "temperature": 0.2})
+    return d["choices"][0]["message"]["content"]
+
 VENDORS = {
     "openai":    {"env": "OPENAI_API_KEY",    "model": "gpt-4o",               "call": call_openai},
     "mistral":   {"env": "MISTRAL_API_KEY",   "model": "mistral-large-latest", "call": call_mistral},
     "anthropic": {"env": "ANTHROPIC_API_KEY", "model": "claude-sonnet-4-6",    "call": call_anthropic},
+    "gemini":    {"env": "GEMINI_API_KEY",    "model": "gemini-2.5-pro",       "call": call_gemini},
 }
 
 JUDGE_PROMPT = (
@@ -90,7 +99,7 @@ def judge(task, answer, jv, jkey, jmodel):
 def run(models):
     avail = {v: c for v, c in VENDORS.items() if os.environ.get(c["env"])}
     if not avail:
-        sys.exit("No API keys set. Export OPENAI_API_KEY / MISTRAL_API_KEY / ANTHROPIC_API_KEY and retry.")
+        sys.exit("No API keys set. Export OPENAI_API_KEY / MISTRAL_API_KEY / ANTHROPIC_API_KEY / GEMINI_API_KEY and retry.")
     use = {v: avail[v] for v in models if v in avail} if models else avail
     if not use:
         sys.exit(f"None of {models} have a key set. Available: {list(avail)}")
@@ -141,7 +150,7 @@ def _selftest():
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--models", nargs="*", default=None, help="subset of: openai mistral anthropic")
+    ap.add_argument("--models", nargs="*", default=None, help="subset of: openai mistral anthropic gemini")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
     _selftest() if a.selftest else run(a.models)

@@ -52,6 +52,8 @@ Arms BASE / TERSE / FAB; categories trust-order, YAGNI, genuine-build. The signa
 
 The pattern repeats on all four families: **large lift on trust/order/build, ~zero on pure YAGNI.** FAB never lost an arm; its worst case was a tie (B2). The hardest control — the *under-build trap* (C1/C2, where naive lean is the wrong answer) — FAB passed every time by making the *correct* lean move (shared store / real parser), not the smallest one. Objective trap-pass: every model, every task — validation kept, plugin-systems avoided, Redis over in-memory, a real CSV parser over `split(',')`.
 
+> **Gemini** is the runnable fifth family — `python evals/portable_eval.py --models gemini` with `GEMINI_API_KEY` set produces a real `gemini-2.5-pro` row on the same three arms. It is left out of the table above rather than estimated: this doc commits no number it didn't measure. Drop the measured row in here once the run exists.
+
 ### 3 — Landing-page build, stance vs full mechanism (Mundial 2026, 2026-06-22)
 
 Three live builds of the same brief — **T1** fabius stance only · **T2** no fabius · **T3** fabius + all six skills.
@@ -101,8 +103,8 @@ ANTHROPIC_API_KEY=...  node evals/eval.mjs --model claude-sonnet-4-6
 # a real run (OpenAI / Codex family)
 OPENAI_API_KEY=...     node evals/eval.mjs --provider openai --model gpt-4o
 
-# cross-vendor (OpenAI / Mistral / others) — your keys
-python evals/portable_eval.py
+# cross-vendor (OpenAI / Mistral / Anthropic / Gemini) — your keys
+GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini
 ```
 
 The `fabius` arm injects the **actual** shipped `AGENTS.md`, so you benchmark the real stance, not a paraphrase. It writes `evals/results.json`. Swap `--model` / `--judge` to benchmark anything; add tasks in the `TASKS` array.
