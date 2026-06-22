@@ -1,10 +1,16 @@
 <div align="center">
 
-# ⚔️ fabius — the super-skill
+<pre>
+████   ███   ███   ███  █   █   ███
+█     █   █  █  █   █   █   █  █   
+███   █████  ███    █   █   █   ██ 
+█     █   █  █  █   █   █   █     █
+█     █   █  ███   ███   ███   ███
+</pre>
 
-### One skill that equips Claude **end to end.**
+### ⚔️ scout wide · strike narrow
 
-*Write code · write prose · build agents · design UI · debug · remember — one stance behind all of it.*
+*One skill that equips Claude end to end — code · prose · agents · design · debug · memory.*
 
 <br/>
 
