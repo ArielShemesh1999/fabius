@@ -173,7 +173,7 @@ fabius/
 ├── AGENTS.md                    # 🔌 tool-agnostic bridge (Codex / Cursor / …)
 ├── ARCHITECTURE.md              # layer model + single-owner table + capability matrix
 ├── BENCHMARKS.md                # method + mechanism + reproduce
-├── CREDITS.md                   # inspiration + attribution for bundled references
+├── credits/                     # inspiration + attribution (small side folder)
 ├── LICENSE                      # MIT
 └── README.md
 ```
@@ -190,7 +190,7 @@ Lean is a **discipline, not a corner-cutter** — it never trims validation, sec
 
 ## 📄 License
 
-fabius is licensed **MIT**. The bundled `references/` adapt open work — see [CREDITS.md](CREDITS.md) for inspiration + attribution.
+fabius is licensed **MIT**. The bundled `references/` adapt open work — see [credits/](credits/) for inspiration + attribution.
 
 <div align="center">
 <br/>

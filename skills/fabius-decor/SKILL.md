@@ -6,8 +6,8 @@ description: >
   UI — a landing page, a component, a screen, an email, a slide, a brand surface — when the user
   references a brand look, or asks to make something "look good", "more polished", or "production
   quality". The token contract lives in references/design-tokens.md; the full 69-brand teardown
-  library (DESIGN-apple.md, DESIGN-stripe.md, DESIGN-linear.app.md …) plus the open-design,
-  GSAP-animation, hyperframes and ui-ux-pro-max bundles live in references/design/.
+  library (DESIGN-apple.md, DESIGN-stripe.md, DESIGN-linear.app.md …) plus the fabius-design,
+  GSAP-animation, fabius-frames and fabius-uiux bundles live in references/design/.
 ---
 
 # Fabius Decor — what good actually looks like

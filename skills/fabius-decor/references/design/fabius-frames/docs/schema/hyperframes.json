@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabius-frames.heygen.com/schema/fabius-frames.json",
+  "title": "Fabius-Frames Project Config",
+  "description": "Per-project configuration for a Fabius-Frames project (fabius-frames.json). Tells `fabius-frames add` which registry to pull items from and where to drop them in the project tree. Created by `fabius-frames init`; users may edit it to point at custom registries or reshape their project layout.",
+  "type": "object",
+  "required": ["registry", "paths"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "JSON Schema URL — https://fabius-frames.heygen.com/schema/fabius-frames.json."
+    },
+    "registry": {
+      "type": "string",
+      "format": "uri",
+      "minLength": 1,
+      "description": "Base URL of the registry to pull items from. Point at the official Fabius-Frames registry or a custom one."
+    },
+    "paths": {
+      "type": "object",
+      "description": "Target paths for each item type, relative to the project root.",
+      "required": ["blocks", "components", "assets"],
+      "additionalProperties": false,
+      "properties": {
+        "blocks": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Where `fabius-frames:block` items land. Defaults to `compositions`."
+        },
+        "components": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Where `fabius-frames:component` items land. Defaults to `compositions/components`."
+        },
+        "assets": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Where asset files (images, fonts, videos) land. Defaults to `assets`."
+        }
+      }
+    }
+  }
+}

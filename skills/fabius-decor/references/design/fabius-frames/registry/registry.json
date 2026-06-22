@@ -1,0 +1,491 @@
+{
+  "$schema": "https://fabius-frames.heygen.com/schema/registry.json",
+  "name": "fabius-frames",
+  "homepage": "https://fabius-frames.heygen.com",
+  "items": [
+    {
+      "name": "warm-grain",
+      "type": "fabius-frames:example"
+    },
+    {
+      "name": "play-mode",
+      "type": "fabius-frames:example"
+    },
+    {
+      "name": "swiss-grid",
+      "type": "fabius-frames:example"
+    },
+    {
+      "name": "vignelli",
+      "type": "fabius-frames:example"
+    },
+    {
+      "name": "decision-tree",
+      "type": "fabius-frames:example"
+    },
+    {
+      "name": "kinetic-type",
+      "type": "fabius-frames:example"
+    },
+    {
+      "name": "product-promo",
+      "type": "fabius-frames:example"
+    },
+    {
+      "name": "nyt-graph",
+      "type": "fabius-frames:example"
+    },
+    {
+      "name": "data-chart",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "us-map",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "us-map-bubble",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "us-map-hex",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "us-map-flow",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "world-map",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "spain-map",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "flowchart",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "logo-outro",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "grain-overlay",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "shimmer-sweep",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "grid-pixelate-wipe",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "motion-blur",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "texture-mask-text",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "vignette",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-pill-karaoke",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-neon-accent",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-weight-shift",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-emoji-pop",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-editorial-emphasis",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-parallax-layers",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-glitch-rgb",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-matrix-decode",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-particle-burst",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-texture",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-clip-wipe",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-kinetic-slam",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-gradient-fill",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-neon-glow",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-highlight",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "caption-blend-difference",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "morph-text",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "instagram-follow",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "tiktok-follow",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "yt-lower-third",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "x-post",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "reddit-post",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "spotify-card",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "macos-notification",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "app-showcase",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "north-korea-locked-down",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "apple-money-count",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "vpn-youtube-spot",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "blue-sweater-intro-video",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "nyc-paris-flight",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "ui-3d-reveal",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "domain-warp-dissolve",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "ridged-burn",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "whip-pan",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "sdf-iris",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "ripple-waves",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "gravitational-lens",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "cinematic-zoom",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "chromatic-radial-split",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "glitch",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "swirl-vortex",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "thermal-distortion",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "flash-through-white",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "cross-warp-morph",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "light-leak",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-3d",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-blur",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-cover",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-destruction",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-dissolve",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-distortion",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-grid",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-light",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-mechanical",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-other",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-push",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-radial",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "transitions-scale",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "vfx-text-cursor",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "vfx-liquid-background",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "vfx-iphone-device",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "vfx-magnetic",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "vfx-portal",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "liquid-glass-notification",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "liquid-glass-context-menu",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "liquid-glass-media-controls",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "liquid-glass-widgets",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "ios26-liquid-glass",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "macos-tahoe-liquid-glass",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "vfx-shatter",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-basic",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-clear-dark",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-clear-light",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-grass",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-homebrew",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-man-page",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-novel",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-ocean",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-pro",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-red-sands",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-silver-aerogel",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-solid-colors",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-dark-2026",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-dark-modern",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-dark-plus",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-high-contrast",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-high-contrast-light",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-light-2026",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-light-modern",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-light-plus",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-monokai",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-solarized-light",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-visual-studio-dark",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "code-snippet-visual-studio-light",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "flowchart-vertical",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "vfx-liquid-glass",
+      "type": "fabius-frames:block"
+    },
+    {
+      "name": "parallax-zoom",
+      "type": "fabius-frames:component"
+    },
+    {
+      "name": "parallax-unzoom",
+      "type": "fabius-frames:component"
+    }
+  ]
+}

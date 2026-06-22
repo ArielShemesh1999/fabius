@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Open Design
-description: An open-source, local-first AI design workspace (open-design.ai · nexu-io/open-design). Editorial print aesthetic — warm parchment canvas (`#f5f4ed`), single ink-blue accent (`#1B365D`), serif-led hierarchy at a single weight (500), no italic, no second saturated color. Designed so generated artifacts feel like high-quality printed pages rather than typical web UI. Multilingual by design (EN · zh-CN · ja). Source brand spec lives inside the repo at `design-systems/kami/DESIGN.md`.
+description: An open-source, local-first AI design workspace (fabius-design.ai · nexu-io/fabius-design). Editorial print aesthetic — warm parchment canvas (`#f5f4ed`), single ink-blue accent (`#1B365D`), serif-led hierarchy at a single weight (500), no italic, no second saturated color. Designed so generated artifacts feel like high-quality printed pages rather than typical web UI. Multilingual by design (EN · zh-CN · ja). Source brand spec lives inside the repo at `design-systems/kami/DESIGN.md`.
 
 colors:
   primary: "#1B365D"
@@ -172,13 +172,13 @@ visual-signature:
 product-context:
   what-it-is: "Open-source, local-first alternative to Claude Design. Web-deployable, BYOK at every layer. 16 coding-agent CLIs auto-detected on PATH (Claude Code, Codex, Devin, Cursor Agent, Gemini CLI, OpenCode, Qwen, Qoder, GitHub Copilot CLI, Hermes, Kimi, Pi, Kiro, Kilo, Mistral Vibe, DeepSeek TUI) become the design engine."
   bundled: "139 composable skills · 152 brand-grade design systems · 5 curated visual directions (Editorial Monocle · Modern Minimal · Warm Soft · Tech Utility · Brutalist Experimental) · sandboxed iframe preview · HTML/PDF/PPTX/MP4/ZIP export."
-  media-generation: "Image (gpt-image-2) · video (Seedance 2.0) · HTML→MP4 motion (HyperFrames)."
+  media-generation: "Image (gpt-image-2) · video (Seedance 2.0) · HTML→MP4 motion (Fabius-Frames)."
   license: "Apache-2.0"
-  install: "git clone https://github.com/ArielShemesh1999/fabius && cd open-design && pnpm install && pnpm tools-dev run web"
-  site: "https://open-design.ai"
+  install: "git clone https://github.com/ArielShemesh1999/fabius && cd fabius-design && pnpm install && pnpm tools-dev run web"
+  site: "https://fabius-design.ai"
   repo: "https://github.com/ArielShemesh1999/fabius"
   stars: "53.8k (May 2026)"
-  bundled-here: "Knowledge subset vendored at open-design/ in this repo: skills/, design-systems/, specs/, prompt-templates/, templates/. Heavy app code (apps/, plugins/, packages/, tools/, design-templates/, assets/, docs/) stripped — clone the upstream repo to run the daemon + web app."
+  bundled-here: "Knowledge subset vendored at fabius-design/ in this repo: skills/, design-systems/, specs/, prompt-templates/, templates/. Heavy app code (apps/, plugins/, packages/, tools/, design-templates/, assets/, docs/) stripped — clone the upstream repo to run the daemon + web app."
 
 do:
   - "Always start from parchment (#f5f4ed), never #ffffff."
