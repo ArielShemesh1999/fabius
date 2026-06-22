@@ -49,14 +49,41 @@ Stay single unless one of these is true:
 
 None of those hold → one well-scoped agent with the right tools beats a swarm every time.
 
-## The four orchestration patterns
+## The five orchestration patterns
 
 1. **Sequential** — A → B → C, each consuming the prior output. For pipelines (research → draft → publish). Simplest; the default for ordered work.
 2. **Parallel (fan-out, then gather)** — N agents on disjoint slices at once, then merge. For breadth (review 8 files, search 4 ways). Use a barrier only when the merge genuinely needs all results together.
 3. **Hierarchical** — a coordinator decomposes a goal, dispatches specialists, integrates the results. For open-ended goals where the sub-tasks aren't known up front (triage → investigate → respond).
 4. **Human-in-the-loop** — the agent pauses at a defined gate for human input or approval before continuing. For irreversible or high-stakes actions.
+5. **Swarm** — a coordinator over a tight team of 6–8 specialized workers with shared memory and worktree isolation, for work too big for one window that splits many ways. The heaviest tool; earn it. Full shape below.
 
 Compose them: a hierarchical coordinator whose investigate phase fans out in parallel, with a human gate before it ships.
+
+## The swarm — a coordinated cohort at scale
+
+When the work is too big for one context window **and** splits into many parallel pieces (a migration across 40 files, an audit across a codebase, a from-scratch build), promote the hierarchical pattern to a **swarm**: one coordinator over a tight team of specialized workers. It's the heaviest tool here — earn it with the lean question first (`fabius-parcus`: does this need a swarm, or one good agent?).
+
+**The shape (fabius-native — no external runtime to install):**
+
+- **Coordinator** — decomposes the goal into a shared task list, assigns each task to the right specialist, integrates results, reassigns stalled work. Owns the plan; writes no code itself.
+- **A small, specialized team** — each worker gets ONE non-overlapping role: `architect` (contracts + boundaries first), `coder` (implements one slice), `reviewer` (independent — didn't write it), `researcher` (locates prior art). Keep it **6–8 workers max** — past that, coordination cost eats the parallelism.
+- **Shared memory** — workers don't re-derive each other's context: the coordinator files the spec and decisions into a `fabius-archivum` memory namespace; each worker reads it before starting and writes its result back. The wiki is the shared blackboard.
+- **Isolation for parallel writes** — when workers edit files at once, give each its own git **worktree** so they don't collide; merge on completion. Read-only fan-out needs no isolation.
+
+**Run it with the native tools — nothing to install:**
+
+- The **Workflow tool** is the swarm engine: `parallel()` for a fan-out barrier, `pipeline()` for find → build → verify with no barrier, a coordinator loop for assign → integrate. Deterministic control flow, not model-improvised.
+- The **Agent / Task tool** spawns each worker (`agentType` for a specialist, `isolation: "worktree"` for parallel writers, `run_in_background` for concurrency).
+- A worker's `description` + output contract is still the law — a swarm is N well-defined cohort members, not N vague ones.
+
+**Anti-drift — what keeps a swarm from thrashing:**
+
+1. Tight count (6–8) and **specialized, non-overlapping roles** — overlap is where swarms drift.
+2. One shared spec / task-list everyone reads; the coordinator is the single source of truth.
+3. Every worker returns a checkable contract; the coordinator verifies before integrating (pair with adversarial-verify for findings).
+4. File the coordination outcome back to memory so the next swarm starts smarter (`fabius-archivum`).
+
+Still lean: if the task list is short and serial, it's a pipeline, not a swarm. Reach for the swarm only when breadth × depth genuinely exceeds one agent's reach.
 
 ## Reliability patterns
 

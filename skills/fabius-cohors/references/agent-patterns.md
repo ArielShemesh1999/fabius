@@ -32,11 +32,52 @@ A Claude Code subagent uses the same idea in its own format: a `description` (ho
 | **Fan-out reviewers** | N agents review disjoint files or dimensions, then merge findings | parallel + barrier on merge |
 | **Find → adversarial-verify** | finders surface candidates; independent skeptics try to refute them | pipeline |
 | **Coordinator + specialists** | decompose an open goal, dispatch, integrate (triage, incident, adjudication) | hierarchical |
+| **Swarm** | a coordinator over 6–8 specialized workers, shared memory, worktree isolation, for big work that splits many ways | hierarchical + parallel |
 | **Approval concierge** | pauses at a gate for human sign-off before an irreversible step | human-in-the-loop |
 | **Grounded Q&A (RAG)** | answers only from retrieved, cited sources — never free recall | single + retrieval |
 | **Memory-bank agent** | persists user facts and preferences across sessions | single + memory layer |
 | **Safety-guarded agent** | screens input and tool calls (prompt-injection defense) before execution | middleware / pre-hook |
 | **Eval harness** | scores an agent against a fixed task set; reports skill-vs-baseline delta | sequential |
+
+## Swarm — coordinator + worker templates
+
+A swarm is the hierarchical shape at scale: one coordinator, 6–8 specialized workers, shared memory, worktree isolation for parallel writers. Built from native tools (the Workflow tool drives it, the Agent/Task tool spawns workers) — no external runtime.
+
+**Coordinator** (owns the plan, writes no code):
+```yaml
+---
+description: Decompose the goal into a task list, assign each task to the right specialist, integrate results, reassign stalled work.
+mode: primary
+permission: { read: allow, edit: deny, bash: ask }
+tools: [read, grep, glob]      # plans and integrates; workers do the writing
+---
+You are the swarm coordinator.
+Rules:
+- Keep the team to 6–8 workers, each ONE specialized non-overlapping role (architect / coder / reviewer / researcher).
+- Maintain ONE shared task list + spec in the fabius-archivum memory namespace; it is the single source of truth.
+- Assign → collect each worker's contract → verify before integrating → reassign anything stalled or failed.
+- File the coordination outcome back to memory so the next swarm starts smarter.
+Output contract: the integrated result + a one-line-per-task status table (task · worker · pass/fail).
+```
+
+**Worker** (one slice, one contract):
+```yaml
+---
+description: Implement exactly one assigned slice of the swarm's task list and return its contract.
+mode: subagent
+permission: { read: allow, edit: allow, bash: ask }   # edit scoped to its worktree
+tools: [read, edit, grep, glob, bash]
+isolation: worktree           # only when writing in parallel with siblings
+---
+You are the <architect | coder | reviewer | researcher> worker.
+Rules:
+- Read the shared spec from memory before starting; don't re-derive what a sibling already settled.
+- Do only your assigned task — staying in your lane is the anti-drift rule.
+- Write your result back to memory and return your contract.
+Output contract: <the exact shape — a diff, a review table, a design doc, a findings list>.
+```
+
+The coordinator never writes code; the workers never replan. That split — plus the tight count and the shared memory — is what keeps a swarm coordinated instead of drifting.
 
 ## Least-privilege defaults
 

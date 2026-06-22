@@ -4,7 +4,8 @@ description: >
   fabius's persistent-memory layer — lets the agent stop re-deriving: write what it learns into an
   interlinked markdown knowledge base, retrieve from it cheaply, and keep it healthy (index + log +
   when-to-add-vector). Use when work spans sessions, when a fact or decision is worth keeping, when
-  the user says "remember this", when a knowledge base is growing, or whenever the agent is about
+  the user says "remember this", when a knowledge base is growing, to set up a per-project memory or
+  an Obsidian vault so the next session starts ahead, or whenever the agent is about
   to redo research it (or a past session) already did. Directory schema and page conventions live in
   references/memory-schema.md; the knowledge engine itself — a vector engine, the wiki pattern, and a
   working RAG pipeline — lives in references/knowledge/.
@@ -55,5 +56,24 @@ ingest (write) → index (catalog/embed) → query (read, cite, file back) → l
 ```
 
 The agent does all the bookkeeping — summarize, cross-reference, file, consistency-check. The human only curates sources and asks questions. Concrete directory schema, page frontmatter, and the index/log line formats live in `references/memory-schema.md`. When the corpus outgrows grep, the working engine — vector store, the wiki-pattern layout, and a runnable RAG indexer/query pipeline — is in `references/knowledge/`.
+
+## Cross-session memory — autonomous, per project
+
+The point of a record office: the next session starts where the last one ended. Keep a **per-project memory** and tend it without being asked.
+
+- **Read on start.** Beginning work on a project, read its memory index (`MEMORY.md` / `index.md`) *before* acting — the cheapest way to not re-derive last session's decisions. No memory yet → that's the signal to set one up.
+- **Write on milestone.** After a decision, a fix, an architecture choice, a "why we did it this way", or at session end — update the page it touches and append one `log.md` line. Surgical (`fabius-parcus`), proven (`fabius-disciplina`). You don't wait to be told; the bookkeeping is your job.
+- **One layout, scaled to size.** Small project: a flat `MEMORY.md` index + `log.md` + a handful of topic pages. Large one: the full `wiki/` (entities / concepts / syntheses). Same conventions either way — schema in `references/memory-schema.md`.
+
+What goes in: the things the *code doesn't say* — decisions and their why, rejected approaches, gotchas, live URLs, current goals, open threads. Not a transcript; the non-obvious and retrievable. One page = one thing, linked with `[[slug]]`.
+
+### Obsidian onboarding (offer once)
+
+The wiki is plain markdown — works in any editor, best browsed in Obsidian (backlinks, graph, Dataview). On a project with no memory yet, offer the choice once:
+
+1. **Obsidian** (richer) — guide them: install from obsidian.md → *Open folder as vault* on the project's `wiki/` dir → enable Graph + Dataview. fabius writes the pages; they browse and follow links live. *(Obsidian is the IDE, the LLM is the programmer, the wiki is the codebase.)*
+2. **Plain md** (zero install) — just the `wiki/` dir of markdown. Same retrieval (`index.md` + grep), no app.
+
+Either way the human curates sources and asks; fabius writes and maintains. Never block work to set this up — scaffold the minimal `MEMORY.md` + `log.md` and keep going.
 
 Pairs with: `fabius-disciplina` (resolved facts and post-mortems get filed here), `fabius-cohors` (grounding and cross-session memory for agents), `fabius-parcus` (don't build the heavy retrieval engine before the corpus demands it).

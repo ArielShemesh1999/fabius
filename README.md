@@ -90,8 +90,8 @@ Full layer model, the single-owner coordination table, and the capability matrix
 | 🪶 | **fabius-parcus** | always-on lean core | terse output · YAGNI ladder · surgical changes · no speculative scope |
 | ⚙️ | **fabius-disciplina** | engineering process | brainstorm → plan → test-first → prove · grill ambiguity · root-cause debugging |
 | 🎨 | **fabius-decor** | design system | one-accent laws · token vocabulary · mobile-first · live-verify checklist |
-| 🤖 | **fabius-cohors** | agent engineering | definition schema · least-privilege permissions · 4 orchestration patterns |
-| 🧠 | **fabius-archivum** | persistent memory | write-it-down-once memory · index + log retrieval · when to go vector |
+| 🤖 | **fabius-cohors** | agent engineering | definition schema · least-privilege · 5 orchestration patterns incl. **swarm** (coordinator + specialized workers) |
+| 🧠 | **fabius-archivum** | persistent memory | **autonomous per-project memory** (LLM-wiki) · Obsidian-ready · index + log retrieval · when to go vector |
 
 Each skill is a thin operating contract; the depth — a 69-brand design teardown library, a 200+-agent production catalog with `ruvector.db` memory, a knowledge engine (vector · wiki · RAG), and the full craft + discipline process library — lives under each skill's `references/`, loaded **on demand**, so the skill itself stays lean.
 

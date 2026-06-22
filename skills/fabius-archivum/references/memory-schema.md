@@ -60,3 +60,53 @@ Symbolic-first keeps the dense search cheap and the results scoped; pure vector 
 ## Why maintenance stays near zero
 
 The agent does the bookkeeping — summarize the source, cross-reference the touched pages, file the answer back, lint for contradictions. The human only curates which sources come in and asks the questions. That division is the whole point: the knowledge base is the agent's job, not the human's chore.
+
+## Per-project autonomous memory (the cross-session contract)
+
+For a working project (a code repo, a client engagement), the memory lives *with the project* and fabius tends it on its own:
+
+```
+<project>/
+  MEMORY.md           # the index: live URLs, stack, current goal, open threads, links to pages. READ FIRST, every session.
+  wiki/
+    log.md            # append-only: one line per session/decision/fix
+    decisions/        # why we chose X over Y (the thing the code never records)
+    gotchas/          # the traps that cost an hour; how to avoid them next time
+    <topic>.md        # architecture, domain, integrations — one page per thing
+```
+
+Small project → collapse `wiki/` into a flat folder beside `MEMORY.md`. Don't build the tree before the pages exist.
+
+### `MEMORY.md` template (scaffold this on a fresh project)
+
+```markdown
+# <Project> — memory
+
+> Read this first. Update on every milestone. Plain markdown — open in Obsidian if you like.
+
+- **Live:** <url> · **Stack:** <one line> · **Repo:** <url>
+- **Goal now:** <the current objective>
+- **Open threads:** <what's unfinished, with the next step>
+
+## Index
+- [Architecture](wiki/architecture.md) — how it fits together
+- [Decisions](wiki/decisions/) — why, not just what
+- [Gotchas](wiki/gotchas/) — traps + avoidance
+- [Log](wiki/log.md) — chronological
+```
+
+### The autonomous loop, applied to a project
+
+1. **Session start** — read `MEMORY.md`. It exists? Start from it, don't re-derive. It doesn't? Scaffold the template above (one file), keep working.
+2. **On a milestone** — a decision made, a bug rooted out, an integration wired, a goal reached: write/update the page, append one `log.md` line. No prompt needed.
+3. **Session end** — refresh `Goal now` + `Open threads` so the next session opens mid-stride.
+4. **Periodic lint** — fold contradictions, drop stale claims, link orphans (the `LINT` operation above).
+
+### Obsidian onboarding steps (offer once, never block)
+
+The vault is just the project's memory folder — no migration, no export:
+
+1. Install Obsidian (obsidian.md) — free, local, no account.
+2. *Open folder as vault* → pick the project's `wiki/` (or the project root).
+3. Enable **Graph view** (see the link structure) and the **Dataview** community plugin (query frontmatter — e.g. list every page by `updated`).
+4. Done. fabius writes the markdown from the conversation; the human browses, follows `[[links]]`, reads the graph. If they'd rather not install anything, the same files work with `grep` + any editor.
