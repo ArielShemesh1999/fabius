@@ -1,12 +1,6 @@
 <div align="center">
 
-<pre>
-████   ███   ███   ███  █   █   ███
-█     █   █  █  █   █   █   █  █   
-███   █████  ███    █   █   █   ██ 
-█     █   █  █  █   █   █   █     █
-█     █   █  ███   ███   ███   ███
-</pre>
+<img src="assets/fabius-pixel.svg" alt="fabius" width="440" />
 
 ### ⚔️ scout wide · strike narrow
 
