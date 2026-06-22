@@ -29,11 +29,11 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libopenblas-dev pkg-config
 
-      - name: turbovec test suite
-        run: cargo test -p turbovec --release
+      - name: fabius-vec test suite
+        run: cargo test -p fabius-vec --release
 
-      # Standalone cargo project that path-deps turbovec — exercises the same
-      # link path a downstream `cargo add turbovec` user hits. Catches BLAS
+      # Standalone cargo project that path-deps fabius-vec — exercises the same
+      # link path a downstream `cargo add fabius-vec` user hits. Catches BLAS
       # link-propagation regressions of the class fixed in #69.
       - name: Downstream consumer smoke test
         run: cargo run --release --manifest-path examples/downstream-smoke/Cargo.toml
@@ -62,9 +62,9 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install maturin pytest
 
-      - name: Build turbovec wheel
+      - name: Build fabius-vec wheel
         shell: bash
-        working-directory: turbovec-python
+        working-directory: fabius-vec-python
         run: maturin build --release --out dist
 
       # Install the freshly-built wheel + the four integration extras so the
@@ -72,7 +72,7 @@ jobs:
       # being skipped by their `pytest.importorskip(...)` guards.
       - name: Install wheel + integration extras
         shell: bash
-        working-directory: turbovec-python
+        working-directory: fabius-vec-python
         run: |
           python -m pip install dist/*.whl
           python -m pip install \
@@ -83,4 +83,4 @@ jobs:
 
       - name: Run pytest
         shell: bash
-        run: pytest turbovec-python/tests/ -v
+        run: pytest fabius-vec-python/tests/ -v

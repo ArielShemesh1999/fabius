@@ -4,7 +4,7 @@
 //! near-optimal distortion. Data-oblivious — no training required.
 //!
 //! ```no_run
-//! use turbovec::TurboQuantIndex;
+//! use fabius-vec::TurboQuantIndex;
 //!
 //! // 1536-dim vectors compressed to 4 bits per coordinate.
 //! let mut index = TurboQuantIndex::new(1536, 4).unwrap();
@@ -34,14 +34,14 @@
 //! `OnceLock`. This keeps the invariant that once a cache is populated
 //! from `&self`, it matches the current `packed_codes`.
 
-// turbovec is 64-bit by design: the SIMD kernels, the `usize` size/offset
+// fabius-vec is 64-bit by design: the SIMD kernels, the `usize` size/offset
 // arithmetic in `encode`/`pack`/`search`, and all benchmarks assume a 64-bit
 // pointer width. On a 32-bit (or 16-bit) target those size computations could
 // overflow `usize` and index out of bounds. Refuse to compile there rather
 // than ship a silently-unsafe build — supporting 32-bit/wasm would require a
 // dedicated checked-arithmetic pass first.
 #[cfg(not(target_pointer_width = "64"))]
-compile_error!("turbovec requires a 64-bit target (target_pointer_width = \"64\")");
+compile_error!("fabius-vec requires a 64-bit target (target_pointer_width = \"64\")");
 
 pub mod codebook;
 pub mod encode;

@@ -1,6 +1,6 @@
-"""LangChain VectorStore backed by turbovec's quantized index.
+"""LangChain VectorStore backed by fabius-vec's quantized index.
 
-Install with: ``pip install turbovec[langchain]``.
+Install with: ``pip install fabius-vec[langchain]``.
 
 The public surface mirrors langchain_core's in-tree ``InMemoryVectorStore``
 so this store can be swapped in wherever the in-memory store is used.
@@ -17,7 +17,7 @@ import numpy as np
 
 from ._dedup import DuplicatePolicy, resolve_duplicates
 from ._persist import check_persisted_handles
-from ._turbovec import IdMapIndex
+from ._fabius-vec import IdMapIndex
 
 try:
     from langchain_core.documents import Document
@@ -25,8 +25,8 @@ try:
     from langchain_core.vectorstores import VectorStore
 except ImportError as exc:
     raise ImportError(
-        "langchain-core is required to use turbovec.langchain. "
-        "Install with: pip install turbovec[langchain]"
+        "langchain-core is required to use fabius-vec.langchain. "
+        "Install with: pip install fabius-vec[langchain]"
     ) from exc
 
 
@@ -90,7 +90,7 @@ class TurboQuantVectorStore(VectorStore):
     # ---- Relevance score normalization --------------------------------
 
     def _select_relevance_score_fn(self) -> Callable[[float], float]:
-        # turbovec returns the raw inner product of unit-normalized vectors —
+        # fabius-vec returns the raw inner product of unit-normalized vectors —
         # ideally cosine similarity in [-1, 1]. Quantization noise can
         # push that very slightly outside the bounds, so clamp after
         # mapping to LangChain's [0, 1] relevance scale via (sim + 1) / 2.
@@ -359,7 +359,7 @@ class TurboQuantVectorStore(VectorStore):
     # ---- Max marginal relevance ---------------------------------------
     #
     # MMR requires the full-precision vector of every candidate to compute
-    # pairwise diversity scores. turbovec discards full vectors after
+    # pairwise diversity scores. fabius-vec discards full vectors after
     # quantization (that's the point), so we can't faithfully implement
     # MMR. Raise loudly with a useful message rather than silently fall
     # back to the base class's bare NotImplementedError.
@@ -486,7 +486,7 @@ class TurboQuantVectorStore(VectorStore):
     def dump(self, folder_path: str | Path) -> None:
         """Persist the quantized index plus the side-car to disk.
 
-        ``folder_path`` is a directory; turbovec writes ``index.tvim``
+        ``folder_path`` is a directory; fabius-vec writes ``index.tvim``
         and ``docstore.json`` inside it. Document metadata must be
         JSON-serializable (same constraint as ``InMemoryVectorStore``).
         A lazy uncommitted index encodes its state via the index file's
@@ -530,7 +530,7 @@ class TurboQuantVectorStore(VectorStore):
         if version != _DOCSTORE_SCHEMA_VERSION:
             raise ValueError(
                 f"docstore.json has schema version {version}; "
-                f"this turbovec expects version {_DOCSTORE_SCHEMA_VERSION}"
+                f"this fabius-vec expects version {_DOCSTORE_SCHEMA_VERSION}"
             )
         # IdMapIndex.load handles the dim=0 (lazy-uncommitted) sentinel
         # internally and reconstructs the index in the right state.

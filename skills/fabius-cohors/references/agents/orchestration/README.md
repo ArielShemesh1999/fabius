@@ -1,6 +1,6 @@
 # orchestration
 
-**163 orchestration agents** from [the author/orchestration](https://github.com/the author/orchestration) (claude-flow) — a multi-agent swarm-coordination framework. 108 core agents + 55 plugin agents across 32 plugins. Knowledge-only: agent definitions extracted, framework code / build artifacts / v3 duplicates stripped (see `LICENSE`).
+**163 orchestration agents** from [the author/orchestration](https://github.com/the author/orchestration) (fabius-flow) — a multi-agent swarm-coordination framework. 108 core agents + 55 plugin agents across 32 plugins. Knowledge-only: agent definitions extracted, framework code / build artifacts / v3 duplicates stripped (see `LICENSE`).
 
 ## Core agents (`agents/`)
 
@@ -141,7 +141,7 @@
 
 | Agent | Description | File |
 |---|---|---|
-| **agentdb-specialist** | AgentDB and RuVector specialist for memory operations, HNSW indexing, RaBitQ quantization, and semantic search across the controller bridge | [`plugins/orchestration-agentdb/agentdb-specialist.md`](./plugins/orchestration-agentdb/agentdb-specialist.md) |
+| **agentdb-specialist** | AgentDB and Fabius-Vec specialist for memory operations, HNSW indexing, RaBitQ quantization, and semantic search across the controller bridge | [`plugins/orchestration-agentdb/agentdb-specialist.md`](./plugins/orchestration-agentdb/agentdb-specialist.md) |
 
 ### orchestration-aidefence
 
@@ -159,14 +159,14 @@
 
 | Agent | Description | File |
 |---|---|---|
-| **browser-agent** | Browser automation agent — drives Playwright via 23 MCP tools, captures every session as an RVF container with a ruvector trajectory, and gates content throu... | [`plugins/orchestration-browser/browser-agent.md`](./plugins/orchestration-browser/browser-agent.md) |
+| **browser-agent** | Browser automation agent — drives Playwright via 23 MCP tools, captures every session as an RVF container with a fabius-vec trajectory, and gates content throu... | [`plugins/orchestration-browser/browser-agent.md`](./plugins/orchestration-browser/browser-agent.md) |
 
 ### orchestration-core
 
 | Agent | Description | File |
 |---|---|---|
 | **coder** | Implementation specialist for writing clean, efficient code following project patterns | [`plugins/orchestration-core/coder.md`](./plugins/orchestration-core/coder.md) |
-| **researcher** | Pathfinder research specialist — traverses RuVector memory graphs and codebase to surface patterns, dependencies, and prior art | [`plugins/orchestration-core/researcher.md`](./plugins/orchestration-core/researcher.md) |
+| **researcher** | Pathfinder research specialist — traverses Fabius-Vec memory graphs and codebase to surface patterns, dependencies, and prior art | [`plugins/orchestration-core/researcher.md`](./plugins/orchestration-core/researcher.md) |
 | **reviewer** | Code review specialist for quality, security, and best-practice enforcement | [`plugins/orchestration-core/reviewer.md`](./plugins/orchestration-core/reviewer.md) |
 | **witness-curator** | Maintains the cryptographically-signed witness manifest. Adds new fix entries when shipping a release, regenerates the signed manifest + temporal history, id... | [`plugins/orchestration-core/witness-curator.md`](./plugins/orchestration-core/witness-curator.md) |
 
@@ -279,13 +279,13 @@
 
 | Agent | Description | File |
 |---|---|---|
-| **memory-specialist** | SOTA RAG memory specialist — hybrid search (sparse+dense), Graph RAG multi-hop retrieval, MMR diversity reranking, smart consolidation, ruvector integration | [`plugins/orchestration-rag-memory/memory-specialist.md`](./plugins/orchestration-rag-memory/memory-specialist.md) |
+| **memory-specialist** | SOTA RAG memory specialist — hybrid search (sparse+dense), Graph RAG multi-hop retrieval, MMR diversity reranking, smart consolidation, fabius-vec integration | [`plugins/orchestration-rag-memory/memory-specialist.md`](./plugins/orchestration-rag-memory/memory-specialist.md) |
 
-### orchestration-ruvector
+### orchestration-fabius-vec
 
 | Agent | Description | File |
 |---|---|---|
-| **vector-engineer** | Vector operations specialist using npx ruvector@0.2.25 — HNSW indexing, adaptive LoRA embeddings, code-graph clustering, hooks routing, brain/SONA, 103 MCP t... | [`plugins/orchestration-ruvector/vector-engineer.md`](./plugins/orchestration-ruvector/vector-engineer.md) |
+| **vector-engineer** | Vector operations specialist using npx fabius-vec@0.2.25 — HNSW indexing, adaptive LoRA embeddings, code-graph clustering, hooks routing, brain/SONA, 103 MCP t... | [`plugins/orchestration-fabius-vec/vector-engineer.md`](./plugins/orchestration-fabius-vec/vector-engineer.md) |
 
 ### orchestration-ruvllm
 

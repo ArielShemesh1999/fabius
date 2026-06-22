@@ -598,34 +598,34 @@ const resourceIntegration = {
 ### Resource Management Commands
 ```bash
 # Analyze resource usage
-npx claude-flow metrics-collect --components ["cpu", "memory", "network"]
+npx fabius-flow metrics-collect --components ["cpu", "memory", "network"]
 
 # Optimize resource allocation
-npx claude-flow daa-resource-alloc --resources <resource-config>
+npx fabius-flow daa-resource-alloc --resources <resource-config>
 
 # Predictive scaling
-npx claude-flow swarm-scale --swarm-id <id> --target-size <size>
+npx fabius-flow swarm-scale --swarm-id <id> --target-size <size>
 
 # Performance profiling
-npx claude-flow performance-report --format detailed --timeframe 24h
+npx fabius-flow performance-report --format detailed --timeframe 24h
 
 # Circuit breaker configuration
-npx claude-flow fault-tolerance --strategy circuit-breaker --config <config>
+npx fabius-flow fault-tolerance --strategy circuit-breaker --config <config>
 ```
 
 ### Optimization Commands
 ```bash
 # Run performance optimization
-npx claude-flow optimize-performance --swarm-id <id> --strategy adaptive
+npx fabius-flow optimize-performance --swarm-id <id> --strategy adaptive
 
 # Generate resource forecasts
-npx claude-flow forecast-resources --time-horizon 3600 --confidence 0.95
+npx fabius-flow forecast-resources --time-horizon 3600 --confidence 0.95
 
 # Profile system performance
-npx claude-flow profile-performance --duration 60000 --components all
+npx fabius-flow profile-performance --duration 60000 --components all
 
 # Analyze bottlenecks
-npx claude-flow bottleneck-analyze --component swarm-coordination
+npx fabius-flow bottleneck-analyze --component swarm-coordination
 ```
 
 ## Integration Points

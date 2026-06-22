@@ -14,8 +14,8 @@ use std::env;
 use std::fs::{create_dir_all, File};
 use std::io::{BufWriter, Write};
 
-use turbovec::codebook::codebook;
-use turbovec::rotation::make_rotation_matrix;
+use fabius-vec::codebook::codebook;
+use fabius-vec::rotation::make_rotation_matrix;
 
 fn write_f32s<W: Write>(w: &mut W, vals: &[f32]) -> std::io::Result<()> {
     for &v in vals {

@@ -1,12 +1,12 @@
 [package]
-name = "turbovec"
+name = "fabius-vec"
 version = "0.9.0"
 edition = "2021"
 rust-version = "1.70"
 description = "Fast vector quantization with 2-4 bit compression and SIMD search"
 license = "MIT"
-repository = "https://github.com/RyanCodrai/turbovec"
-homepage = "https://github.com/RyanCodrai/turbovec"
+repository = "https://github.com/RyanCodrai/fabius-vec"
+homepage = "https://github.com/RyanCodrai/fabius-vec"
 readme = "../README.md"
 keywords = ["vector-search", "quantization", "nearest-neighbor", "ann", "simd"]
 categories = ["algorithms", "science", "compression"]

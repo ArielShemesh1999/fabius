@@ -15,7 +15,7 @@
 //! These tests pin the typed-error behaviour on the `_2d` paths and
 //! the panic behaviour on the flat / search paths.
 
-use turbovec::{AddError, IdMapIndex, TurboQuantIndex};
+use fabius-vec::{AddError, IdMapIndex, TurboQuantIndex};
 
 const DIM: usize = 64;
 

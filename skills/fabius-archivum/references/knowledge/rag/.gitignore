@@ -2,5 +2,5 @@
 .index/
 __pycache__/
 *.pyc
-ruvector.db
+fabius-vec.db
 *.lock

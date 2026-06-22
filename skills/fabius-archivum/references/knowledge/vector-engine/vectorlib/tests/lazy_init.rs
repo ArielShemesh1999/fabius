@@ -14,7 +14,7 @@
 //!     committed index round-trips exactly.
 
 use std::fs;
-use turbovec::{IdMapIndex, TurboQuantIndex};
+use fabius-vec::{IdMapIndex, TurboQuantIndex};
 
 const DIM: usize = 64;
 
@@ -96,7 +96,7 @@ fn add_2d_rejects_dim_change() {
     let err = idx.add_2d(&wrong, DIM * 2).err().unwrap();
     assert_eq!(
         err,
-        turbovec::AddError::DimMismatch {
+        fabius-vec::AddError::DimMismatch {
             existing: DIM,
             got: DIM * 2,
         },
@@ -173,7 +173,7 @@ fn add_2d_rejects_non_multiple_of_8_dim_on_lazy_index() {
     // DimMismatch would not have failed the suite.
     let mut idx = TurboQuantIndex::new_lazy(4).unwrap();
     let err = idx.add_2d(&[0.0f32; 14], 7).unwrap_err();
-    assert_eq!(err, turbovec::AddError::DimNotMultipleOf8(7));
+    assert_eq!(err, fabius-vec::AddError::DimNotMultipleOf8(7));
     // Failure must not have committed a dim.
     assert_eq!(idx.dim_opt(), None);
 }
@@ -186,7 +186,7 @@ fn prepare_on_lazy_uncommitted_is_noop() {
 
 #[test]
 fn write_load_round_trip_lazy_uncommitted() {
-    let tmp = std::env::temp_dir().join("turbovec_lazy_uncommitted.tv");
+    let tmp = std::env::temp_dir().join("fabius-vec_lazy_uncommitted.tv");
     {
         let idx = TurboQuantIndex::new_lazy(4).unwrap();
         idx.write(&tmp).unwrap();
@@ -201,7 +201,7 @@ fn write_load_round_trip_lazy_uncommitted() {
 #[test]
 fn write_load_round_trip_eager_index_still_works() {
     // Regression: the dim=0 sentinel logic must not affect normal indexes.
-    let tmp = std::env::temp_dir().join("turbovec_lazy_eager.tv");
+    let tmp = std::env::temp_dir().join("fabius-vec_lazy_eager.tv");
     {
         let mut idx = TurboQuantIndex::new(DIM, 4).unwrap();
         idx.add(&unit_vectors(4, DIM, 0xA00D_0008));
@@ -215,7 +215,7 @@ fn write_load_round_trip_eager_index_still_works() {
 
 #[test]
 fn write_load_round_trip_lazy_after_committed_add() {
-    let tmp = std::env::temp_dir().join("turbovec_lazy_committed.tv");
+    let tmp = std::env::temp_dir().join("fabius-vec_lazy_committed.tv");
     {
         let mut idx = TurboQuantIndex::new_lazy(2).unwrap();
         idx.add_2d(&unit_vectors(3, DIM, 0xA00D_0009), DIM).unwrap();
@@ -268,7 +268,7 @@ fn id_map_search_on_lazy_uncommitted_returns_empty() {
 
 #[test]
 fn id_map_write_load_round_trip_lazy_uncommitted() {
-    let tmp = std::env::temp_dir().join("turbovec_idmap_lazy_uncommitted.tvim");
+    let tmp = std::env::temp_dir().join("fabius-vec_idmap_lazy_uncommitted.tvim");
     {
         let idx = IdMapIndex::new_lazy(2).unwrap();
         idx.write(&tmp).unwrap();
@@ -282,7 +282,7 @@ fn id_map_write_load_round_trip_lazy_uncommitted() {
 
 #[test]
 fn id_map_write_load_round_trip_lazy_after_committed_add() {
-    let tmp = std::env::temp_dir().join("turbovec_idmap_lazy_committed.tvim");
+    let tmp = std::env::temp_dir().join("fabius-vec_idmap_lazy_committed.tvim");
     let ids: Vec<u64> = vec![100, 200, 300];
     {
         let mut idx = IdMapIndex::new_lazy(4).unwrap();
@@ -304,7 +304,7 @@ fn id_map_write_load_round_trip_lazy_after_committed_add() {
 fn new_rejects_bad_bit_width() {
     for bw in [0usize, 1, 5, 8, 100] {
         let err = TurboQuantIndex::new(DIM, bw).err().unwrap();
-        assert_eq!(err, turbovec::ConstructError::BitWidthOutOfRange(bw));
+        assert_eq!(err, fabius-vec::ConstructError::BitWidthOutOfRange(bw));
     }
 }
 
@@ -312,7 +312,7 @@ fn new_rejects_bad_bit_width() {
 fn new_rejects_bad_dim() {
     for dim in [0usize, 1, 4, 7, 9, 15] {
         let err = TurboQuantIndex::new(dim, 4).err().unwrap();
-        assert_eq!(err, turbovec::ConstructError::DimNotPositiveMultipleOf8(dim));
+        assert_eq!(err, fabius-vec::ConstructError::DimNotPositiveMultipleOf8(dim));
     }
 }
 
@@ -320,18 +320,18 @@ fn new_rejects_bad_dim() {
 fn new_lazy_rejects_bad_bit_width() {
     for bw in [0usize, 1, 5, 8] {
         let err = TurboQuantIndex::new_lazy(bw).err().unwrap();
-        assert_eq!(err, turbovec::ConstructError::BitWidthOutOfRange(bw));
+        assert_eq!(err, fabius-vec::ConstructError::BitWidthOutOfRange(bw));
     }
 }
 
 #[test]
 fn id_map_new_rejects_bad_bit_width() {
     let err = IdMapIndex::new(DIM, 5).err().unwrap();
-    assert_eq!(err, turbovec::ConstructError::BitWidthOutOfRange(5));
+    assert_eq!(err, fabius-vec::ConstructError::BitWidthOutOfRange(5));
 }
 
 #[test]
 fn id_map_new_rejects_bad_dim() {
     let err = IdMapIndex::new(0, 4).err().unwrap();
-    assert_eq!(err, turbovec::ConstructError::DimNotPositiveMultipleOf8(0));
+    assert_eq!(err, fabius-vec::ConstructError::DimNotPositiveMultipleOf8(0));
 }

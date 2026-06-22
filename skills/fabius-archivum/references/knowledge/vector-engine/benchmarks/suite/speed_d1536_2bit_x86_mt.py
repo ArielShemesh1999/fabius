@@ -1,6 +1,6 @@
 import os, time, json, numpy as np
 import faiss
-from turbovec import TurboQuantIndex
+from fabius-vec import TurboQuantIndex
 
 DATA_DIR = os.path.expanduser("~/data/py-turboquant")
 DIM, BIT_WIDTH = 1536, 2

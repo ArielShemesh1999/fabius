@@ -15,8 +15,8 @@
 //!    exposing a dequantize API.
 
 use statrs::distribution::{Beta, Continuous};
-use turbovec::codebook::codebook;
-use turbovec::TurboQuantIndex;
+use fabius-vec::codebook::codebook;
+use fabius-vec::TurboQuantIndex;
 
 /// Lloyd-Max MSE for an N(0, 1) source at b bits per dimension,
 /// from the TurboQuant paper's Theorem 1 (equivalently, Max 1960).
@@ -56,7 +56,7 @@ fn codebook_mse_matches_paper_at_high_dim() {
 fn codebook_mse_within_shannon_factor() {
     // The paper claims distortion within ~2.7x of the Shannon lower
     // bound 2^{-2b}. Validate the ratio stays below 3.0 across every
-    // (bits, dim) pair turbovec cares about.
+    // (bits, dim) pair fabius-vec cares about.
     for &bits in &[2usize, 3, 4] {
         for &dim in &[256usize, 768, 1536] {
             let (boundaries, centroids) = codebook(bits, dim);

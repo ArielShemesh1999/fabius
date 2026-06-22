@@ -1,6 +1,6 @@
-"""LlamaIndex VectorStore backed by turbovec's quantized index.
+"""LlamaIndex VectorStore backed by fabius-vec's quantized index.
 
-Install with: ``pip install turbovec[llama-index]``.
+Install with: ``pip install fabius-vec[llama-index]``.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ import numpy as np
 
 from ._dedup import DuplicatePolicy, resolve_duplicates
 from ._persist import check_persisted_handles
-from ._turbovec import IdMapIndex
+from ._fabius-vec import IdMapIndex
 
 try:
     from llama_index.core.bridge.pydantic import PrivateAttr
@@ -40,8 +40,8 @@ try:
     )
 except ImportError as exc:
     raise ImportError(
-        "llama-index-core is required to use turbovec.llama_index. "
-        "Install with: pip install turbovec[llama-index]"
+        "llama-index-core is required to use fabius-vec.llama_index. "
+        "Install with: pip install fabius-vec[llama-index]"
     ) from exc
 
 
@@ -263,13 +263,13 @@ class TurboQuantVectorStore(BasePydanticVectorStore):
 
     def get(self, text_id: str) -> List[float]:
         """LlamaIndex's protocol expects this to return the full-precision
-        embedding for a given node id. turbovec discards full-precision
+        embedding for a given node id. fabius-vec discards full-precision
         embeddings after quantization, so we raise loudly with an
         explanation rather than return a lossy reconstruction or zeroes.
         """
         raise NotImplementedError(
             "TurboQuantVectorStore.get(text_id) cannot return the original "
-            "embedding because turbovec quantizes vectors to 2-4 bits per "
+            "embedding because fabius-vec quantizes vectors to 2-4 bits per "
             "dimension and discards full precision after encoding. Keep a "
             "parallel docstore if you need the raw embedding."
         )
@@ -284,7 +284,7 @@ class TurboQuantVectorStore(BasePydanticVectorStore):
         silently skipped.
 
         Unlike ``SimpleVectorStore`` (which raises NotImplementedError
-        here because it doesn't store nodes), turbovec keeps node text
+        here because it doesn't store nodes), fabius-vec keeps node text
         and metadata in a side-car so this can return populated
         ``TextNode`` objects directly.
         """
@@ -433,7 +433,7 @@ class TurboQuantVectorStore(BasePydanticVectorStore):
             return target in value
         if op == FilterOperator.TEXT_MATCH:
             # Reference (`utils.py:138-144`): case-SENSITIVE substring,
-            # both sides must be strings. Previous turbovec impl
+            # both sides must be strings. Previous fabius-vec impl
             # lowercased both sides — a silent semantic divergence that
             # caused our results to disagree with SimpleVectorStore on
             # mixed-case keys.
@@ -464,7 +464,7 @@ class TurboQuantVectorStore(BasePydanticVectorStore):
     def query(self, query: VectorStoreQuery, **_: Any) -> VectorStoreQueryResult:
         # MMR / SVM / LINEAR_REGRESSION / HYBRID etc. all need access to
         # full-precision vectors (for pairwise diversity, learned scoring,
-        # or sparse-dense fusion). turbovec discards full precision after
+        # or sparse-dense fusion). fabius-vec discards full precision after
         # quantization, so any non-DEFAULT mode is unsupportable here.
         # Raise loudly instead of silently treating it as DEFAULT, which
         # the previous impl did and which let callers think they were
@@ -474,7 +474,7 @@ class TurboQuantVectorStore(BasePydanticVectorStore):
                 f"TurboQuantVectorStore does not support query mode "
                 f"{query.mode!r}. Only VectorStoreQueryMode.DEFAULT is "
                 "supported — MMR / SVM / hybrid modes need access to "
-                "full-precision vectors which turbovec discards after "
+                "full-precision vectors which fabius-vec discards after "
                 "quantization. Maintain a parallel store with full vectors "
                 "if you need a non-default scoring mode."
             )
@@ -640,7 +640,7 @@ class TurboQuantVectorStore(BasePydanticVectorStore):
         if version not in _NODES_SCHEMA_COMPAT:
             raise ValueError(
                 f"{_STORE_EXT.lstrip('.')} has schema version {version}; "
-                f"this turbovec accepts versions {list(_NODES_SCHEMA_COMPAT)}"
+                f"this fabius-vec accepts versions {list(_NODES_SCHEMA_COMPAT)}"
             )
         store = cls(index=index)
         # v1 entries lack `node_dict` and reconstruct as narrow TextNodes;

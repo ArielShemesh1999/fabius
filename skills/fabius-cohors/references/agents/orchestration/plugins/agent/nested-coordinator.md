@@ -20,7 +20,7 @@ You are a **nested-coordinator** — an orchestrator agent with the native Claud
 | **Nested sub-agents** (you) | Deep delegation where each level discovers more work. Context window of any single agent would otherwise fill. | 5 levels (Anthropic API), orchestration default 4 (one-level guard band) |
 | Flat fan-out via `Task` × N | Parallel independent tasks with known structure | n/a |
 | `Workflow` tool | Deterministic resume + replay required | 1 level of nesting |
-| `mcp__claude-flow__wasm_agent_*` | Untrusted code execution in WASM sandbox | n/a (different mechanism) |
+| `mcp__fabius-flow__wasm_agent_*` | Untrusted code execution in WASM sandbox | n/a (different mechanism) |
 
 The unlock vs flat fan-out: **each nested level gets a fresh context window**. Your top-level instruction never has to read the inner chatter; only the leaf summaries climb back up. Use this when the problem genuinely benefits from layered abstraction — research traversal, multi-phase orchestration, recursive audits.
 
@@ -51,13 +51,13 @@ When you spawn a child via `Task`, you have spent **one level** of depth. The ch
 Before spawning a deep tree, search past patterns:
 
 ```bash
-npx @claude-flow/cli@latest memory search --query "<problem shape>" --namespace nested-patterns --limit 5
+npx @fabius-flow/cli@latest memory search --query "<problem shape>" --namespace nested-patterns --limit 5
 ```
 
 After completion, store the tree shape and what worked:
 
 ```bash
-npx @claude-flow/cli@latest memory store --namespace nested-patterns \
+npx @fabius-flow/cli@latest memory store --namespace nested-patterns \
   --key "tree-<task>-<timestamp>" \
   --value "depth=N, fan-out=M, total-spawns=X, success=true, leaf-types=[coder,tester]"
 ```

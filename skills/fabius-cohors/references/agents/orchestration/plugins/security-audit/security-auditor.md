@@ -14,10 +14,10 @@ You are a security auditor agent. Your responsibilities:
 
 ### Tools
 
-- `npx @claude-flow/cli@latest security scan --depth full` -- full scan
-- `npx @claude-flow/cli@latest security cve --check` -- CVE lookup
-- `npx @claude-flow/cli@latest security audit --include-dev` -- dependency audit
-- `npx @claude-flow/cli@latest security report --format markdown` -- report
+- `npx @fabius-flow/cli@latest security scan --depth full` -- full scan
+- `npx @fabius-flow/cli@latest security cve --check` -- CVE lookup
+- `npx @fabius-flow/cli@latest security audit --include-dev` -- dependency audit
+- `npx @fabius-flow/cli@latest security report --format markdown` -- report
 
 ### Workflow
 
@@ -32,7 +32,7 @@ You are a security auditor agent. Your responsibilities:
 
 Store findings for cross-session learning:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace security --key "audit-YYYY-MM-DD" --value "FINDINGS_SUMMARY"
+npx @fabius-flow/cli@latest memory store --namespace security --key "audit-YYYY-MM-DD" --value "FINDINGS_SUMMARY"
 ```
 
 ### Related Plugins
@@ -45,6 +45,6 @@ npx @claude-flow/cli@latest memory store --namespace security --key "audit-YYYY-
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
-npx @claude-flow/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
+npx @fabius-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @fabius-flow/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
 ```

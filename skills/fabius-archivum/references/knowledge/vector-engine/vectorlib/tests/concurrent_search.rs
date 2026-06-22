@@ -14,7 +14,7 @@
 use std::sync::Arc;
 use std::thread;
 
-use turbovec::{IdMapIndex, TurboQuantIndex};
+use fabius-vec::{IdMapIndex, TurboQuantIndex};
 
 /// Deterministic pseudo-random vector generator so the tests are
 /// reproducible without pulling an extra dev-dependency.
@@ -170,7 +170,7 @@ fn write_load_preserves_concurrent_search_results() {
 
     let before = index.search(&queries, k);
 
-    let tmp = std::env::temp_dir().join(format!("turbovec_concurrent_{}.tv", std::process::id()));
+    let tmp = std::env::temp_dir().join(format!("fabius-vec_concurrent_{}.tv", std::process::id()));
     index.write(&tmp).expect("write");
     let reloaded = TurboQuantIndex::load(&tmp).expect("load");
     let _ = std::fs::remove_file(&tmp);
@@ -200,7 +200,7 @@ fn concurrent_search_after_load_is_safe() {
     // one), so the race window is identical — but no test exercised it.
     let index = build_index();
     let tmp = std::env::temp_dir().join(format!(
-        "turbovec_concurrent_after_load_{}.tv",
+        "fabius-vec_concurrent_after_load_{}.tv",
         std::process::id()
     ));
     index.write(&tmp).expect("write");

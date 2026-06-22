@@ -2,12 +2,12 @@
 name: fabius-cohors
 description: >
   fabius's agent-engineering layer — how to DEFINE and ORCHESTRATE other agents: the definition
-  schema, the permission model, the single-vs-multi-agent decision, and the four orchestration
-  patterns (sequential / parallel / hierarchical / human-in-the-loop). Use when the user wants to
+  schema, the permission model, the single-vs-multi-agent decision, and the five orchestration
+  patterns (sequential / parallel / hierarchical / human-in-the-loop / swarm). Use when the user wants to
   build an agent, a subagent, a tool-using assistant, a multi-agent system, a swarm, or an
   orchestration workflow. A copy-from schema and proven agent shapes live in
   references/agent-patterns.md; the full production agent catalog (200+ agents across 15 domains
-  + Python/Go/Java/Kotlin/Android/TypeScript packs, with a ruvector.db memory index) lives in
+  + Python/Go/Java/Kotlin/Android/TypeScript packs, with a fabius-vec.db memory index) lives in
   references/agents/, indexed by references/agent-catalog.md.
 ---
 

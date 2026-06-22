@@ -87,7 +87,7 @@ Full layer model, the single-owner coordination table, and the capability matrix
 | 🤖 | **fabius-cohors** | agent engineering | definition schema · least-privilege · 5 orchestration patterns incl. **swarm** (coordinator + specialized workers) |
 | 🧠 | **fabius-archivum** | persistent memory | **autonomous per-project memory** (LLM-wiki) · Obsidian-ready · index + log retrieval · when to go vector |
 
-Each skill is a thin operating contract; the depth — a 69-brand design teardown library, a 200+-agent production catalog with `ruvector.db` memory, a knowledge engine (vector · wiki · RAG), and the full craft + discipline process library — lives under each skill's `references/`, loaded **on demand**, so the skill itself stays lean.
+Each skill is a thin operating contract; the depth — a 69-brand design teardown library, a 200+-agent production catalog with `fabius-vec.db` memory, a knowledge engine (vector · wiki · RAG), and the full craft + discipline process library — lives under each skill's `references/`, loaded **on demand**, so the skill itself stays lean.
 
 *Latin, for the curious: **parcus** frugal · **disciplina** training · **decor** what is fitting · **cohors** the cohort · **archivum** the record office.*
 
@@ -166,13 +166,14 @@ fabius/
 │   ├── fabius-decor/            # 🎨 design system
 │   │   └── references/          #    token contract + design/ (69-brand teardown library)
 │   ├── fabius-cohors/           # 🤖 agent engineering
-│   │   └── references/          #    schema + agents/ (200+ agent catalog + ruvector.db)
+│   │   └── references/          #    schema + agents/ (200+ agent catalog + fabius-vec.db)
 │   └── fabius-archivum/         # 🧠 persistent memory
 │       └── references/          #    wiki schema + knowledge/ (vector · wiki · RAG)
 ├── evals/                       # eval.mjs · portable_eval.py · harness.workflow.js · results.json
 ├── AGENTS.md                    # 🔌 tool-agnostic bridge (Codex / Cursor / …)
 ├── ARCHITECTURE.md              # layer model + single-owner table + capability matrix
 ├── BENCHMARKS.md                # method + mechanism + reproduce
+├── CREDITS.md                   # inspiration + attribution for bundled references
 ├── LICENSE                      # MIT
 └── README.md
 ```
@@ -189,7 +190,7 @@ Lean is a **discipline, not a corner-cutter** — it never trims validation, sec
 
 ## 📄 License
 
-fabius is licensed **MIT**.
+fabius is licensed **MIT**. The bundled `references/` adapt open work — see [CREDITS.md](CREDITS.md) for inspiration + attribution.
 
 <div align="center">
 <br/>

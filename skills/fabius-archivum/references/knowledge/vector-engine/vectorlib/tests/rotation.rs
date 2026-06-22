@@ -11,7 +11,7 @@
 //!
 //! Tolerances here are generous enough for f32 + faer QR roundoff.
 
-use turbovec::rotation::make_rotation_matrix;
+use fabius-vec::rotation::make_rotation_matrix;
 
 fn mat_mul(a: &[f32], b: &[f32], dim: usize) -> Vec<f32> {
     let mut out = vec![0.0f32; dim * dim];

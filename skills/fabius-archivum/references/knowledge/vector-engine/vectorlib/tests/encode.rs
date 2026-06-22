@@ -6,9 +6,9 @@
 //! verify the low-level output shape and the per-vector scale value
 //! without reaching into private state.
 
-use turbovec::codebook::codebook;
-use turbovec::encode::encode;
-use turbovec::rotation::make_rotation_matrix;
+use fabius-vec::codebook::codebook;
+use fabius-vec::encode::encode;
+use fabius-vec::rotation::make_rotation_matrix;
 
 fn make_vectors(n: usize, dim: usize, seed: u64) -> Vec<f32> {
     let mut state = seed.wrapping_mul(0x9E3779B97F4A7C15);

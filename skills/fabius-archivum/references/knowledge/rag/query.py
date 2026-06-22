@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Query the vault TurboVec index. Usage: python query.py <question>  (K=5 env to change top-k)."""
+"""Query the vault Fabius-Vec index. Usage: python query.py <question>  (K=5 env to change top-k)."""
 import os, sys, json
 import numpy as np
 
@@ -13,7 +13,7 @@ def main():
         print("usage: python query.py <question>"); sys.exit(1)
     k = int(os.environ.get("K", "5"))
     from fastembed import TextEmbedding
-    from turbovec import IdMapIndex
+    from fabius-vec import IdMapIndex
     idx = IdMapIndex.load(os.path.join(INDEX_DIR, "vault.tvim"))
     meta = json.load(open(os.path.join(INDEX_DIR, "meta.json")))
     model = TextEmbedding(MODEL)

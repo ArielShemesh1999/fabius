@@ -1,6 +1,6 @@
-"""Agno VectorDb backed by turbovec's quantized index.
+"""Agno VectorDb backed by fabius-vec's quantized index.
 
-Install with: ``pip install turbovec[agno]``.
+Install with: ``pip install fabius-vec[agno]``.
 
 Implements Agno's ``VectorDb`` interface and matches the public surface
 of ``agno.vectordb.lancedb.LanceDb`` (the closest in-tree single-machine
@@ -16,7 +16,7 @@ from typing import Any, Dict, Iterable, List, Optional, Set, Union
 
 import numpy as np
 
-from ._turbovec import IdMapIndex
+from ._fabius-vec import IdMapIndex
 
 try:
     from agno.knowledge.document import Document
@@ -27,8 +27,8 @@ try:
     from agno.vectordb.search import SearchType
 except ImportError as exc:
     raise ImportError(
-        "agno is required to use turbovec.agno. "
-        "Install with: pip install turbovec[agno]"
+        "agno is required to use fabius-vec.agno. "
+        "Install with: pip install fabius-vec[agno]"
     ) from exc
 
 
@@ -51,7 +51,7 @@ class TurboQuantVectorDb(VectorDb):
     Example::
 
         from agno.knowledge.embedder.openai import OpenAIEmbedder
-        from turbovec.agno import TurboQuantVectorDb
+        from fabius-vec.agno import TurboQuantVectorDb
 
         vector_db = TurboQuantVectorDb(embedder=OpenAIEmbedder())
         vector_db.create()
@@ -82,7 +82,7 @@ class TurboQuantVectorDb(VectorDb):
             other values raise :class:`ValueError`. (Keyword/hybrid search
             would require an external BM25/lexical index.)
         :param distance: Only :class:`Distance.cosine` is supported.
-            turbovec stores unit-normalized vectors, so the kernel's raw
+            fabius-vec stores unit-normalized vectors, so the kernel's raw
             score is cosine similarity directly.
         :param reranker: Optional Agno reranker applied to the result set
             after vector retrieval.
@@ -98,7 +98,7 @@ class TurboQuantVectorDb(VectorDb):
         )
         if embedder is None:
             raise ValueError(
-                "`embedder` is required; turbovec needs the embedder's "
+                "`embedder` is required; fabius-vec needs the embedder's "
                 "`dimensions` to size the underlying index."
             )
         if embedder.dimensions is None:
@@ -114,7 +114,7 @@ class TurboQuantVectorDb(VectorDb):
         if distance != Distance.cosine:
             raise ValueError(
                 f"TurboQuantVectorDb only supports distance=Distance.cosine; "
-                f"got {distance}. turbovec stores unit-normalized vectors."
+                f"got {distance}. fabius-vec stores unit-normalized vectors."
             )
 
         self.embedder: Embedder = embedder
@@ -620,7 +620,7 @@ class TurboQuantVectorDb(VectorDb):
 
     def get_supported_search_types(self) -> List[SearchType]:
         # Only vector. Keyword and hybrid would require an external BM25
-        # / lexical index that turbovec doesn't ship. Return shape
+        # / lexical index that fabius-vec doesn't ship. Return shape
         # mirrors LanceDb: a list of SearchType enum members (not their
         # `.value` strings).
         return [SearchType.vector]
@@ -755,7 +755,7 @@ class TurboQuantVectorDb(VectorDb):
         if version != _DOCSTORE_SCHEMA_VERSION:
             raise ValueError(
                 f"{_STORE_FILENAME} has schema_version {version}; this "
-                f"turbovec expects {_DOCSTORE_SCHEMA_VERSION}"
+                f"fabius-vec expects {_DOCSTORE_SCHEMA_VERSION}"
             )
         if state.get("dimensions") != self.dimensions:
             raise ValueError(

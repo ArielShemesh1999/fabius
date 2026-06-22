@@ -6,7 +6,7 @@ which isn't m%32-aligned. Matches the paper's Section 4.4 configuration:
 2 coordinates per sub-quantizer at 4-bit (m = d / 2 = 100), 256 codewords.
 """
 import os, json, time, numpy as np, h5py, faiss
-from turbovec import TurboQuantIndex
+from fabius-vec import TurboQuantIndex
 
 DATA_DIR = os.path.expanduser("~/data/py-turboquant")
 GLOVE_PATH = os.path.join(DATA_DIR, "glove-200-angular.hdf5")

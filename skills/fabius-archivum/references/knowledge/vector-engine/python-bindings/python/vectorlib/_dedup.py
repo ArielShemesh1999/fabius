@@ -1,7 +1,7 @@
 """Shared in-batch duplicate resolution for the framework integrations.
 
 Each upstream library resolves a repeated id *within a single write* its own
-way, and every turbovec wrapper must match its upstream to stay a true
+way, and every fabius-vec wrapper must match its upstream to stay a true
 drop-in:
 
 - LangChain's ``InMemoryVectorStore`` overwrites on a repeated key  → KEEP_LAST

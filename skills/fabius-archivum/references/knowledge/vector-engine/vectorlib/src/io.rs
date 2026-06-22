@@ -1,4 +1,4 @@
-//! Read/write TurboVec index files.
+//! Read/write Fabius-Vec index files.
 //!
 //! Two formats live here:
 //! * `.tv` — [`TurboQuantIndex`](crate::TurboQuantIndex) — 4-byte magic
@@ -10,16 +10,16 @@
 //!
 //! ## Format versioning
 //!
-//! Both formats are at version 3 as of turbovec 0.6.x (TQ+ per-coord
-//! calibration). Version 2 (turbovec 0.4.4 .. 0.6.0) is loaded transparently
+//! Both formats are at version 3 as of fabius-vec 0.6.x (TQ+ per-coord
+//! calibration). Version 2 (fabius-vec 0.4.4 .. 0.6.0) is loaded transparently
 //! with empty calibration — the index behaves like the old encoding, with
 //! no recall change and no TQ+ gain. Re-encoding from source vectors picks
-//! up the new calibration. Version 1 (turbovec ≤ 0.4.3) is incompatible
+//! up the new calibration. Version 1 (fabius-vec ≤ 0.4.3) is incompatible
 //! and refused with a rebuild hint.
 //!
 //! Version 1 `.tv` files had no magic — the file started with a bare
 //! bit_width byte (2/3/4). Version 2+ prepends magic + version, which
-//! lets us detect either a current file or "looks like a v1 turbovec
+//! lets us detect either a current file or "looks like a v1 fabius-vec
 //! file" cleanly.
 
 use std::fs::File;
@@ -32,7 +32,7 @@ const TVIM_MAGIC: &[u8; 4] = b"TVIM";
 const TVIM_VERSION: u8 = 3;
 
 const REBUILD_HINT: &str =
-    "Rebuild this index from the source vectors using turbovec 0.4.4 or later \
+    "Rebuild this index from the source vectors using fabius-vec 0.4.4 or later \
      (no in-place migration is provided; the format version 2 changes the meaning \
      of the per-vector scalar from ||v|| to a length-renormalization correction).";
 
@@ -73,13 +73,13 @@ pub fn load(path: impl AsRef<Path>) -> io::Result<CoreLoad> {
         // Version 1 .tv files had no magic — first byte was the bit_width
         // (always 2, 3, or 4). If we see one of those as the first byte,
         // emit a targeted error rather than the generic "wrong magic"
-        // message; otherwise treat it as a non-turbovec file.
+        // message; otherwise treat it as a non-fabius-vec file.
         if (2..=4).contains(&magic[0]) {
             return Err(io::Error::new(
                 io::ErrorKind::InvalidData,
                 format!(
-                    "this .tv file was written by turbovec ≤ 0.4.3 (format \
-                     version 1). It is incompatible with turbovec 0.4.4+ \
+                    "this .tv file was written by fabius-vec ≤ 0.4.3 (format \
+                     version 1). It is incompatible with fabius-vec 0.4.4+ \
                      because the per-vector scalar's meaning changed. {}",
                     REBUILD_HINT,
                 ),
@@ -87,7 +87,7 @@ pub fn load(path: impl AsRef<Path>) -> io::Result<CoreLoad> {
         }
         return Err(io::Error::new(
             io::ErrorKind::InvalidData,
-            "not a turbovec .tv file: wrong magic",
+            "not a fabius-vec .tv file: wrong magic",
         ));
     }
     let mut version = [0u8; 1];
@@ -150,8 +150,8 @@ pub fn load_id_map(
         return Err(io::Error::new(
             io::ErrorKind::InvalidData,
             format!(
-                "this .tvim file was written by turbovec ≤ 0.4.3 (format \
-                 version 1). It is incompatible with turbovec 0.4.4+ \
+                "this .tvim file was written by fabius-vec ≤ 0.4.3 (format \
+                 version 1). It is incompatible with fabius-vec 0.4.4+ \
                  because the per-vector scalar's meaning changed. {}",
                 REBUILD_HINT,
             ),

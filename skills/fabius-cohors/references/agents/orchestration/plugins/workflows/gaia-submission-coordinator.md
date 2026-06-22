@@ -76,12 +76,12 @@ Before telling the user the package is ready:
 
 Store and search submission records:
 ```bash
-npx @claude-flow/cli@latest memory store \
+npx @fabius-flow/cli@latest memory store \
   --namespace gaia-submissions \
   --key "sub-$(date +%Y%m%d-%H%M)" \
   --value '{"package":"submission-<date>-<sha>","pass_rate":0.208,"model":"claude-sonnet-4-6","signed":true}'
 
-npx @claude-flow/cli@latest memory search \
+npx @fabius-flow/cli@latest memory search \
   --namespace gaia-submissions \
   --query "submission package 2026"
 ```

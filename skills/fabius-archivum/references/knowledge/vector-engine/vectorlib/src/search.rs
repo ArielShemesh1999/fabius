@@ -1350,7 +1350,7 @@ pub(crate) fn block_pair_has_allowed(mask: Option<&[u64]>, base_vec_pair: usize)
 /// Used by the non-x86_64 / non-aarch64 scalar fallback at the bottom
 /// of `search`, AND as the x86_64 fallback inside the SIMD-dispatch
 /// `unsafe` block when neither AVX-512 BW nor AVX2 is detected at
-/// runtime (e.g. running a turbovec binary built without the cargo
+/// runtime (e.g. running a fabius-vec binary built without the cargo
 /// config's `target-cpu=x86-64-v3` on a pre-Haswell CPU, or under a
 /// VM / emulator that doesn't expose AVX2 to userspace). Without this
 /// fallback, pre-AVX2 x86_64 silently returned empty top-k results

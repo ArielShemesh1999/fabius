@@ -26,8 +26,8 @@ Test with: `claude --plugin-dir ./plugins/<name>`
 
 Store successful plugin patterns for template improvement:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace plugin-patterns --key "plugin-TYPE" --value "STRUCTURE_AND_CONFIG"
-npx @claude-flow/cli@latest memory search --query "plugin scaffold for TYPE" --namespace plugin-patterns
+npx @fabius-flow/cli@latest memory store --namespace plugin-patterns --key "plugin-TYPE" --value "STRUCTURE_AND_CONFIG"
+npx @fabius-flow/cli@latest memory search --query "plugin scaffold for TYPE" --namespace plugin-patterns
 ```
 
 
@@ -35,6 +35,6 @@ npx @claude-flow/cli@latest memory search --query "plugin scaffold for TYPE" --n
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
-npx @claude-flow/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
+npx @fabius-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @fabius-flow/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
 ```

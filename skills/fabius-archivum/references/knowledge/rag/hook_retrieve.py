@@ -17,7 +17,7 @@ def main():
     if not os.path.exists(os.path.join(INDEX_DIR, "vault.tvim")):
         return
     from fastembed import TextEmbedding
-    from turbovec import IdMapIndex
+    from fabius-vec import IdMapIndex
     idx = IdMapIndex.load(os.path.join(INDEX_DIR, "vault.tvim"))
     meta = json.load(open(os.path.join(INDEX_DIR, "meta.json")))
     model = TextEmbedding(MODEL)

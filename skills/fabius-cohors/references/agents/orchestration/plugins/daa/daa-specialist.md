@@ -13,11 +13,11 @@ You are a DAA specialist for Orchestration's Dynamic Agentic Architecture. Your 
 5. **Design workflows** that leverage cognitive patterns for intelligent execution
 
 Use these MCP tools:
-- `mcp__claude-flow__daa_agent_create` / `daa_agent_adapt` for agent management
-- `mcp__claude-flow__daa_cognitive_pattern` for reasoning patterns
-- `mcp__claude-flow__daa_workflow_create` / `daa_workflow_execute` for workflows
-- `mcp__claude-flow__daa_knowledge_share` for cross-agent learning
-- `mcp__claude-flow__daa_learning_status` / `daa_performance_metrics` for monitoring
+- `mcp__fabius-flow__daa_agent_create` / `daa_agent_adapt` for agent management
+- `mcp__fabius-flow__daa_cognitive_pattern` for reasoning patterns
+- `mcp__fabius-flow__daa_workflow_create` / `daa_workflow_execute` for workflows
+- `mcp__fabius-flow__daa_knowledge_share` for cross-agent learning
+- `mcp__fabius-flow__daa_learning_status` / `daa_performance_metrics` for monitoring
 
 Focus on creating agents that improve measurably over time through feedback loops.
 
@@ -25,8 +25,8 @@ Focus on creating agents that improve measurably over time through feedback loop
 
 Persist cognitive patterns and adaptation history:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace daa-patterns --key "cognitive-PATTERN" --value "ADAPTATION_DATA"
-npx @claude-flow/cli@latest memory search --query "cognitive pattern for TASK" --namespace daa-patterns
+npx @fabius-flow/cli@latest memory store --namespace daa-patterns --key "cognitive-PATTERN" --value "ADAPTATION_DATA"
+npx @fabius-flow/cli@latest memory search --query "cognitive pattern for TASK" --namespace daa-patterns
 ```
 
 ### Related Plugins
@@ -38,5 +38,5 @@ npx @claude-flow/cli@latest memory search --query "cognitive pattern for TASK" -
 
 After completing tasks, feed the adaptive-agent learning loop:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @fabius-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```

@@ -12,7 +12,7 @@ use std::fs::File;
 use std::io::Write;
 use std::path::PathBuf;
 
-use turbovec::io::{load, load_id_map, write, write_id_map};
+use fabius-vec::io::{load, load_id_map, write, write_id_map};
 
 fn temp_path(name: &str) -> PathBuf {
     let mut p = std::env::temp_dir();
@@ -20,7 +20,7 @@ fn temp_path(name: &str) -> PathBuf {
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
         .as_nanos();
-    p.push(format!("turbovec-{}-{}", nonce, name));
+    p.push(format!("fabius-vec-{}-{}", nonce, name));
     p
 }
 
@@ -74,7 +74,7 @@ fn tv_round_trip_with_tqplus_calibration() {
 
 #[test]
 fn tv_v1_file_is_rejected_with_upgrade_hint() {
-    // Hand-construct a turbovec ≤ 0.4.3 `.tv` file: bare header
+    // Hand-construct a fabius-vec ≤ 0.4.3 `.tv` file: bare header
     // (bit_width=4, dim=32, n_vectors=2), packed codes, two f32 norms.
     let path = temp_path("v1.tv");
     {
@@ -90,7 +90,7 @@ fn tv_v1_file_is_rejected_with_upgrade_hint() {
     let err = load(&path).unwrap_err();
     let msg = err.to_string();
     assert!(
-        msg.contains("turbovec ≤ 0.4.3") && msg.contains("Rebuild"),
+        msg.contains("fabius-vec ≤ 0.4.3") && msg.contains("Rebuild"),
         "expected upgrade hint, got: {}",
         msg
     );
@@ -123,7 +123,7 @@ fn tvim_round_trip_current_format() {
 
 #[test]
 fn tvim_v1_file_is_rejected_with_upgrade_hint() {
-    // Hand-construct a turbovec ≤ 0.4.3 `.tvim` file: TVIM magic, version
+    // Hand-construct a fabius-vec ≤ 0.4.3 `.tvim` file: TVIM magic, version
     // byte = 1, then the same v1 core layout.
     let path = temp_path("v1.tvim");
     {
@@ -141,7 +141,7 @@ fn tvim_v1_file_is_rejected_with_upgrade_hint() {
     let err = load_id_map(&path).unwrap_err();
     let msg = err.to_string();
     assert!(
-        msg.contains("turbovec ≤ 0.4.3") && msg.contains("Rebuild"),
+        msg.contains("fabius-vec ≤ 0.4.3") && msg.contains("Rebuild"),
         "expected upgrade hint, got: {}",
         msg
     );
@@ -246,7 +246,7 @@ fn tv_garbage_file_rejected_without_upgrade_hint() {
     let msg = err.to_string();
     assert!(msg.contains("wrong magic"), "expected wrong-magic error, got: {}", msg);
     assert!(
-        !msg.contains("turbovec ≤ 0.4.3"),
+        !msg.contains("fabius-vec ≤ 0.4.3"),
         "should not suggest upgrade for garbage: {}",
         msg
     );

@@ -14,8 +14,8 @@ from llama_index.core.vector_stores.types import (
     VectorStoreQuery,
 )
 
-from turbovec import IdMapIndex
-from turbovec.llama_index import TurboQuantVectorStore
+from fabius-vec import IdMapIndex
+from fabius-vec.llama_index import TurboQuantVectorStore
 
 
 def _unit_vec(seed: int, dim: int) -> list[float]:
@@ -459,7 +459,7 @@ def test_query_ne_filter_treats_missing_key_as_no_match():
 
 def test_query_text_match_is_case_sensitive():
     # Matches the reference (`utils.py:138-144`): TEXT_MATCH is a case-
-    # SENSITIVE substring check. An earlier turbovec impl lowercased both
+    # SENSITIVE substring check. An earlier fabius-vec impl lowercased both
     # sides — we no longer do that (TEXT_MATCH_INSENSITIVE is the
     # opt-in case-folding variant; see below).
     store = TurboQuantVectorStore.from_params(dim=64, bit_width=4)
@@ -1010,7 +1010,7 @@ def _make_rich_node(
 
 def test_query_returns_node_with_full_field_fidelity():
     # Every field SimpleVectorStore preserves through query must survive
-    # turbovec's write -> query round-trip. The previous narrow side-car
+    # fabius-vec's write -> query round-trip. The previous narrow side-car
     # schema lost relationships (PREVIOUS/NEXT/PARENT/CHILD),
     # excluded_*_metadata_keys, template fields, char_idx, and mimetype.
     store = TurboQuantVectorStore.from_params(dim=64, bit_width=4)
@@ -1117,7 +1117,7 @@ def test_persist_round_trip_preserves_full_node_fidelity(tmp_path):
 
 
 def test_persist_v1_schema_still_loads_with_narrow_fidelity(tmp_path):
-    # A nodes.json written by an older turbovec (schema_version=1, narrow
+    # A nodes.json written by an older fabius-vec (schema_version=1, narrow
     # `{text, metadata, ref_doc_id}` per entry) must still load — relationships
     # other than SOURCE will be missing (the data wasn't there), but the
     # text + metadata + SOURCE relationship round-trip as they always did.
@@ -1164,7 +1164,7 @@ def test_persist_v1_schema_still_loads_with_narrow_fidelity(tmp_path):
 
 
 def test_query_rejects_non_default_mode():
-    # MMR / SVM / hybrid all need full-precision vectors which turbovec
+    # MMR / SVM / hybrid all need full-precision vectors which fabius-vec
     # discards. Raise loudly instead of silently treating as DEFAULT
     # (which the previous impl did, masking that the requested mode
     # wasn't honoured).
@@ -1255,7 +1255,7 @@ def test_query_round_trips_index_node_subtype():
 
 
 def test_query_returned_node_always_has_none_embedding():
-    # turbovec discards full-precision embeddings after quantization.
+    # fabius-vec discards full-precision embeddings after quantization.
     # `get()` raises NotImplementedError to communicate this; `query`
     # and `get_nodes` honour the same contract by returning nodes with
     # `embedding=None` even when the input node had an embedding set.

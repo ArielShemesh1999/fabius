@@ -6,7 +6,7 @@ per sub-quantizer (nbits=8), grouping 2 coordinates per sub at 4-bit
 (m = dim / 2).
 """
 import os, json, time, numpy as np, faiss
-from turbovec import TurboQuantIndex
+from fabius-vec import TurboQuantIndex
 
 DATA_DIR = os.path.expanduser("~/data/py-turboquant")
 RESULTS_DIR = os.path.join(os.path.dirname(__file__), "..", "results")

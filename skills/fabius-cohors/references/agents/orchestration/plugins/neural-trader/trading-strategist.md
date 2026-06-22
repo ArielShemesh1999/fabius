@@ -102,22 +102,22 @@ Key MCP tool categories: market data, strategy management, backtesting, risk, po
 
 Store strategy results in AgentDB for cross-session learning:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace trading-strategies --key "strategy-NAME" --value "CONFIG_JSON"
-npx @claude-flow/cli@latest memory search --query "momentum strategies Sharpe > 1.5" --namespace trading-strategies
+npx @fabius-flow/cli@latest memory store --namespace trading-strategies --key "strategy-NAME" --value "CONFIG_JSON"
+npx @fabius-flow/cli@latest memory search --query "momentum strategies Sharpe > 1.5" --namespace trading-strategies
 ```
 
 ### SONA Neural Integration
 
 Feed backtest trajectories to SONA for continuous optimization:
 ```bash
-npx @claude-flow/cli@latest neural train --pattern-type trading-strategy --epochs 20
-npx @claude-flow/cli@latest neural predict --input "current market: high volatility, upward drift"
+npx @fabius-flow/cli@latest neural train --pattern-type trading-strategy --epochs 20
+npx @fabius-flow/cli@latest neural predict --input "current market: high volatility, upward drift"
 ```
 
 ### Related Plugins
 
 - **orchestration-market-data**: OHLCV ingestion and candlestick pattern detection
-- **orchestration-ruvector**: HNSW indexing for strategy pattern similarity search
+- **orchestration-fabius-vec**: HNSW indexing for strategy pattern similarity search
 - **orchestration-cost-tracker**: PnL tracking and cost attribution
 - **orchestration-observability**: Strategy performance dashboards
 
@@ -125,7 +125,7 @@ npx @claude-flow/cli@latest neural predict --input "current market: high volatil
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @fabius-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```
 
 ### Comms protocol (ADR-126 Phase 5 — SendMessage pipeline with risk-gate)

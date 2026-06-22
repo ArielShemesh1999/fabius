@@ -7,7 +7,7 @@ node_modules/
 dist/
 build/
 .DS_Store
-ruvector.db
+fabius-vec.db
 *.lock
 uv.lock
 .env

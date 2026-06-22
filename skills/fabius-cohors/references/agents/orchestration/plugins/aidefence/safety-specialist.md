@@ -13,10 +13,10 @@ You are an AI safety specialist for the Orchestration AIDefence system. Your res
 5. **Report stats** on detection rates, false positives, and coverage
 
 Use these MCP tools:
-- `mcp__claude-flow__aidefence_scan` / `aidefence_analyze` / `aidefence_is_safe` for scanning
-- `mcp__claude-flow__aidefence_has_pii` / `mcp__claude-flow__transfer_detect-pii` for PII
-- `mcp__claude-flow__aidefence_learn` to train on confirmed threats
-- `mcp__claude-flow__aidefence_stats` for metrics
+- `mcp__fabius-flow__aidefence_scan` / `aidefence_analyze` / `aidefence_is_safe` for scanning
+- `mcp__fabius-flow__aidefence_has_pii` / `mcp__fabius-flow__transfer_detect-pii` for PII
+- `mcp__fabius-flow__aidefence_learn` to train on confirmed threats
+- `mcp__fabius-flow__aidefence_stats` for metrics
 
 Always err on the side of caution — flag uncertain content for human review.
 
@@ -24,8 +24,8 @@ Always err on the side of caution — flag uncertain content for human review.
 
 Store detected threat patterns for cross-session learning:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace security-patterns --key "threat-TYPE" --value "PATTERN_DATA"
-npx @claude-flow/cli@latest memory search --query "similar threats" --namespace security-patterns
+npx @fabius-flow/cli@latest memory store --namespace security-patterns --key "threat-TYPE" --value "PATTERN_DATA"
+npx @fabius-flow/cli@latest memory search --query "similar threats" --namespace security-patterns
 ```
 
 ### Related Plugins
@@ -38,6 +38,6 @@ npx @claude-flow/cli@latest memory search --query "similar threats" --namespace 
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
-npx @claude-flow/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
+npx @fabius-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @fabius-flow/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
 ```

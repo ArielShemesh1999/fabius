@@ -14,6 +14,6 @@ Checklist:
 - Tests: adequate coverage, edge cases, mocks for externals
 
 Report findings with severity (critical/warning/info). Store patterns:
-`npx @claude-flow/cli@latest memory store --key "review-PATTERN" --value "DESCRIPTION" --namespace patterns`
+`npx @fabius-flow/cli@latest memory store --key "review-PATTERN" --value "DESCRIPTION" --namespace patterns`
 
-Use `npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true` when complete.
+Use `npx @fabius-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true` when complete.

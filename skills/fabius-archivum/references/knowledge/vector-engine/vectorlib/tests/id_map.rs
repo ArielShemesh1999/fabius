@@ -9,7 +9,7 @@
 //!   - Internal `slot_to_id` / `id_to_slot` tables stay consistent after
 //!     a swap-and-pop (verified indirectly via search correctness).
 
-use turbovec::IdMapIndex;
+use fabius-vec::IdMapIndex;
 
 fn gaussian_normalized(n: usize, dim: usize, seed: u64) -> Vec<f32> {
     let mut state = seed | 1;
@@ -169,7 +169,7 @@ fn add_with_ids_rejects_duplicate_id() {
     let err = idx
         .add_with_ids(&data[2 * dim..3 * dim], &[2])
         .unwrap_err();
-    assert_eq!(err, turbovec::AddError::IdAlreadyPresent(2));
+    assert_eq!(err, fabius-vec::AddError::IdAlreadyPresent(2));
 }
 
 #[test]
@@ -181,7 +181,7 @@ fn add_with_ids_rejects_length_mismatch() {
     let err = idx.add_with_ids(&data, &[1, 2, 3]).unwrap_err();
     assert_eq!(
         err,
-        turbovec::AddError::IdsCountMismatch {
+        fabius-vec::AddError::IdsCountMismatch {
             expected: 5,
             got: 3,
         },
@@ -201,7 +201,7 @@ fn write_and_load_round_trips() {
     idx.remove(2003);
     idx.remove(2007);
 
-    let tmp = std::env::temp_dir().join(format!("turbovec_idmap_{}.tvim", std::process::id()));
+    let tmp = std::env::temp_dir().join(format!("fabius-vec_idmap_{}.tvim", std::process::id()));
     idx.write(&tmp).expect("write failed");
 
     let restored = IdMapIndex::load(&tmp).expect("load failed");
@@ -228,7 +228,7 @@ fn write_and_load_round_trips() {
 #[test]
 fn load_rejects_wrong_magic() {
     let tmp = std::env::temp_dir().join(format!(
-        "turbovec_idmap_badmagic_{}.tvim",
+        "fabius-vec_idmap_badmagic_{}.tvim",
         std::process::id()
     ));
     // Write a file that starts with the `.tv` format instead of `TVIM`.
@@ -266,7 +266,7 @@ fn add_with_ids_2d_rolls_back_id_tables_on_inner_dim_mismatch() {
     let err = idx.add_with_ids_2d(&wrong, 64, &[40, 50]).unwrap_err();
     assert_eq!(
         err,
-        turbovec::AddError::DimMismatch {
+        fabius-vec::AddError::DimMismatch {
             existing: dim,
             got: 64,
         },
@@ -304,7 +304,7 @@ fn add_with_ids_2d_rejects_non_multiple_buffer() {
         .add_with_ids_2d(&vec![0.0f32; 17], 8, &[1, 2])
         .unwrap_err();
     assert!(
-        matches!(err, turbovec::AddError::VectorBufferNotMultipleOfDim { .. }),
+        matches!(err, fabius-vec::AddError::VectorBufferNotMultipleOfDim { .. }),
         "expected VectorBufferNotMultipleOfDim, got {err:?}",
     );
 }
@@ -315,7 +315,7 @@ fn add_with_ids_2d_rejects_zero_dim() {
     let mut idx = IdMapIndex::new_lazy(4).unwrap();
     let err = idx.add_with_ids_2d(&[], 0, &[]).unwrap_err();
     assert!(
-        matches!(err, turbovec::AddError::VectorBufferNotMultipleOfDim { .. }),
+        matches!(err, fabius-vec::AddError::VectorBufferNotMultipleOfDim { .. }),
         "expected VectorBufferNotMultipleOfDim, got {err:?}",
     );
 }
@@ -422,7 +422,7 @@ fn empty_index_round_trip() {
     let idx = IdMapIndex::new(dim, 4).unwrap();
 
     let tmp = std::env::temp_dir().join(format!(
-        "turbovec_idmap_empty_{}.tvim",
+        "fabius-vec_idmap_empty_{}.tvim",
         std::process::id()
     ));
     idx.write(&tmp).expect("write failed");

@@ -13,7 +13,7 @@
 //! index and only owns the ID table.
 //!
 //! ```no_run
-//! use turbovec::IdMapIndex;
+//! use fabius-vec::IdMapIndex;
 //!
 //! let mut index = IdMapIndex::new(1536, 4).unwrap();
 //! let vectors: Vec<f32> = vec![0.0; 1536 * 3];

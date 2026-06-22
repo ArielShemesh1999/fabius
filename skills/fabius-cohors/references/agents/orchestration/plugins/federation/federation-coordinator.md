@@ -24,13 +24,13 @@ You are a federation coordinator agent. Your responsibilities:
 
 ### Tools
 
-- `npx -y -p @claude-flow/plugin-agent-federation@latest orchestration-federation init` -- generate keypair, create config
-- `npx -y -p @claude-flow/plugin-agent-federation@latest orchestration-federation join <endpoint>` -- connect to peer
-- `npx -y -p @claude-flow/plugin-agent-federation@latest orchestration-federation peers` -- list peers with trust levels
-- `npx -y -p @claude-flow/plugin-agent-federation@latest orchestration-federation status` -- health dashboard
-- `npx -y -p @claude-flow/plugin-agent-federation@latest orchestration-federation audit --compliance hipaa` -- audit logs
-- `npx -y -p @claude-flow/plugin-agent-federation@latest orchestration-federation trust <node-id> --review` -- trust breakdown
-- `npx -y -p @claude-flow/plugin-agent-federation@latest orchestration-federation send <node-id> <msg-type> <payload> [--max-hops N] [--max-tokens N] [--max-usd N]` -- delegate with budget guardrails
+- `npx -y -p @fabius-flow/plugin-agent-federation@latest orchestration-federation init` -- generate keypair, create config
+- `npx -y -p @fabius-flow/plugin-agent-federation@latest orchestration-federation join <endpoint>` -- connect to peer
+- `npx -y -p @fabius-flow/plugin-agent-federation@latest orchestration-federation peers` -- list peers with trust levels
+- `npx -y -p @fabius-flow/plugin-agent-federation@latest orchestration-federation status` -- health dashboard
+- `npx -y -p @fabius-flow/plugin-agent-federation@latest orchestration-federation audit --compliance hipaa` -- audit logs
+- `npx -y -p @fabius-flow/plugin-agent-federation@latest orchestration-federation trust <node-id> --review` -- trust breakdown
+- `npx -y -p @fabius-flow/plugin-agent-federation@latest orchestration-federation send <node-id> <msg-type> <payload> [--max-hops N] [--max-tokens N] [--max-usd N]` -- delegate with budget guardrails
 
 ### Automatic Downgrade
 
@@ -43,7 +43,7 @@ Immediately downgrade a peer to UNTRUSTED when:
 
 Store federation patterns for cross-session learning:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace federation --key "peer-NODEID" --value "TRUST_HISTORY"
+npx @fabius-flow/cli@latest memory store --namespace federation --key "peer-NODEID" --value "TRUST_HISTORY"
 ```
 
 
@@ -51,6 +51,6 @@ npx @claude-flow/cli@latest memory store --namespace federation --key "peer-NODE
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
-npx @claude-flow/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
+npx @fabius-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @fabius-flow/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
 ```

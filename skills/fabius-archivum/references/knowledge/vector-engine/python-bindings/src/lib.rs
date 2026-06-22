@@ -25,7 +25,7 @@ fn shape_err(e: numpy::ndarray::ShapeError) -> PyErr {
 /// `PanicException`. `add` already maps the same condition to `ValueError`;
 /// this keeps `search` consistent.
 fn validate_queries(values: &[f32], dim: usize) -> PyResult<()> {
-    if let Some((vi, ci, v)) = turbovec_core::first_invalid_coord(values, dim) {
+    if let Some((vi, ci, v)) = fabius-vec_core::first_invalid_coord(values, dim) {
         return Err(pyo3::exceptions::PyValueError::new_err(format!(
             "invalid query value at query {vi}, coord {ci}: {v} \
              (must be finite and |value| < 1e16)",
@@ -36,7 +36,7 @@ fn validate_queries(values: &[f32], dim: usize) -> PyResult<()> {
 
 #[pyclass]
 struct TurboQuantIndex {
-    inner: turbovec_core::TurboQuantIndex,
+    inner: fabius-vec_core::TurboQuantIndex,
 }
 
 #[pymethods]
@@ -49,8 +49,8 @@ impl TurboQuantIndex {
     #[pyo3(signature = (dim=None, bit_width=4))]
     fn new(dim: Option<usize>, bit_width: usize) -> PyResult<Self> {
         let inner = match dim {
-            Some(d) => turbovec_core::TurboQuantIndex::new(d, bit_width),
-            None => turbovec_core::TurboQuantIndex::new_lazy(bit_width),
+            Some(d) => fabius-vec_core::TurboQuantIndex::new(d, bit_width),
+            None => fabius-vec_core::TurboQuantIndex::new_lazy(bit_width),
         }
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
         Ok(Self { inner })
@@ -135,7 +135,7 @@ impl TurboQuantIndex {
 
     #[classmethod]
     fn load(_cls: &Bound<PyType>, path: &str) -> PyResult<Self> {
-        let inner = turbovec_core::TurboQuantIndex::load(path).map_err(|e| {
+        let inner = fabius-vec_core::TurboQuantIndex::load(path).map_err(|e| {
             pyo3::exceptions::PyIOError::new_err(format!("{}", e))
         })?;
         Ok(Self { inner })
@@ -175,7 +175,7 @@ impl TurboQuantIndex {
             .dim_opt()
             .map_or_else(|| "None".to_string(), |d| d.to_string());
         format!(
-            "turbovec.TurboQuantIndex(dim={}, bit_width={}, n_vectors={})",
+            "fabius-vec.TurboQuantIndex(dim={}, bit_width={}, n_vectors={})",
             dim,
             self.inner.bit_width(),
             self.inner.len()
@@ -198,7 +198,7 @@ impl TurboQuantIndex {
 
 #[pyclass]
 struct IdMapIndex {
-    inner: turbovec_core::IdMapIndex,
+    inner: fabius-vec_core::IdMapIndex,
 }
 
 #[pymethods]
@@ -210,8 +210,8 @@ impl IdMapIndex {
     #[pyo3(signature = (dim=None, bit_width=4))]
     fn new(dim: Option<usize>, bit_width: usize) -> PyResult<Self> {
         let inner = match dim {
-            Some(d) => turbovec_core::IdMapIndex::new(d, bit_width),
-            None => turbovec_core::IdMapIndex::new_lazy(bit_width),
+            Some(d) => fabius-vec_core::IdMapIndex::new(d, bit_width),
+            None => fabius-vec_core::IdMapIndex::new_lazy(bit_width),
         }
         .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
         Ok(Self { inner })
@@ -358,7 +358,7 @@ impl IdMapIndex {
     /// [`IdMapIndex.write`].
     #[classmethod]
     fn load(_cls: &Bound<PyType>, path: &str) -> PyResult<Self> {
-        let inner = turbovec_core::IdMapIndex::load(path).map_err(|e| {
+        let inner = fabius-vec_core::IdMapIndex::load(path).map_err(|e| {
             pyo3::exceptions::PyIOError::new_err(format!("{}", e))
         })?;
         Ok(Self { inner })
@@ -374,7 +374,7 @@ impl IdMapIndex {
             .dim_opt()
             .map_or_else(|| "None".to_string(), |d| d.to_string());
         format!(
-            "turbovec.IdMapIndex(dim={}, bit_width={}, n_vectors={})",
+            "fabius-vec.IdMapIndex(dim={}, bit_width={}, n_vectors={})",
             dim,
             self.inner.bit_width(),
             self.inner.len()
@@ -399,7 +399,7 @@ impl IdMapIndex {
 }
 
 #[pymodule]
-fn _turbovec(m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn _fabius-vec(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<TurboQuantIndex>()?;
     m.add_class::<IdMapIndex>()?;
     Ok(())

@@ -3,7 +3,7 @@
 # x86-64-v3 corresponds to the generic Haswell/Excavator feature set
 # (AVX, AVX2, BMI1, BMI2, FMA, F16C, LZCNT, MOVBE, OSXSAVE) which has
 # been ubiquitous since 2013 and is the minimum floor for running
-# turbovec's AVX2 SIMD kernel anyway. Setting it here lets LLVM emit
+# fabius-vec's AVX2 SIMD kernel anyway. Setting it here lets LLVM emit
 # AVX2/FMA instructions in the surrounding non-intrinsic Rust code
 # (rotation loops, LUT build, heap update) which measurably improves
 # the non-hot-kernel paths.

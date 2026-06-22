@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from turbovec import IdMapIndex
+from fabius-vec import IdMapIndex
 
 
 def unit_vectors(n: int, dim: int, seed: int = 0) -> np.ndarray:
@@ -140,7 +140,7 @@ def test_search_empty_queries_returns_consistent_shape_across_index_types():
     # must produce the same shape on both index types. Previously,
     # IdMapIndex returned (0, k) (raw k) while TurboQuantIndex returned
     # (0, min(k, n_vectors)) — a silent divergence in result shape.
-    from turbovec import TurboQuantIndex
+    from fabius-vec import TurboQuantIndex
 
     tq = TurboQuantIndex(dim=64, bit_width=4)
     im = IdMapIndex(dim=64, bit_width=4)

@@ -3,7 +3,7 @@
 //! For each vector `v` with rotated unit form `u` and reconstructed
 //! centroid vector `x_hat`, the stored scale is `||v|| / <u, x_hat>` —
 //! the RaBitQ-style length-renormalization correction adapted to
-//! turbovec's Lloyd-Max codebook. Applying this scale at the final
+//! fabius-vec's Lloyd-Max codebook. Applying this scale at the final
 //! score-multiplication site in the SIMD kernel gives an unbiased
 //! estimator of `<v, q>`.
 //!

@@ -149,7 +149,7 @@ dependencies = [
 name = "downstream-smoke"
 version = "0.0.0"
 dependencies = [
- "turbovec",
+ "fabius-vec",
 ]
 
 [[package]]
@@ -1027,7 +1027,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "turbovec"
+name = "fabius-vec"
 version = "0.7.0"
 dependencies = [
  "faer",

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Recall benchmark: OpenAI d=3072, 2-bit (TQ vs FAISS PQ with LUT256)."""
 import os, json, time, numpy as np, faiss
-from turbovec import TurboQuantIndex
+from fabius-vec import TurboQuantIndex
 
 DATA_DIR = os.path.expanduser("~/data/py-turboquant")
 RESULTS_DIR = os.path.join(os.path.dirname(__file__), "..", "results")

@@ -13,11 +13,11 @@ You are a RuVLLM specialist for Orchestration's local inference system. Your res
 5. **Format prompts** for multi-provider compatibility
 
 Use these MCP tools:
-- `mcp__claude-flow__ruvllm_generate_config` / `ruvllm_status` for configuration
-- `mcp__claude-flow__ruvllm_microlora_*` for fine-tuning
-- `mcp__claude-flow__ruvllm_sona_*` for SONA adaptation
-- `mcp__claude-flow__ruvllm_hnsw_*` for HNSW indexes
-- `mcp__claude-flow__ruvllm_chat_format` for prompt formatting
+- `mcp__fabius-flow__ruvllm_generate_config` / `ruvllm_status` for configuration
+- `mcp__fabius-flow__ruvllm_microlora_*` for fine-tuning
+- `mcp__fabius-flow__ruvllm_sona_*` for SONA adaptation
+- `mcp__fabius-flow__ruvllm_hnsw_*` for HNSW indexes
+- `mcp__fabius-flow__ruvllm_chat_format` for prompt formatting
 
 Optimize for the right balance of quality, speed, and cost per task.
 
@@ -25,13 +25,13 @@ Optimize for the right balance of quality, speed, and cost per task.
 
 Store successful model configurations and prompt templates:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace llm-configs --key "config-PROVIDER-MODEL" --value "PARAMS_AND_RESULTS"
-npx @claude-flow/cli@latest memory search --query "config for PROVIDER" --namespace llm-configs
+npx @fabius-flow/cli@latest memory store --namespace llm-configs --key "config-PROVIDER-MODEL" --value "PARAMS_AND_RESULTS"
+npx @fabius-flow/cli@latest memory search --query "config for PROVIDER" --namespace llm-configs
 ```
 
 ### Neural Learning
 
 After each routing or fine-tune cycle, feed the router outcome learning so future provider/model picks compound this run:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @fabius-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```

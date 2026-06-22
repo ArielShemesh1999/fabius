@@ -1,11 +1,11 @@
-//! Smoke test for the downstream `cargo add turbovec` experience.
+//! Smoke test for the downstream `cargo add fabius-vec` experience.
 //!
 //! Exercises the public API end-to-end (construct, add, prepare, search,
 //! write, load) with no BLAS-related setup. If this binary links and
-//! runs, the link-directive propagation from turbovec's build.rs is
+//! runs, the link-directive propagation from fabius-vec's build.rs is
 //! working and downstream users won't hit the `cblas_sgemm` error.
 
-use turbovec::TurboQuantIndex;
+use fabius-vec::TurboQuantIndex;
 
 const DIM: usize = 64;
 const N_DB: usize = 256;
@@ -52,7 +52,7 @@ fn main() {
         }
     }
 
-    let tmp = std::env::temp_dir().join("turbovec_downstream_smoke.tv");
+    let tmp = std::env::temp_dir().join("fabius-vec_downstream_smoke.tv");
     index.write(&tmp).expect("write");
     let loaded = TurboQuantIndex::load(&tmp).expect("load");
     assert_eq!(loaded.len(), N_DB);

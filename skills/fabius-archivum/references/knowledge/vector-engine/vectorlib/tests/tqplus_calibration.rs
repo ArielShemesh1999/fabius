@@ -21,7 +21,7 @@
 use std::fs::File;
 use std::io::Write;
 
-use turbovec::{io, TurboQuantIndex};
+use fabius-vec::{io, TurboQuantIndex};
 
 fn gaussian_normalized(n: usize, dim: usize, seed: u64) -> Vec<f32> {
     let mut state = seed | 1;
@@ -84,7 +84,7 @@ fn empty_first_add_does_not_freeze_identity_calibration() {
     // be exactly `(zeros, ones)` because identity was locked by the
     // empty add.
     let tmp = std::env::temp_dir().join(format!(
-        "turbovec_empty_add_freeze_{}.tv",
+        "fabius-vec_empty_add_freeze_{}.tv",
         std::process::id()
     ));
     idx.write(&tmp).unwrap();
@@ -109,7 +109,7 @@ fn v2_loaded_index_populates_identity_calibration() {
     // Hand-construct a v2 .tv file: TVPI magic + version=2 + header +
     // packed codes + scales, NO TQ+ trailer (this is the v2 wire format).
     let path = std::env::temp_dir().join(format!(
-        "turbovec_v2_load_then_add_{}.tv",
+        "fabius-vec_v2_load_then_add_{}.tv",
         std::process::id()
     ));
     let bit_width = 4u8;
@@ -153,7 +153,7 @@ fn v2_loaded_index_populates_identity_calibration() {
     assert_eq!(idx.len(), 1503);
 
     let tmp = std::env::temp_dir().join(format!(
-        "turbovec_v2_load_then_add_out_{}.tv",
+        "fabius-vec_v2_load_then_add_out_{}.tv",
         std::process::id()
     ));
     idx.write(&tmp).unwrap();

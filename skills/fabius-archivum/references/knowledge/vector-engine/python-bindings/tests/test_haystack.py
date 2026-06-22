@@ -12,7 +12,7 @@ from haystack.dataclasses.sparse_embedding import SparseEmbedding
 from haystack.document_stores.errors import DuplicateDocumentError
 from haystack.document_stores.types import DuplicatePolicy
 
-from turbovec.haystack import TurboQuantDocumentStore
+from fabius-vec.haystack import TurboQuantDocumentStore
 
 
 DIM = 128
@@ -180,7 +180,7 @@ def test_filter_documents_rejects_field_without_operator():
 # ---- Reference-parity tests against InMemoryDocumentStore. Each one
 # pins behaviour the haystack in-tree DocumentStoreBaseTests suite
 # tests; the bug class is "drop-in regression that only shows up when
-# users compare turbovec's store against InMemoryDocumentStore". ----
+# users compare fabius-vec's store against InMemoryDocumentStore". ----
 
 @pytest.mark.parametrize(
     "bad_filter",
@@ -351,7 +351,7 @@ def test_async_concurrent_embedding_retrievals_are_consistent():
         assert ids == sync_ids
 
 
-def test_return_embedding_flag_is_inert_for_turbovec():
+def test_return_embedding_flag_is_inert_for_fabius-vec():
     # Quantization discards full-precision embeddings — the flag is
     # accepted for `InMemoryDocumentStore` parity but Documents always
     # come back with `embedding=None` regardless of the flag (both
@@ -642,7 +642,7 @@ def test_save_and_load_roundtrip(tmp_path):
 
 def test_save_writes_json_sidecar(tmp_path):
     # Side-car is plain JSON now, not pickle. A reviewer auditing a
-    # turbovec-saved store should be able to read it with a text editor.
+    # fabius-vec-saved store should be able to read it with a text editor.
     import json
 
     store = TurboQuantDocumentStore(dim=DIM, bit_width=4)
@@ -788,7 +788,7 @@ def test_storage_property_returns_documents_by_id():
     storage = store.storage
     assert set(storage.keys()) == {"doc-0", "doc-1", "doc-2"}
     assert storage["doc-1"].meta["idx"] == 1
-    # Embeddings always None — turbovec doesn't keep them.
+    # Embeddings always None — fabius-vec doesn't keep them.
     assert all(doc.embedding is None for doc in storage.values())
 
 
@@ -1134,7 +1134,7 @@ def test_to_dict_includes_all_init_params_and_type_key():
     )
     serialized = store.to_dict()
 
-    assert serialized["type"] == "turbovec.haystack.TurboQuantDocumentStore"
+    assert serialized["type"] == "fabius-vec.haystack.TurboQuantDocumentStore"
     assert set(serialized["init_parameters"]) == {
         "dim",
         "bit_width",

@@ -1,6 +1,6 @@
-"""Haystack DocumentStore backed by turbovec's quantized index.
+"""Haystack DocumentStore backed by fabius-vec's quantized index.
 
-Install with: ``pip install turbovec[haystack]``.
+Install with: ``pip install fabius-vec[haystack]``.
 
 Implements the Haystack 2.x ``DocumentStore`` protocol and mirrors most
 of ``InMemoryDocumentStore``'s public surface (write/filter/delete,
@@ -25,7 +25,7 @@ from typing import Any, Dict, Iterable, List, Literal, Optional, Tuple
 import numpy as np
 
 from ._persist import check_persisted_handles
-from ._turbovec import IdMapIndex
+from ._fabius-vec import IdMapIndex
 
 try:
     from haystack import Document
@@ -36,13 +36,13 @@ try:
     from haystack.utils.filters import document_matches_filter
 except ImportError as exc:
     raise ImportError(
-        "haystack-ai is required to use turbovec.haystack. "
-        "Install with: pip install turbovec[haystack]"
+        "haystack-ai is required to use fabius-vec.haystack. "
+        "Install with: pip install fabius-vec[haystack]"
     ) from exc
 
 
 class TurboQuantDocumentStore:
-    """Haystack DocumentStore backed by a :class:`~turbovec.IdMapIndex`.
+    """Haystack DocumentStore backed by a :class:`~fabius-vec.IdMapIndex`.
 
     Vectors are quantized to 2–4 bits per dimension. Full-precision
     embeddings are dropped after quantization — callers requesting
@@ -51,7 +51,7 @@ class TurboQuantDocumentStore:
 
     Example::
 
-        from turbovec.haystack import TurboQuantDocumentStore
+        from fabius-vec.haystack import TurboQuantDocumentStore
         from haystack import Document
 
         store = TurboQuantDocumentStore(dim=1536, bit_width=4)
@@ -79,14 +79,14 @@ class TurboQuantDocumentStore:
         :param bit_width: Quantization width per coordinate (2 or 4).
         :param embedding_similarity_function: ``"cosine"`` (default) or
             ``"dot_product"``. Used to choose the ``scale_score`` formula
-            during retrieval. Defaults to ``"cosine"`` because turbovec
+            during retrieval. Defaults to ``"cosine"`` because fabius-vec
             stores unit-normalized vectors.
         :param async_executor: Optional executor for the ``*_async``
             methods. If omitted, a single-threaded executor is created
             and cleaned up on instance destruction.
         :param return_embedding: Whether retrieval methods should leave
             the ``embedding`` field populated on returned Documents.
-            turbovec never has the full-precision embedding available, so
+            fabius-vec never has the full-precision embedding available, so
             this is always ``None`` either way; the flag is accepted for
             API parity with ``InMemoryDocumentStore``.
         """
@@ -109,7 +109,7 @@ class TurboQuantDocumentStore:
         # the caller didn't pass one in, and shut it down in __del__.
         self._owns_executor = async_executor is None
         self.executor = async_executor or ThreadPoolExecutor(
-            thread_name_prefix=f"async-turbovec-docstore-executor-{id(self)}",
+            thread_name_prefix=f"async-fabius-vec-docstore-executor-{id(self)}",
             max_workers=1,
         )
 
@@ -423,7 +423,7 @@ class TurboQuantDocumentStore:
         """Return the ``top_k`` documents most similar to ``query_embedding``.
 
         ``return_embedding=None`` (default) honours the store-level
-        ``return_embedding`` set in the constructor. turbovec never has
+        ``return_embedding`` set in the constructor. fabius-vec never has
         the full-precision embedding either way — the parameter is here
         for API parity with ``InMemoryDocumentStore``.
 
@@ -648,7 +648,7 @@ class TurboQuantDocumentStore:
         if version not in cls._DOCSTORE_SCHEMA_COMPAT:
             raise ValueError(
                 f"docstore.json has schema version {version}; "
-                f"this turbovec accepts versions {list(cls._DOCSTORE_SCHEMA_COMPAT)}"
+                f"this fabius-vec accepts versions {list(cls._DOCSTORE_SCHEMA_COMPAT)}"
             )
         store = cls(
             bit_width=state["bit_width"],
@@ -694,7 +694,7 @@ class TurboQuantDocumentStore:
         if score is not None and scale_score:
             # Match Haystack's InMemoryDocumentStore._compute_query_embedding_similarity_scores
             # (document_store.py:818-822): different formula per similarity
-            # function. turbovec uses unit-normalized vectors so the cosine
+            # function. fabius-vec uses unit-normalized vectors so the cosine
             # branch is the natural default.
             if self.embedding_similarity_function == "dot_product":
                 score = 1.0 / (1.0 + math.exp(-score / 100.0))

@@ -20,12 +20,12 @@ You are the GAIA Benchmark Runner for the orchestration harness. Your responsibi
 
 ## Key files
 
-- `v3/@claude-flow/cli/src/commands/gaia-bench.ts` — CLI entry point
-- `v3/@claude-flow/cli/src/benchmarks/gaia-agent.ts` — agent loop
-- `v3/@claude-flow/cli/src/benchmarks/gaia-judge.ts` — scorer
-- `v3/@claude-flow/cli/src/benchmarks/gaia-loader.ts` — HF dataset
-- `v3/@claude-flow/cli/src/benchmarks/gaia-tools/` — tool catalogue
-- `v3/@claude-flow/cli/src/benchmarks/gaia-voting.ts` — self-consistency
+- `v3/@fabius-flow/cli/src/commands/gaia-bench.ts` — CLI entry point
+- `v3/@fabius-flow/cli/src/benchmarks/gaia-agent.ts` — agent loop
+- `v3/@fabius-flow/cli/src/benchmarks/gaia-judge.ts` — scorer
+- `v3/@fabius-flow/cli/src/benchmarks/gaia-loader.ts` — HF dataset
+- `v3/@fabius-flow/cli/src/benchmarks/gaia-tools/` — tool catalogue
+- `v3/@fabius-flow/cli/src/benchmarks/gaia-voting.ts` — self-consistency
 
 ## Tool catalogue
 
@@ -59,15 +59,15 @@ The running agent has access to these tools (verify with `/gaia validate`):
 
 Store and search run learnings:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace gaia-runs --key "run-$(date +%Y%m%d-%H%M)" --value "$SUMMARY_JSON"
-npx @claude-flow/cli@latest memory search --namespace gaia-patterns --query "failure mode extraction bug"
+npx @fabius-flow/cli@latest memory store --namespace gaia-runs --key "run-$(date +%Y%m%d-%H%M)" --value "$SUMMARY_JSON"
+npx @fabius-flow/cli@latest memory search --namespace gaia-patterns --query "failure mode extraction bug"
 ```
 
 ## Neural learning
 
 After each run, train on outcomes:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "gaia-run-$(date +%Y%m%d)" --success true --train-neural true
+npx @fabius-flow/cli@latest hooks post-task --task-id "gaia-run-$(date +%Y%m%d)" --success true --train-neural true
 ```
 
 ## Coordination protocol

@@ -10,7 +10,7 @@
 //!   - Cache invalidation: a search immediately after a delete reflects
 //!     the new layout (no stale `OnceLock` blocked cache).
 
-use turbovec::TurboQuantIndex;
+use fabius-vec::TurboQuantIndex;
 
 fn gaussian_normalized(n: usize, dim: usize, seed: u64) -> Vec<f32> {
     let mut state = seed | 1;

@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from turbovec import IdMapIndex, TurboQuantIndex
+from fabius-vec import IdMapIndex, TurboQuantIndex
 
 
 DIM = 128

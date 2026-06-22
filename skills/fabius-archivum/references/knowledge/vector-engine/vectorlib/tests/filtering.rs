@@ -10,7 +10,7 @@
 //!   - `IdMapIndex.search_with_allowlist` returns only ids in the allowlist
 //!     and never returns slot indices outside it.
 
-use turbovec::{IdMapIndex, TurboQuantIndex};
+use fabius-vec::{IdMapIndex, TurboQuantIndex};
 
 fn gaussian_normalized(n: usize, dim: usize, seed: u64) -> Vec<f32> {
     let mut state = seed | 1;
@@ -400,7 +400,7 @@ fn block_skip_path_actually_fires_under_selective_mask() {
     // Robust to concurrent test interference: cargo test runs tests in
     // parallel and other selective-mask tests will also increment the
     // counter, but they can only push the delta UP, never down.
-    use turbovec::search::{blocks_skipped_by_mask, reset_blocks_skipped_by_mask};
+    use fabius-vec::search::{blocks_skipped_by_mask, reset_blocks_skipped_by_mask};
 
     let dim = 64;
     let n = 4096; // 128 blocks of 32

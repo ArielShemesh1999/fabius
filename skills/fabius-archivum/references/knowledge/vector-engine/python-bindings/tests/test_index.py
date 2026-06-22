@@ -9,7 +9,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from turbovec import TurboQuantIndex
+from fabius-vec import TurboQuantIndex
 
 
 def unit_vectors(n: int, dim: int, seed: int = 0) -> np.ndarray:

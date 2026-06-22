@@ -8,8 +8,8 @@ pytest.importorskip("langchain_core")
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
 
-from turbovec import IdMapIndex
-from turbovec.langchain import TurboQuantVectorStore
+from fabius-vec import IdMapIndex
+from fabius-vec.langchain import TurboQuantVectorStore
 
 
 class StubEmbeddings(Embeddings):
@@ -367,7 +367,7 @@ def test_dump_and_load_roundtrip(tmp_path):
 
 
 def test_dump_writes_json_sidecar(tmp_path):
-    # Side-car is plain JSON. A reviewer auditing a turbovec-saved store
+    # Side-car is plain JSON. A reviewer auditing a fabius-vec-saved store
     # should be able to read it with a text editor.
     import json
 

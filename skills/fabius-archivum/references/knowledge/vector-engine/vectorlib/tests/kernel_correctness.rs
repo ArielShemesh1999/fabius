@@ -13,7 +13,7 @@
 use std::sync::Arc;
 use std::thread;
 
-use turbovec::TurboQuantIndex;
+use fabius-vec::TurboQuantIndex;
 
 /// Seeded gaussian normalized vectors via Box–Muller.
 ///

@@ -12,7 +12,7 @@ from agno.knowledge.document import Document
 from agno.vectordb.distance import Distance
 from agno.vectordb.search import SearchType
 
-from turbovec.agno import TurboQuantVectorDb
+from fabius-vec.agno import TurboQuantVectorDb
 
 
 DIM = 64
@@ -239,7 +239,7 @@ def test_update_metadata_with_empty_dict_is_noop():
 
 
 def test_search_does_not_dedupe_distinct_documents_with_identical_content():
-    # LanceDb dedupes search results by content string; turbovec
+    # LanceDb dedupes search results by content string; fabius-vec
     # intentionally does NOT — each insert produces a distinct quantized
     # vector + id, and we return both as separate hits so callers can
     # tell them apart via content_id. Pin this deliberate divergence so
@@ -1006,7 +1006,7 @@ def test_async_insert_uses_async_batch_embedder_path():
 def test_save_before_create_raises():
     db = TurboQuantVectorDb(embedder=StubEmbedder())
     with pytest.raises(RuntimeError, match="no index to save"):
-        db.save("/tmp/nonexistent-turbovec-store")
+        db.save("/tmp/nonexistent-fabius-vec-store")
 
 
 def test_update_metadata_before_create_is_noop():
@@ -1033,10 +1033,10 @@ def test_update_metadata_unknown_content_id_is_noop():
 def test_search_results_content_origin_divergence_from_lancedb():
     # `Document.content_origin` is an agno field set by some Reader
     # pipelines. LanceDb drops it on insert (stores `payload` as opaque
-    # JSON of {id, name, meta_data, content_id, usage} only); turbovec
+    # JSON of {id, name, meta_data, content_id, usage} only); fabius-vec
     # mirrors that. Pin the divergence so a future caller doesn't quietly
     # start relying on the field surviving — and so a future preservation
-    # change (turbovec preserving it where LanceDb doesn't) is a
+    # change (fabius-vec preserving it where LanceDb doesn't) is a
     # deliberate decision.
     embedder = StubEmbedder(DIM)
     db = TurboQuantVectorDb(embedder=embedder)
@@ -1072,7 +1072,7 @@ def test_search_results_size_divergence_from_lancedb():
 def test_search_results_embedding_is_none_divergence_from_lancedb():
     # LanceDb's `_build_search_results` sets `embedding=item["vector"]`
     # so callers can read the original vector off a returned hit.
-    # turbovec quantizes vectors to 2-4 bits per dim and discards the
+    # fabius-vec quantizes vectors to 2-4 bits per dim and discards the
     # full-precision form — the original vector is unrecoverable, so
     # we return `embedding=None`. Pin this so a caller who depends on
     # `result.embedding` after retrieval (e.g. for rerank-by-similarity)

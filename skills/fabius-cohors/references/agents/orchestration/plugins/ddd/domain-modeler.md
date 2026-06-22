@@ -28,8 +28,8 @@ The DDD building-block vocabulary (Entity / Value Object / Aggregate Root / Doma
 ## Tools
 
 - `Read`, `Grep`, `Glob` — analyze existing codebase for domain concepts.
-- `npx @claude-flow/cli@latest memory search --query "domain MODEL" --namespace patterns` — retrieve prior domain models.
-- `npx @claude-flow/cli@latest memory store --key "domain-CONTEXT" --value "MODEL" --namespace tasks` — persist domain decisions.
+- `npx @fabius-flow/cli@latest memory search --query "domain MODEL" --namespace patterns` — retrieve prior domain models.
+- `npx @fabius-flow/cli@latest memory store --key "domain-CONTEXT" --value "MODEL" --namespace tasks` — persist domain decisions.
 
 ## Cross-references
 
@@ -41,14 +41,14 @@ The DDD building-block vocabulary (Entity / Value Object / Aggregate Root / Doma
 
 Before starting work, search for prior domain models and patterns:
 ```bash
-npx @claude-flow/cli@latest memory search --query "bounded context DOMAIN" --namespace patterns
-npx @claude-flow/cli@latest memory search --query "aggregate DOMAIN" --namespace tasks
+npx @fabius-flow/cli@latest memory search --query "bounded context DOMAIN" --namespace patterns
+npx @fabius-flow/cli@latest memory search --query "aggregate DOMAIN" --namespace tasks
 ```
 
 ## Neural learning
 
 After completing tasks, store successful patterns so future domain models inherit them:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
-npx @claude-flow/cli@latest memory store --key "ddd-pattern-CONTEXT" --value "APPROACH" --namespace patterns
+npx @fabius-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @fabius-flow/cli@latest memory store --key "ddd-pattern-CONTEXT" --value "APPROACH" --namespace patterns
 ```

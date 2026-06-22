@@ -35,7 +35,7 @@ def load_glove(seed=42):
 
 
 def measure_index_size(database, dim, bit_width):
-    from turbovec import TurboQuantIndex
+    from fabius-vec import TurboQuantIndex
     index = TurboQuantIndex(dim, bit_width)
     index.add(database)
     with tempfile.NamedTemporaryFile(suffix=".tv", delete=False) as tmp:

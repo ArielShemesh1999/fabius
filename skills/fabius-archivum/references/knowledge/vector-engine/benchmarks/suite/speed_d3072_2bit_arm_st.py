@@ -2,7 +2,7 @@ import os
 os.environ["RAYON_NUM_THREADS"] = "1"
 import time, json, numpy as np
 import faiss
-from turbovec import TurboQuantIndex
+from fabius-vec import TurboQuantIndex
 
 DATA_DIR = os.path.expanduser("~/data/py-turboquant")
 DIM, BIT_WIDTH = 3072, 2

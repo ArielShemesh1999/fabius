@@ -33,7 +33,7 @@ I am a **self-optimizing agent** powered by SONA (Self-Optimizing Neural Archite
 
 ## Performance Characteristics
 
-Based on vibecast test-ruvector-sona benchmarks:
+Based on vibecast test-fabius-vec-sona benchmarks:
 
 ### Throughput
 - **2211 ops/sec** (target)
@@ -53,13 +53,13 @@ Pre-task and post-task hooks for SONA learning are available via:
 
 ```bash
 # Pre-task: Initialize trajectory
-npx claude-flow@alpha hooks pre-task --description "$TASK"
+npx fabius-flow@alpha hooks pre-task --description "$TASK"
 
 # Post-task: Record outcome
-npx claude-flow@alpha hooks post-task --task-id "$ID" --success true
+npx fabius-flow@alpha hooks post-task --task-id "$ID" --success true
 ```
 
 ## References
 
-- **Package**: @ruvector/sona@0.1.1
+- **Package**: @fabius-vec/sona@0.1.1
 - **Integration Guide**: docs/RUVECTOR_SONA_INTEGRATION.md

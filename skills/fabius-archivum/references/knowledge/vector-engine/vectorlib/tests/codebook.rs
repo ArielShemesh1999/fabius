@@ -7,7 +7,7 @@
 //! representative (bits, dim) pairs that the encoding pipeline relies
 //! on.
 
-use turbovec::codebook::codebook;
+use fabius-vec::codebook::codebook;
 
 #[test]
 fn centroids_strictly_ascending() {

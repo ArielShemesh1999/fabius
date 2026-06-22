@@ -8,7 +8,7 @@
 //! `add()` corruption pointed at the same risk in the Rust core; these
 //! tests pin the operation sequences most likely to harbour it.
 
-use turbovec::{IdMapIndex, TurboQuantIndex};
+use fabius-vec::{IdMapIndex, TurboQuantIndex};
 
 fn unit_vectors(n: usize, dim: usize, seed: u64) -> Vec<f32> {
     let mut state = seed | 1;
@@ -113,7 +113,7 @@ fn swap_remove_after_load_produces_correct_search() {
     let data = unit_vectors(5, dim, 0x5005);
     idx.add(&data);
 
-    let tmp = std::env::temp_dir().join(format!("turbovec_seq_load_swap_{}.tv", std::process::id()));
+    let tmp = std::env::temp_dir().join(format!("fabius-vec_seq_load_swap_{}.tv", std::process::id()));
     idx.write(&tmp).unwrap();
 
     let mut loaded = TurboQuantIndex::load(&tmp).unwrap();
@@ -147,7 +147,7 @@ fn swap_remove_then_round_trip_matches_in_memory_search() {
     let in_memory = idx.search(&data[0..dim], 3);
 
     let tmp = std::env::temp_dir().join(format!(
-        "turbovec_seq_swap_roundtrip_{}.tv",
+        "fabius-vec_seq_swap_roundtrip_{}.tv",
         std::process::id()
     ));
     idx.write(&tmp).unwrap();
@@ -240,7 +240,7 @@ fn add_after_load_extends_index() {
     idx.add(&first);
 
     let tmp = std::env::temp_dir().join(format!(
-        "turbovec_seq_add_after_load_{}.tv",
+        "fabius-vec_seq_add_after_load_{}.tv",
         std::process::id()
     ));
     idx.write(&tmp).unwrap();

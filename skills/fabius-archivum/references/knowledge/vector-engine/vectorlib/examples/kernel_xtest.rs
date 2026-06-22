@@ -10,12 +10,12 @@
 //! Fixture is fully deterministic from `seed` so ARM and x86 see exactly
 //! the same input — no dataset files needed, no cross-machine state
 //! shuffling, no BLAS-backend noise (rotation is computed deterministically
-//! by turbovec from a fixed ROTATION_SEED).
+//! by fabius-vec from a fixed ROTATION_SEED).
 
 use std::env;
 use std::io::Write;
 
-use turbovec::TurboQuantIndex;
+use fabius-vec::TurboQuantIndex;
 
 const N_DB: usize = 5_000;
 const N_QUERIES: usize = 50;

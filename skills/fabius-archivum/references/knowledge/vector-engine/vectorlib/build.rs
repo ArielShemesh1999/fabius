@@ -4,8 +4,8 @@
 // ndarray's `blas` feature calls into C-BLAS for matrix multiplication but
 // doesn't pick a provider; the provider lives in an external native library
 // (OpenBLAS on Linux, Apple's Accelerate on macOS). Emitting the link flag
-// from this crate's build script attaches the directive to `turbovec` itself,
-// so any binary that depends on `turbovec` inherits it — bypassing the
+// from this crate's build script attaches the directive to `fabius-vec` itself,
+// so any binary that depends on `fabius-vec` inherits it — bypassing the
 // "blas-src must be referenced in the final binary" footgun.
 //
 // Windows falls through to ndarray's pure-Rust matrixmultiply fallback.

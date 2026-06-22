@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import pytest
 
-from turbovec._dedup import DuplicatePolicy, resolve_duplicates
+from fabius-vec._dedup import DuplicatePolicy, resolve_duplicates
 
 
 def test_keep_all_returns_every_index():

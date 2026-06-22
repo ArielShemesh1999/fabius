@@ -4,7 +4,7 @@ These guard against the classes of bug found in the security audit: an
 untrusted/corrupt index file must be *rejected* at load with a typed error
 rather than loading and later panicking, returning silently-wrong results,
 or driving an unbounded allocation. Each test crafts a malformed file by
-hand against the on-disk format documented in ``turbovec/src/io.rs``.
+hand against the on-disk format documented in ``fabius-vec/src/io.rs``.
 """
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ import struct
 import numpy as np
 import pytest
 
-from turbovec import IdMapIndex, TurboQuantIndex
+from fabius-vec import IdMapIndex, TurboQuantIndex
 
 
 def _craft_tv(

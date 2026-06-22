@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Index the Obsidian vault into a TurboVec IdMapIndex.
+"""Index the Obsidian vault into a Fabius-Vec IdMapIndex.
 
 Walk markdown -> markdown-heading-aware chunks -> local fastembed (bge-small-en, 384d)
--> turbovec IdMapIndex (bit_width=4) persisted to .index/vault.tvim, with a meta.json
+-> fabius-vec IdMapIndex (bit_width=4) persisted to .index/vault.tvim, with a meta.json
 sidecar mapping each chunk id -> {file, heading, text}. The .index/ is local-only
 (gitignored) because it embeds personal vault content.
 """
@@ -69,7 +69,7 @@ def build_chunks(vault):
 
 def main():
     from fastembed import TextEmbedding
-    from turbovec import IdMapIndex
+    from fabius-vec import IdMapIndex
     os.makedirs(INDEX_DIR, exist_ok=True)
     chunks = build_chunks(VAULT)
     if not chunks:

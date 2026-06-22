@@ -67,27 +67,27 @@ DROP INDEX CONCURRENTLY IF EXISTS idx_table_column;
 
 ### Tools
 
-- `mcp__claude-flow__agentdb_hierarchical-store` -- store migration metadata and history
-- `mcp__claude-flow__agentdb_hierarchical-recall` -- recall migration status and history
-- `mcp__claude-flow__agentdb_pattern-store` -- store successful migration patterns
-- `mcp__claude-flow__agentdb_pattern-search` -- search for similar migration patterns
-- `mcp__claude-flow__agentdb_semantic-route` -- route queries to relevant schema documentation
+- `mcp__fabius-flow__agentdb_hierarchical-store` -- store migration metadata and history
+- `mcp__fabius-flow__agentdb_hierarchical-recall` -- recall migration status and history
+- `mcp__fabius-flow__agentdb_pattern-store` -- store successful migration patterns
+- `mcp__fabius-flow__agentdb_pattern-search` -- search for similar migration patterns
+- `mcp__fabius-flow__agentdb_semantic-route` -- route queries to relevant schema documentation
 
 ### Neural Learning
 
 After successful migration creation or validation, train patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
-npx @claude-flow/cli@latest neural train --pattern-type migrations --epochs 10
+npx @fabius-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @fabius-flow/cli@latest neural train --pattern-type migrations --epochs 10
 ```
 
 ### Memory Learning
 
 Store migration patterns and validation results:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace migrations --key "migration-NNN_NAME" --value "MIGRATION_METADATA_JSON"
-npx @claude-flow/cli@latest memory store --namespace migration-patterns --key "pattern-PATTERN_NAME" --value "PATTERN_JSON"
-npx @claude-flow/cli@latest memory search --query "migrations adding foreign keys" --namespace migrations
+npx @fabius-flow/cli@latest memory store --namespace migrations --key "migration-NNN_NAME" --value "MIGRATION_METADATA_JSON"
+npx @fabius-flow/cli@latest memory store --namespace migration-patterns --key "pattern-PATTERN_NAME" --value "PATTERN_JSON"
+npx @fabius-flow/cli@latest memory search --query "migrations adding foreign keys" --namespace migrations
 ```
 
 ### Related Plugins
