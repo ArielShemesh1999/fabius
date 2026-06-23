@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fabius — a research-grounded operating stance for LLM agents</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 0.96 },
+  startup: { typeset: true }
+};
+</script>
+<script src="lib/tex-svg.js" id="MathJax-script"></script>
+<style>
+  :root{
+    --ink:#16181d; --soft:#3c424d; --faint:#6b7280; --line:#e3e6ea;
+    --accent:#1f6feb; --accent-d:#0b4fc4; --brand:#c2410c;
+    --green:#15803d; --amber:#b45309; --grey:#64748b;
+    --bg:#ffffff; --panel:#f7f8fa; --mono:#0f172a;
+  }
+  *{box-sizing:border-box}
+  html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body{
+    font-family:"Charter","Georgia","Times New Roman",serif;
+    color:var(--ink); background:var(--bg);
+    font-size:10.6pt; line-height:1.5; margin:0;
+    text-rendering:optimizeLegibility; font-kerning:normal;
+  }
+  .page{ max-width:760px; margin:0 auto; padding:0 8px; }
+  h1,h2,h3,h4{ font-family:"Helvetica Neue",Arial,system-ui,sans-serif; color:var(--ink); line-height:1.18; }
+  h2{ font-size:16.5pt; margin:0 0 .5em; letter-spacing:-.01em; padding-bottom:.18em; border-bottom:2px solid var(--ink); }
+  h3{ font-size:12.4pt; margin:1.5em 0 .45em; color:var(--accent-d); }
+  h4{ font-size:10.8pt; margin:1.1em 0 .35em; color:var(--soft); }
+  p{ margin:0 0 .72em; }
+  a{ color:var(--accent-d); text-decoration:none; }
+  strong{ color:var(--ink); }
+  em{ color:var(--soft); }
+  sup{ font-size:.7em; line-height:0; }
+  code,.mono{ font-family:"SF Mono","JetBrains Mono",ui-monospace,Menlo,monospace; font-size:.86em; color:var(--mono); }
+
+  /* sections start a fresh page (paper feel) */
+  section.sec{ break-before:page; padding-top:2px; }
+  section.sec:first-of-type{ break-before:auto; }
+
+  /* ---- title page ---- */
+  .title-page{ break-after:page; padding-top:48px; text-align:center; }
+  .wordmark{ width:330px; max-width:78%; margin:0 auto 26px; display:block; }
+  .title{ font-family:"Helvetica Neue",Arial,sans-serif; font-size:25pt; font-weight:800; letter-spacing:-.02em; margin:0 0 10px; line-height:1.1; }
+  .subtitle{ font-size:13.5pt; color:var(--soft); font-style:italic; margin:0 auto 30px; max-width:520px; }
+  .byline{ font-size:10.5pt; color:var(--faint); margin-top:6px; }
+  .byline b{ color:var(--ink); }
+  .rule-hr{ width:54px; height:3px; background:var(--brand); border:0; margin:26px auto; }
+  .abstract{ text-align:left; max-width:560px; margin:30px auto 0; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px 20px; }
+  .abstract h4{ margin:0 0 .4em; color:var(--brand); text-transform:uppercase; letter-spacing:.08em; font-size:8.6pt; }
+  .abstract p{ font-size:9.9pt; margin-bottom:.5em; }
+  .meta-row{ font-size:8.8pt; color:var(--faint); margin-top:22px; }
+
+  /* ---- figures ---- */
+  figure{ margin:1.1em 0 1.2em; text-align:center; break-inside:avoid; page-break-inside:avoid; }
+  figure svg{ max-width:86%; height:auto; }
+  figure.arch svg{ max-width:100%; }
+  figcaption{ font-size:8.7pt; color:var(--faint); margin-top:.5em; text-align:left; line-height:1.4; padding:0 6px; }
+  figcaption b{ color:var(--soft); }
+
+  /* ---- proof cards ---- */
+  .rulecard{ break-inside:avoid; page-break-inside:avoid; border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:7px; padding:11px 15px 6px; margin:0 0 13px; background:#fcfdff; }
+  .rulecard.analogy{ border-left-color:var(--amber); background:#fffdf8; }
+  .rulecard.qualitative{ border-left-color:var(--grey); background:#fafbfc; }
+  .rulehead{ display:flex; align-items:baseline; gap:9px; margin-bottom:.3em; flex-wrap:wrap; }
+  .ruleid{ font-family:"Helvetica Neue",Arial,sans-serif; font-weight:800; font-size:10.5pt; color:var(--ink); }
+  .ruletitle{ font-family:"Helvetica Neue",Arial,sans-serif; font-weight:600; font-size:10.4pt; color:var(--soft); }
+  .badge{ margin-left:auto; font-family:"Helvetica Neue",Arial,sans-serif; font-size:7.2pt; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:2px 7px; border-radius:20px; white-space:nowrap; }
+  .badge.real{ background:#e7f6ec; color:var(--green); }
+  .badge.analogy{ background:#fdf0dd; color:var(--amber); }
+  .badge.qualitative{ background:#eef1f4; color:var(--grey); }
+  .rulecard p{ font-size:9.8pt; margin:.3em 0 .5em; }
+  .rulecard p strong:first-child{ color:var(--accent-d); }
+  .rulecard.analogy p strong:first-child{ color:var(--amber); }
+  mjx-container{ overflow-x:visible; }
+  mjx-container[display="true"]{ margin:.55em 0 !important; }
+
+  /* ---- tables ---- */
+  table{ width:100%; border-collapse:collapse; margin:.7em 0 1.1em; font-size:9.2pt; }
+  caption{ caption-side:top; text-align:left; font-size:8.7pt; color:var(--faint); margin-bottom:.35em; }
+  th,td{ border:1px solid var(--line); padding:5px 8px; text-align:left; vertical-align:top; }
+  thead th{ background:var(--panel); font-family:"Helvetica Neue",Arial,sans-serif; font-weight:700; font-size:8.8pt; color:var(--soft); }
+  td.num,th.num{ text-align:center; }
+  td.win{ font-weight:700; color:var(--green); }
+  tbody tr:nth-child(even){ background:#fcfcfd; }
+
+  /* ---- callouts ---- */
+  .lead{ font-size:11.4pt; color:var(--soft); line-height:1.55; }
+  .maxim{ text-align:center; font-family:"Helvetica Neue",Arial,sans-serif; font-weight:800; font-size:13pt; color:var(--ink); margin:.8em auto; letter-spacing:-.01em; }
+  .note{ background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:10px 15px; margin:1em 0; font-size:9.5pt; }
+  .note.honesty{ border-left:3px solid var(--brand); }
+  .note .lbl{ font-family:"Helvetica Neue",Arial,sans-serif; font-weight:800; font-size:7.6pt; text-transform:uppercase; letter-spacing:.09em; color:var(--brand); display:block; margin-bottom:.3em; }
+  pre.flow{ background:#0f1320; color:#e6e9f2; border-radius:8px; padding:13px 16px; font-family:"SF Mono",ui-monospace,Menlo,monospace; font-size:8.4pt; line-height:1.55; overflow-x:auto; break-inside:avoid; white-space:pre; }
+  pre.flow .c{ color:#7d8aa8; }
+  pre.flow .k{ color:#6cb6ff; }
+  pre.flow .g{ color:#7ee787; }
+  ul,ol{ margin:.3em 0 .9em; padding-left:1.3em; }
+  li{ margin:.2em 0; }
+  .skilltbl td:first-child code{ font-weight:700; color:var(--accent-d); }
+  .refs{ font-size:8.8pt; column-count:1; }
+  .refs p{ margin:0 0 .35em; padding-left:1.2em; text-indent:-1.2em; line-height:1.4; }
+  .footer-tag{ text-align:center; color:var(--faint); font-size:8.4pt; margin-top:30px; border-top:1px solid var(--line); padding-top:12px; }
+  .kicker{ font-family:"Helvetica Neue",Arial,sans-serif; font-size:8.4pt; text-transform:uppercase; letter-spacing:.14em; color:var(--brand); font-weight:700; margin-bottom:.3em; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ================= TITLE ================= -->
+<div class="title-page">
+  <!--FIG:fabius-pixel-->
+  <div class="title">Fabius</div>
+  <div class="subtitle">A research-grounded operating stance for LLM agents — one stance, six skills, and the mathematics of knowing when to stop.</div>
+  <hr class="rule-hr" />
+  <div class="byline"><b>Ariel Shemesh</b></div>
+  <div class="byline">github.com/ArielShemesh1999/fabius &nbsp;·&nbsp; MIT</div>
+
+  <div class="abstract">
+    <h4>Abstract</h4>
+    <p>Large language models, used as coding and reasoning agents, fail in two opposite directions: they over-explain and over-engineer, or — when told merely to "be concise" — they cut the validation, security, and accessibility that make an artifact correct. <strong>Fabius</strong> is a single operating stance, packaged as one super-skill of six coordinated sub-skills, that resolves this tension along one axis: <em>scout wide in what you investigate, strike narrow in what you ship.</em></p>
+    <p>This paper presents fabius as a system. It gives the architecture (a router over an always-on lean core and four engineering specialists), the decision policy (eighteen routing rules drawn from the agent-research canon), and — the core of the paper — the <strong>mathematics</strong> beneath each rule: every gate reduced to a formal statement, proved, and adversarially checked. We then prove the policy <em>coheres</em>: all eighteen rules are one expected-loss / value-of-information threshold applied to disjoint variables, composed in an acyclic pipeline that routes every task and terminates. Throughout, a strict honesty ledger separates what the source papers <em>measured</em> from what fabius <em>borrows by analogy</em>. We close with a blind, reproducible benchmark: across four model families, structure beats brevity, and the advantage grows as the model's default discipline drops.</p>
+    <div class="meta-row">Version 1.2.1 · June 2026 · figures computed (numpy → SVG), reproducible</div>
+  </div>
+</div>
+
+<!-- ================= 1. INTRODUCTION ================= -->
+<section class="sec">
+<h2>1 · Introduction</h2>
+<p class="lead">A capable model is not the same as a disciplined one. Hand a frontier LLM a real engineering task and it tends to do too much: it pads the explanation, builds a plugin system for a single flag, hedges every claim. Correct the over-building with the obvious instruction — <em>"be concise, write minimal code"</em> — and a second failure appears: the model now cuts the input validation, the error handling, the accessibility, the security. Brevity is not discipline. It trades one defect for another.</p>
+
+<p>Fabius is named for Quintus Fabius Maximus, whose doctrine against Hannibal was to <strong>scout the whole field and fight only the battle that mattered</strong> — never the pitched engagement the stronger enemy wanted. Translated to an agent, the doctrine is a single axis that dissolves the thoroughness-versus-minimalism tension:</p>
+
+<div class="maxim">Scout wide in what you investigate.&nbsp;&nbsp;Strike narrow in what you ship.</div>
+
+<p>Fan out to understand and to verify; deliver the smallest correct artifact; explain it in the fewest exact words. These never conflict, because they live on different axes — process and memory make you wide, lean makes you narrow. Fabius packages this as one Claude Code plugin of six skills: a router, an always-on lean core, and four specialists for process, design, agent-engineering, and memory.</p>
+
+<p>The contribution of this paper is to show that the stance is not a vibe. Section 2 gives the system architecture and the single-owner coordination contract that keeps six skills from contradicting one another. Section 3 states the decision policy: eighteen operational rules, each drawn from a specific result in the agent-research literature. Section 4 — the heart of the paper — supplies the <strong>mathematics</strong> under each rule, every theorem proved and adversarially verified, with a hard line between results that <em>govern</em> a routing decision and theorems borrowed only for their <em>shape</em>. Section 5 proves the eighteen rules <strong>compose into one coherent decision system</strong>. Section 6 reports a blind, reproducible benchmark. The discipline of the whole is in Section 7: <strong>measured, not claimed</strong>.</p>
+</section>
+
+<!-- ================= 2. THE SYSTEM ================= -->
+<section class="sec">
+<h2>2 · The system</h2>
+<p>Fabius is one system, not a bundle of plugins. A single super-skill routes five capability layers over a thin supporting spine — six skills in all, counting the router — so any agent gains end-to-end engineering capability from one install.</p>
+
+<figure class="arch">
+  <!--FIG:architecture-->
+  <figcaption><b>Figure 0 — the layer model.</b> Your prompt enters the <code>fabius</code> router, which routes to the specialist a task needs — <code>disciplina</code> (process), <code>decor</code> (design), <code>cohors</code> (agents), <code>archivum</code> (memory) — all running on the always-on <code>fabius-parcus</code> lean core, producing the smallest correct result.</figcaption>
+</figure>
+
+<h3>2.1 · Six skills, one stance</h3>
+<table class="skilltbl">
+  <caption>Each skill is a thin operating contract; its depth lives under <code>references/</code> and loads only on demand.</caption>
+  <thead><tr><th>Skill</th><th>Role</th><th>What it delivers</th></tr></thead>
+  <tbody>
+    <tr><td><code>fabius</code></td><td>router</td><td>reads the job, sets the stance, pulls the right layer</td></tr>
+    <tr><td><code>fabius-parcus</code></td><td>lean core, always on</td><td>terse output · the YAGNI ladder · surgical changes · no speculative scope</td></tr>
+    <tr><td><code>fabius-disciplina</code></td><td>engineering process</td><td>brainstorm → plan → test-first → prove · root-cause debugging</td></tr>
+    <tr><td><code>fabius-decor</code></td><td>design system</td><td>one-accent laws · token vocabulary · mobile-first · live-verify</td></tr>
+    <tr><td><code>fabius-cohors</code></td><td>agent engineering</td><td>definition schema · least privilege · five orchestration patterns</td></tr>
+    <tr><td><code>fabius-archivum</code></td><td>persistent memory</td><td>per-project memory · the LLM-wiki · index + log retrieval · recall</td></tr>
+  </tbody>
+</table>
+<p><em>Latin, for the curious:</em> <strong>parcus</strong>, frugal · <strong>disciplina</strong>, training · <strong>decor</strong>, what is fitting · <strong>cohors</strong>, the cohort · <strong>archivum</strong>, the record office.</p>
+
+<h3>2.2 · Single owner, zero overlap</h3>
+<p>The coordination contract is one rule: <strong>each rule has exactly one owning layer; every other layer links to it instead of restating it.</strong> Planning, test discipline, and the clarifying-question procedure are owned by <code>disciplina</code>; lean prose, the YAGNI ladder, and the never-trim guardrail list by <code>parcus</code>; routing and the kill-switch by <code>fabius</code>. <code>parcus</code> is the only always-on layer: it composes <em>underneath</em> whatever task layer the router selects and never competes for a task verb, so it can run beneath the layer that does. This single-owner discipline is what makes the formal coherence of Section 5 possible — no two layers write the same rule with opposite intent.</p>
+</section>
+
+<!-- ================= 3. THE POLICY ================= -->
+<section class="sec">
+<h2>3 · The decision policy</h2>
+<p>A stance is only as good as the decisions it makes: <em>which</em> layer to route to, <em>when</em> to spend a tool call or a second agent, <em>how long</em> to keep refining, <em>what</em> to load from memory. Fabius's router carries an explicit policy of eighteen rules — ten routing rules (R1–R10) and eight orchestration / memory rules (M1–M8) — each drawn from a specific result in the agent-research canon and tagged for honesty.</p>
+
+<h3>3.1 · Route by classification, then climb one rung</h3>
+<p>Specialist selection is reproducible, not vibes. Fabius opens every non-trivial task by naming its load on three axes — <strong>Memory, Tools/Action, Planning</strong> — the universal capability axes from Wang et al.'s survey of autonomous agents <strong>(R1)</strong>. Memory routes to <code>archivum</code>, Tools to <code>cohors</code>, Planning to <code>disciplina</code>; zero axes loaded stays in the lean <code>parcus</code> core. The classification <em>is</em> the routing rationale.</p>
+<p>Then it climbs a capability ladder one rung at a time — <span class="mono">inline → one tool → retrieval → plan → single subagent → swarm</span> — adding the smallest rung the classification demands and stopping <strong>(R2)</strong>. The efficiency surveys describe a cost–capability frontier with steep diminishing returns; fabius operates at the <em>knee</em>, not the tail. The formal version of "stop at the knee" is proved in §4.1.</p>
+
+<h3>3.2 · The eighteen rules at a glance</h3>
+<table>
+  <thead><tr><th>Rule</th><th>The decision it makes</th><th>Source paper</th><th class="num">grounding</th></tr></thead>
+  <tbody>
+    <tr><td><b>R1</b></td><td>classify a task on {Memory, Tools, Planning}, route each loaded axis</td><td>Wang survey</td><td class="num">direct</td></tr>
+    <tr><td><b>R2</b></td><td>climb the capability ladder one rung; stop at the knee</td><td>efficiency surveys</td><td class="num">analogy</td></tr>
+    <tr><td><b>R3</b></td><td>call a tool only when you can name the wrong answer it prevents</td><td>Toolformer</td><td class="num">analogy</td></tr>
+    <tr><td><b>R4</b></td><td>on an ambiguous task, keep 2–3 routes alive; collapse as signal sharpens</td><td>Flow Matching</td><td class="num">analogy</td></tr>
+    <tr><td><b>R5</b></td><td>reason → act → observe; never act on an assumed result</td><td>ReAct</td><td class="num">direct</td></tr>
+    <tr><td><b>R6</b></td><td>plan in placeholders; bind tool calls only after the plan is fixed</td><td>Chain of Abstraction</td><td class="num">analogy</td></tr>
+    <tr><td><b>R7</b></td><td>branch only when a cheap evaluator can rank unfinished candidates</td><td>Tree of Thoughts</td><td class="num">direct</td></tr>
+    <tr><td><b>R8</b></td><td>refine only on a verifiable signal; signal type sets the budget</td><td>Reflexion · Self-Refine</td><td class="num">direct</td></tr>
+    <tr><td><b>R9</b></td><td>retrieve on demand; read the index, page in only the matching slice</td><td>MemGPT</td><td class="num">direct</td></tr>
+    <tr><td><b>R10</b></td><td>state breadth tasks once; hard-steer only narrow contracts</td><td>Classifier-Free Guidance</td><td class="num">analogy</td></tr>
+    <tr><td><b>M1</b></td><td>spawn a second agent only to prevent a named error</td><td>Toolformer-spirit</td><td class="num">real-math</td></tr>
+    <tr><td><b>M2</b></td><td>add a reducer only when partial results merge (associativity)</td><td>Graph of Thoughts</td><td class="num">real-math</td></tr>
+    <tr><td><b>M3</b></td><td>scale verification depth to measured per-route failure</td><td>Consistency Models</td><td class="num">real-math</td></tr>
+    <tr><td><b>M4</b></td><td>reflect-then-retry; escalate when hypotheses run out</td><td>Reflexion</td><td class="num">real-math</td></tr>
+    <tr><td><b>M5</b></td><td>accept a prompt rewrite only on a held-out metric delta</td><td>DSPy</td><td class="num">real-math</td></tr>
+    <tr><td><b>M6</b></td><td>promote verified solutions to a reusable skill; query before planning</td><td>Voyager</td><td class="num">real-math</td></tr>
+    <tr><td><b>M7</b></td><td>page memory explicitly; write only decision-changing facts</td><td>MemGPT</td><td class="num">real-math</td></tr>
+    <tr><td><b>M8</b></td><td>rank index ties by relevance, then recency and load-bearingness</td><td>Generative Agents</td><td class="num">analogy</td></tr>
+  </tbody>
+</table>
+<p>The reading list behind each rule is the agent-research canon — ReAct, Toolformer, Tree and Graph of Thoughts, Reflexion, Self-Refine, MemGPT, DSPy, Voyager, the Wang and efficiency surveys, and (for the analogies) the sampling mathematics of generative models. Section 4 turns each rule into a theorem.</p>
+</section>
+
+<!-- ================= 4. THE MATHEMATICS ================= -->
+<section class="sec">
+<h2>4 · The mathematics of the policy</h2>
+<p>Each rule below is reduced to a formal statement and proved. Every proof was written and then <strong>adversarially verified by an independent reviewer</strong> whose only job was to find an error — a process that, in development, caught a sign error in the value-of-information gate, a missing completeness hypothesis in the contraction argument, an over-stated submodular-knapsack bound, and an attribution slip on the ranking principle, all corrected before publication.</p>
+<p>Two tags run through the section. <strong>Real-math</strong> means the equation genuinely <em>governs</em> the routing decision — decision theory, information theory, optimization, scheduling, algebra. <strong>Analogy</strong> means a correct theorem from another field (generative-model sampling, transport, IR kernels) borrowed for its <em>shape</em>; the source paper proves nothing about agents, so fabius takes the shape, not a measured result. One rule (R5) is <strong>qualitative</strong> — a control-flow invariant with no objective function. The honesty boundary is stated inside every analogy proof.</p>
+
+<!--MATH_SECTION-->
+</section>
+
+<!-- ================= 5. COHERENCE ================= -->
+<section class="sec">
+<h2>5 · Coherence — the rules are one system</h2>
+<p>Eighteen rules drawn from eighteen papers could easily contradict one another. They do not. The capstone result of this paper is that they compose into a single decision system that is <strong>consistent, complete, and composable</strong>.</p>
+
+<pre class="flow"><span class="c">parcus</span>  (lean floor — always on, never competes for a task verb)
+  <span class="k">≺ R1</span>   classify the 3 axes {Memory, Tools, Planning}
+  <span class="k">≺ R4</span>   scout 2–3 routes      (only if the classification is ambiguous)
+  <span class="k">≺ R2</span>   capability ladder      (admit the smallest sufficient rung)
+  <span class="k">≺ R3 · M1</span>   tool / 2nd-agent expected-value gate (confirm or veto the rung)
+  <span class="k">≺ R6</span>   plan-then-bind         (build the tool-free call DAG)
+  <span class="k">≺ R5</span>   reason → act → observe (per-edge execution invariant)
+  <span class="k">≺ R7 · M2</span>   search topology    (branch only if scorable · tree vs graph)
+  <span class="k">≺ R8 · M3 · M4</span>   refine budget  (signal-typed loop · verify depth · retry-stop)
+  <span class="k">≺ M5 · M6</span>   learning layer       (metric-gated rewrite · skill cache, queried first)
+  <span class="k">≺ R9* · M7 · M8*</span>   memory substrate (retrieve-under-budget · evict/recall · rank)</pre>
+
+<!--COHERENCE-->
+</section>
+
+<!-- ================= 6. BENCHMARK ================= -->
+<section class="sec">
+<h2>6 · Does it work? A blind benchmark</h2>
+<p>Fabius is prompt-level scaffolding, so a number measured on one model at one moment does not transfer cleanly. The defensible thing to publish is the <strong>method, the mechanism, and the measured signal that repeats across models</strong> — plus a one-command way to re-measure it. Every figure below was measured on a real model at a named moment; nothing is estimated.</p>
+
+<h3>6.1 · The harness</h3>
+<p>A blind, three-arm evaluation. Each task is answered three ways: <code>baseline</code> (the task only), <code>terse</code> (the task plus a generic <em>"be concise, write minimal code"</em> line), and <code>fabius</code> (the task plus the shipped stance, read verbatim). A judge model that is <strong>never told which arm produced which answer</strong> scores each 0–5 on correctness, minimality, and best-practice, plus an objective character count. The <code>terse</code> arm is the real control: beating <code>baseline</code> is easy; <strong>beating <code>terse</code> isolates structure from mere brevity.</strong></p>
+
+<h3>6.2 · Measured results</h3>
+<table>
+  <caption><b>Run 1</b> — in-repo eval, 8 tasks × 3 arms, blind judge (<code>claude-opus-4-8</code>), total out of 15. 2026-06-20.</caption>
+  <thead><tr><th>Model</th><th class="num">baseline</th><th class="num">terse</th><th class="num">fabius</th><th class="num">gain vs terse</th><th class="num">output cut</th></tr></thead>
+  <tbody>
+    <tr><td>Opus 4.8</td><td class="num">12.5</td><td class="num">13.0</td><td class="num win">13.88</td><td class="num">+0.88</td><td class="num">−42.6%</td></tr>
+    <tr><td>Sonnet 4.6</td><td class="num">8.75</td><td class="num">11.75</td><td class="num win">12.5</td><td class="num">+0.75</td><td class="num">−52.1%</td></tr>
+    <tr><td>Haiku 4.5</td><td class="num">8.88</td><td class="num">9.13</td><td class="num win">10.38</td><td class="num">+1.25</td><td class="num">−31.6%</td></tr>
+  </tbody>
+</table>
+<p>Fabius beats <code>terse</code> on every tier <strong>while cutting output 31–52%</strong> — shorter answers the blind judge scores <em>higher</em>.</p>
+
+<table>
+  <caption><b>Run 2</b> — cross-family stance test, the signal is FAB − TERSE (structure vs brevity), /15. Grok and Mistral judged <em>blind cross-family</em> by Claude — the cleanest evidence.</caption>
+  <thead><tr><th>Task</th><th>category</th><th class="num">Grok</th><th class="num">Mistral</th><th class="num">GPT</th><th class="num">Claude</th></tr></thead>
+  <tbody>
+    <tr><td>A1 migration</td><td>trust / order</td><td class="num">+7</td><td class="num">+4</td><td class="num">+6</td><td class="num">+6</td></tr>
+    <tr><td>A2 upload</td><td>trust / security</td><td class="num">+7</td><td class="num">+5</td><td class="num">+5</td><td class="num">+7</td></tr>
+    <tr><td>B1 exporter</td><td>YAGNI</td><td class="num">+1</td><td class="num">+2</td><td class="num">+1</td><td class="num">+1</td></tr>
+    <tr><td>B2 USD format</td><td>YAGNI</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>C1 rate limiter</td><td>genuine build</td><td class="num">+8</td><td class="num">+1</td><td class="num">+6</td><td class="num">+6</td></tr>
+    <tr><td>C2 CSV parser</td><td>genuine build</td><td class="num">+9</td><td class="num">+4</td><td class="num">+8</td><td class="num">+8</td></tr>
+  </tbody>
+</table>
+<p>The pattern repeats on all four families: <strong>large lift on trust / order / genuine-build, near-zero on pure YAGNI.</strong> FAB never lost an arm; its worst case was a tie (B2). The hardest control is the <em>under-build trap</em> (C1/C2), where naive lean is the <em>wrong</em> answer — fabius passed every time by making the <em>correct</em> lean move (a shared store, a real parser), not the smallest one. This is the proof that fabius is a scope-control system, not a "shorten" prompt: a model that only shortens cannot also produce the longest, most-complete migration answer.</p>
+
+<table>
+  <caption><b>Run 3</b> — landing-page build, same brief three ways. T1 stance only · T2 no fabius · T3 stance + all six skills. 2026-06-22.</caption>
+  <thead><tr><th></th><th class="num">design score</th><th class="num">lines</th><th class="num">size</th><th class="num">working form</th></tr></thead>
+  <tbody>
+    <tr><td>T1 stance only</td><td class="num win">8.5</td><td class="num">561</td><td class="num">34 KB</td><td class="num">no</td></tr>
+    <tr><td>T2 no fabius</td><td class="num">8.3</td><td class="num">517</td><td class="num">31 KB</td><td class="num">no</td></tr>
+    <tr><td>T3 stance + 6 skills</td><td class="num">7.5</td><td class="num win">333</td><td class="num win">19 KB</td><td class="num win">yes</td></tr>
+  </tbody>
+</table>
+<p>The bare stance maximizes <em>design polish</em>; the full six-skill mechanism shifts toward <em>lean and functional</em> — T3 shipped 40% less code <strong>and the only working signup form</strong>. They optimize different things, and this is the live proof that the mechanism fires on its own.</p>
+
+<h3>6.3 · What the data supports — and what it does not</h3>
+<p>The honest claim: <strong>fabius gives a consistent, cross-model quality lift that grows as the model's default gets less disciplined — large at trust / order / genuine-build boundaries, negligible at pure YAGNI.</strong> Not "smarter." Not "10× on everything." The caveats are equally on the record: most single runs are directional, the judge is a model (only the character counts and the blind cross-family subset are hard signals), <em>n</em> is small (6–8 tasks), and every number was measured on one model at one moment. The blind cross-family runs scored fabius <em>lower</em> than the self-judged ones — and the pattern held anyway, which is the reassuring direction for a bias check to move.</p>
+</section>
+
+<!-- ================= 7. HONESTY ================= -->
+<section class="sec">
+<h2>7 · The honesty ledger</h2>
+<p>The quality bar of the whole project is one phrase: <strong>measured, not claimed.</strong> The sharpest decision heuristics in the policy are borrowed from a different field — the sampling mathematics of generative models. Those results are proved about numerical sampling of learned vector fields and image fidelity, <em>never</em> about agents. Where fabius uses one, it takes the shape of the idea, not a measured agent result, and says so.</p>
+
+<div class="note honesty">
+  <span class="lbl">Direct mappings</span>
+  <p>The source paper makes a claim about LLM agents that fabius applies almost verbatim: ReAct's reason→act→observe grounding contract (R5); Tree of Thoughts' branch-only-when-partials-are-judgeable gate (R7); Reflexion and Self-Refine's verifiable-signal reflection loop with diminishing returns (R8, M4); Voyager's verify-then-store skill library (M6); DSPy's contract-first metric-delta gate (M5); MemGPT's explicit paging and retrieve-over-stuff (R9, M7); and the Wang Profile/Memory/Planning/Action taxonomy anchoring the three-axis router (R1).</p>
+</div>
+
+<div class="note honesty">
+  <span class="lbl">Analogy mappings</span>
+  <p>The source proves something about a different domain and fabius transfers the shape, not a measured agent result: Toolformer's loss-reduction filter is a training-time criterion against the gold continuation, uncomputable at routing time, so R3/M1 borrow only its spirit; the efficiency surveys assert diminishing returns directionally but fit no curve, so R2's knee is qualitative; Chain of Abstraction measured ~1.4× on single-tool tasks, not agent fan-out, so R6's parallel benefit is unmeasured here; Graph of Thoughts' numbers are intra-LLM, transplanted to agent topology (M2); and the three generative-model rules — Flow Matching (R4), Classifier-Free Guidance (R10), Consistency Models (M3) — together with Generative Agents' recency kernel (M8b), are <strong>all</strong> analogies, because those papers prove their claims about sampling and image fidelity and say nothing about agents, routing, or verification budgets.</p>
+</div>
+
+<p>The bar held throughout: <strong>measured where a paper measured it in-domain; analogy everywhere the transfer crosses domains — labelled, so no claim is overstated.</strong> Of the eighteen rules, fifteen rest on mathematics that genuinely governs the decision, one (R5) is an explicit qualitative invariant, and four are analogies that carry their caveat inline and never govern a route the way the real-math rules do.</p>
+</section>
+
+<!-- ================= 8. REPRODUCE & USE ================= -->
+<section class="sec">
+<h2>8 · Reproduce it, and use it</h2>
+<p>Every figure in §4 is computed, not drawn — <code>numpy</code> to SVG, no external services — and every benchmark number re-runs from one command with your own key.</p>
+<pre class="flow"><span class="c"># the figures</span>
+python3 assets/charts/render_figures.py
+
+<span class="c"># the benchmark — wiring check (no key, no cost), then a real run</span>
+node evals/eval.mjs --selftest
+ANTHROPIC_API_KEY=...  node evals/eval.mjs --model claude-sonnet-4-6
+GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini</pre>
+<p>Fabius installs as a standard Claude Code plugin (<code>/plugin install fabius</code>), or any single <code>skills/&lt;name&gt;/</code> folder drops into a project's <code>.claude/skills/</code>. Because the skills are plain markdown, the portable bridge <code>AGENTS.md</code> carries the same stance to Codex, Cursor, Windsurf, Cline, Copilot, OpenCode, and Gemini — the agent operates under fabius end to end, in any tool that reads standing instructions.</p>
+</section>
+
+<!-- ================= 9. CONCLUSION ================= -->
+<section class="sec">
+<h2>9 · Conclusion</h2>
+<p>Fabius is a small idea carried all the way down. The idea is a single axis — scout wide, strike narrow — that lets an agent be thorough and minimal at once because the two live on different axes. The system is six coordinated skills with a single-owner contract. The policy is eighteen rules, each sourced to a real result. And the mathematics is not decoration: every gate is the same value-of-information threshold applied to a different capability, composed in an acyclic pipeline that routes every task and terminates — proved here, and adversarially checked.</p>
+<p>What makes it trustworthy is the line it refuses to cross. Where a paper measured a thing in its own domain, fabius uses the result; where the transfer would cross domains, it borrows only the shape and labels it. The benchmark says the same thing in data: a consistent, cross-model lift that grows as the model's default discipline drops — shorter answers a blind judge scores higher — and nothing more than that. <strong>Measured, not claimed.</strong></p>
+<div class="maxim" style="margin-top:1.2em">Scout wide, strike narrow.</div>
+</section>
+
+<!-- ================= REFERENCES ================= -->
+<section class="sec">
+<h2>References</h2>
+<h4>Agent research</h4>
+<div class="refs">
+<p>Yao, S. et al. <em>ReAct: Synergizing Reasoning and Acting in Language Models.</em> 2022.</p>
+<p>Schick, T. et al. <em>Toolformer: Language Models Can Teach Themselves to Use Tools.</em> 2023.</p>
+<p>Shinn, N. et al. <em>Reflexion: Language Agents with Verbal Reinforcement Learning.</em> 2023.</p>
+<p>Madaan, A. et al. <em>Self-Refine: Iterative Refinement with Self-Feedback.</em> 2023.</p>
+<p>Yao, S. et al. <em>Tree of Thoughts: Deliberate Problem Solving with Large Language Models.</em> 2023.</p>
+<p>Besta, M. et al. <em>Graph of Thoughts: Solving Elaborate Problems with Large Language Models.</em> 2023.</p>
+<p>Gao, S. et al. <em>Efficient Tool Use with Chain-of-Abstraction Reasoning.</em> 2024.</p>
+<p>Packer, C. et al. <em>MemGPT: Towards LLMs as Operating Systems.</em> 2023.</p>
+<p>Park, J. S. et al. <em>Generative Agents: Interactive Simulacra of Human Behavior.</em> 2023.</p>
+<p>Wang, L. et al. <em>A Survey on Large Language Model based Autonomous Agents.</em> 2023.</p>
+<p>Khattab, O. et al. <em>DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines.</em> 2023.</p>
+<p>Wang, G. et al. <em>Voyager: An Open-Ended Embodied Agent with Large Language Models.</em> 2023.</p>
+<p>Lipman, Y. et al. <em>Flow Matching for Generative Modeling.</em> 2023.</p>
+<p>Ho, J. &amp; Salimans, T. <em>Classifier-Free Diffusion Guidance.</em> 2022.</p>
+<p>Song, Y. et al. <em>Consistency Models.</em> 2023.</p>
+</div>
+<h4>Mathematical foundations</h4>
+<div class="refs">
+<p>Howard, R. A. <em>Information Value Theory.</em> IEEE Trans. SSC, 1966.</p>
+<p>Raiffa, H. &amp; Schlaifer, R. <em>Applied Statistical Decision Theory.</em> 1961.</p>
+<p>Banach, S. <em>Sur les opérations dans les ensembles abstraits.</em> Fund. Math., 1922.</p>
+<p>Nemhauser, G., Wolsey, L. &amp; Fisher, M. <em>An analysis of approximations for maximizing submodular set functions.</em> 1978.</p>
+<p>Khuller, S., Moss, A. &amp; Naor, J. <em>The budgeted maximum coverage problem.</em> 1999. · Sviridenko, M. 2004.</p>
+<p>Kraft, L. G. 1949 · McMillan, B. <em>Two inequalities implied by unique decipherability.</em> 1956.</p>
+<p>Shannon, C. E. <em>Coding theorems for a discrete source with a fidelity criterion.</em> 1959.</p>
+<p>Robertson, S. E. <em>The Probability Ranking Principle in IR.</em> 1977.</p>
+<p>Vapnik, V. <em>The Nature of Statistical Learning Theory.</em> 1995. · Hoeffding, W. 1963.</p>
+<p>Bellman, R. <em>Dynamic Programming.</em> 1957. · Michie, D. <em>"Memo" functions.</em> 1968.</p>
+<p>Rissanen, J. <em>Modeling by shortest data description (MDL).</em> 1978.</p>
+<p>Brent, R. P. <em>The parallel evaluation of general arithmetic expressions.</em> 1974.</p>
+</div>
+<div class="footer-tag">Fabius v1.2.1 · scout wide, strike narrow · github.com/ArielShemesh1999/fabius · MIT</div>
+</section>
+
+</div>
+</body>
+</html>

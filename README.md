@@ -17,6 +17,7 @@
 [![Six skills](https://img.shields.io/badge/architecture-6_skills,_one_install-1f6feb?style=for-the-badge)](#architecture)
 [![Benchmark](https://img.shields.io/badge/benchmark-blind,_reproducible-2ea44f?style=for-the-badge)](#what-it-does)
 [![Research-grounded](https://img.shields.io/badge/research--grounded-routing_policy-8957e5?style=for-the-badge)](RESEARCH.md)
+[![Paper](https://img.shields.io/badge/paper-36pp_·_proofs_+_coherence-D97757?style=for-the-badge)](paper/fabius-as-a-system.pdf)
 [![License](https://img.shields.io/badge/license-MIT-555?style=for-the-badge)](#license)
 
 </div>
@@ -116,6 +117,8 @@ fabius's decisions aren't hand-waving. Its routing policy is drawn from the agen
 
 Under the policy sits a **mathematical-foundations layer**: every rule reduced to its formal statement (decision theory, information theory, optimization, scheduling) — adversarially verified, then *proven* to compose as **one consistent, gap-free, model-applicable decision system** (all 18 rules are the same expected-loss / value-of-information threshold wrapped in a measurable task-partition). The decision policy, the math behind all seven figures, the foundations table, the coherence proof, and the direct-vs-analogy honesty ledger live in **[RESEARCH.md](RESEARCH.md)**. The figures are conceptual shapes of documented principles, not fabius measurements — reproduce them with `python3 assets/charts/render_figures.py`.
 
+The full treatment — architecture, the eighteen rules, **a complete proof of the mathematics under each one** (every proof adversarially verified, ten corrected before publication), the coherence theorem, the blind benchmark, and the honesty ledger — is collected as a 36-page paper: **[paper/fabius-as-a-system.pdf](paper/fabius-as-a-system.pdf)** (reproduce with `bash paper/build.sh`).
+
 ---
 
 ## Install
@@ -174,6 +177,7 @@ fabius/
 ├── ARCHITECTURE.md         layer model · single-owner table · capability matrix
 ├── BENCHMARKS.md           method · mechanism · how to reproduce
 ├── RESEARCH.md             the decision policy, the math, the honesty ledger
+├── paper/                  the 36-page paper (PDF) — proofs + coherence theorem
 ├── assets/charts/          numpy → SVG figure renderer (reproducible)
 ├── credits/                inspiration and attribution
 └── LICENSE                 MIT
