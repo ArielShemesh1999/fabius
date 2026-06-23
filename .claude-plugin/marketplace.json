@@ -7,14 +7,14 @@
   },
   "metadata": {
     "description": "fabius — one super-skill that equips Claude end-to-end (code · prose · agents · design · debug · memory) under a single Fabian stance: scout wide, strike narrow. Six coordinated skills, one install.",
-    "version": "1.2.0"
+    "version": "1.2.1"
   },
   "plugins": [
     {
       "name": "fabius",
       "source": "./",
       "description": "The fabius super-skill — equips Claude end-to-end under one lean Fabian stance: scout wide, strike narrow. Six coordinated, zero-overlap skills (always-on lean core + router + process/design/agents/memory specialists), one install.",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "author": {
         "name": "Ariel Shemesh",
         "url": "https://github.com/ArielShemesh1999"

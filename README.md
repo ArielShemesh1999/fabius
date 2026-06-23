@@ -114,7 +114,7 @@ fabius's decisions aren't hand-waving. Its routing policy is drawn from the agen
 
 **Climb one rung, stop at the knee** (left) — capability scales sub-linearly with machinery, so fabius adds the smallest sufficient rung (`inline → tool → retrieval → plan → subagent → swarm`) and never jumps to a swarm. **Refine on a real signal** (right) — a hard oracle (test, compiler) earns ~3 iterations, soft self-critique caps at 1–2, no signal ships once to human review.
 
-The decision policy, the math behind all seven figures, and the direct-vs-analogy honesty ledger live in **[RESEARCH.md](RESEARCH.md)**. The figures are conceptual shapes of documented principles, not fabius measurements — reproduce them with `python3 assets/charts/render_figures.py`.
+Under the policy sits a **mathematical-foundations layer**: every rule reduced to its formal statement (decision theory, information theory, optimization, scheduling) — adversarially verified, then *proven* to compose as **one consistent, gap-free, model-applicable decision system** (all 18 rules are the same expected-loss / value-of-information threshold wrapped in a measurable task-partition). The decision policy, the math behind all seven figures, the foundations table, the coherence proof, and the direct-vs-analogy honesty ledger live in **[RESEARCH.md](RESEARCH.md)**. The figures are conceptual shapes of documented principles, not fabius measurements — reproduce them with `python3 assets/charts/render_figures.py`.
 
 ---
 
