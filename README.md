@@ -16,6 +16,7 @@
 [![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-plugin-D97757?style=for-the-badge&logo=anthropic&logoColor=white)](https://docs.anthropic.com/en/docs/claude-code)
 [![Six skills](https://img.shields.io/badge/architecture-6_skills,_one_install-1f6feb?style=for-the-badge)](#architecture)
 [![Benchmark](https://img.shields.io/badge/benchmark-blind,_reproducible-2ea44f?style=for-the-badge)](#what-it-does)
+[![Research-grounded](https://img.shields.io/badge/research--grounded-routing_policy-8957e5?style=for-the-badge)](RESEARCH.md)
 [![License](https://img.shields.io/badge/license-MIT-555?style=for-the-badge)](#license)
 
 </div>
@@ -102,6 +103,21 @@ Fan out to understand and verify. Ship the smallest correct artifact. Explain it
 
 ---
 
+## Grounded in agent research
+
+fabius's decisions aren't hand-waving. Its routing policy is drawn from the agent-research canon — ReAct, Toolformer, Tree of Thoughts, Reflexion, MemGPT, DSPy, Voyager — turned into ten operational rules, and stated with an explicit ledger separating what the papers *measured* from what fabius *borrows by analogy*. Two principles, illustrated:
+
+<div align="center">
+<img src="assets/fig-capability-ladder.svg" alt="Capability vs machinery: fabius stops at the knee instead of climbing to a swarm" width="49%" />
+<img src="assets/fig-reflection-iteration.svg" alt="Reflection quality vs iteration: a hard oracle earns more passes than soft self-critique" width="49%" />
+</div>
+
+**Climb one rung, stop at the knee** (left) — capability scales sub-linearly with machinery, so fabius adds the smallest sufficient rung (`inline → tool → retrieval → plan → subagent → swarm`) and never jumps to a swarm. **Refine on a real signal** (right) — a hard oracle (test, compiler) earns ~3 iterations, soft self-critique caps at 1–2, no signal ships once to human review.
+
+The decision policy, the math behind all seven figures, and the direct-vs-analogy honesty ledger live in **[RESEARCH.md](RESEARCH.md)**. The figures are conceptual shapes of documented principles, not fabius measurements — reproduce them with `python3 assets/charts/render_figures.py`.
+
+---
+
 ## Install
 
 A standard Claude Code plugin — zero build, zero config.
@@ -147,7 +163,7 @@ fabius is plain-markdown skills — model- and tool-agnostic. The portable bridg
 fabius/
 ├── .claude-plugin/         plugin + marketplace manifests
 ├── skills/
-│   ├── fabius/             router / super-skill
+│   ├── fabius/             router  · references: routing-policy · agent-research · failures
 │   ├── fabius-parcus/      always-on lean core
 │   ├── fabius-disciplina/  engineering process  · references: process library
 │   ├── fabius-decor/       design system        · references: 69-brand library
@@ -157,6 +173,8 @@ fabius/
 ├── AGENTS.md               tool-agnostic bridge (Codex / Cursor / Gemini / …)
 ├── ARCHITECTURE.md         layer model · single-owner table · capability matrix
 ├── BENCHMARKS.md           method · mechanism · how to reproduce
+├── RESEARCH.md             the decision policy, the math, the honesty ledger
+├── assets/charts/          numpy → SVG figure renderer (reproducible)
 ├── credits/                inspiration and attribution
 └── LICENSE                 MIT
 ```

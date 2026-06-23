@@ -80,4 +80,13 @@ A claim of success needs evidence. Before reporting complete:
 
 The full process library — craft skills (brainstorm, prototype, TDD, grill, handoff, writing) and discipline skills (systematic-debugging, writing-plans, verification-before-completion, parallel agents) — is in `references/process/`; the worked debug walkthrough and test anti-patterns in `references/process-playbook.md`.
 
+## Routing the reasoning — when to branch, when to reflect
+
+From the agent-research canon (full set in the router's [routing-policy.md](../fabius/references/routing-policy.md)):
+
+- **Reason → act → observe (R5).** In tool/sub-agent work, never act on an assumed result — one thought, one action, read the *real* observation, then continue. After ~3 cycles with no progress toward the verify condition, stop and re-plan (the same 3-strike trigger as the debug rule above). *(ReAct)*
+- **Plan in placeholders (R6).** For any task that will call ≥2 tools, finish a tool-free plan naming each tool *output* as a placeholder before binding a call — so the skeleton can be grilled, independent calls parallelize, and a wrong result re-runs one tool, not the plan. *(Chain of Abstraction)*
+- **Branch only when partials are scorable (R7).** Keep brainstorm/plan a single pass by default; escalate to a scored tree (generate → score → prune) only when a cheap evaluator can rank half-finished candidates and early mistakes are costly. No evaluator → single path. *(Tree of Thoughts)*
+- **Reflect on a real signal (R8).** Enter a refine loop only on an attributable critique. A hard oracle (test/compiler/schema) earns ~3 iterations; soft self-critique caps at 1–2; no signal → ship once, route to human review. *(Reflexion + Self-Refine)*
+
 Pairs with: `fabius-parcus` (every artifact stays minimal), `fabius-archivum` (resolved facts and post-mortems get filed).

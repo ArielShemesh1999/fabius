@@ -76,4 +76,13 @@ The wiki is plain markdown — works in any editor, best browsed in Obsidian (ba
 
 Either way the human curates sources and asks; fabius writes and maintains. Never block work to set this up — scaffold the minimal `MEMORY.md` + `log.md` and keep going.
 
+## Memory discipline — page, don't stuff
+
+The memory rules from the routing policy (MemGPT, Voyager, the memory surveys; full set in [routing-policy.md](../fabius/references/routing-policy.md)):
+
+- **Retrieve on demand (R9).** Read the index, page in only the matching slice; if it still exceeds the budget, summarize-then-link — never cat a whole page or directory "just in case." *(MemGPT)*
+- **Write only decision-changing facts (M7).** `write = EVICT` (flush durable facts to a page + log line under window pressure / at session end); `read = RECALL` (index→page on a miss, logged as QUERY). Everything addressable by `[[slug]]`.
+- **Promote verified solutions to skills (M6).** After a self-contained sub-problem is solved *and verified*, file it as a named reusable skill page; query archivum and compose existing skills before planning from scratch; supersede, don't duplicate. Failures leave an anti-pattern note. *(Voyager)*
+- **Tie-break by recency + load-bearingness (M8).** When index entries tie on relevance, surface the freshest decision-bearing pages first; fold a grown batch of log lines up into a synthesis page. *(Generative Agents, analogy)*
+
 Pairs with: `fabius-disciplina` (resolved facts and post-mortems get filed here), `fabius-cohors` (grounding and cross-session memory for agents), `fabius-parcus` (don't build the heavy retrieval engine before the corpus demands it).

@@ -44,6 +44,8 @@ The ladder is a reflex, not a research project: two rungs both work → take the
 
 Rules that fall out of it: no abstraction with a single implementation, no factory for one product, no config for a value that never changes. Deletion beats addition. Boring beats clever — clever is what someone else decodes at 3am. Fewest files, shortest working diff.
 
+The same ladder governs *orchestration*, not just code. The capability-deployment ladder (`inline → one tool → retrieval → plan → single subagent → swarm`, the router's routing-policy R2) is this code ladder's twin — don't instantiate a swarm, a corrector, or a vector engine until the rung below it is shown insufficient on *this* task. Over-steering a sub-agent — repeating or stacking a constraint (R10) — is the orchestration form of over-building: state a constraint once on breadth tasks; hard-steer only narrow contracts.
+
 Mark a deliberate shortcut with a `fabius:` comment that names the ceiling and the upgrade path:
 `# fabius: global lock for now; per-account locks if throughput ever matters.`
 

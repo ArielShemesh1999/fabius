@@ -51,6 +51,17 @@ UI · landing page · component · brand look   → fabius-decor
 
 **Process picks HOW, domain picks WHAT — load process first.** "Build a landing page" = `fabius-disciplina` (brainstorm the spec) → `fabius-decor` (execute at quality), all under `fabius-parcus` (always). The router composes layers; it doesn't make you choose one.
 
+## How fabius decides — the routing policy
+
+Routing is a policy, not a guess. The full decision policy — ten rules, each sourced honestly to the agent-research canon (ReAct, Toolformer, Tree of Thoughts, Reflexion, MemGPT…) — lives in [references/routing-policy.md](references/routing-policy.md). The four that fire most:
+
+- **Classify before routing.** Name the task's load on three axes — Memory · Tools/Action · Planning — and route each loaded axis to its layer; none loaded → stay in `fabius-parcus`. (R1)
+- **Climb the ladder one rung.** `inline → one tool → retrieval → plan → single subagent → swarm`; add the smallest rung that holds, never jump to the top. (R2)
+- **A call must earn its place.** Route to a tool, sub-agent, or specialist only when you can name the wrong answer the call prevents; else answer inline. (R3)
+- **Scout 2–3 routes under ambiguity**, and collapse to one only as the signal sharpens. (R4)
+
+The reasoning and the math behind the policy are in [RESEARCH.md](../../RESEARCH.md); the Reflexion-style lesson log that refines it from real failures is [references/failures.md](references/failures.md).
+
 ## The loop — Scout, Plan, Strike, Prove, Record
 
 1. **Scout** — read context. Ambiguous? grill one question at a time; never assume. (`fabius-disciplina`)

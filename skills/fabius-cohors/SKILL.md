@@ -49,6 +49,16 @@ Stay single unless one of these is true:
 
 None of those hold → one well-scoped agent with the right tools beats a swarm every time.
 
+## Spend an agent only when it earns it
+
+Before scaling the fleet, the orchestration rules from the routing policy ([routing-policy.md](../fabius/references/routing-policy.md)):
+
+- **Name the error a second agent prevents (M1).** Stay single unless the work splits into independent pieces, needs an independent reviewer who didn't write the artifact, or overflows one window. Can't name the wrong answer it prevents → don't spawn it. *(Toolformer-spirit)*
+- **Tree vs graph by whether partials merge (M2).** Combinable sub-results (synthesis, audit union, sort/merge, dedup) → parallel workers + a reducer agent. Competing branches → best-of-k, no merge machinery. *(Graph of Thoughts)*
+- **Verification depth from measured failure (M3).** Set corrector/verify scaffolding from a route's *measured* pass rate — more where it has been failing, none on routes that never fail (drop the corrector, YAGNI). Re-measure from each outcome.
+- **Reflect-then-retry, escalate when hypotheses run out (M4).** On a verifiable failure, prepend a one-paragraph reflection to the retry; if it repeats the prior cause with no new hypothesis, escalate to a human (cap ~3). *(Reflexion)*
+- **Agents are contracts; rewrites need a metric delta (M5).** Accept a prompt change only when a checkable metric on held-out real examples improves — never on better-sounding wording. *(DSPy)*
+
 ## The five orchestration patterns
 
 1. **Sequential** — A → B → C, each consuming the prior output. For pipelines (research → draft → publish). Simplest; the default for ordered work.
