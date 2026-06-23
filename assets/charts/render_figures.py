@@ -17,7 +17,7 @@ def p(name): return os.path.join(OUT, name)
 cost = np.linspace(0, 10, 220); cap = 1 - np.exp(-0.55*cost)
 knee = np.log(1/0.30)/0.55
 plot(p("fig-capability-ladder.svg"),
-     "Capability vs machinery — diminishing returns",
+     "Capability vs machinery — diminishing returns  (analogy)",
      "machinery / cost   (tokens · latency · agent-count)  →", "task capability",
      [{"x": cost, "y": cap, "color": B}], (0, 10), (0, 1.06),
      xticks=[(0, "inline"), (knee, "knee"), (5.5, "+subagent"), (10, "swarm")],
@@ -41,7 +41,7 @@ info = 0.25 + 0.95*(1-np.exp(-1.0*(b-1)))*np.exp(-0.16*(b-1))
 uninfo = 0.34 - 0.018*(b-1)
 bstar = b[int(np.argmax(info))]
 plot(p("fig-branching-accuracy.svg"),
-     "Branching factor vs accuracy at a fixed budget",
+     "Branching factor vs accuracy at a fixed budget  (illustrative)",
      "branching factor b   (usable depth d ≈ budget / b)", "task accuracy",
      [{"x": b, "y": info, "color": B}, {"x": b, "y": uninfo, "color": GR, "dash": "5 4"}],
      (1, 8), (0, 0.95),
@@ -54,7 +54,7 @@ k = np.arange(1, 7)
 hard = np.array([0.45, 0.66, 0.80, 0.87, 0.90, 0.92])
 soft = np.array([0.40, 0.60, 0.59, 0.57, 0.56, 0.55])
 plot(p("fig-reflection-iteration.svg"),
-     "Reflection quality vs iteration  (hard vs soft signal)",
+     "Reflection quality vs iteration  (empirical)",
      "iteration / retry  k", "cumulative success",
      [{"x": k, "y": hard, "color": B}, {"x": k, "y": soft, "color": G}],
      (1, 6), (0, 1.0),
@@ -69,7 +69,7 @@ recall = 0.92*(1-np.exp(-0.95*x))
 stuff = recall - np.maximum(x-7, 0)*0.055
 infl = 3.0
 plot(p("fig-recall-context.svg"),
-     "Recall vs context loaded  (retrieve the slice, don't stuff)",
+     "Recall vs context loaded  (illustrative)",
      "context tokens loaded   (index-matched slice → whole directory)", "answer recall quality",
      [{"x": x, "y": recall, "color": B}, {"x": x, "y": stuff, "color": R, "dash": "5 4"}],
      (0, 10), (0, 1.0),

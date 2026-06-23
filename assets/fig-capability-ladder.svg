@@ -2,7 +2,7 @@
 <rect x="1" y="1" width="658" height="408" rx="12" fill="#ffffff" stroke="#d0d7de"/>
 <rect x="421.2" y="48" width="212.8" height="302" fill="#cf222e" opacity="0.07"/>
 <text x="527.6" y="340" text-anchor="middle" font-size="11" fill="#57606a">over-spend: swarm / long chains</text>
-<text x="330.0" y="27" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2328">Capability vs machinery — diminishing returns</text>
+<text x="330.0" y="27" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2328">Capability vs machinery — diminishing returns  (analogy)</text>
 <line x1="74" y1="48" x2="74" y2="350" stroke="#57606a" stroke-width="1.5"/>
 <line x1="74" y1="350" x2="634" y2="350" stroke="#57606a" stroke-width="1.5"/>
 <line x1="74.0" y1="350" x2="74.0" y2="355" stroke="#57606a"/>
