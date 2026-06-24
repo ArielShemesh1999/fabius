@@ -1,3 +1,4 @@
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 # Fabius Corpus — the indexed body
 
 One fabius-branded index over **every** capability library. The brain (the `fabius` router) holds this index, never the bulk: on a task it queries the index → pages in the one matching slice → strikes narrow (routing-policy **M9 · R9 · M7**). Every library is fabius-named and reached through the same `fabius-vec` retrieval. The research fabius drew on and the inspiration behind each library are recorded in [credits/](credits/README.md).

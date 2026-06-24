@@ -1,3 +1,4 @@
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 # The whitepaper
 
 **[fabius-as-a-system.pdf](fabius-as-a-system.pdf)** — *Fabius: one super-skill for the LLM agent (v1.0.0).* The canonical, full whitepaper. 40 pages: the nine-skill architecture (the *praetorium* router that dispatches by layer + machinery + model-tier, four engineering specialists, three domain verticals, on the always-on lean core), the proven core of eighteen routing rules with a full **proof of the mathematics under every rule**, the coherence theorem (the core composes into one consistent, complete, composable decision system), the four operational extensions (R11–R13, M9) stated honestly *outside* the proof, a blind reproducible benchmark, and the direct-vs-analogy honesty ledger.

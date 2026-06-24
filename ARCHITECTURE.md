@@ -1,3 +1,4 @@
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 # Fabius — system architecture
 
 Fabius is **one system**, not a bundle of plugins. A single super-skill routes eight coordinated capability layers over a thin supporting spine — nine skills in all, counting the router itself — so any agent gains end-to-end engineering capability from one install. The router dispatches on three axes together: **which layer(s)**, **how much machinery**, and **which model tier**. This document is the system's own architecture and its capability matrix.

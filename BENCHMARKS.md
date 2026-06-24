@@ -1,3 +1,4 @@
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 # Benchmarks — does fabius actually improve model output?
 
 Fabius ships **a runnable harness *and* the measured runs behind it.** You can reproduce every number on your own machine with your own key, for the exact model you care about — and below are the runs already done, with their caveats stated plainly. Nothing here is estimated; every figure was measured on a real model at a named moment.
