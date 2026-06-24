@@ -10,6 +10,7 @@ description: >
   references/memory-schema.md; the knowledge engine itself — a vector engine, the wiki pattern, and a
   working RAG pipeline — lives in references/knowledge/.
 ---
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
 # Fabius Archivum — don't re-derive what you already learned
 

@@ -10,6 +10,7 @@ description: >
   table, and the high-converting copy structures live in references/marketing-playbook.md; the
   channel playbooks and swipe library live in references/channel-swipe-library.md, bundled and indexed by CORPUS.md, paged in on demand.
 ---
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
 # Fabius Mercatus — make the value legible, make the next step obvious
 

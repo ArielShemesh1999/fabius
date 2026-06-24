@@ -11,6 +11,7 @@ description: >
   full 69-brand teardown library (DESIGN-apple.md, DESIGN-stripe.md, DESIGN-linear.app.md …) plus the
   fabius-design, GSAP-animation, fabius-frames and fabius-uiux bundles live in references/design/.
 ---
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
 # Fabius Decor — what good actually looks like
 

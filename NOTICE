@@ -1,0 +1,39 @@
+fabius
+Copyright (c) 2026 Ariel Shemesh — github.com/ArielShemesh1999/fabius
+
+This software and its accompanying research, prose, figures, and skill
+definitions are the original work of Ariel Shemesh.
+
+LICENSE & ATTRIBUTION
+--------------------
+fabius is released under the MIT License (see LICENSE). The MIT License is
+permissive, but it is NOT a waiver of authorship. As an explicit, binding
+condition of that license:
+
+    "The above copyright notice and this permission notice shall be
+     included in all copies or substantial portions of the Software."
+
+Any copy, fork, redistribution, or derivative — in whole or in substantial
+part — MUST retain the copyright notice above. For such a copy, removing the
+notice means the copier never met the license condition, so the work is used
+outside the license — i.e. ordinary copyright infringement. (You still must
+show they copied substantial protected expression; the notice point removes
+their license defense, it is not a standalone win.)
+
+PROVENANCE
+----------
+Authorship and the priority date of this work are independently provable
+without trusting GitHub, the author, or any single party:
+
+  * provenance/sealed-commit.txt      — the sealed git commit + tree hash
+  * provenance/sealed-commit.txt.ots  — OpenTimestamps proof anchoring that
+                                        hash into the Bitcoin blockchain
+  * a cryptographically SSH-signed git tag (provenance/allowed_signers)
+  * an embedded provenance fingerprint in every skill file
+
+See PROVENANCE.md for the full threat model, what each layer does and does
+NOT prove, and the verification + enforcement procedure.
+
+To verify everything from a clean clone:
+
+    bash provenance/verify.sh

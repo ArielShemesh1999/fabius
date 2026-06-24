@@ -10,6 +10,7 @@ description: >
   core-loop template, the juice checklist, the state-machine skeleton, and the pixel-art constants
   live in references/game-playbook.md; the engine recipes and feel patterns live in references/engine-recipes.md, bundled and indexed by CORPUS.md, paged in on demand.
 ---
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
 # Fabius Ludus — the loop is the game; everything else is paint
 

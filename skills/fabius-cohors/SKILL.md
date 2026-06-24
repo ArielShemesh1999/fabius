@@ -10,6 +10,7 @@ description: >
   + Python/Go/Java/Kotlin/Android/TypeScript packs, with a fabius-vec.db memory index) lives in
   references/agents/, indexed by references/agent-catalog.md.
 ---
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
 # Fabius Cohors — build agents that actually work
 

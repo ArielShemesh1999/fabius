@@ -11,6 +11,7 @@ description: >
   STRIDE template, the OWASP checklist, and the finding format live in references/security-playbook.md;
   the hardening guides and audit library live in references/hardening-guides.md, bundled and indexed by CORPUS.md, paged in on demand.
 ---
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
 # Fabius Praesidium — find it and fix it before someone finds it for you
 

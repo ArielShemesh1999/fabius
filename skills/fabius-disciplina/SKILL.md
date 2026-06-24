@@ -11,6 +11,7 @@ description: >
   (systematic-debugging, writing-plans, verification-before-completion, parallel agents) — lives in
   references/process/.
 ---
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
 # Fabius Disciplina — understand, plan, build proven, finish
 
