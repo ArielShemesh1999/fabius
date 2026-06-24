@@ -1,6 +1,6 @@
-# The paper
+# The whitepaper
 
-**[fabius-as-a-system.pdf](fabius-as-a-system.pdf)** — *Fabius: a research-grounded operating stance for LLM agents.* 36 pages: the architecture, the eighteen-rule decision policy, a full **proof of the mathematics under every rule**, the coherence theorem (the rules compose into one consistent, complete, composable decision system), a blind reproducible benchmark, and the direct-vs-analogy honesty ledger.
+**[fabius-as-a-system.pdf](fabius-as-a-system.pdf)** — *Fabius: one super-skill for the LLM agent (v1.0.0).* The canonical, full whitepaper. 40 pages: the nine-skill architecture (the *praetorium* router that dispatches by layer + machinery + model-tier, four engineering specialists, three domain verticals, on the always-on lean core), the proven core of eighteen routing rules with a full **proof of the mathematics under every rule**, the coherence theorem (the core composes into one consistent, complete, composable decision system), the four operational extensions (R11–R13, M9) stated honestly *outside* the proof, a blind reproducible benchmark, and the direct-vs-analogy honesty ledger.
 
 ## How it was made — and why you can trust the math
 

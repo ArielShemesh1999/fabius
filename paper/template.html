@@ -114,17 +114,18 @@ window.MathJax = {
 <!-- ================= TITLE ================= -->
 <div class="title-page">
   <!--FIG:fabius-pixel-->
+  <div class="kicker" style="text-align:center;margin-bottom:8px">Whitepaper · v1.0.0</div>
   <div class="title">Fabius</div>
-  <div class="subtitle">A research-grounded operating stance for LLM agents — one stance, six skills, and the mathematics of knowing when to stop.</div>
+  <div class="subtitle">One super-skill for the LLM agent — nine coordinated skills, a research-grounded decision policy, and the mathematics of knowing when to stop.</div>
   <hr class="rule-hr" />
-  <div class="byline"><b>Ariel Shemesh</b></div>
+  <div class="byline"><b>Ariel Shemesh</b> · a Claude Code plugin</div>
   <div class="byline">github.com/ArielShemesh1999/fabius &nbsp;·&nbsp; MIT</div>
 
   <div class="abstract">
     <h4>Abstract</h4>
-    <p>Large language models, used as coding and reasoning agents, fail in two opposite directions: they over-explain and over-engineer, or — when told merely to "be concise" — they cut the validation, security, and accessibility that make an artifact correct. <strong>Fabius</strong> is a single operating stance, packaged as one super-skill of six coordinated sub-skills, that resolves this tension along one axis: <em>scout wide in what you investigate, strike narrow in what you ship.</em></p>
-    <p>This paper presents fabius as a system. It gives the architecture (a router over an always-on lean core and four engineering specialists), the decision policy (eighteen routing rules drawn from the agent-research canon), and — the core of the paper — the <strong>mathematics</strong> beneath each rule: every gate reduced to a formal statement, proved, and adversarially checked. We then prove the policy <em>coheres</em>: all eighteen rules are one expected-loss / value-of-information threshold applied to disjoint variables, composed in an acyclic pipeline that routes every task and terminates. Throughout, a strict honesty ledger separates what the source papers <em>measured</em> from what fabius <em>borrows by analogy</em>. We close with a blind, reproducible benchmark: across four model families, structure beats brevity, and the advantage grows as the model's default discipline drops.</p>
-    <div class="meta-row">Version 1.2.1 · June 2026 · figures computed (numpy → SVG), reproducible</div>
+    <p>Large language models, used as coding and reasoning agents, fail in two opposite directions: they over-explain and over-engineer, or — when told merely to "be concise" — they cut the validation, security, and accessibility that make an artifact correct. <strong>Fabius</strong> is a single operating stance, packaged as one Claude Code plugin of nine coordinated skills, that resolves this tension along one axis: <em>scout wide in what you investigate, strike narrow in what you ship.</em></p>
+    <p>This whitepaper presents fabius as a system. It gives the architecture (a router — the <em>praetorium</em> — that dispatches on three axes over an always-on lean core, four engineering specialists, and three domain verticals), the decision policy (a proven core of eighteen routing rules drawn from the agent-research canon, plus four operational extensions for model-tier dispatch, long-horizon loops, verticals, and corpus externalization), and — the centre of the document — the <strong>mathematics</strong> beneath each core rule: every gate reduced to a formal statement, proved, and adversarially checked. We then prove the core <em>coheres</em>: all eighteen rules are one expected-loss / value-of-information threshold applied to disjoint variables, composed in an acyclic pipeline that routes every task and terminates. A strict honesty ledger separates what the source papers <em>measured</em> from what fabius <em>borrows by analogy</em> — and marks the operational extensions as the working edge, not yet folded into the proof. We close with a blind, reproducible benchmark: across four model families, structure beats brevity, and the advantage grows as the model's default discipline drops.</p>
+    <div class="meta-row">Version 1.0.0 · June 2026 · figures computed (numpy → SVG), reproducible</div>
   </div>
 </div>
 
@@ -137,38 +138,44 @@ window.MathJax = {
 
 <div class="maxim">Scout wide in what you investigate.&nbsp;&nbsp;Strike narrow in what you ship.</div>
 
-<p>Fan out to understand and to verify; deliver the smallest correct artifact; explain it in the fewest exact words. These never conflict, because they live on different axes — process and memory make you wide, lean makes you narrow. Fabius packages this as one Claude Code plugin of six skills: a router, an always-on lean core, and four specialists for process, design, agent-engineering, and memory.</p>
+<p>Fan out to understand and to verify; deliver the smallest correct artifact; explain it in the fewest exact words. These never conflict, because they live on different axes — process and memory make you wide, lean makes you narrow. Fabius packages this as one Claude Code plugin of nine skills: a router, an always-on lean core, four engineering specialists (process, design, agent-engineering, memory), and three domain verticals (go-to-market, defensive security, game craft).</p>
 
-<p>The contribution of this paper is to show that the stance is not a vibe. Section 2 gives the system architecture and the single-owner coordination contract that keeps six skills from contradicting one another. Section 3 states the decision policy: eighteen operational rules, each drawn from a specific result in the agent-research literature. Section 4 — the heart of the paper — supplies the <strong>mathematics</strong> under each rule, every theorem proved and adversarially verified, with a hard line between results that <em>govern</em> a routing decision and theorems borrowed only for their <em>shape</em>. Section 5 proves the eighteen rules <strong>compose into one coherent decision system</strong>. Section 6 reports a blind, reproducible benchmark. The discipline of the whole is in Section 7: <strong>measured, not claimed</strong>.</p>
+<p>The contribution of this whitepaper is to show that the stance is not a vibe. Section 2 gives the system architecture and the single-owner coordination contract that keeps nine skills from contradicting one another. Section 3 states the decision policy: a proven core of eighteen operational rules, each drawn from a specific result in the agent-research literature, and four operational extensions at the working edge. Section 4 — the heart of the document — supplies the <strong>mathematics</strong> under each core rule, every theorem proved and adversarially verified, with a hard line between results that <em>govern</em> a routing decision and theorems borrowed only for their <em>shape</em>. Section 5 proves the eighteen core rules <strong>compose into one coherent decision system</strong>. Section 6 reports a blind, reproducible benchmark. The discipline of the whole is in Section 7: <strong>measured, not claimed</strong>.</p>
 </section>
 
 <!-- ================= 2. THE SYSTEM ================= -->
 <section class="sec">
 <h2>2 · The system</h2>
-<p>Fabius is one system, not a bundle of plugins. A single super-skill routes five capability layers over a thin supporting spine — six skills in all, counting the router — so any agent gains end-to-end engineering capability from one install.</p>
+<p>Fabius is one system, not a bundle of plugins. A single super-skill — the router, or <em>praetorium</em> — dispatches eight coordinated capability layers over a thin supporting spine (nine skills in all, counting the router), so any agent gains end-to-end capability from one install. The router does not just pick a layer; it dispatches on three axes at once: <strong>which layer(s)</strong>, <strong>how much machinery</strong> (the capability ladder of §4.1), and <strong>which model tier</strong>.</p>
 
 <figure class="arch">
   <!--FIG:architecture-->
-  <figcaption><b>Figure 0 — the layer model.</b> Your prompt enters the <code>fabius</code> router, which routes to the specialist a task needs — <code>disciplina</code> (process), <code>decor</code> (design), <code>cohors</code> (agents), <code>archivum</code> (memory) — all running on the always-on <code>fabius-parcus</code> lean core, producing the smallest correct result.</figcaption>
+  <figcaption><b>Figure 0 — the layer model.</b> Your prompt enters the <code>fabius</code> router (the <em>praetorium</em>), which dispatches by layer, machinery, and model-tier to the specialist a task needs — four engineering specialists (<code>disciplina</code> process, <code>decor</code> design + data-viz, <code>cohors</code> agents, <code>archivum</code> memory) and three domain verticals (<code>mercatus</code> go-to-market, <code>praesidium</code> defensive security, <code>ludus</code> games) — all running on the always-on <code>fabius-parcus</code> lean core, producing the smallest correct result. Depth loads on demand from <code>references/</code> (indexed by <code>CORPUS.md</code>); the benchmark is in <code>evals/</code>; the stance ports to any tool via <code>AGENTS.md</code>.</figcaption>
 </figure>
 
-<h3>2.1 · Six skills, one stance</h3>
+<h3>2.1 · Nine skills, one stance</h3>
 <table class="skilltbl">
-  <caption>Each skill is a thin operating contract; its depth lives under <code>references/</code> and loads only on demand.</caption>
+  <caption>Each skill is a thin operating contract; its depth lives under <code>references/</code>, indexed by <code>CORPUS.md</code>, and loads only on demand.</caption>
   <thead><tr><th>Skill</th><th>Role</th><th>What it delivers</th></tr></thead>
   <tbody>
-    <tr><td><code>fabius</code></td><td>router</td><td>reads the job, sets the stance, pulls the right layer</td></tr>
-    <tr><td><code>fabius-parcus</code></td><td>lean core, always on</td><td>terse output · the YAGNI ladder · surgical changes · no speculative scope</td></tr>
+    <tr><td><code>fabius</code></td><td>router · praetorium</td><td>reads the job, sets the stance, dispatches by layer + machinery + model-tier</td></tr>
+    <tr><td><code>fabius-parcus</code></td><td>lean core, always on</td><td>terse output · the YAGNI ladder · surgical changes · the never-trim floor</td></tr>
     <tr><td><code>fabius-disciplina</code></td><td>engineering process</td><td>brainstorm → plan → test-first → prove · root-cause debugging</td></tr>
-    <tr><td><code>fabius-decor</code></td><td>design system</td><td>one-accent laws · token vocabulary · mobile-first · live-verify</td></tr>
+    <tr><td><code>fabius-decor</code></td><td>design + data-viz</td><td>one-accent laws · token vocabulary · mobile-first · data-ink charts (figura)</td></tr>
     <tr><td><code>fabius-cohors</code></td><td>agent engineering</td><td>definition schema · least privilege · five orchestration patterns</td></tr>
     <tr><td><code>fabius-archivum</code></td><td>persistent memory</td><td>per-project memory · the LLM-wiki · index + log retrieval · recall</td></tr>
+    <tr><td><code>fabius-mercatus</code></td><td>go-to-market</td><td>positioning · message-to-awareness match · proof over adjectives · a one-action funnel</td></tr>
+    <tr><td><code>fabius-praesidium</code></td><td>defensive security</td><td>STRIDE per boundary · the OWASP pass · severity → fix → proof findings</td></tr>
+    <tr><td><code>fabius-ludus</code></td><td>game craft</td><td>the core loop first · deliberate juice · state as a machine · jam-sized scope</td></tr>
   </tbody>
 </table>
-<p><em>Latin, for the curious:</em> <strong>parcus</strong>, frugal · <strong>disciplina</strong>, training · <strong>decor</strong>, what is fitting · <strong>cohors</strong>, the cohort · <strong>archivum</strong>, the record office.</p>
+<p><em>Latin, for the curious:</em> <strong>parcus</strong>, frugal · <strong>disciplina</strong>, training · <strong>decor</strong>, what is fitting · <strong>cohors</strong>, the cohort · <strong>archivum</strong>, the record office · <strong>mercatus</strong>, the marketplace · <strong>praesidium</strong>, the garrison · <strong>ludus</strong>, the game and the school where you drill it.</p>
 
 <h3>2.2 · Single owner, zero overlap</h3>
-<p>The coordination contract is one rule: <strong>each rule has exactly one owning layer; every other layer links to it instead of restating it.</strong> Planning, test discipline, and the clarifying-question procedure are owned by <code>disciplina</code>; lean prose, the YAGNI ladder, and the never-trim guardrail list by <code>parcus</code>; routing and the kill-switch by <code>fabius</code>. <code>parcus</code> is the only always-on layer: it composes <em>underneath</em> whatever task layer the router selects and never competes for a task verb, so it can run beneath the layer that does. This single-owner discipline is what makes the formal coherence of Section 5 possible — no two layers write the same rule with opposite intent.</p>
+<p>The coordination contract is one rule: <strong>each rule has exactly one owning layer; every other layer links to it instead of restating it.</strong> Planning, test discipline, and the clarifying-question procedure are owned by <code>disciplina</code>; lean prose, the YAGNI ladder, and the never-trim guardrail list by <code>parcus</code>; routing and the kill-switch by <code>fabius</code>. The line between core and vertical is drawn the same way: <code>parcus</code> owns the <em>never-trim security floor</em> (don't cut validation), while <code>praesidium</code> owns the <em>active</em> security work (model the threat, name the check, prove it closed) and references that floor rather than restating it. <code>parcus</code> is the only always-on layer: it composes <em>underneath</em> whatever task layer the router selects and never competes for a task verb. This single-owner discipline is what makes the formal coherence of Section 5 possible — no two layers write the same rule with opposite intent.</p>
+
+<h3>2.3 · The corpus — the brain holds the index, not the library</h3>
+<p>The depth behind the skills — a 69-brand design teardown library, a 200-plus-agent production catalog with a vector index, a knowledge engine, and the marketing, security, and game-craft playbooks — is large. Fabius keeps the <em>install</em> lean by separating brain from library: a single fabius-branded index (<code>CORPUS.md</code>) sits over every capability library, and the router holds only the index. On a task it reads the index, pages in the one matching slice, and never loads the bulk (the memory discipline of §4.5, rules R9 · M7 · M9). Honest current state: three libraries still ship bundled under <code>references/</code> today and are migrating behind the index (§4.7, M9) — the contract is built so they can externalize without any skill changing how it reaches them. The standing rule is that adding a capability is adding a row to the index, not a megabyte to the install — so the library scales without bloating the brain.</p>
 </section>
 
 <!-- ================= 3. THE POLICY ================= -->
@@ -205,6 +212,19 @@ window.MathJax = {
   </tbody>
 </table>
 <p>The reading list behind each rule is the agent-research canon — ReAct, Toolformer, Tree and Graph of Thoughts, Reflexion, Self-Refine, MemGPT, DSPy, Voyager, the Wang and efficiency surveys, and (for the analogies) the sampling mathematics of generative models. Section 4 turns each rule into a theorem.</p>
+
+<h3>3.3 · The operational edge — four extensions beyond the proven core</h3>
+<p>The eighteen rules above are the <strong>proven core</strong>: Section 5's coherence theorem is established over them and them alone. As the system grew to dispatch model tiers, run long-horizon loops, compose verticals, and package its own corpus, it added four <strong>operational extensions</strong>. These are honestly outside the proof — borrowed-by-analogy or system-internal, consistent with the core in practice but not yet formalized or folded into the coherence theorem. They are the working edge.</p>
+<table>
+  <thead><tr><th>Rule</th><th>The decision it makes</th><th>Source</th></tr></thead>
+  <tbody>
+    <tr><td><b>R11</b></td><td>spend the cheapest model tier that holds; escalate on a <em>verifiable</em> miss, not a guess — re-tier per sub-task, not per session</td><td>efficiency survey · FrugalGPT cascades</td></tr>
+    <tr><td><b>R12</b></td><td>long-horizon work runs <code>step → verify</code> on a loop with a dual exit gate (completion <em>and</em> done-signal) and a hard cycle cap — autonomous, never infinite</td><td>Ralph loop · Reflexion stop-condition</td></tr>
+    <tr><td><b>R13</b></td><td>a vertical runs a studio — the domain skill leads the WHAT, process plans, execution follows, lean underneath</td><td>fabius's own composition rule</td></tr>
+    <tr><td><b>M9</b></td><td>externalize the corpus — the brain holds the index, not the library; adding a capability is an index row, not a megabyte</td><td>MemGPT paging · memory survey</td></tr>
+  </tbody>
+</table>
+<p>R11–R13 and M9 are stated in full in §4.7, after the core proofs — with the boundary kept explicit: they are sound and useful, but they have not earned a place inside the theorem yet, and this document does not pretend otherwise.</p>
 </section>
 
 <!-- ================= 4. THE MATHEMATICS ================= -->
@@ -214,6 +234,37 @@ window.MathJax = {
 <p>Two tags run through the section. <strong>Real-math</strong> means the equation genuinely <em>governs</em> the routing decision — decision theory, information theory, optimization, scheduling, algebra. <strong>Analogy</strong> means a correct theorem from another field (generative-model sampling, transport, IR kernels) borrowed for its <em>shape</em>; the source paper proves nothing about agents, so fabius takes the shape, not a measured result. One rule (R5) is <strong>qualitative</strong> — a control-flow invariant with no objective function. The honesty boundary is stated inside every analogy proof.</p>
 
 <!--MATH_SECTION-->
+
+<h3>4.7 · The operational edge — R11–R13, M9</h3>
+<p>These four rules dispatch model tiers, run long-horizon loops, compose verticals, and package the corpus. They are stated here for completeness and tagged honestly: each has a sound basis, but none has a proof folded into the coherence theorem of §5. They are the working edge, not the proven floor — and the document marks them so.</p>
+
+<div class="rulecard qualitative">
+  <div class="rulehead"><span class="ruleid">R11</span><span class="ruletitle">Spend the cheapest model tier that holds</span><span class="badge qualitative">operational edge</span></div>
+  <p><strong>Rule.</strong> Route each sub-task to the lowest-cost model tier that clears its bar, and re-tier <em>per sub-task</em>, not per session. Reserve the strong tier for ambiguity, architecture, security calls, and irreversible actions; hand mechanical, tightly-contracted work to a cheap tier. Escalate only on a <em>verifiable</em> miss (R8), never on a hunch.</p>
+  <p><strong>Basis.</strong> This is R3's value-of-information gate lifted to model choice: among tiers \(t\) with expected loss \(\mathbb{E}[L\mid t]\) and price \(c_t\), pick \(\arg\min_t (\mathbb{E}[L\mid t] + c_t)\); the strong tier earns its premium only where it strictly lowers expected loss by more than its extra cost. The escalate-on-miss mechanism is a FrugalGPT-style cascade.</p>
+  <p><strong>Boundary.</strong> Direct on the principle (the efficiency survey's cost-effectiveness frontier); the specific savings are task- and dataset-specific and do not transfer. The gate is real; the numbers are not claimed.</p>
+</div>
+
+<div class="rulecard qualitative">
+  <div class="rulehead"><span class="ruleid">R12</span><span class="ruletitle">Long-horizon work runs on a loop with a dual exit gate</span><span class="badge qualitative">operational edge</span></div>
+  <p><strong>Rule.</strong> For multi-cycle autonomous work, repeat the <code>step → verify</code> cycle and stop only when <em>both</em> a completion condition <em>and</em> an explicit done-signal hold. Hard-cap the cycles; on a stuck loop (no movement toward the verify condition across ~3 cycles, or a reflection that repeats the prior cause) stop and escalate — never spin. Rate-limit and checkpoint so a runaway can neither burn unbounded cost nor corrupt state.</p>
+  <p><strong>Basis.</strong> The outer-loop form of M4's optimal-stopping rule — the same logic that caps a refine loop — applied to an autonomous build-until-done loop, with R8's convergence / no-progress test as the movement check. The dual gate is what separates "autonomous" from "infinite".</p>
+  <p><strong>Boundary.</strong> Direct on the loop-plus-gate shape (the Ralph technique + the Reflexion stop-condition); the specific caps are operational heuristics, not derived constants.</p>
+</div>
+
+<div class="rulecard qualitative">
+  <div class="rulehead"><span class="ruleid">R13</span><span class="ruletitle">A vertical runs a studio</span><span class="badge qualitative">operational edge</span></div>
+  <p><strong>Rule.</strong> A domain task spanning more than one layer (a game, a launch, a security review, a landing page) composes as a pipeline behind one goal: the <strong>domain skill leads</strong> (sets the WHAT and the domain laws) → <code>disciplina</code> plans and proves → the execution layers follow → <code>parcus</code> underneath. Don't collapse a vertical to a single layer, and don't let a downstream layer redefine the domain goal.</p>
+  <p><strong>Basis.</strong> The system's own single-owner discipline (§2.2) generalized to multi-layer jobs: process picks HOW, the domain picks WHAT, and the owner of the goal is fixed for the whole pipeline.</p>
+  <p><strong>Boundary.</strong> Direct — no external claim borrowed; it is fabius's coordination contract applied one level up.</p>
+</div>
+
+<div class="rulecard qualitative">
+  <div class="rulehead"><span class="ruleid">M9</span><span class="ruletitle">Externalize the corpus — index, not library</span><span class="badge qualitative">operational edge</span></div>
+  <p><strong>Rule.</strong> Bulk reference material belongs outside the installed plugin as an indexed corpus. Each skill ships a lean entry doc plus an index and pages in only the matching slice on demand. Never bundle a new library into the artifact: it bloats the install and contradicts the lean stance the benchmark proves. Adding a capability is an index row, not a megabyte.</p>
+  <p><strong>Basis.</strong> MemGPT paging (R9 · M7) and the memory survey's retrieval-augmented store, applied to the system's own packaging rather than to a task's working context.</p>
+  <p><strong>Boundary.</strong> Direct on read-the-index-first. Honest current state: three full libraries still ship bundled under <code>references/</code> and are migrating behind the index — the contract is built so they can externalize without any skill changing how it reaches them.</p>
+</div>
 </section>
 
 <!-- ================= 5. COHERENCE ================= -->
@@ -234,6 +285,8 @@ window.MathJax = {
   <span class="k">≺ R9* · M7 · M8*</span>   memory substrate (retrieve-under-budget · evict/recall · rank)</pre>
 
 <!--COHERENCE-->
+
+<p style="margin-top:1em"><strong>Scope of the theorem.</strong> Coherence is proved over the <em>eighteen-rule core</em> (R1–R10, M1–M8) — the part of the policy that rests on mathematics that governs the decision. The four operational extensions of §4.7 (R11–R13, M9) are consistent with the core in practice and reuse its objects (R11 is R3's gate over tiers; R12 is M4's optimal-stopping rule with R8's no-progress test on the outer loop; M9 is R9/M7's paging applied to packaging), but they are <strong>not</strong> yet folded into this pipeline or its proof. Formalizing them — a proof per rule, then re-running the coherence check over the full set — is a deliberate next step, stated here as future work rather than an implicit claim.</p>
 </section>
 
 <!-- ================= 6. BENCHMARK ================= -->
@@ -271,7 +324,7 @@ window.MathJax = {
 <p>The pattern repeats on all four families: <strong>large lift on trust / order / genuine-build, near-zero on pure YAGNI.</strong> FAB never lost an arm; its worst case was a tie (B2). The hardest control is the <em>under-build trap</em> (C1/C2), where naive lean is the <em>wrong</em> answer — fabius passed every time by making the <em>correct</em> lean move (a shared store, a real parser), not the smallest one. This is the proof that fabius is a scope-control system, not a "shorten" prompt: a model that only shortens cannot also produce the longest, most-complete migration answer.</p>
 
 <table>
-  <caption><b>Run 3</b> — landing-page build, same brief three ways. T1 stance only · T2 no fabius · T3 stance + all six skills. 2026-06-22.</caption>
+  <caption><b>Run 3</b> — landing-page build, same brief three ways. T1 stance only · T2 no fabius · T3 stance + all six skills shipping at the time. 2026-06-22.</caption>
   <thead><tr><th></th><th class="num">design score</th><th class="num">lines</th><th class="num">size</th><th class="num">working form</th></tr></thead>
   <tbody>
     <tr><td>T1 stance only</td><td class="num win">8.5</td><td class="num">561</td><td class="num">34 KB</td><td class="num">no</td></tr>
@@ -300,7 +353,9 @@ window.MathJax = {
   <p>The source proves something about a different domain and fabius transfers the shape, not a measured agent result: Toolformer's loss-reduction filter is a training-time criterion against the gold continuation, uncomputable at routing time, so R3/M1 borrow only its spirit; the efficiency surveys assert diminishing returns directionally but fit no curve, so R2's knee is qualitative; Chain of Abstraction measured ~1.4× on single-tool tasks, not agent fan-out, so R6's parallel benefit is unmeasured here; Graph of Thoughts' numbers are intra-LLM, transplanted to agent topology (M2); and the three generative-model rules — Flow Matching (R4), Classifier-Free Guidance (R10), Consistency Models (M3) — together with Generative Agents' recency kernel (M8b), are <strong>all</strong> analogies, because those papers prove their claims about sampling and image fidelity and say nothing about agents, routing, or verification budgets.</p>
 </div>
 
-<p>The bar held throughout: <strong>measured where a paper measured it in-domain; analogy everywhere the transfer crosses domains — labelled, so no claim is overstated.</strong> Of the eighteen rules, fifteen rest on mathematics that genuinely governs the decision, one (R5) is an explicit qualitative invariant, and four are analogies that carry their caveat inline and never govern a route the way the real-math rules do.</p>
+<p>The bar held throughout: <strong>measured where a paper measured it in-domain; analogy everywhere the transfer crosses domains — labelled, so no claim is overstated.</strong> Of the eighteen core rules, fifteen rest on mathematics that genuinely governs the decision, one (R5) is an explicit qualitative invariant, and four are analogies that carry their caveat inline and never govern a route the way the real-math rules do.</p>
+
+<p>The same discipline draws the line between the <em>proven core</em> and the <em>operational edge</em>. The coherence theorem is claimed over the eighteen-rule core only; the four extensions of §4.7 are presented as sound and useful but explicitly outside the proof. A whitepaper that quietly extended the theorem to cover features it had just added would be doing exactly the over-claiming fabius is built to refuse. The boundary is the honest thing, and it is drawn in ink, not pencil.</p>
 </section>
 
 <!-- ================= 8. REPRODUCE & USE ================= -->
@@ -314,13 +369,14 @@ python3 assets/charts/render_figures.py
 node evals/eval.mjs --selftest
 ANTHROPIC_API_KEY=...  node evals/eval.mjs --model claude-sonnet-4-6
 GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini</pre>
-<p>Fabius installs as a standard Claude Code plugin (<code>/plugin install fabius</code>), or any single <code>skills/&lt;name&gt;/</code> folder drops into a project's <code>.claude/skills/</code>. Because the skills are plain markdown, the portable bridge <code>AGENTS.md</code> carries the same stance to Codex, Cursor, Windsurf, Cline, Copilot, OpenCode, and Gemini — the agent operates under fabius end to end, in any tool that reads standing instructions.</p>
+<p>Fabius installs as a standard Claude Code plugin (<code>/plugin install fabius</code>), or any single <code>skills/&lt;name&gt;/</code> folder drops into a project's <code>.claude/skills/</code>. Because the nine skills are plain markdown, the portable bridge <code>AGENTS.md</code> carries the same stance to Codex, Cursor, Windsurf, Cline, Copilot, OpenCode, and Gemini — the agent operates under fabius end to end, in any tool that reads standing instructions.</p>
+<p>The system is built to grow without bloating. Adding a capability is a new <code>skills/fabius-&lt;name&gt;/SKILL.md</code> with one precisely-described owned concern plus a row in the corpus index — never a megabyte bundled into the install (M9). That is how the system went from six skills to nine — adding the go-to-market, defensive-security, and game-craft verticals — while the installed brain stayed lean and the libraries moved behind the index. Each new layer links to its siblings instead of duplicating them, so the single-owner contract, and the coherence it enables, survive every addition.</p>
 </section>
 
 <!-- ================= 9. CONCLUSION ================= -->
 <section class="sec">
 <h2>9 · Conclusion</h2>
-<p>Fabius is a small idea carried all the way down. The idea is a single axis — scout wide, strike narrow — that lets an agent be thorough and minimal at once because the two live on different axes. The system is six coordinated skills with a single-owner contract. The policy is eighteen rules, each sourced to a real result. And the mathematics is not decoration: every gate is the same value-of-information threshold applied to a different capability, composed in an acyclic pipeline that routes every task and terminates — proved here, and adversarially checked.</p>
+<p>Fabius is a small idea carried all the way down. The idea is a single axis — scout wide, strike narrow — that lets an agent be thorough and minimal at once because the two live on different axes. The system is nine coordinated skills with a single-owner contract. The policy is eighteen proven rules — each sourced to a real result — and four operational extensions held honestly at the edge. And the mathematics is not decoration: every gate is the same value-of-information threshold applied to a different capability, composed in an acyclic pipeline that routes every task and terminates — proved here, and adversarially checked.</p>
 <p>What makes it trustworthy is the line it refuses to cross. Where a paper measured a thing in its own domain, fabius uses the result; where the transfer would cross domains, it borrows only the shape and labels it. The benchmark says the same thing in data: a consistent, cross-model lift that grows as the model's default discipline drops — shorter answers a blind judge scores higher — and nothing more than that. <strong>Measured, not claimed.</strong></p>
 <div class="maxim" style="margin-top:1.2em">Scout wide, strike narrow.</div>
 </section>
@@ -345,6 +401,9 @@ GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini</pre>
 <p>Lipman, Y. et al. <em>Flow Matching for Generative Modeling.</em> 2023.</p>
 <p>Ho, J. &amp; Salimans, T. <em>Classifier-Free Diffusion Guidance.</em> 2022.</p>
 <p>Song, Y. et al. <em>Consistency Models.</em> 2023.</p>
+<p>Hao, S. et al. <em>Reasoning with Language Model is Planning with World Model (RAP).</em> 2023.</p>
+<p><em>Toward Efficient Agents</em> — efficiency / cost-effectiveness survey. arXiv:2601.14192, 2026.</p>
+<p><em>A Survey on Memory for LLM Agents.</em> arXiv:2603.07670, 2026.</p>
 </div>
 <h4>Mathematical foundations</h4>
 <div class="refs">
@@ -361,7 +420,7 @@ GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini</pre>
 <p>Rissanen, J. <em>Modeling by shortest data description (MDL).</em> 1978.</p>
 <p>Brent, R. P. <em>The parallel evaluation of general arithmetic expressions.</em> 1974.</p>
 </div>
-<div class="footer-tag">Fabius v1.2.1 · scout wide, strike narrow · github.com/ArielShemesh1999/fabius · MIT</div>
+<div class="footer-tag">Fabius v1.0.0 · scout wide, strike narrow · github.com/ArielShemesh1999/fabius · MIT</div>
 </section>
 
 </div>
