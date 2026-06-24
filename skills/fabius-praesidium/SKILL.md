@@ -9,7 +9,7 @@ description: >
   when the user says "is this secure?", "threat-model this", "audit this", "harden this", "review
   for vulnerabilities", or "security review". Defensive only — it hardens, never weaponizes. The
   STRIDE template, the OWASP checklist, and the finding format live in references/security-playbook.md;
-  the hardening guides and audit library live in the fabius-praesidium library of the fabius corpus (CORPUS.md), paged in on demand.
+  the hardening guides and audit library live in references/hardening-guides.md, bundled and indexed by CORPUS.md, paged in on demand.
 ---
 
 # Fabius Praesidium — find it and fix it before someone finds it for you
@@ -81,6 +81,6 @@ Severity sets order: critical/high first, and a critical at a trust boundary sto
 ## References
 
 - STRIDE-per-boundary template, the OWASP checklist as a runnable list, the secrets-hygiene checklist, and the severity→fix→proof format → `references/security-playbook.md`.
-- Hardening guides and the audit library → the **fabius-praesidium** library in the fabius corpus ([CORPUS.md](../../CORPUS.md)), paged in on demand (M9 · R9). Defensive only — guides to harden and detect, never to attack.
+- Hardening guides and the audit library → `references/hardening-guides.md`, bundled and indexed by [CORPUS.md](../../CORPUS.md); page in the one slice the task needs (R9 · M9). Defensive only — guides to harden and detect, never to attack.
 
 Boundary: defensive only — no offensive tooling, ever. The never-trim security floor is `fabius-parcus`; the test discipline is `fabius-disciplina`; agent least-privilege is `fabius-cohors`. This layer owns the threat model and the audit. The user's instruction wins on everything except cutting a guardrail; `stop fabius` drops the stance.

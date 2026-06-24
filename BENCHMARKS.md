@@ -72,7 +72,7 @@ The pattern repeats on all four families: **large lift on trust/order/build, ~ze
 
 Three live builds of the same brief — **T1** fabius stance only · **T2** no fabius · **T3** fabius + all six skills.
 
-> *Version note: this run measures the then-six-skill build. The specialists added in v1.3.0 — `fabius-mercatus`, `fabius-praesidium`, `fabius-ludus`, and the `fabius-decor` figura/data-viz concern — are **not** exercised by this benchmark and make no claim on these numbers. The "six skills" wording below is left exactly as-run, on purpose.*
+> *Version note: this run measures the then-six-skill build. The specialists added in v1.0.0 — `fabius-mercatus`, `fabius-praesidium`, `fabius-ludus`, and the `fabius-decor` figura/data-viz concern — are **not** exercised by this benchmark and make no claim on these numbers. The "six skills" wording below is left exactly as-run, on purpose.*
 
 | | design score | lines | size | working signup form |
 |---|---|---|---|---|

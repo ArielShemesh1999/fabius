@@ -8,7 +8,7 @@ description: >
   a sticker/character game, or anything with win/lose/score state — or when the user says "make a
   game", "the loop isn't fun", "add juice", "balance this", or "make it feel good to play". The
   core-loop template, the juice checklist, the state-machine skeleton, and the pixel-art constants
-  live in references/game-playbook.md; the engine recipes and feel patterns live in the fabius-ludus library of the fabius corpus (CORPUS.md), paged in on demand.
+  live in references/game-playbook.md; the engine recipes and feel patterns live in references/engine-recipes.md, bundled and indexed by CORPUS.md, paged in on demand.
 ---
 
 # Fabius Ludus — the loop is the game; everything else is paint
@@ -83,6 +83,6 @@ Pick the **smallest shippable game that proves the loop** — a jam-sized cut. O
 ## References
 
 - Core-loop template, the juice checklist, the FSM skeleton, the pixel-art constants, and jam-scoping rules → `references/game-playbook.md`.
-- Engine recipes, feel patterns, and the pixel-art kit → the **fabius-ludus** library in the fabius corpus ([CORPUS.md](../../CORPUS.md)), paged in on demand (M9 · R9).
+- Engine recipes, feel patterns, and the pixel-art kit → `references/engine-recipes.md`, bundled and indexed by [CORPUS.md](../../CORPUS.md); page in the one slice the task needs (R9 · M9).
 
 Boundary: lean code is `fabius-parcus`; plan + prove is `fabius-disciplina`; UI/animation laws are `fabius-decor`; enemy/NPC agents are `fabius-cohors`. This layer owns the loop, the feel, and the balance. The user's design and brand always win; `stop fabius` drops the stance.

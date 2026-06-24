@@ -8,7 +8,7 @@ description: >
   pricing/positioning page — or when the user says "market this", "write copy", "position this",
   "name the benefit", or "why isn't this converting?". The positioning canvas, the awareness-level
   table, and the high-converting copy structures live in references/marketing-playbook.md; the
-  channel playbooks and swipe library live in the fabius-mercatus library of the fabius corpus (CORPUS.md), paged in on demand.
+  channel playbooks and swipe library live in references/channel-swipe-library.md, bundled and indexed by CORPUS.md, paged in on demand.
 ---
 
 # Fabius Mercatus — make the value legible, make the next step obvious
@@ -81,6 +81,6 @@ Don't build the funnel; test the message. Ship the smallest asset that puts the 
 ## References
 
 - Positioning canvas, awareness table, the converting structures (PAS · AIDA · BAB · the 4-U headline test), and the metric-per-stage map → `references/marketing-playbook.md`.
-- Channel playbooks (landing · email · social · cold outreach) and the swipe library → the **fabius-mercatus** library in the fabius corpus ([CORPUS.md](../../CORPUS.md)), paged in one slice at a time on demand (M9 · R9).
+- Channel playbooks (landing · email · social · cold outreach · launch) and the swipe library → `references/channel-swipe-library.md`, bundled and indexed by [CORPUS.md](../../CORPUS.md); page in the one slice the task needs (R9 · M9).
 
 Boundary: prose-trim is `fabius-parcus`; demand-validation and the clarifying grill are `fabius-disciplina`; visual execution is `fabius-decor`. This layer owns the message and the path. The user's brand and instruction always win; `stop fabius` drops the stance.
