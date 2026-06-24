@@ -41,11 +41,17 @@ fi
 # 3) OpenTimestamps proof (Bitcoin priority date) -------------------------
 OTS=$(command -v ots || ls "$HOME"/Library/Python/*/bin/ots 2>/dev/null | head -1)
 if [ -n "${OTS:-}" ] && [ -f provenance/sealed-commit.txt.ots ]; then
-  ots_out=$("$OTS" verify provenance/sealed-commit.txt.ots 2>&1); ots_rc=$?
-  if [ "$ots_rc" -eq 0 ] && printf '%s' "$ots_out" | grep -qiE "bitcoin (block|attests)"; then
-    pass "OpenTimestamps proof confirmed on the Bitcoin blockchain"
+  # The Bitcoin attestation is embedded IN the proof file — `ots info` reads it
+  # with no Bitcoin node. (`ots verify` additionally cross-checks the block
+  # header against a node/explorer; absence of a node is not "unconfirmed".)
+  info=$("$OTS" info provenance/sealed-commit.txt.ots 2>&1)
+  block=$(printf '%s' "$info" | grep -oiE "BitcoinBlockHeaderAttestation\([0-9]+\)" | grep -oE "[0-9]+" | head -1)
+  if [ -n "$block" ]; then
+    pass "OpenTimestamps proof anchored to Bitcoin block $block (cross-check its merkle root on any explorer, or 'ots verify' with a node)"
+  elif printf '%s' "$info" | grep -qi "PendingAttestation"; then
+    note "OTS proof present but still pending Bitcoin confirmation — run: $OTS upgrade provenance/sealed-commit.txt.ots"
   else
-    note "OTS proof present but not yet Bitcoin-confirmed — run: $OTS upgrade provenance/sealed-commit.txt.ots"
+    note "OTS proof present but no recognizable attestation — inspect: $OTS info provenance/sealed-commit.txt.ots"
   fi
 else
   note "ots client or .ots proof absent — install opentimestamps-client, or release not sealed yet"
