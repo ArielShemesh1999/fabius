@@ -5,7 +5,7 @@ The real measurement behind [`../BENCHMARKS.md`](../BENCHMARKS.md). No estimated
 | File | What it is |
 |---|---|
 | `harness.workflow.js` | Claude-Code harness (Workflow tool). 4 Claude-family models × 3 arms × 8 tasks, blind Opus judge. |
-| `results.json` | Raw measured output of the Claude-family run on 2026-06-20 (per-cell scores + length + deltas). |
+| `results.json` | Raw measured output the harness writes on a run (per-cell scores + length + deltas) — gitignored; the transcribed numbers live in [`../BENCHMARKS.md`](../BENCHMARKS.md). |
 | `portable_eval.py` | **Vendor-agnostic** harness — stdlib only, no pip. Same 3-arm design against **OpenAI (GPT/Codex), Mistral, and Anthropic**. This is how you get real Codex/Mistral numbers. |
 
 ## Cross-vendor run (OpenAI / Mistral / your keys)

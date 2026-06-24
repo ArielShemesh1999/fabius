@@ -8,13 +8,13 @@
 
 <br/>
 
-<img src="assets/hero.webp" alt="fabius — six coordinated skills fused into one super-skill" width="100%" />
+<img src="assets/hero.webp" alt="fabius — nine coordinated skills fused into one super-skill" width="100%" />
 
 <br/>
 <br/>
 
 [![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-plugin-D97757?style=for-the-badge&logo=anthropic&logoColor=white)](https://docs.anthropic.com/en/docs/claude-code)
-[![Six skills](https://img.shields.io/badge/architecture-6_skills,_one_install-1f6feb?style=for-the-badge)](#architecture)
+[![Nine skills](https://img.shields.io/badge/architecture-9_skills,_one_install-1f6feb?style=for-the-badge)](#architecture)
 [![Benchmark](https://img.shields.io/badge/benchmark-blind,_reproducible-2ea44f?style=for-the-badge)](#what-it-does)
 [![Research-grounded](https://img.shields.io/badge/research--grounded-routing_policy-8957e5?style=for-the-badge)](RESEARCH.md)
 [![Paper](https://img.shields.io/badge/paper-36pp_·_proofs_+_coherence-D97757?style=for-the-badge)](paper/fabius-as-a-system.pdf)
@@ -26,9 +26,9 @@
 
 ## What it is
 
-fabius is one super-skill you hand the agent. It sets *how* the agent works across the whole job — write code, write prose, build and orchestrate agents, design UI, debug, and remember — and routes to a specialist only when a task needs depth. One stance, applied everywhere: talk lean, build lean, run a disciplined process, design at ship quality, build other agents, and stop re-deriving.
+fabius is one super-skill you hand the agent. It sets *how* the agent works across the whole job — write code, write prose, build and orchestrate agents, design UI, visualize data, debug, market the value, harden security, build games, and remember — and routes to a specialist only when a task needs depth. One stance, applied everywhere: talk lean, build lean, run a disciplined process, design at ship quality, build other agents, and stop re-deriving.
 
-It is named for the Fabian doctrine: **scout the whole field, fight only the battle that matters.** One system of six coordinated, non-overlapping skills — a router, an always-on lean core, and four engineering specialists — installed as a single plugin.
+It is named for the Fabian doctrine: **scout the whole field, fight only the battle that matters.** One system of nine coordinated, non-overlapping skills — a router, an always-on lean core, and seven engineering specialists — installed as a single plugin.
 
 ---
 
@@ -61,32 +61,35 @@ Across four model families — Grok, Mistral, GPT, Claude — the pattern holds:
 
 ## Architecture
 
-One router over an always-on lean core and four specialists, on a thin spine. Process decides *how*, domain decides *what*, and the lean core runs beneath everything.
+One router over an always-on lean core and seven specialists, on a thin spine. The router dispatches by layer + machinery + model-tier; process decides *how*, domain decides *what*, and the lean core runs beneath everything.
 
 <div align="center">
 
-<img src="assets/architecture.svg" alt="How fabius works: your prompt goes to the fabius router, which routes to four specialists — disciplina (process), decor (design), cohors (agents), archivum (memory) — all running on the always-on fabius-parcus lean core, producing the smallest correct result." width="100%" />
+<img src="assets/architecture.svg" alt="How fabius works: your prompt goes to the fabius router, which dispatches by layer, machinery, and model-tier to seven specialists — disciplina (process), decor (design + data-viz), cohors (agents), archivum (memory), mercatus (marketing), praesidium (defensive security), ludus (games) — all running on the always-on fabius-parcus lean core, producing the smallest correct result." width="100%" />
 
 </div>
 
-Each rule has exactly one owning layer; every other layer links to it instead of restating it. That single-owner contract is what keeps six skills from contradicting one another. Full layer model, coordination table, and capability matrix: **[ARCHITECTURE.md](ARCHITECTURE.md)**.
+Each rule has exactly one owning layer; every other layer links to it instead of restating it. That single-owner contract is what keeps nine skills from contradicting one another. Full layer model, coordination table, and capability matrix: **[ARCHITECTURE.md](ARCHITECTURE.md)**.
 
 ---
 
-## The six skills
+## The nine skills
 
 | Skill | Role | What it delivers |
 |---|---|---|
-| `fabius` | router | reads the job, sets the stance, pulls the right layer |
+| `fabius` | router | reads the job, sets the stance, dispatches by layer + machinery + model-tier |
 | `fabius-parcus` | lean core, always on | terse output · the YAGNI ladder · surgical changes · no speculative scope |
 | `fabius-disciplina` | engineering process | brainstorm → plan → test-first → prove · grill ambiguity · root-cause debugging |
-| `fabius-decor` | design system | one-accent laws · token vocabulary · mobile-first · live-verify checklist |
+| `fabius-decor` | design + data-viz | one-accent laws · token vocabulary · mobile-first · live-verify · data-ink charts (figura) |
 | `fabius-cohors` | agent engineering | definition schema · least privilege · five orchestration patterns including the swarm |
 | `fabius-archivum` | persistent memory | autonomous per-project memory · the LLM-wiki · index + log retrieval · cross-session recall |
+| `fabius-mercatus` | go-to-market | positioning · message-to-awareness match · proof over adjectives · a one-action funnel · converting copy |
+| `fabius-praesidium` | defensive security | STRIDE per boundary · the OWASP pass · secrets + least-privilege · severity→fix→proof findings |
+| `fabius-ludus` | game craft | the core loop first · deliberate juice · state as a machine · the pixel lane · jam-sized scope |
 
-Each skill is a thin operating contract. The depth — a 69-brand design teardown library, a 200-plus-agent production catalog with a vector-indexed memory, a knowledge engine (vector, wiki, RAG), and the full craft-and-discipline process library — lives under each skill's `references/` and loads only on demand, so the skill itself stays lean.
+Each skill is a thin operating contract. The depth — a 69-brand design teardown library, a 200-plus-agent production catalog with a vector-indexed memory, a knowledge engine (vector, wiki, RAG), the full craft-and-discipline process library, and the marketing / defensive-security / game-craft playbooks — lives under each skill's `references/` (indexed by [CORPUS.md](CORPUS.md)) and loads only on demand, so the skill itself stays lean.
 
-> *Latin, for the curious:* **parcus**, frugal · **disciplina**, training · **decor**, what is fitting · **cohors**, the cohort · **archivum**, the record office.
+> *Latin, for the curious:* **parcus**, frugal · **disciplina**, training · **decor**, what is fitting · **cohors**, the cohort · **archivum**, the record office · **mercatus**, the marketplace · **praesidium**, the garrison · **ludus**, the game (and the school where you drill it).
 
 ---
 
@@ -106,7 +109,7 @@ Fan out to understand and verify. Ship the smallest correct artifact. Explain it
 
 ## Grounded in agent research
 
-fabius's decisions aren't hand-waving. Its routing policy is drawn from the agent-research canon — ReAct, Toolformer, Tree of Thoughts, Reflexion, MemGPT, DSPy, Voyager — turned into ten operational rules, and stated with an explicit ledger separating what the papers *measured* from what fabius *borrows by analogy*. Two principles, illustrated:
+fabius's decisions aren't hand-waving. Its routing policy is drawn from the agent-research canon — ReAct, Toolformer, Tree of Thoughts, RAP, Reflexion, MemGPT, DSPy, Voyager, and the 2026 efficiency and memory surveys — turned into a documented decision policy (a proven core of ten routing + eight orchestration/memory rules, plus operational extensions for model-tier dispatch, long-horizon loops, verticals, and corpus externalization), stated with an explicit ledger separating what the papers *measured* from what fabius *borrows by analogy*. Two principles, illustrated:
 
 <div align="center">
 <img src="assets/fig-capability-ladder.svg" alt="Capability vs machinery: fabius stops at the knee instead of climbing to a swarm" width="49%" />
@@ -136,8 +139,12 @@ Or drop any single `skills/<name>/` folder straight into a project's `.claude/sk
 write code          → fabius-parcus
 build a feature     → fabius-disciplina
 build UI / a page   → fabius-decor
+chart / visualize   → fabius-decor
 build an agent      → fabius-cohors
 remember this       → fabius-archivum
+market / launch it  → fabius-mercatus
+secure / audit it   → fabius-praesidium
+make a game         → fabius-ludus
 ```
 
 ---
@@ -148,7 +155,7 @@ fabius is plain-markdown skills — model- and tool-agnostic. The portable bridg
 
 | Tool | How to install |
 |---|---|
-| Claude Code | `/plugin install fabius` — all six skills with progressive disclosure |
+| Claude Code | `/plugin install fabius` — all nine skills with progressive disclosure |
 | Codex / OpenAI | drop [`AGENTS.md`](AGENTS.md) at the repo root (read automatically) |
 | OpenCode | `AGENTS.md` at the repo root, or copy `skills/` into `.opencode/` |
 | Cursor | copy `AGENTS.md` into `.cursor/rules/fabius.mdc` |
@@ -169,14 +176,18 @@ fabius/
 │   ├── fabius/             router  · references: routing-policy · agent-research · failures
 │   ├── fabius-parcus/      always-on lean core
 │   ├── fabius-disciplina/  engineering process  · references: process library
-│   ├── fabius-decor/       design system        · references: 69-brand library
+│   ├── fabius-decor/       design + data-viz    · references: 69-brand library · visualization (figura)
 │   ├── fabius-cohors/      agent engineering    · references: 200+ agent catalog
-│   └── fabius-archivum/    persistent memory    · references: vector · wiki · RAG
-├── evals/                  blind benchmark — eval.mjs · portable_eval.py · results.json
+│   ├── fabius-archivum/    persistent memory    · references: vector · wiki · RAG
+│   ├── fabius-mercatus/    go-to-market         · references: marketing playbook (+ corpus)
+│   ├── fabius-praesidium/  defensive security   · references: STRIDE/OWASP playbook (+ corpus)
+│   └── fabius-ludus/       game craft           · references: game playbook (+ corpus)
+├── evals/                  blind benchmark — eval.mjs · portable_eval.py · harness.workflow.js
 ├── AGENTS.md               tool-agnostic bridge (Codex / Cursor / Gemini / …)
 ├── ARCHITECTURE.md         layer model · single-owner table · capability matrix
 ├── BENCHMARKS.md           method · mechanism · how to reproduce
 ├── RESEARCH.md             the decision policy, the math, the honesty ledger
+├── CORPUS.md               the fabius corpus index — every capability library, one index
 ├── paper/                  the 36-page paper (PDF) — proofs + coherence theorem
 ├── assets/charts/          numpy → SVG figure renderer (reproducible)
 ├── credits/                inspiration and attribution

@@ -39,7 +39,7 @@ same tasks, output length:   31–52 % SHORTER than baseline — and the blind j
 
 The point isn't "fabius is shorter" (so is TERSE). It's that fabius is shorter **and** wins the quality score — the one move plain brevity can't make.
 
-### 1 — In-repo eval, 3 Claude tiers (`evals/results.json`, run v2, 2026-06-20)
+### 1 — In-repo eval, 3 Claude tiers (`evals/harness.workflow.js`, run v2, 2026-06-20)
 
 8 tasks × 3 arms, blind judge (`claude-opus-4-8`). Total out of 15:
 
@@ -71,6 +71,8 @@ The pattern repeats on all four families: **large lift on trust/order/build, ~ze
 ### 3 — Landing-page build, stance vs full mechanism (Mundial 2026, 2026-06-22)
 
 Three live builds of the same brief — **T1** fabius stance only · **T2** no fabius · **T3** fabius + all six skills.
+
+> *Version note: this run measures the then-six-skill build. The specialists added in v1.3.0 — `fabius-mercatus`, `fabius-praesidium`, `fabius-ludus`, and the `fabius-decor` figura/data-viz concern — are **not** exercised by this benchmark and make no claim on these numbers. The "six skills" wording below is left exactly as-run, on purpose.*
 
 | | design score | lines | size | working signup form |
 |---|---|---|---|---|

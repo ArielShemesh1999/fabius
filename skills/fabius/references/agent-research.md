@@ -4,6 +4,34 @@ The Core Knowledge Base behind fabius's [routing policy](routing-policy.md). One
 
 **Honesty key.** **direct** = the agent-research paper makes this claim about LLM agents / reasoning / memory. **analogy** = the shape is borrowed from another domain (generative-model sampling math, or a non-agent setting) and the paper does not claim it about agents — fabius takes the shape, not a measured agent result. The full ledger is in [RESEARCH.md](../../../RESEARCH.md).
 
+## The canon — every source, mapped
+
+The literature fabius is built on, at a glance; each row is detailed below. **foundation** = the math source for the analogy rules · **reference** = a living index. Rules R1–R10 / M1–M8 are the proven core; R11–R13 / M9 are operational extensions (grounded here, fenced from the coherence proof). Every arXiv id below was checked against the abstract it cites.
+
+| Source | arXiv | Drives | Tag |
+|---|---|---|---|
+| ReAct | 2210.03629 | R5 | direct |
+| Toolformer | 2302.04761 | R3 · M1 | analogy |
+| Reflexion | 2303.11366 | R8 · M4 | direct |
+| Self-Refine | 2303.17651 | R8 (soft tier) | direct |
+| Tree of Thoughts | 2305.10601 | R7 | direct |
+| Reasoning via Planning (RAP) | 2305.14992 | R7 | direct |
+| Graph of Thoughts | 2308.09687 | M2 | analogy |
+| Chain of Abstraction | 2401.17464 | R6 | analogy |
+| MemGPT | 2310.08560 | R9 · M7 | direct |
+| LongMem | 2306.07174 | R9 | direct |
+| Generative Agents | 2304.03442 | M8 | analogy |
+| Voyager | 2305.16291 | M6 | direct |
+| DSPy | 2310.03714 | M5 | direct |
+| Autonomous-Agents survey (Wang) | — | R1 | direct |
+| Toward Efficient Agents (Yang et al., survey) | 2601.14192 | R2 · R11 · M3 | direct |
+| Memory for Autonomous LLM Agents (Du, survey) | 2603.07670 | R9 · M7 · M8 · M9 | direct |
+| Flow Matching | 2210.02747 | R4 | analogy |
+| Consistency Models | 2303.01469 | M3 | analogy |
+| Classifier-Free Guidance | 2207.12598 | R10 | analogy |
+| MIT diffusion course | diffusion.csail.mit.edu | R4 · M3 · R10 (math) | foundation |
+| LLMAgentPapers · awesome-agent-papers · awesome-ai-agents | github | next-rule sourcing | reference |
+
 ---
 
 ## Tier 1 — The core agent loop
@@ -32,13 +60,13 @@ A memory-stream loop: observations append to a stream; retrieval scores each mem
 Treat the LLM like an **OS managing a memory hierarchy**: a small fast main context (the window) backed by a large external store, with the model issuing function calls to page across the boundary. On overflow it **EVICTS** (summarize/persist + free the window); on a miss it **RECALLS** (deliberate retrieval). Paging is an explicit, logged action; eviction is lossless because the store is addressable. Beats stuff-everything once the corpus exceeds the window.
 → **fabius:** archivum two-tier paging (R9, M7) — working context = main, the wiki = external store; `write = EVICT`, `read = RECALL`, everything addressable by `[[slug]]`; over-budget → summarize-then-link.
 
-### LongMem / external-memory for LLMs · direct · backs R9
+### LongMem (Wang et al., 2023; arXiv 2306.07174) · direct · backs R9
 The long-context problem reframed: rather than stretch the window, attach a **decoupled external memory** that is written to and retrieved from on demand, so recall cost doesn't scale with the prompt. Confirms the architectural split fabius already runs — the wiki + vector index is the long-term store; the window holds only the working slice.
 → **fabius:** reinforces retrieve-on-demand (R9) and the archivum split — don't pay for context you can page.
 
-### A Survey on Memory for LLM Agents · direct · backs R9, M7
-Frames the central decision: short-term (in-context) vs long-term (persisted), and **retrieval-on-demand vs context-stuffing**. Catalogs operations (write / read / manage-forget) and retrieval strategies (symbolic vs dense vs **hybrid**), arguing the architecture is governed by corpus size and query type — not by maximizing what's loaded. Hybrid *symbolic-narrow-then-dense-rerank* is the scalable default.
-→ **fabius:** the archivum backbone — retrieve-not-stuff, "symbolic first, dense-rerank only the slice," and parcus's "don't build the vector engine until corpus size or semantic queries demand it."
+### Memory for Autonomous LLM Agents — survey (Du, 2026; arXiv 2603.07670) · direct · backs R9, M7, M8, M9
+Formalizes agent memory as a **write → manage → read loop** coupled to perception and action, over a three-axis taxonomy (temporal scope · representational substrate · control policy). Five mechanism families: **context-resident compression, retrieval-augmented stores, reflective self-improvement, hierarchical virtual context, policy-learned management** — and the engineering realities fabius lives in: write-path filtering, contradiction handling, latency budgets. Names memory as the differentiator for coding agents and open-world games specifically.
+→ **fabius:** the whole archivum backbone — write/manage/read = Ingest/Lint/Query; hierarchical virtual context = MemGPT paging (R9, M7); reflective self-improvement = the failures loop (M4, M8); and the externalize-the-corpus rule (**M9**) is exactly *context-resident compression + retrieval store + write-path filtering* applied to fabius's own packaging. Retrieve-not-stuff; build the vector engine only when corpus size or semantic queries demand it (parcus).
 
 ---
 
@@ -47,6 +75,10 @@ Frames the central decision: short-term (in-context) vs long-term (persisted), a
 ### Tree of Thoughts (Yao et al., 2023) · direct · backs R7
 Deliberate search over a tree of thoughts with a **value function that scores partial solutions**, enabling lookahead, evaluation, and backtracking. Four knobs: decompose, generate k, evaluate (value or vote), search (BFS/DFS + prune top-k). The decisive point: **branching pays only where a half-finished candidate can be judged** (Game-of-24: ~4% with chain-of-thought → ~74% with ToT). Cost ≈ branching-factor × tokens, so it's a *worse* default than a single chain without an evaluator.
 → **fabius:** the branch-on-evaluability gate (R7) — single-path by default, escalate to a scored tree only when a partial-state evaluator exists and early mistakes are costly; cohors runs generate→score→prune→expand under a budget cap.
+
+### Reasoning via Planning — RAP (Hao et al., 2023; arXiv 2305.14992) · direct · backs R7
+Repurposes one LLM as **both world model and reasoning agent**, then runs **Monte-Carlo Tree Search** over the reasoning space: the agent proposes a step, the world-model LLM predicts the resulting state and a task reward, and MCTS expands high-reward branches under an explicit exploration/exploitation balance. It confirms ToT's lesson with a stronger search — branching pays when a **reward/value signal can rank partial states**, and RAP's reward *is* that evaluator (RAP-LLaMA-33B > CoT-GPT-4 on plan generation, +33% relative).
+→ **fabius:** the branch-on-evaluability gate (R7) — escalate to a scored tree only when a partial-state evaluator (a reward, a test, a vote) exists; cohors's generate→score→prune→expand is the MCTS shape under a budget cap. The world-model framing also underwrites disciplina's `step → verify` — predict the state a step should reach, then check it against reality.
 
 ### Graph of Thoughts (Besta et al., 2023) · analogy · backs M2
 Generalizes ToT to an arbitrary **directed graph**: thoughts are vertices, edges are transformations — crucially **aggregation** (merge several thoughts) and **refinement** (improve in place). Unlocks map-reduce reasoning: fan out, then fuse. Measured on sorting *inside one LLM's reasoning* (~62% quality over ToT, >31% cheaper) — not on multi-agent orchestration.
@@ -61,6 +93,8 @@ Decouple **planning from tool-binding**: write a complete reasoning chain with a
 ## Tier 4 — Flow & decision math (all analogy)
 
 > These are **generative-model sampling math**, not agent research. fabius borrows the *shapes* as decision heuristics. The source papers prove their claims about numerical sampling of learned vector fields and image fidelity/diversity — **never** about agents, routing, or verification budgets. Every rule below is labelled analogy with its caveat.
+>
+> **Formal source:** this math is taught rigorously in the **MIT diffusion course** (*diffusion.csail.mit.edu* — lecture notes on flow matching, score/consistency sampling, and guidance). fabius cites it as the foundation of the borrowed *shapes*; every transfer to agents below is re-labelled analogy.
 
 ### Flow Matching (Lipman et al., 2023) · analogy · backs R4
 The intractable **marginal velocity equals the posterior average of tractable conditional velocities** — i.e., defer the hard commitment and average candidates until the signal sharpens.
@@ -98,9 +132,9 @@ Decomposes an autonomous agent into four modules — **Profile, Memory, Planning
 Program with LLMs **declaratively**: each step is a typed **signature** (in→out), with a **metric** and real examples; a compiler searches prompt configs (instructions + bootstrapped demos) to maximize the metric on held-out data. Prompt text becomes a compiled, replaceable artifact — improvements measured, not vibes.
 → **fabius:** cohors's contract-first + the metric-delta gate (M5) — accept a prompt change only on a measured held-out improvement. Enforces fabius's "measured, not claimed" bar on prompt engineering itself, and grounds the eval harness's skill-vs-baseline pattern.
 
-### Toward Efficient Agents (efficiency surveys) · analogy · backs R2
-The **cost–capability frontier**: capability scales sub-linearly with machinery — bigger models, more agents, more tool calls, longer chains buy capability with steeply diminishing returns while cost (tokens, latency, coordination) climbs. Flags multi-agent orchestration and long deliberation as the highest-cost, most over-used rungs. Efficient design = the smallest config clearing the bar (the **knee**, not the tail).
-→ **fabius:** parcus's economic trim and the capability ladder (R2) — `inline < one tool < retrieval < plan < single subagent < swarm`; add the lowest sufficient rung. **Analogy:** the concave shape is directional only; fabius targets the knee qualitatively and measures real cost per task.
+### Toward Efficient Agents — survey (Yang et al., 2026; arXiv 2601.14192) · direct · backs R2, R11, M3
+Studies agent efficiency across **memory, tool learning, and planning** under real costs (latency, tokens, steps), and frames it as a **Pareto frontier between effectiveness and cost** — same effectiveness at lower cost, or more effectiveness per fixed budget. Converging principles across the field: **bound context via compression/management, design rewards that minimize tool invocation, and use controlled search**. Efficient design = the smallest config clearing the bar.
+→ **fabius:** the capability ladder (R2: `inline < one tool < retrieval < plan < single subagent < swarm`, add the lowest sufficient rung), the cheapest-model-tier rule (**R11** — match capability to difficulty, escalate on a miss), and verification overhead scaled to need (M3). **Direct** on the frontier and the principle; the specific concave-curve shape stays directional — fabius targets the knee qualitatively and measures real cost per task.
 
-### LLM-Agent-Papers / Awesome-Agent-Papers (living indexes) · reference
-Community-maintained catalogs of the agent literature, organized by capability. fabius treats them as the lint backstop: when a real failure exposes a gap rules R1–R10 / M1–M8 don't cover, these are where the next pattern is sourced — and the new rule is added to [`routing-policy.md`](routing-policy.md) only then.
+### Living indexes — the canon, kept current · reference
+Community-maintained catalogs fabius treats as the lint backstop and reading list: **zjunlp/LLMAgentPapers** and **luo-junyu/awesome-agent-papers** (the agent literature, organized by capability) and **e2b-dev/awesome-ai-agents** (production agent *implementations*, the bridge from paper to shipped system). When a real failure exposes a gap rules R1–R13 / M1–M9 don't cover, these are where the next pattern is sourced — and a new rule is added to [`routing-policy.md`](routing-policy.md) only then (never from anticipation; `failures.md` is the trigger).

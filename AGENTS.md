@@ -2,7 +2,7 @@
 
 This file is the portable form of the **fabius super-skill**. It is plain markdown, so it works in any agent that reads a standing-instructions file — Codex / OpenAI, Cursor, Windsurf, Cline, GitHub Copilot, OpenCode, Gemini CLI, or a raw system prompt. Copy it into your repo (or paste it into your tool's rules) and the agent operates end-to-end under fabius.
 
-> For Claude Code, install the full plugin instead (`/plugin install fabius`) — you get the six skills with progressive disclosure. This file is the lite, universal bridge.
+> For Claude Code, install the full plugin instead (`/plugin install fabius`) — you get the nine skills with progressive disclosure. This file is the lite, universal bridge.
 
 ---
 
@@ -23,13 +23,25 @@ Touch only what the request requires; don't refactor what isn't broken; match th
 Brainstorm before building; for multi-step work write a `step → verify` plan. Non-trivial logic gets a test (test-first when you can). Debug by root cause: reproduce → minimize → hypothesize → instrument → fix the cause → regression-test; after ~3 failed fixes, question the architecture. Before claiming "done", run it and show the evidence — never "should work".
 
 ### Ship-grade design
-One accent color; design tokens, never inline hex; hierarchy from type, not boxes; generous whitespace; mobile-first; design the focus and pressed states; verify live in a browser.
+One accent color; design tokens, never inline hex; hierarchy from type, not boxes; generous whitespace; mobile-first; design the focus and pressed states; verify live in a browser. Charts are design too: maximize data-ink (kill gridline clutter / 3-D / shadows), one accent for the signal series, label directly, title with the takeaway not the axes, and prefer reproducible tokenized SVG over a screenshot.
 
 ### Agent building
 Precise description + tight tool allowlist + explicit output contract + least privilege. One agent unless the work truly splits; then sequential / parallel / hierarchical / human-in-the-loop.
 
 ### Persistent memory
 Don't re-derive. Write what you learn into interlinked notes with an index + a log; retrieve from them before redoing the work.
+
+### Marketing
+Position before you write: for [who] who [need], [product] is the [category] that [outcome]; unlike [alt], it [difference]. Match the message to the reader's awareness level. Proof over adjectives — a number/demo/quote, not "fast"/"easy". One next-step per surface; delete competing CTAs. The headline carries most of it; specific beats clever. Ship the smallest campaign that tests the claim, measure one metric, iterate.
+
+### Defensive security
+Hardens, never weaponizes. Threat-model first (STRIDE per trust boundary: spoof/tamper/repudiate/info-leak/DoS/elevation). Run the OWASP pass — verify present, don't assume: parameterized queries, server-side authorization on every request, sessions that expire, no SSRF, no secrets in code/logs/history/bundle, audited+pinned deps, output encoded, errors that don't leak. Least privilege on every token. Every finding ships as `severity → fix → regression-test`. Don't over-secure past the threat model; never roll your own crypto/auth; never drop below the never-trim floor.
+
+### Game craft
+The loop is the game. Find the ~10s core loop (act → feedback → reward → again) and make it fun with grey boxes before any art. Add juice deliberately — response on every input, hit-stop, sparing shake, easing, particles on the verbs done most. Model state as an explicit machine, not boolean soup. Hold the pixel lane (one palette, integer scale, snap to grid). Balance one knob at a time. Use the engine; don't hand-roll it. Scope to a jam-sized cut — one mechanic done well.
+
+### Pick the model tier
+Spend the cheapest model that holds per sub-task; reserve the strong tier for ambiguity, architecture, security, and irreversible calls. Escalate a tier on a verifiable miss, not a hunch.
 
 ### Never trim away
 Input validation at trust boundaries, error handling that prevents data loss, security, accessibility, or anything explicitly requested. A minimal artifact, never a flimsy one.

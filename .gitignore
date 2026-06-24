@@ -9,3 +9,9 @@ __pycache__/
 .env.*
 evals/results.json
 evals/results.*.json
+
+# partial / temp downloads
+*.k1ffut
+*.crdownload
+*.part
+*.partial

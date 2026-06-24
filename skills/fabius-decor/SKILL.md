@@ -3,11 +3,13 @@ name: fabius-decor
 description: >
   fabius's ship-grade design layer — gives the agent a token vocabulary, the universal laws that
   separate amateur UI from shipped UI, and a quality checklist. Use when building or reviewing any
-  UI — a landing page, a component, a screen, an email, a slide, a brand surface — when the user
-  references a brand look, or asks to make something "look good", "more polished", or "production
-  quality". The token contract lives in references/design-tokens.md; the full 69-brand teardown
-  library (DESIGN-apple.md, DESIGN-stripe.md, DESIGN-linear.app.md …) plus the fabius-design,
-  GSAP-animation, fabius-frames and fabius-uiux bundles live in references/design/.
+  UI — a landing page, a component, a screen, an email, a slide, a brand surface, a chart, a graph,
+  a diagram, a data visualization — when the user references a brand look, or asks to make something
+  "look good", "more polished", "production quality", "chart this", "graph this", or "visualize this
+  data". The token contract lives in references/design-tokens.md; the data-visualization laws and the
+  reproducible-SVG path live in references/visualization.md (the fabius-figura corpus library); the
+  full 69-brand teardown library (DESIGN-apple.md, DESIGN-stripe.md, DESIGN-linear.app.md …) plus the
+  fabius-design, GSAP-animation, fabius-frames and fabius-uiux bundles live in references/design/.
 ---
 
 # Fabius Decor — what good actually looks like
@@ -38,6 +40,18 @@ Never inline a raw hex or px. Name a token once, reference it everywhere:
 ## Mobile-first, always
 
 Design and verify the **mobile** layout first — it's the hardest constraint. Desktop tends to fall out right once mobile is right; the reverse fails. Breakpoints that actually matter: ~640 (phone), ~834 (tablet), ~1068 (small desktop), ~1440 (content lock). Touch targets ≥ 44×44px.
+
+## Visualize data — charts, graphs, diagrams
+
+A chart is a design artifact, not a different discipline — the same tokens and the same restraint apply, plus one rule above all: **maximize the data-ink, delete the rest.**
+
+1. **Chart fits the question.** Trend → line; comparison → bar; part-of-whole → stacked/100% bar (rarely a pie, never >5 slices); correlation → scatter; distribution → histogram/box. Pick by the question, not by what looks busy.
+2. **One accent carries the signal.** The series that matters gets `primary`; everything else is `muted`/`hairline`. Color encodes meaning, never decoration (and stays colorblind-safe — don't lean on red/green alone).
+3. **Strip the chart-junk.** No gridline thicket, no 3-D, no drop-shadows, no redundant legend when you can label the line directly. Axes start at zero for bars; annotate the one number the reader should leave with.
+4. **Label directly, title with the takeaway.** The title states the finding ("Signups doubled after launch"), not the dimensions ("Signups by month").
+5. **Reproducible, tokenized SVG.** Prefer generated SVG from data over a screenshot — versionable, themeable, crisp. The repo's `assets/charts/` (`svgplot.py` · `render_figures.py`) is the numpy→SVG path; figures re-render from source, never hand-edited.
+
+Depth — chart-type decision table, the data-ink checklist, accessible color ramps, and the SVG recipes (the **fabius-figura** corpus library) → `references/visualization.md`, paged in on demand (R9 · M9). The diagram-as-code path (flowcharts, architecture) pairs with `fabius-disciplina`.
 
 ## Using a brand spec as a target
 

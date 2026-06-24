@@ -25,7 +25,7 @@ Add the smallest capability rung the classification demands and stop:
 `parcus inline → one tool call → archivum retrieval → disciplina plan → single subagent → cohors swarm`.
 Never instantiate rung N+1 until rung N is shown insufficient on **this** task. (Figure: `fig-capability-ladder.svg`.)
 *Fires: choosing how much machinery to deploy — especially when tempted to open a swarm.*
-*Source: efficiency surveys (cost–capability frontier) — **analogy**. The diminishing-returns shape is directional; the knee is qualitative, not fitted. Measure real cost per task; defer the swarm gate to cohors's decomposability test, not to cost.*
+*Source: Toward Efficient Agents survey (arXiv 2601.14192) — **direct** on the effectiveness/cost Pareto frontier ("smallest config clearing the bar"); the specific concave shape stays directional, not fitted. Measure real cost per task; defer the swarm gate to cohors's decomposability test, not to cost.*
 
 ### R3 · Call a tool/sub-agent only when it measurably beats inline
 Route to a tool, sub-agent, or specialist only when you can **name the specific wrong answer the call prevents**: stale/external state, a computation you'd get wrong, an independent reviewer who didn't write the artifact, or context past one window. If the model already knows it reliably, answer inline. (Figure: `fig-tool-value-gate.svg`.)
@@ -50,7 +50,7 @@ For any task that will call ≥2 tools/agents, finish a **tool-free plan** that 
 ### R7 · Branch only when a cheap evaluator can rank unfinished candidates
 Spawn a branch-score-prune search (a scored tree) **only when a cheap evaluator can rank half-finished candidates** — a test, a lookahead, a value heuristic, an "is this promising?" vote. Absent that evaluator, no branching factor helps: collapse to a single chain-of-thought / plan pass. The cost of a wrong commit sets only *how wide/deep* to search, not *whether* to branch. (Figure: `fig-branching-accuracy.svg`.)
 *Fires: deciding single-path vs branching swarm in planning/brainstorm.*
-*Source: Tree of Thoughts — **direct** (Game-of-24: 4%→74% via partial-solution scoring). The accuracy-vs-b curve in the figure is a constructed illustration ToT does not publish.*
+*Source: Tree of Thoughts — **direct** (Game-of-24: 4%→74% via partial-solution scoring) + RAP (arXiv 2305.14992: LLM-as-world-model + MCTS, reward-ranked partial states). The accuracy-vs-b curve in the figure is a constructed illustration ToT does not publish.*
 
 ### R8 · Reflect on a verifiable signal, not on vibes; signal type sets the budget
 Enter a generate→improve loop **only when an evaluator yields a specific, attributable critique** (cites the exact locus + the fix). Let the signal set the budget:
@@ -88,8 +88,36 @@ These extend the routing decision into `fabius-cohors` (orchestration) and `fabi
 
 ---
 
+## Capability-tier, long-horizon & vertical rules
+
+These extend R1–R10 / M1–M8 with the dispatch dimensions the praetorium adds — which model tier to spend, how to run a long-horizon loop, how a vertical composes, and how the system packages its own corpus. Same honesty discipline: **direct** = the source claims it; **analogy** = the shape is borrowed, the caveat is inline.
+
+> **They are operational extensions — outside the proven core.** The coherence proof in [RESEARCH.md](../../../RESEARCH.md) — *consistent · complete · composable* — is established over the **18-rule core** (R1–R10 / M1–M8) only. R11–R13 and M9 are operational additions: borrowed-by-analogy or system-internal, consistent with the core in practice but **not yet folded into the formal pipeline or its coherence theorem**. They are the working edge, not the proven floor. Formalizing them — a proof per rule, then re-running coherence over the full set — is a deliberate next step, never an implicit claim here.
+
+### R11 · Spend the cheapest model tier that holds; escalate on a miss, not a guess
+Route each sub-task to the lowest-capability, lowest-cost model that clears its bar, and re-tier **per sub-task**, not per session. Reserve the strong tier for ambiguity, architecture, security calls, and irreversible actions; hand mechanical, tightly-contracted work (format, transform, lookup) to a cheap tier. Escalate a tier only on a **verifiable** miss (R8), never on a hunch.
+*Fires: any dispatch where work splits into sub-tasks of differing difficulty — and whenever tempted to run everything on the top model.*
+*Source: Toward Efficient Agents survey (arXiv 2601.14192: rewards that minimize tool invocation, the cost-effectiveness frontier) — **direct** on the principle; FrugalGPT-style cascades for the escalate-on-miss mechanism. The specific savings are task- and dataset-specific; the cost figure does not transfer.*
+
+### R12 · Long-horizon work runs `step → verify` on a loop with a dual exit gate
+For multi-cycle autonomous work, repeat the `fabius-disciplina` `step → verify` cycle and stop only when **both** a completion condition **and** an explicit done-signal hold. Hard-cap the cycles; on a stuck loop (no movement toward the verify condition across ~3 cycles, or a reflection that repeats the prior cause with no new hypothesis) stop and escalate — never spin. Rate-limit and checkpoint so a runaway can neither burn unbounded cost nor corrupt state.
+*Fires: a task needing many autonomous iterations — a large migration, a codebase sweep, an unattended build-until-done.*
+*Source: the Ralph autonomous-loop technique (Huntley) + the Reflexion stop-condition (M4) — **direct** on the loop-plus-gate shape; the specific caps are operational heuristics. The gate is what separates "autonomous" from "infinite".*
+
+### R13 · A vertical runs a studio — the domain skill leads a mini-pipeline
+A domain task that needs more than one layer (a game, a launch, a security review, a landing page) composes as a pipeline behind one goal: the **domain skill leads** (sets the WHAT and the domain laws) → `fabius-disciplina` plans and proves → the execution layers (`fabius-decor` / `fabius-cohors`) follow → `fabius-parcus` underneath. Don't collapse a vertical to a single layer, and don't let a downstream layer redefine the domain goal.
+*Fires: any task spanning a domain + execution + process — i.e. most real deliverables, not a one-line edit.*
+*Source: fabius's own composition rule (process picks HOW, domain picks WHAT), generalized from the landing-page path — **direct** (the system's own single-owner discipline applied to multi-layer jobs). No external claim borrowed.*
+
+### M9 · Externalize the corpus — the brain holds the index, not the library
+Bulk reference material (agent catalogs, design teardowns, swipe files, hardening guides, vector stores) **belongs outside** the installed plugin as an indexed corpus. Each skill ships a lean entry doc + an index and pages in only the matching slice on demand (R9 · M7). Never bundle a *new* library into the artifact: it bloats the install, contradicts the lean stance the benchmark proves, and gives the model nothing a 50-line catalog wouldn't. **Adding a capability = adding an index entry, not a megabyte.** (Honest current state: the three full libraries still ship bundled under `references/` and are migrating behind the index — see [CORPUS.md](../../../CORPUS.md).)
+*Fires: packaging the system; any time a `references/` folder grows past a lean entry doc.*
+*Source: MemGPT paging (R9 · M7) + the Memory-for-Agents survey (arXiv 2603.07670: context-resident compression, retrieval-augmented stores, write-path filtering) applied to the system's own packaging — **direct** on read-the-index-first. The standing rule behind the corpus split (see ARCHITECTURE extension points).*
+
+---
+
 ## Out of scope for this file (on purpose)
 
 - **The papers themselves** → [`agent-research.md`](agent-research.md), pulled on demand. Not here.
 - **The memory substrate** (storage, eviction mechanics, vector index) → architecture, not policy. The only memory this file touches is the lesson loop (R8, M4).
-- **A new rule** → added only when a real failure in [`failures.md`](failures.md) proves rules R1–R10 / M1–M8 didn't cover it.
+- **A new rule** → added only when a real failure in [`failures.md`](failures.md) proves the existing rules (R1–R13 / M1–M9) didn't cover it. New rules enter as operational extensions and are folded into the proven core only after a per-rule proof + a re-run of the coherence check.
