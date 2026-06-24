@@ -179,9 +179,9 @@ fabius/
 │   ├── fabius-decor/       design + data-viz    · references: 69-brand library · visualization (figura)
 │   ├── fabius-cohors/      agent engineering    · references: 200+ agent catalog
 │   ├── fabius-archivum/    persistent memory    · references: vector · wiki · RAG
-│   ├── fabius-mercatus/    go-to-market         · references: marketing playbook (+ corpus)
-│   ├── fabius-praesidium/  defensive security   · references: STRIDE/OWASP playbook (+ corpus)
-│   └── fabius-ludus/       game craft           · references: game playbook (+ corpus)
+│   ├── fabius-mercatus/    go-to-market         · references: marketing playbook · channel + swipe library
+│   ├── fabius-praesidium/  defensive security   · references: STRIDE/OWASP playbook · hardening guides
+│   └── fabius-ludus/       game craft           · references: game playbook · engine recipes
 ├── evals/                  blind benchmark — eval.mjs · portable_eval.py · harness.workflow.js
 ├── AGENTS.md               tool-agnostic bridge (Codex / Cursor / Gemini / …)
 ├── ARCHITECTURE.md         layer model · single-owner table · capability matrix
