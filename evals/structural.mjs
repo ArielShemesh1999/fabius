@@ -35,7 +35,7 @@ const skills = skillNames.map((d) => {
 });
 
 // ---- 1. shape: 12 skills, one router, one always-on core, names unique ----------
-ok("count: exactly twelve skill contracts", skills.length === 12, `${skills.length} found`);
+ok("count: exactly fourteen skill contracts", skills.length === 14, `${skills.length} found`);
 ok("naming: every skill is fabius-prefixed", skills.every((s) => s.name === "fabius" || s.name.startsWith("fabius-")),
    skills.map((s) => s.name).join(", "));
 ok("naming: frontmatter name matches its directory", skills.every((s) => s.name === s.dir),
@@ -111,7 +111,7 @@ ok("seal: recomputed Merkle root matches the manifest", root === manifest.merkle
    root === manifest.merkle_root ? root.slice(0, 16) + "…" : `got ${root.slice(0, 16)}… want ${manifest.merkle_root.slice(0, 16)}…`);
 
 // ---- 7. count coherence: canonical docs say "twelve"/"ten", no stale counts ------
-for (const [file, must] of [["README.md", "twelve"], ["ARCHITECTURE.md", "twelve"], ["AGENTS.md", "twelve"]]) {
+for (const [file, must] of [["README.md", "fourteen"], ["ARCHITECTURE.md", "fourteen"], ["AGENTS.md", "fourteen"]]) {
   const t = readFileSync(join(ROOT, file), "utf8").toLowerCase();
   ok(`coherence: ${file} states "${must}" skills`, t.includes(must), t.includes(must) ? "present" : "missing");
 }

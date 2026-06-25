@@ -8,13 +8,13 @@
 
 <br/>
 
-<img src="assets/hero.webp" alt="fabius — twelve coordinated skills fused into one super-skill" width="100%" />
+<img src="assets/hero.webp" alt="fabius — fourteen coordinated skills fused into one super-skill" width="100%" />
 
 <br/>
 <br/>
 
 [![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-plugin-D97757?style=for-the-badge&logo=anthropic&logoColor=white)](https://docs.anthropic.com/en/docs/claude-code)
-[![Twelve skills](https://img.shields.io/badge/architecture-12_skills,_one_install-1f6feb?style=for-the-badge)](#architecture)
+[![Fourteen skills](https://img.shields.io/badge/architecture-14_skills,_one_install-1f6feb?style=for-the-badge)](#architecture)
 [![Benchmark](https://img.shields.io/badge/benchmark-blind,_reproducible-2ea44f?style=for-the-badge)](#what-it-does)
 [![Structural tests](https://img.shields.io/badge/structural_tests-17%2F17-2ea44f?style=for-the-badge)](BENCHMARKS.md)
 [![Research-grounded](https://img.shields.io/badge/research--grounded-routing_policy-8957e5?style=for-the-badge)](RESEARCH.md)
@@ -29,7 +29,7 @@
 
 fabius is one super-skill you hand the agent. It sets *how* the agent works across the whole job — write code, write prose, build and orchestrate agents, design UI, visualize data, debug, market the value, harden security, build games, develop on-chain and cryptographically seal artifacts, wire automations, research the sciences, and remember — and routes to a specialist only when a task needs depth. One stance, applied everywhere: talk lean, build lean, run a disciplined process, design at ship quality, build other agents, and stop re-deriving.
 
-It is named for the Fabian doctrine: **scout the whole field, fight only the battle that matters.** One system of twelve coordinated, non-overlapping skills — a router, an always-on lean core, and ten engineering specialists — installed as a single plugin.
+It is named for the Fabian doctrine: **scout the whole field, fight only the battle that matters.** One system of fourteen coordinated, non-overlapping skills — a router, an always-on lean core, and twelve engineering specialists — installed as a single plugin.
 
 ---
 
@@ -48,6 +48,8 @@ Same model, one concentrated set of operating rules. The stance changes the *sha
 | On-chain code | unchecked accounts, unsafe signing | account-validation-first, money-safe, simulate before signing |
 | An automation | one-shot, silent miswires | discover-from-live-schema, validate AND verify, then activate |
 | A science question | a confident guess | competing hypotheses, source-grounded lookups, reproducible |
+| An ML system | a model that rots in prod | held-out leakage-free eval, the smallest serving stack, tracked + reproducible |
+| A stock / market | a confident prediction | risk sized first, evidence over narrative, backtests proven out-of-sample (analysis, not advice) |
 
 **Measured, blind, reproducible.** A three-arm evaluation — `baseline`, a generic *"be concise"* control, and the full fabius stance — scored by a judge model that is never told which arm produced which answer. Beating the *"be concise"* control, not the baseline, is the real test. fabius beats it on every tier while cutting output length:
 
@@ -71,7 +73,7 @@ Across four model families — Grok, Mistral, GPT, Claude — the pattern holds:
 | Security · auth / upload (`praesidium`) | 13.5 | 14.5 | +1.0 |
 | **Overall · all domains** | **12.7** | **13.9** | **+1.2** |
 
-Sharpest case: the RNA-seq task — bare model **7/15**, **fabius 15/15** — the multiple-testing-correction the bare model dropped. **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — twelve single-owner contracts, every reference live, the content-bound seal verifiable — **17/17**.
+Sharpest case: the RNA-seq task — bare model **7/15**, **fabius 15/15** — the multiple-testing-correction the bare model dropped. **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — fourteen single-owner contracts, every reference live, the content-bound seal verifiable — **17/17**.
 
 > The claim the data supports: **structure beats brevity, and the advantage grows as the model's default discipline drops.** Not "smarter," not "10× on everything" — a scope-control system that knows when to compress and when to expand. Method, mechanism, and caveats: **[BENCHMARKS.md](BENCHMARKS.md)**.
 
@@ -79,19 +81,19 @@ Sharpest case: the RNA-seq task — bare model **7/15**, **fabius 15/15** — th
 
 ## Architecture
 
-One router over an always-on lean core and ten specialists, on a thin spine. The router dispatches by layer + machinery + model-tier; process decides *how*, domain decides *what*, and the lean core runs beneath everything.
+One router over an always-on lean core and twelve specialists, on a thin spine. The router dispatches by layer + machinery + model-tier; process decides *how*, domain decides *what*, and the lean core runs beneath everything.
 
 <div align="center">
 
-<img src="assets/architecture.svg?v=3" alt="How fabius works: your prompt goes to the fabius router, which dispatches by layer, machinery, and model-tier to ten specialists — disciplina (process), decor (design + data-viz), cohors (agents), archivum (memory), mercatus (marketing), praesidium (defensive security), ludus (games), catena (on-chain + sealing), machina (automation), scientia (science) — all running on the always-on fabius-parcus lean core, producing the smallest correct result." width="100%" />
+<img src="assets/architecture.svg?v=4" alt="How fabius works: your prompt goes to the fabius router, which dispatches by layer, machinery, and model-tier to twelve specialists — disciplina (process), decor (design + data-viz), cohors (agents), archivum (memory), mercatus (marketing), praesidium (defensive security), ludus (games), catena (on-chain + sealing), machina (automation), scientia (science), doctrina (ML engineering), fortuna (markets & finance) — all running on the always-on fabius-parcus lean core, producing the smallest correct result." width="100%" />
 
 </div>
 
-Each rule has exactly one owning layer; every other layer links to it instead of restating it. That single-owner contract is what keeps twelve skills from contradicting one another. Full layer model, coordination table, and capability matrix: **[ARCHITECTURE.md](ARCHITECTURE.md)**.
+Each rule has exactly one owning layer; every other layer links to it instead of restating it. That single-owner contract is what keeps fourteen skills from contradicting one another. Full layer model, coordination table, and capability matrix: **[ARCHITECTURE.md](ARCHITECTURE.md)**.
 
 ---
 
-## The twelve skills
+## The fourteen skills
 
 | Skill | Role | What it delivers |
 |---|---|---|
@@ -107,6 +109,8 @@ Each rule has exactly one owning layer; every other layer links to it instead of
 | `fabius-catena` | on-chain + sealing | account-validation-first contracts (EVM + Solana) · money-safe transactions · verifiable provenance sealing · pre-deploy audit (Slither + fuzzing) · agent wallets |
 | `fabius-machina` | automation | deterministic workflow glue · discover-from-live-schema → build → validate AND verify → activate · managed-OAuth + self-hostable integration platforms |
 | `fabius-scientia` | science | competing falsifiable hypotheses · source-grounded database lookups · reproducible field-standard pipelines · structure prediction · simulation · literature grounding |
+| `fabius-doctrina` | AI/ML engineering | the model lifecycle — train/fine-tune → evaluate → serve → monitor · held-out eval + blind judges · vLLM-class serving · MLOps + experiment tracking |
+| `fabius-fortuna` | markets & finance | method over money — risk sized first · fundamental + technical + quantitative analysis · valuation · honest backtesting (out-of-sample, cost-aware) · analysis not advice |
 
 Each skill is a thin operating contract. The depth — a 69-brand design teardown library, a 200-plus-agent production catalog with a vector-indexed memory, a knowledge engine (vector, wiki, RAG), the full craft-and-discipline process library, and the marketing / defensive-security / game-craft playbooks — lives under each skill's `references/` (indexed by [CORPUS.md](CORPUS.md)) and loads only on demand, so the skill itself stays lean.
 
@@ -141,7 +145,7 @@ fabius's decisions aren't hand-waving. Its routing policy is drawn from the agen
 
 Under the policy sits a **mathematical-foundations layer**: every rule reduced to its formal statement (decision theory, information theory, optimization, scheduling) — adversarially verified, then *proven* to compose as **one consistent, gap-free, model-applicable decision system** (all 18 rules are the same expected-loss / value-of-information threshold wrapped in a measurable task-partition). The decision policy, the math behind all seven figures, the foundations table, the coherence proof, and the direct-vs-analogy honesty ledger live in **[RESEARCH.md](RESEARCH.md)**. The figures are conceptual shapes of documented principles, not fabius measurements — reproduce them with `python3 assets/charts/render_figures.py`.
 
-The full treatment — the twelve-skill architecture, the proven core of eighteen rules with **a complete proof of the mathematics under each one** (every proof adversarially verified, ten corrected before publication), the coherence theorem, the four operational extensions held honestly at the edge, the blind benchmark, and the honesty ledger — is collected as a 40-page **whitepaper**: **[paper/fabius-as-a-system.pdf](paper/fabius-as-a-system.pdf)** (reproduce with `bash paper/build.sh`).
+The full treatment — the fourteen-skill architecture, the proven core of eighteen rules with **a complete proof of the mathematics under each one** (every proof adversarially verified, ten corrected before publication), the coherence theorem, the four operational extensions held honestly at the edge, the blind benchmark, and the honesty ledger — is collected as a 40-page **whitepaper**: **[paper/fabius-as-a-system.pdf](paper/fabius-as-a-system.pdf)** (reproduce with `bash paper/build.sh`).
 
 ---
 
@@ -179,7 +183,7 @@ fabius is plain-markdown skills — model- and tool-agnostic. The portable bridg
 
 | Tool | How to install |
 |---|---|
-| Claude Code | `/plugin install fabius` — all twelve skills with progressive disclosure |
+| Claude Code | `/plugin install fabius` — all fourteen skills with progressive disclosure |
 | Codex / OpenAI | drop [`AGENTS.md`](AGENTS.md) at the repo root (read automatically) |
 | OpenCode | `AGENTS.md` at the repo root, or copy `skills/` into `.opencode/` |
 | Cursor | copy `AGENTS.md` into `.cursor/rules/fabius.mdc` |
@@ -207,8 +211,10 @@ fabius/
 │   ├── fabius-praesidium/  defensive security   · references: STRIDE/OWASP playbook · hardening · AI-review
 │   ├── fabius-ludus/       game craft           · references: game playbook · engine recipes
 │   ├── fabius-catena/      on-chain + sealing   · references: onchain playbook · sealing primitive
-│   ├── fabius-machina/     automation           · references: automation build-and-verify playbook
-│   └── fabius-scientia/    science              · references: scientific method · database-lookup
+│   ├── fabius-machina/     automation           · references: automation build-and-verify · integration platforms
+│   ├── fabius-scientia/    science              · references: scientific method · database-lookup · structure/sim/literature
+│   ├── fabius-doctrina/    AI/ML engineering    · references: serving · MLOps · evaluation playbook
+│   └── fabius-fortuna/     markets & finance    · references: analysis · valuation · honest backtesting · risk
 ├── evals/                  proof — structural.mjs (17/17) · harness.v3.workflow.js · results.v3.json · eval.mjs · portable_eval.py
 ├── provenance/             content-bound seal — verify.sh · seal manifest · OTS Bitcoin proof · signed tag
 ├── PROVENANCE.md           how authorship is proven, not asserted (with the limits up front)

@@ -24,7 +24,7 @@ The length numbers are bias-free (a character count can't be flattered). The qua
 
 ## Measured results
 
-Four runs, four different lenses, plus a deterministic structural suite. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.** Run 4 is the one that exercises the **full twelve-skill surface** — every specialist domain, including the on-chain / automation / science verticals — so the proof now covers the whole system, not just the lean stance.
+Four runs, four different lenses, plus a deterministic structural suite. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.** Run 4 is the one that exercises the **specialist surface** — one task per specialist domain as it stood, including the on-chain / automation / science verticals — so the proof reaches the technical verticals, not just the lean stance. (The two specialists added since, `fabius-doctrina` and `fabius-fortuna`, are not yet exercised — see the note under Run 4.)
 
 ### The margin, at a glance
 
@@ -83,9 +83,9 @@ Three live builds of the same brief — **T1** fabius stance only · **T2** no f
 
 The reading: the bare stance maximizes **design polish** (T1 wins on the judge's eye); the full six-skill mechanism shifts toward **lean + functional** — T3 shipped 40% less code *and the only working form*. They optimize different things, and **this is the live proof the mechanism fires on its own** (see "what this does / doesn't test" below).
 
-### 4 — Twelve-skill coverage: every specialist domain (`evals/harness.v3.workflow.js`)
+### 4 — Specialist-domain coverage: one task per specialist (`evals/harness.v3.workflow.js`)
 
-The run that closes the gap Run 3's version-note named. **13 tasks, one per specialist domain** — the YAGNI traps, correctness, security, a11y, agents, design, **on-chain (catena)**, **automation (machina)**, **science (scientia)**, marketing, game — × the same three arms, generated on two tiers, **judged blind by `claude-opus-4-8`** (156 agents total). Here the `fabius` arm injects the shipped stance **plus the relevant specialist's operative contract** for each domain task — so this measures the routed *twelve-skill mechanism*, not the stance alone.
+The run that closes the gap Run 3's version-note named. **13 tasks, one per specialist domain** — the YAGNI traps, correctness, security, a11y, agents, design, **on-chain (catena)**, **automation (machina)**, **science (scientia)**, marketing, game — × the same three arms, generated on two tiers, **judged blind by `claude-opus-4-8`** (156 agents total). Here the `fabius` arm injects the shipped stance **plus the relevant specialist's operative contract** for each domain task — so this measures the routed *specialist mechanism*, not the stance alone.
 
 Totals out of 15 (n = 13 per cell):
 
@@ -118,16 +118,18 @@ Separate from "does the stance help," a deterministic suite proves the *system* 
 
 | Invariant | Result |
 |---|---|
-| Exactly twelve skill contracts; one router, one always-on core; names unique | **PASS** |
+| Exactly fourteen skill contracts; one router, one always-on core; names unique | **PASS** |
 | Frontmatter `name` matches directory; declares `name` + `description` | **PASS** |
 | Progressive disclosure — every `SKILL.md` ≤ 12 KB (depth lives in `references/`) | **PASS** (max 11.2 KB) |
 | Provenance `fab1-` fingerprint embedded in all 12 contracts | **PASS** |
 | Reference integrity — every linked `references/*.md` resolves | **PASS** (26/26) |
 | Plugin manifest skill list == skills on disk; version 1.0.0 | **PASS** |
 | Content-bound seal — 15 sealed files hash-match + Merkle root recomputes | **PASS** |
-| Count coherence — README / ARCHITECTURE / AGENTS all state "twelve" | **PASS** |
+| Count coherence — README / ARCHITECTURE / AGENTS all state "fourteen" | **PASS** |
 
 **17/17 pass.** This is the structural complement to the behavioral runs: Runs 1–4 measure that fabius *acts* better; the structural suite proves it is *built* right — single-owner, under budget, every reference live, and the seal verifiable.
+
+> Two specialists were added after Run 4 and are **not** exercised by it — `fabius-doctrina` (AI/ML engineering) and `fabius-fortuna` (markets & finance). Re-run `evals/harness.v3.workflow.js` with a serving/eval/MLOps task and a valuation/backtest task to extend the table. The structural suite already covers both (they are two of the fourteen contracts above).
 
 ---
 
@@ -150,7 +152,7 @@ A good result is **shorter answers the blind judge scores higher** — brevity *
 
 - Runs 1–2 test **#1 — does injecting the stance improve output.** Yes, consistently, cross-model.
 - Run 3 (T3) tests **#2 — does the multi-skill mechanism fire and act on its own.** Yes — it shipped the leanest, only-functional build live in Claude Code.
-- Run 4 tests **#3 — does each of the twelve skills, including the new on-chain / automation / science verticals, improve its own domain.** Yes — fabius beats both controls on both tiers, and the largest lifts land on those technical verticals.
+- Run 4 tests **#3 — does each benchmarked specialist, including the new on-chain / automation / science verticals, improve its own domain.** Yes — fabius beats both controls on both tiers, and the largest lifts land on those technical verticals.
 - The structural suite tests **#4 — is the system built right** (single-owner, under budget, references live, seal verifiable). 17/17.
 - The advantage **grows as the model's default discipline drops** (Run 1: sonnet/haiku gain more than opus; Run 2: lean-BASE Grok gains most, verbose-BASE Mistral least). The advantage is always present; its *size* tracks how undisciplined the default is.
 - **Not tested by a one-shot eval:** `fabius-archivum` (persistent memory only pays off across sessions) and the `fabius` router's dispatch accuracy. Memory is excluded rather than faked; routing is checked structurally, not behaviorally.
@@ -175,7 +177,7 @@ OPENAI_API_KEY=...     node evals/eval.mjs --provider openai --model gpt-4o
 # cross-vendor (OpenAI / Mistral / Anthropic / Gemini) — your keys
 GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini
 
-# the twelve-skill, every-domain run (Run 4), inside Claude Code:
+# the every-domain run (Run 4), inside Claude Code:
 #   Workflow({ scriptPath: "evals/harness.v3.workflow.js" })
 ```
 

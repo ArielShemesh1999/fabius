@@ -1,6 +1,6 @@
 # Credits & inspiration
 
-The fabius **system** — the twelve skills, the router/dispatch policy, `AGENTS.md`, `CORPUS.md`, the architecture, the provenance apparatus, and the evals — is original work, written from scratch under one stance (*scout wide, strike narrow*). Each skill is an original operating contract in fabius's own voice.
+The fabius **system** — the fourteen skills, the router/dispatch policy, `AGENTS.md`, `CORPUS.md`, the architecture, the provenance apparatus, and the evals — is original work, written from scratch under one stance (*scout wide, strike narrow*). Each skill is an original operating contract in fabius's own voice.
 
 What we owe to the open community is the **learning**: the on-demand depth under each skill's `references/` was **informed by and adapted from** the open work below. We studied these projects and wrote our own version; credit where it's due. Two honest rules govern this file:
 

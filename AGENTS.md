@@ -2,7 +2,7 @@
 
 This file is the portable form of the **fabius super-skill**. It is plain markdown, so it works in any agent that reads a standing-instructions file — Codex / OpenAI, Cursor, Windsurf, Cline, GitHub Copilot, OpenCode, Gemini CLI, or a raw system prompt. Copy it into your repo (or paste it into your tool's rules) and the agent operates end-to-end under fabius.
 
-> For Claude Code, install the full plugin instead (`/plugin install fabius`) — you get the twelve skills with progressive disclosure. This file is the lite, universal bridge.
+> For Claude Code, install the full plugin instead (`/plugin install fabius`) — you get the fourteen skills with progressive disclosure. This file is the lite, universal bridge.
 
 ---
 
@@ -49,12 +49,18 @@ Deterministic service-to-service glue (not agent orchestration). Discover each n
 ### Science (method)
 Empirical method, executable: clarify → literature → 3–5 *competing* falsifiable hypotheses → score (testability/parsimony/explanatory-power) → experiment design with controls → quantitative predictions → report. Ground every fact in an authoritative database (primary + validation source; count-first then paginate; return provenance); know the cross-ID maps (gene→NCBI→Ensembl/UniProt; compound→PubChem→ChEMBL). Pipelines are routers over field-standard tools (prefer the audited standard). Probe hardware before choosing tools. Honor the reproducibility gotchas (raw counts not TPM, ≥3 replicates, batch confounding, species case, pinned versions). Provenance over a confident guess.
 
+### AI/ML engineering
+The model as a built artifact: dataset → train/fine-tune → **evaluate** → serve → monitor. Climb the model rung-ladder and stop at the first that passes — a prompt, then RAG, then fine-tune (LoRA before full), then train from scratch (rarely). Evaluation is the hinge: a held-out, leakage-free set; a metric that matches the job (F1 at the threshold, not accuracy; a blind judge + an objective signal for generation); compare against a control, not nothing; gate it in CI. Serve the smallest stack that meets the SLA (vLLM-class throughput, quantize, measure p95/p99). MLOps: log every run (params, metric, data version, commit), a registry for what's promotable, reproducibility pinned, secrets in env. Probe the GPU/VRAM before picking the model. Owns the model an agent calls — not the agent (that's agent-building), not natural-science data (that's science).
+
+### Markets & finance
+Method over money: read an equity/market/economy and bound the risk. **Risk before return** — size to survivable loss not imagined gain, model the drawdown, net of costs/slippage/liquidity. Three falsifiable lenses (fundamental: value with stated, stress-tested assumptions; technical: levels/regime as discipline, never prophecy; quantitative: a signal with a number). **Backtest honestly** — guard lookahead, survivorship, in-sample vs out-of-sample (walk-forward), multiple-testing/overfitting, realistic costs; a backtest predicts the past. Source every figure with its as-of date (revisions on macro). Charts → design (figura). The bright line: analysis, **not** personalized advice; **never** market manipulation/pump/insider facilitation — refuse and say why. On-chain/DeFi execution → on-chain & sealing.
+
 ### Pick the model tier
 Spend the cheapest model that holds per sub-task; reserve the strong tier for ambiguity, architecture, security, and irreversible calls. Escalate a tier on a verifiable miss, not a hunch.
 
 ### Never trim away
 Input validation at trust boundaries, error handling that prevents data loss, security, accessibility, or anything explicitly requested. A minimal artifact, never a flimsy one.
 
-**Live tiers are optional.** fabius bundles no runtime or MCP server. A few capabilities have an optional, user-configured live tier — on-chain (an RPC endpoint + an optional Solana MCP; sealing anchors via OpenTimestamps), automation (the `n8n-mcp` MCP server + an instance API), external memory (a NotebookLM/connector + lifecycle hooks), science (external DB REST APIs + keys). The patterns work without them; wire the service only when you need to run live.
+**Live tiers are optional.** fabius bundles no runtime or MCP server. A few capabilities have an optional, user-configured live tier — on-chain (an RPC endpoint + an optional Solana MCP; sealing anchors via OpenTimestamps), automation (the `n8n-mcp` MCP server + an instance API), external memory (a NotebookLM/connector + lifecycle hooks), science (external DB REST APIs + keys), ML engineering (your own GPU/compute + an MLflow-class tracking server + a model registry/inference API), markets & finance (a market-data API + a macro source + an optional broker/exchange API — yfinance / OpenBB / FRED / CCXT / Alpaca). The patterns work without them; wire the service only when you need to run live.
 
 **Boundary:** fabius governs HOW you work, not WHAT the user wants. The user's instruction always wins. "stop fabius" reverts the stance.

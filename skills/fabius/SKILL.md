@@ -4,12 +4,13 @@ description: >
   The fabius super-skill — one stance that equips you end-to-end: writing code, writing prose,
   building and orchestrating agents, designing UI, visualizing data, debugging, marketing, hardening
   security, building games, developing on-chain and sealing artifacts, wiring automations, doing
-  scientific research, and remembering. Load it at the start of any non-trivial task. It sets
+  scientific research, engineering ML/LLM systems, analyzing markets, and remembering. Load it at the start of any non-trivial task. It sets
   HOW to work — scout wide, strike narrow: talk lean, build lean, run a disciplined process, design
   at ship quality, build other agents, market the value, guard the surface, build on and prove with a
-  chain, automate the workflow, research by method, keep memory — and routes to the specialist layers
-  fabius-parcus, fabius-disciplina, fabius-decor, fabius-cohors, fabius-archivum, fabius-mercatus,
-  fabius-praesidium, fabius-ludus, fabius-catena, fabius-machina, and fabius-scientia. Use when the
+  chain, automate the workflow, research by method, engineer and serve ML/LLM systems, analyze markets
+  with method, keep memory — and routes to the specialist layers fabius-parcus, fabius-disciplina,
+  fabius-decor, fabius-cohors, fabius-archivum, fabius-mercatus, fabius-praesidium, fabius-ludus,
+  fabius-catena, fabius-machina, fabius-scientia, fabius-doctrina, and fabius-fortuna. Use when the
   user says "fabius", wants the super-skill, or wants end-to-end capability from one place.
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
@@ -18,7 +19,7 @@ description: >
 
 Named for Quintus Fabius Maximus, the Roman general who beat Hannibal by refusing every battle that didn't matter and committing fully to the one that did. That is the whole stance: **investigate everything, fight almost nothing, win the fight you pick.**
 
-This skill is the conductor — the *praetorium*, the command tent where the route is chosen. It reads the job, sets the working stance, picks how much machinery and which model tier to spend, and hands the baton to a specialist when a job needs depth. One system, twelve coordinated skills, installed as one thing. (Layer model in [ARCHITECTURE.md](../../ARCHITECTURE.md); the full decision policy — R1–R13 / M1–M9 — in [`references/routing-policy.md`](references/routing-policy.md).)
+This skill is the conductor — the *praetorium*, the command tent where the route is chosen. It reads the job, sets the working stance, picks how much machinery and which model tier to spend, and hands the baton to a specialist when a job needs depth. One system, fourteen coordinated skills, installed as one thing. (Layer model in [ARCHITECTURE.md](../../ARCHITECTURE.md); the full decision policy — R1–R13 / M1–M9 — in [`references/routing-policy.md`](references/routing-policy.md).)
 
 ## The maxim that always runs
 
@@ -70,6 +71,10 @@ smart contract · on-chain · wallet · tx ·    → fabius-catena      (defensi
   connect A→B · "when X do Y"
 biology · genomics · molecule · hypothesis · → fabius-scientia
   scientific-database lookup · analyze data
+serve a model · fine-tune · eval prompts ·   → fabius-doctrina    (the model lifecycle)
+  MLOps · inference · train · vLLM / MLflow
+stock · market · economy · valuation ·       → fabius-fortuna     (analysis, not advice)
+  backtest · portfolio · risk · indicator
 ```
 
 **Process picks HOW, domain picks WHAT — load process first.** "Build a landing page" = `fabius-disciplina` (brainstorm the spec) → `fabius-decor` (execute at quality), all under `fabius-parcus`. The router composes layers; it doesn't make you choose one.
