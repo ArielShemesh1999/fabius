@@ -47,6 +47,7 @@ Idempotency (a re-fired trigger must not double-act), explicit error responses (
 ## References
 
 - The full build discipline, the tool-per-intent decision map, the n8n silent-failure gotcha catalog (as the worked example), and the ordered deployment gate → `references/automation-playbook.md`.
+- The integration-platform decision map — managed-OAuth catalogs (Composio), self-hostable engines (Activepieces), the MCP bridge (n8n-MCP), and the discipline that survives a platform swap → `references/integration-ecosystem.md`.
 
 **Live tier (optional).** Discovery, validation, and design need no runtime; *driving a live instance* needs the `n8n-mcp` MCP server + `N8N_API_URL` / `N8N_API_KEY` (or the per-platform equivalent). fabius bundles none — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
 

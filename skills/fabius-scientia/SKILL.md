@@ -53,6 +53,7 @@ One concern per skill — keep scientia to the genuinely scientific core and rou
 ## References
 
 - The hypothesis-generation loop with scoring criteria, the unified database-lookup contract and the cross-identifier maps, the pipeline-as-router pattern, the resource-detection prerequisite, and the per-domain reproducibility checklist → `references/science-playbook.md`.
+- Structural-biology prediction (AlphaFold / -Multimer with honest pLDDT/PAE confidence), resource-gated GPU/MD/FEM simulation and protocol-as-code wet-lab automation (PyLabRobot), and auditable literature grounding (Zotero, Jupyter-AI) as additional pipeline-as-router stages → `references/structural-bio-and-simulation.md`.
 
 **Live tier (optional).** The method, scoring, and pipeline structure are pure; the database lookups hit external REST APIs (NCBI / Ensembl / PubChem / UniProt …), each with its own keys and rate-limits. fabius bundles none — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
 

@@ -103,13 +103,15 @@ fabius is plain-markdown skills: it bundles **no runtime and no MCP server**, an
 
 | Capability | Optional live tier — *you* configure it | Works without it |
 |---|---|---|
-| `fabius-machina` | the **`n8n-mcp`** MCP server + `N8N_API_URL` / `N8N_API_KEY` (or the per-platform equivalent) | design, discovery, and validation need no API |
-| `fabius-catena` (on-chain) | an **RPC endpoint** (EVM: Infura / Alchemy / public; Solana: a cluster) + an optional **Solana MCP** | writing/reviewing contracts offline; one-shot reads via `curl` to any RPC |
+| `fabius-machina` | the **`n8n-mcp`** MCP server + `N8N_API_URL` / `N8N_API_KEY` (or the per-platform equivalent — **Composio**, **Activepieces**) | design, discovery, and validation need no API |
+| `fabius-catena` (on-chain) | an **RPC endpoint** (EVM: Infura / Alchemy / public; Solana: a cluster) + an optional **Solana MCP** | writing/reviewing contracts offline; one-shot reads via `curl` to any RPC; static analysis (Slither) + fuzzing (Echidna / Foundry) run local |
 | `fabius-catena` (sealing) | **OpenTimestamps → Bitcoin** for the anchor | hashing, signing, and verification run fully offline/local |
 | `fabius-archivum` | Claude Code lifecycle **hooks** (auto-recall) and an external-corpus connector (**NotebookLM** / `notebooklm-mcp` / a vector store) | the markdown index + log + grep needs nothing |
-| `fabius-scientia` | external scientific-DB **REST APIs** (NCBI / Ensembl / PubChem …) + keys / rate-limits | the method, scoring, and pipeline structure are pure |
+| `fabius-scientia` | external scientific-DB **REST APIs** (NCBI / Ensembl / PubChem …), structure/literature services (**AlphaFold**, **Zotero**, **Jupyter-AI**) + keys / rate-limits | the method, scoring, and pipeline structure are pure |
+| `fabius-disciplina` | **web-search / deep-research** APIs or MCP (Perplexity / Exa / Brave / Firecrawl) for scouting reality, and **browser automation** (Playwright MCP) for proving a UI | scouting by hand, code-graph build, and most proving need nothing |
+| `fabius-cohors` | **MCP tool servers** the agents call (reference servers / Composio / a bridge) and a **code-execution sandbox** (E2B / Modal / Docker) | defining agents, least-privilege, output contracts, and the orchestration patterns are pure |
 
-The other seven skills (`parcus`, `disciplina`, `decor`, `cohors`, `mercatus`, `praesidium`, `ludus`) need no external connection at all. Nothing here is bundled; each live tier is the user's to wire — the same lean rule everywhere: **hold the pattern, add the runtime only when the task demands it.**
+The other five skills (`parcus`, `decor`, `mercatus`, `praesidium`, `ludus`) need no external connection at all. Nothing here is bundled; each live tier is the user's to wire — the same lean rule everywhere: **hold the pattern, add the runtime only when the task demands it.**
 
 ## Capability matrix
 

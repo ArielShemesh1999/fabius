@@ -87,7 +87,7 @@ For a **UI app**, "hit the real path" means **run it on a device/simulator and a
 - **The loop:** health-check the environment → build + test → boot/launch → assert state via the tree → screenshot only for visual confirmation → capture the full state (screenshot + hierarchy + logs) on failure.
 - **Prove with a number where you can.** A before/after task-success rate beats "it built." (iOS `simctl`/`xcodebuild` workflow, the troubleshooting table, and the test recipes → `references/simulator-verify.md`.)
 
-The full process library — craft skills (brainstorm, prototype, TDD, grill, handoff, writing) and discipline skills (systematic-debugging, writing-plans, verification-before-completion, parallel agents) — is in `references/process/`; the worked debug walkthrough and test anti-patterns in `references/process-playbook.md`.
+The full process library — craft skills (brainstorm, prototype, TDD, grill, handoff, writing) and discipline skills (systematic-debugging, writing-plans, verification-before-completion, parallel agents) — is in `references/process/`; the worked debug walkthrough and test anti-patterns in `references/process-playbook.md`. The on-demand depth for the *scout* and *prove* steps when the unknown is a large codebase, a current-world fact, or a UI in a browser — a local code graph for surgical context, live-web fact-checking, plan-as-files, real-browser (Playwright) verification, and a TDD-enforcement gate — is in `references/codebase-and-proof.md`.
 
 ## Routing the reasoning — when to branch, when to reflect
 

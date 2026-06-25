@@ -98,5 +98,6 @@ When the job is to **review a change** (a diff, a PR) rather than design a syste
 - STRIDE-per-boundary template, the OWASP checklist as a runnable list, the secrets-hygiene checklist, and the severity→fix→proof format → `references/security-playbook.md`.
 - Hardening guides and the audit library → `references/hardening-guides.md`, bundled and indexed by [CORPUS.md](../../CORPUS.md); page in the one slice the task needs (R9 · M9). Defensive only — guides to harden and detect, never to attack.
 - The AI diff/PR review pass — the confidence gate, the do-not-report exclusion list, the two-stage filter, and the prompt-injection caveat → `references/ai-review.md`.
+- The supply-chain leg — auditing third-party AI artifacts (skills, plugins, agents, MCP servers) and CI before you adopt them: the exec/data/net/creds gate, SHA-pinning against the auto-update blind window, sandboxing, least-privilege creds, and repeatable Semgrep / Action-pinning rule packs → `references/supply-chain-and-ai-artifacts.md`.
 
 Boundary: defensive only — no offensive tooling, ever. The never-trim security floor is `fabius-parcus`; the test discipline is `fabius-disciplina`; agent least-privilege is `fabius-cohors`. This layer owns the threat model and the audit. The user's instruction wins on everything except cutting a guardrail; `stop fabius` drops the stance.

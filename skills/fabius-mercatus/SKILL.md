@@ -83,5 +83,6 @@ Don't build the funnel; test the message. Ship the smallest asset that puts the 
 
 - Positioning canvas, awareness table, the converting structures (PAS · AIDA · BAB · the 4-U headline test), and the metric-per-stage map → `references/marketing-playbook.md`.
 - Channel playbooks (landing · email · social · cold outreach · launch) and the swipe library → `references/channel-swipe-library.md`, bundled and indexed by [CORPUS.md](../../CORPUS.md); page in the one slice the task needs (R9 · M9).
+- SEO & the organic-discovery channel — keyword/intent match, honest on-page + JSON-LD, the technical floor, content clusters, AI-answer visibility, and the SEO→funnel link → `references/seo-and-discoverability.md`.
 
 Boundary: prose-trim is `fabius-parcus`; demand-validation and the clarifying grill are `fabius-disciplina`; visual execution is `fabius-decor`. This layer owns the message and the path. The user's brand and instruction always win; `stop fabius` drops the stance.
