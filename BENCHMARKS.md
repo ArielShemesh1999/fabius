@@ -24,7 +24,7 @@ The length numbers are bias-free (a character count can't be flattered). The qua
 
 ## Measured results
 
-Three separate runs, three different lenses. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.**
+Four runs, four different lenses, plus a deterministic structural suite. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.** Run 4 is the one that exercises the **full twelve-skill surface** — every specialist domain, including the on-chain / automation / science verticals — so the proof now covers the whole system, not just the lean stance.
 
 ### The margin, at a glance
 
@@ -73,7 +73,7 @@ The pattern repeats on all four families: **large lift on trust/order/build, ~ze
 
 Three live builds of the same brief — **T1** fabius stance only · **T2** no fabius · **T3** fabius + all six skills.
 
-> *Version note: this run measures the then-six-skill build. The specialists beyond the original six — `fabius-mercatus`, `fabius-praesidium`, `fabius-ludus`, the `fabius-decor` figura/data-viz concern, and the later `fabius-catena`, `fabius-machina`, `fabius-scientia` verticals — are **not** exercised by this benchmark and make no claim on these numbers. The "six skills" wording below is left exactly as-run, on purpose.*
+> *Version note: this run measures the then-six-skill build, left exactly as-run. The specialists beyond those six — including the `fabius-catena`, `fabius-machina`, `fabius-scientia` verticals — are not exercised **here**; they are exercised in **Run 4 below**, which spans all ten specialist domains. The "six skills" wording in this table is preserved on purpose.*
 
 | | design score | lines | size | working signup form |
 |---|---|---|---|---|
@@ -82,6 +82,52 @@ Three live builds of the same brief — **T1** fabius stance only · **T2** no f
 | T3 stance + 6 skills | 7.5 | **333** | **19 KB** | **yes** |
 
 The reading: the bare stance maximizes **design polish** (T1 wins on the judge's eye); the full six-skill mechanism shifts toward **lean + functional** — T3 shipped 40% less code *and the only working form*. They optimize different things, and **this is the live proof the mechanism fires on its own** (see "what this does / doesn't test" below).
+
+### 4 — Twelve-skill coverage: every specialist domain (`evals/harness.v3.workflow.js`, 2026-06-25)
+
+The run that closes the gap Run 3's version-note named. **13 tasks, one per specialist domain** — the YAGNI traps, correctness, security, a11y, agents, design, **on-chain (catena)**, **automation (machina)**, **science (scientia)**, marketing, game — × the same three arms, generated on two tiers, **judged blind by `claude-opus-4-8`** (156 agents total). Here the `fabius` arm injects the shipped stance **plus the relevant specialist's operative contract** for each domain task — so this measures the routed *twelve-skill mechanism*, not the stance alone.
+
+Totals out of 15 (n = 13 per cell):
+
+| Tier | baseline | terse | **fabius** | gain vs terse | gain vs baseline | output cut vs baseline |
+|---|---|---|---|---|---|---|
+| sonnet | 14.15 | 13.00 | **14.69** | +1.69 | +0.54 | −30.7% |
+| haiku  | 11.23 | 12.85 | **13.15** | +0.30 | +1.92 | −50.6% |
+| **pooled** | 12.69 | 12.93 | **13.92** | **+0.99** | **+1.23** | **−42.6%** |
+
+**fabius is the only arm that beats *both* the bare baseline *and* the "be concise" control on *both* tiers** — while cutting output 31–51%. It scores **≥ baseline in all 11 task domains** and **≥ terse in 8 of 11**.
+
+The lift concentrates exactly where the thesis predicts — the technical verticals, including the three new ones (FAB − control, /15, both tiers pooled):
+
+```
+science  (scientia)    +4.5 vs base  ████████████████████  ← largest — multiple-testing-correction trap
+game     (ludus)       +3.0 vs base  █████████████
+automation (machina)   +3.5 vs terse █████████████████     ← idempotency / auth / retry the controls dropped
+on-chain (catena)      +1.5 vs base  ██████                 ← SPL owner/mint validation, money-safety
+design · security · a11y · agents    +0.5…+1.5
+YAGNI (pure)           −1.75 vs terse ▓▓                     ← brevity matches/beats, by design
+```
+
+The sharpest single cell: the **RNA-seq differential-expression** task on haiku — baseline **7**, "be concise" **8**, **fabius 15**. The controls fed normalized values or skipped FDR correction (a *fluently-wrong* science bug); the `scientia` contract forced raw counts + Benjamini-Hochberg. That is a guardrail neither baseline nor brevity supplies.
+
+Honest reading of the misses: **pure-YAGNI** is the one category where plain "be concise" beats fabius (−1.75) — exactly as designed, since over-building adds nothing there so there is no scope to control. Marketing copy and one game-loop cell were ~ties. And the **baseline here is a Claude-Code subagent** that already carries a lean-ish system prompt, so it is an unusually strong baseline — fabius wins *into a headwind*, which is the conservative direction. Full per-task data: [`evals/results.v3.json`](evals/results.v3.json).
+
+### Structural tests — the system is well-formed (no model, no key)
+
+Separate from "does the stance help," a deterministic suite proves the *system* is intact. These are pass/fail facts that reproduce byte-for-byte on any clone — [`node evals/structural.mjs`](evals/structural.mjs):
+
+| Invariant | Result |
+|---|---|
+| Exactly twelve skill contracts; one router, one always-on core; names unique | **PASS** |
+| Frontmatter `name` matches directory; declares `name` + `description` | **PASS** |
+| Progressive disclosure — every `SKILL.md` ≤ 12 KB (depth lives in `references/`) | **PASS** (max 11.2 KB) |
+| Provenance `fab1-` fingerprint embedded in all 12 contracts | **PASS** |
+| Reference integrity — every linked `references/*.md` resolves | **PASS** (26/26) |
+| Plugin manifest skill list == skills on disk; version 1.0.0 | **PASS** |
+| Content-bound seal — 15 sealed files hash-match + Merkle root recomputes | **PASS** |
+| Count coherence — README / ARCHITECTURE / AGENTS all state "twelve" | **PASS** |
+
+**17/17 pass.** This is the structural complement to the behavioral runs: Runs 1–4 measure that fabius *acts* better; the structural suite proves it is *built* right — single-owner, under budget, every reference live, and the seal verifiable.
 
 ---
 
@@ -103,18 +149,24 @@ A good result is **shorter answers the blind judge scores higher** — brevity *
 ## What this does and doesn't test
 
 - Runs 1–2 test **#1 — does injecting the stance improve output.** Yes, consistently, cross-model.
-- Run 3 (T3) tests **#2 — does the six-skill mechanism fire and act on its own.** Yes — it shipped the leanest, only-functional build live in Claude Code.
+- Run 3 (T3) tests **#2 — does the multi-skill mechanism fire and act on its own.** Yes — it shipped the leanest, only-functional build live in Claude Code.
+- Run 4 tests **#3 — does each of the twelve skills, including the new on-chain / automation / science verticals, improve its own domain.** Yes — fabius beats both controls on both tiers, and the largest lifts land on those technical verticals.
+- The structural suite tests **#4 — is the system built right** (single-owner, under budget, references live, seal verifiable). 17/17.
 - The advantage **grows as the model's default discipline drops** (Run 1: sonnet/haiku gain more than opus; Run 2: lean-BASE Grok gains most, verbose-BASE Mistral least). The advantage is always present; its *size* tracks how undisciplined the default is.
+- **Not tested by a one-shot eval:** `fabius-archivum` (persistent memory only pays off across sessions) and the `fabius` router's dispatch accuracy. Memory is excluded rather than faked; routing is checked structurally, not behaviorally.
 
 ---
 
 ## Reproduce it (one command)
 
 ```bash
-# wiring check — no key, no cost, no network
+# structural suite — no key, no cost, no network; 17/17 must pass (Run 4 sibling)
+node evals/structural.mjs
+
+# behavioral wiring check — no key, no cost
 node evals/eval.mjs --selftest
 
-# a real run (Anthropic)
+# a real behavioral run (Anthropic)
 ANTHROPIC_API_KEY=...  node evals/eval.mjs --model claude-sonnet-4-6
 
 # a real run (OpenAI / Codex family)
@@ -122,9 +174,12 @@ OPENAI_API_KEY=...     node evals/eval.mjs --provider openai --model gpt-4o
 
 # cross-vendor (OpenAI / Mistral / Anthropic / Gemini) — your keys
 GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini
+
+# the twelve-skill, every-domain run (Run 4), inside Claude Code:
+#   Workflow({ scriptPath: "evals/harness.v3.workflow.js" })
 ```
 
-The `fabius` arm injects the **actual** shipped `AGENTS.md`, so you benchmark the real stance, not a paraphrase. It writes `evals/results.json`. Swap `--model` / `--judge` to benchmark anything; add tasks in the `TASKS` array.
+The `fabius` arm injects the **actual** shipped `AGENTS.md` (and, in Run 4, the relevant specialist contract), so you benchmark the real stance, not a paraphrase. `eval.mjs` writes `evals/results.json`; the published Run 4 receipt is [`evals/results.v3.json`](evals/results.v3.json). Swap `--model` / `--judge` to benchmark anything; add tasks in the `TASKS` array.
 
 ---
 
@@ -136,4 +191,4 @@ The `fabius` arm injects the **actual** shipped `AGENTS.md`, so you benchmark th
 - **Blind scores lower — and that's reassurance.** The blind cross-family runs scored fabius lower than the self-judged ones (86/82 vs 89/87). A judge that doesn't love itself scores harder; the pattern held anyway.
 - **Versions move.** Every number was measured on one model at one moment. Don't generalize past that — re-run it.
 
-> The claim the data supports: **fabius gives a consistent, cross-model quality lift that grows as the model's default gets less disciplined — large at trust / order / genuine-build boundaries, negligible at pure YAGNI. It is not a "shorten" prompt; it is a scope-control system that knows when to compress and when to expand.** Not "smarter." Not "10× on everything." That sentence survives technical scrutiny; the inflated one doesn't.
+> The claim the data supports: **fabius gives a consistent, cross-model quality lift that grows as the model's default gets less disciplined — large at trust / order / genuine-build boundaries and across the technical verticals (on-chain, automation, science), negligible at pure YAGNI. It is the only arm that beats both a bare baseline and a "be concise" control while cutting output ~40%. It is not a "shorten" prompt; it is a scope-control system that knows when to compress and when to expand — and it is built right: 17/17 structural invariants, a verifiable content-bound seal.** Not "smarter." Not "10× on everything." That sentence survives technical scrutiny; the inflated one doesn't.

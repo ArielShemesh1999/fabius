@@ -1,0 +1,55 @@
+{
+  "_meta": {
+    "run": "v3 — twelve-skill coverage",
+    "date": "2026-06-25",
+    "method": "Claude-Code Workflow harness (evals/harness.v3.workflow.js). 13 tasks spanning all ten specialist domains + the YAGNI traps, 3 arms, 2 generator tiers, blind opus judge.",
+    "arms": ["baseline", "terse", "fabius"],
+    "tiers": ["claude-sonnet-4-6", "claude-haiku-4-5"],
+    "judge": "claude-opus-4-8 (blind — never told which arm produced an answer)",
+    "n_per_cell": 13,
+    "generations": 78,
+    "judgements": 78,
+    "agents": 156,
+    "fabius_arm": "the shipped lean stance (AGENTS.md, verbatim) PLUS the relevant specialist's operative contract for domain tasks — so this measures the routed twelve-skill mechanism, not the stance alone",
+    "conservative_bias": "baseline here is a Claude-Code subagent, which already carries a lean-ish system prompt, so the baseline arm is unusually strong. That can only UNDERstate fabius's lift vs a clean no-system-prompt API baseline (see evals/eval.mjs run v2 in BENCHMARKS.md run 1). The wins below survive that headwind.",
+    "objective_metric": "output length in characters, computed in code from the returned answer — bias-free"
+  },
+  "byTierArm": {
+    "sonnet/baseline": { "n": 13, "total": 14.15, "chars": 3148, "correctness": 5, "minimality": 4.62, "best_practice": 4.54 },
+    "sonnet/terse":    { "n": 13, "total": 13.0,  "chars": 1414, "correctness": 4.31, "minimality": 4.85, "best_practice": 3.85 },
+    "sonnet/fabius":   { "n": 13, "total": 14.69, "chars": 2183, "correctness": 4.92, "minimality": 4.92, "best_practice": 4.85 },
+    "haiku/baseline":  { "n": 13, "total": 11.23, "chars": 4737, "correctness": 4.31, "minimality": 3.23, "best_practice": 3.69 },
+    "haiku/terse":     { "n": 13, "total": 12.85, "chars": 2640, "correctness": 4.54, "minimality": 4.38, "best_practice": 3.92 },
+    "haiku/fabius":    { "n": 13, "total": 13.15, "chars": 2340, "correctness": 4.38, "minimality": 4.23, "best_practice": 4.54 }
+  },
+  "deltas": {
+    "sonnet": { "baseline": 14.15, "terse": 13.0, "fabius": 14.69, "gain_vs_baseline": 0.54, "gain_vs_terse": 1.69, "output_reduction_vs_baseline_pct": 30.7 },
+    "haiku":  { "baseline": 11.23, "terse": 12.85, "fabius": 13.15, "gain_vs_baseline": 1.92, "gain_vs_terse": 0.3, "output_reduction_vs_baseline_pct": 50.6 }
+  },
+  "pooled": {
+    "baseline": 12.69, "terse": 12.93, "fabius": 13.92,
+    "gain_vs_baseline": 1.23, "gain_vs_terse": 0.99,
+    "output_reduction_vs_baseline_pct": 42.6,
+    "fabius_ge_baseline_domains": "11/11",
+    "fabius_ge_terse_domains": "8/11 (exceptions: pure-YAGNI, marketing copy, one game-loop cell — where plain brevity is already near-optimal)"
+  },
+  "byCat": {
+    "yagni":      { "baseline": 12.5, "terse": 14.5, "fabius": 12.75, "fab_minus_terse": -1.75, "fab_minus_base": 0.25, "spec": null },
+    "build":      { "baseline": 15.0, "terse": 10.0, "fabius": 15.0,  "fab_minus_terse": 5.0,   "fab_minus_base": 0.0,  "spec": "parcus/disciplina" },
+    "security":   { "baseline": 13.5, "terse": 13.25, "fabius": 14.5, "fab_minus_terse": 1.25,  "fab_minus_base": 1.0,  "spec": "praesidium" },
+    "a11y":       { "baseline": 14.5, "terse": 14.5, "fabius": 15.0,  "fab_minus_terse": 0.5,   "fab_minus_base": 0.5,  "spec": "decor" },
+    "agents":     { "baseline": 12.0, "terse": 12.5, "fabius": 12.5,  "fab_minus_terse": 0.0,   "fab_minus_base": 0.5,  "spec": "cohors" },
+    "design":     { "baseline": 13.5, "terse": 14.0, "fabius": 15.0,  "fab_minus_terse": 1.0,   "fab_minus_base": 1.5,  "spec": "decor" },
+    "onchain":    { "baseline": 11.5, "terse": 12.0, "fabius": 13.0,  "fab_minus_terse": 1.0,   "fab_minus_base": 1.5,  "spec": "catena (NEW)" },
+    "automation": { "baseline": 12.5, "terse": 10.5, "fabius": 14.0,  "fab_minus_terse": 3.5,   "fab_minus_base": 1.5,  "spec": "machina (NEW)" },
+    "science":    { "baseline": 10.5, "terse": 11.0, "fabius": 15.0,  "fab_minus_terse": 4.0,   "fab_minus_base": 4.5,  "spec": "scientia (NEW)" },
+    "marketing":  { "baseline": 13.5, "terse": 14.5, "fabius": 14.0,  "fab_minus_terse": -0.5,  "fab_minus_base": 0.5,  "spec": "mercatus" },
+    "game":       { "baseline": 10.0, "terse": 13.5, "fabius": 13.0,  "fab_minus_terse": -0.5,  "fab_minus_base": 3.0,  "spec": "ludus" }
+  },
+  "highlights": [
+    "fabius is the only arm that beats BOTH the bare baseline AND the 'be concise' control on BOTH tiers, while cutting output 31-51%.",
+    "The three new verticals show the largest lifts: science +4.5, automation +3.5 (vs terse), on-chain +1.5 vs baseline — the new specialists fire, not just the stance.",
+    "Sharpest single result: the RNA-seq task on haiku — baseline 7, 'be concise' 8, fabius 15 — the multiple-testing-correction guardrail the controls dropped.",
+    "Pure-YAGNI is the one place plain brevity matches or beats fabius (-1.75 vs terse) — by design: over-building adds nothing, so there's no scope to control."
+  ]
+}

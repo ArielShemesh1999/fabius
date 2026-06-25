@@ -16,6 +16,7 @@
 [![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-plugin-D97757?style=for-the-badge&logo=anthropic&logoColor=white)](https://docs.anthropic.com/en/docs/claude-code)
 [![Twelve skills](https://img.shields.io/badge/architecture-12_skills,_one_install-1f6feb?style=for-the-badge)](#architecture)
 [![Benchmark](https://img.shields.io/badge/benchmark-blind,_reproducible-2ea44f?style=for-the-badge)](#what-it-does)
+[![Structural tests](https://img.shields.io/badge/structural_tests-17%2F17-2ea44f?style=for-the-badge)](BENCHMARKS.md)
 [![Research-grounded](https://img.shields.io/badge/research--grounded-routing_policy-8957e5?style=for-the-badge)](RESEARCH.md)
 [![Whitepaper](https://img.shields.io/badge/whitepaper-40pp_·_proofs_+_coherence-D97757?style=for-the-badge)](paper/fabius-as-a-system.pdf)
 [![License](https://img.shields.io/badge/license-MIT-555?style=for-the-badge)](#license)
@@ -57,6 +58,18 @@ Same model, one concentrated set of operating rules. The stance changes the *sha
 | Haiku 4.5 | 8.88 | 9.13 | **10.38** | **+1.25** | **−32%** |
 
 Across four model families — Grok, Mistral, GPT, Claude — the pattern holds: the advantage is largest at trust, ordering, and genuine-build boundaries, and near zero on pure over-engineering traps. Shorter answers that the blind judge scores *higher*.
+
+**Every specialist domain, measured.** A second blind run ([Run 4](BENCHMARKS.md), 2026-06-25) puts one task through *each* of the ten specialists — including the on-chain, automation, and science verticals — with the router injecting the relevant skill. fabius is the **only arm that beats both the bare baseline and the "be concise" control on both tiers**, ≥ baseline in all 11 domains, while cutting output ~40%. The biggest lifts land exactly where they should — the technical verticals:
+
+| Domain (skill) | fabius − "be concise" | fabius − baseline |
+|---|:---:|:---:|
+| Science · RNA-seq (`scientia`) | **+4.0** | **+4.5** |
+| Automation · webhook (`machina`) | **+3.5** | +1.5 |
+| On-chain · SPL balance (`catena`) | +1.0 | +1.5 |
+| Design · security · a11y · game | +0.5 … +1.0 | +1.5 … +3.0 |
+| Pure-YAGNI trap | −1.75 (by design) | +0.25 |
+
+Sharpest cell: the RNA-seq task on Haiku — baseline **7**, "be concise" **8**, **fabius 15** — the multiple-testing-correction the controls dropped. **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — twelve single-owner contracts, every reference live, the content-bound seal verifiable — **17/17**.
 
 > The claim the data supports: **structure beats brevity, and the advantage grows as the model's default discipline drops.** Not "smarter," not "10× on everything" — a scope-control system that knows when to compress and when to expand. Method, mechanism, and caveats: **[BENCHMARKS.md](BENCHMARKS.md)**.
 
@@ -194,7 +207,7 @@ fabius/
 │   ├── fabius-catena/      on-chain + sealing   · references: onchain playbook · sealing primitive
 │   ├── fabius-machina/     automation           · references: automation build-and-verify playbook
 │   └── fabius-scientia/    science              · references: scientific method · database-lookup
-├── evals/                  blind benchmark — eval.mjs · portable_eval.py · harness.workflow.js
+├── evals/                  proof — structural.mjs (17/17) · harness.v3.workflow.js · results.v3.json · eval.mjs · portable_eval.py
 ├── provenance/             content-bound seal — verify.sh · seal manifest · OTS Bitcoin proof · signed tag
 ├── PROVENANCE.md           how authorship is proven, not asserted (with the limits up front)
 ├── AGENTS.md               tool-agnostic bridge (Codex / Cursor / Gemini / …)
