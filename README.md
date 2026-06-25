@@ -26,7 +26,7 @@
 
 ## What it is
 
-fabius is one super-skill you hand the agent. It sets *how* the agent works across the whole job — write code, write prose, build and orchestrate agents, design UI, visualize data, debug, market the value, harden security, build games, and remember — and routes to a specialist only when a task needs depth. One stance, applied everywhere: talk lean, build lean, run a disciplined process, design at ship quality, build other agents, and stop re-deriving.
+fabius is one super-skill you hand the agent. It sets *how* the agent works across the whole job — write code, write prose, build and orchestrate agents, design UI, visualize data, debug, market the value, harden security, build games, develop on-chain and cryptographically seal artifacts, wire automations, research the sciences, and remember — and routes to a specialist only when a task needs depth. One stance, applied everywhere: talk lean, build lean, run a disciplined process, design at ship quality, build other agents, and stop re-deriving.
 
 It is named for the Fabian doctrine: **scout the whole field, fight only the battle that matters.** One system of twelve coordinated, non-overlapping skills — a router, an always-on lean core, and ten engineering specialists — installed as a single plugin.
 
@@ -44,6 +44,9 @@ Same model, one concentrated set of operating rules. The stance changes the *sha
 | An agent | broad tools, vague role | least privilege, precise output contract |
 | An explanation | padded, hedged | tight, exact, no filler |
 | Research / memory | re-derives every session | written down once, retrieved the next time |
+| On-chain code | unchecked accounts, unsafe signing | account-validation-first, money-safe, simulate before signing |
+| An automation | one-shot, silent miswires | discover-from-live-schema, validate AND verify, then activate |
+| A science question | a confident guess | competing hypotheses, source-grounded lookups, reproducible |
 
 **Measured, blind, reproducible.** A three-arm evaluation — `baseline`, a generic *"be concise"* control, and the full fabius stance — scored by a judge model that is never told which arm produced which answer. Beating the *"be concise"* control, not the baseline, is the real test. fabius beats it on every tier while cutting output length:
 
