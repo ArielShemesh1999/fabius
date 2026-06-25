@@ -8,7 +8,9 @@ description: >
   an Obsidian vault so the next session starts ahead, or whenever the agent is about
   to redo research it (or a past session) already did. Directory schema and page conventions live in
   references/memory-schema.md; the knowledge engine itself — a vector engine, the wiki pattern, and a
-  working RAG pipeline — lives in references/knowledge/.
+  working RAG pipeline — lives in references/knowledge/. Cross-session auto-recall (capture → compress →
+  re-inject without being asked) and source-grounded external-corpus connectors live in
+  references/external-recall.md.
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -76,6 +78,25 @@ The wiki is plain markdown — works in any editor, best browsed in Obsidian (ba
 2. **Plain md** (zero install) — just the `wiki/` dir of markdown. Same retrieval (`index.md` + grep), no app.
 
 Either way the human curates sources and asks; fabius writes and maintains. Never block work to set this up — scaffold the minimal `MEMORY.md` + `log.md` and keep going.
+
+## Auto-recall — surface memory without being asked
+
+Reading the index on start (above) is recall you *choose*. The stronger habit is recall that fires **automatically**, so the agent never re-derives what a past session already settled. The loop has three named stages — keep them separate:
+
+- **Capture** — record what happened (a decision, a fix, a result) as it happens. Capture must be **non-blocking**: never stop the work to summarize; jot the raw fact and move on.
+- **Compress** — turn the raw capture into a small, *typed and titled* record (a title + a type + a compact body), not a transcript dump. Typed-and-titled is what makes later filtering and progressive disclosure cheap.
+- **Re-inject** — at the **start** of the next session, surface a compact index of the recent records (titles grouped by type, last-N sessions) into context *before* acting. That single step is what turns memory from opt-in to automatic.
+
+Retrieve under **progressive disclosure**: inject the small index (titles/ids) by default; pull a record's full body only on demand. This is `fabius-parcus`'s progressive-disclosure rule applied to memory — the same reason a SKILL.md is lean and its `references/` page in on demand. (In Claude Code this maps onto lifecycle hooks — capture on tool-use, re-inject on session-start — but the *pattern* is what matters; don't build a daemon before the corpus demands one. Wiring in `references/external-recall.md`.)
+
+## Ground in an external corpus — ask, don't guess
+
+When an answer must be **source-true** (a domain spec, a contract, a curated body of documents), route the question to an authoritative external knowledge base that answers **only** from its sources and signals uncertainty — instead of pattern-matching from the model's weights. Two rules make this reliable:
+
+- **Keep a source registry.** Store each external corpus as `{ name, description, topics }` and select by topic at query time — the connector remembers *which* corpus answers *which* question. To register an unknown corpus, ask it to summarize *itself* first, then use that as its metadata; never tag it generically.
+- **Loop until complete, then synthesize.** After each retrieved answer, diff it against the *original* request, identify the gaps, and re-query — only synthesize once nothing is missing. A single lookup is rarely the whole answer.
+
+Stay provider-agnostic (the connector pattern outlives any one product) and keep credentials and the registry **out of the repo**. Connector recipe and the decision table for *when to reach for an external corpus vs read local files* → `references/external-recall.md`.
 
 ## Memory discipline — page, don't stuff
 

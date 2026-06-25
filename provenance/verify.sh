@@ -69,6 +69,41 @@ else
   bad "provenance/allowed_signers missing"
 fi
 
+# 5) Content-bound seal — recompute every sealed file's hash + the merkle root --
+if [ -f provenance/seal-manifest.json ]; then
+  count=$(grep -o '"count": [0-9]*' provenance/seal-manifest.json | grep -o '[0-9]*' | head -1)
+  if command -v python3 >/dev/null 2>&1; then
+    if python3 - <<'PY'
+import hashlib, json, sys
+m = json.load(open("provenance/seal-manifest.json"))
+bad = 0
+for p, h in m["files"].items():
+    try:
+        d = hashlib.sha256(open(p, "rb").read()).hexdigest()
+    except FileNotFoundError:
+        print("    missing sealed file:", p); bad += 1; continue
+    if d != h:
+        print("    hash mismatch:", p); bad += 1
+leaves = sorted(hashlib.sha256((p + "\x00" + h).encode("utf-8")).digest() for p, h in m["files"].items())
+lvl = leaves
+while len(lvl) > 1:
+    lvl = [hashlib.sha256(lvl[i] + (lvl[i + 1] if i + 1 < len(lvl) else lvl[i])).digest() for i in range(0, len(lvl), 2)]
+if (lvl[0].hex() if lvl else "") != m.get("merkle_root"):
+    print("    merkle root mismatch"); bad += 1
+sys.exit(1 if bad else 0)
+PY
+    then
+      pass "content-bound seal verified — all ${count:-?} sealed files match their sha256 and the merkle root recomputes"
+    else
+      bad "content-bound seal MISMATCH — a sealed file changed since sealing (see above). If intended, re-run: bash provenance/seal-skills.sh"
+    fi
+  else
+    note "python3 absent — skipped the seal recompute (each file is still checkable by hand: shasum -a 256 <path> vs provenance/seal-manifest.json)"
+  fi
+else
+  note "provenance/seal-manifest.json missing — create the content-bound seal: bash provenance/seal-skills.sh"
+fi
+
 say ""
 say "== $ok passed · $warn notes · $fail failed =="
 [ "$fail" -eq 0 ]

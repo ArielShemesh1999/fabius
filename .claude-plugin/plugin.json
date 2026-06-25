@@ -1,7 +1,7 @@
 {
   "name": "fabius",
-  "version": "1.0.0",
-  "description": "fabius — one super-skill that equips Claude end-to-end under a single Fabian stance: scout wide, strike narrow. Write lean code and lean prose, run a disciplined brainstorm→plan→TDD→verify→debug loop, design ship-grade UI, visualize data, build and orchestrate other agents, market the value, harden security (defensive), build games, and keep a persistent memory so it stops re-deriving. One install, nine coordinated zero-overlap skills: an always-on lean core, a router that dispatches by layer + machinery + model-tier, and seven engineering specialists. Capabilities: terse output, a YAGNI code ladder, root-cause debugging, design tokens + one-accent laws, data-ink charts, least-privilege agent definitions, index+log knowledge base, positioning + converting copy, STRIDE/OWASP threat-modeling, game-loop + juice. Actions: write, build, fix, debug, refactor, review, design, chart, plan, verify, remember, market, harden, play. Lean by default, never flimsy.",
+  "version": "1.1.0",
+  "description": "fabius — one super-skill that equips Claude end-to-end under a single Fabian stance: scout wide, strike narrow. Write lean code and lean prose, run a disciplined brainstorm→plan→TDD→verify→debug loop, design ship-grade UI, visualize data, build and orchestrate other agents, market the value, harden security (defensive), build games, develop on-chain and cryptographically seal artifacts, wire automations, research the sciences, and keep a persistent memory so it stops re-deriving. One install, twelve coordinated zero-overlap skills: an always-on lean core, a router that dispatches by layer + machinery + model-tier, and ten engineering specialists. Capabilities: terse output, a YAGNI code ladder, root-cause debugging, design tokens + one-accent laws, data-ink charts + generative imagery, least-privilege agent definitions, index+log knowledge base with auto-recall, positioning + converting copy, STRIDE/OWASP threat-modeling + AI diff review, game-loop + juice, on-chain account-validation + verifiable provenance sealing, automation build-and-verify, the scientific method with reproducible pipelines. Actions: write, build, fix, debug, refactor, review, design, chart, plan, verify, remember, market, harden, play, seal, automate, research. Lean by default, never flimsy.",
   "author": {
     "name": "Ariel Shemesh",
     "url": "https://github.com/ArielShemesh1999"
@@ -24,6 +24,13 @@
     "marketing",
     "security",
     "game-dev",
+    "blockchain",
+    "on-chain",
+    "provenance",
+    "automation",
+    "n8n",
+    "science",
+    "bioinformatics",
     "best-practices",
     "workflow"
   ],
@@ -36,6 +43,9 @@
     "./skills/fabius-archivum",
     "./skills/fabius-mercatus",
     "./skills/fabius-praesidium",
-    "./skills/fabius-ludus"
+    "./skills/fabius-ludus",
+    "./skills/fabius-catena",
+    "./skills/fabius-machina",
+    "./skills/fabius-scientia"
   ]
 }

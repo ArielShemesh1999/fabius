@@ -6,7 +6,7 @@
 
 </div>
 
-fabius is original work. This document is the apparatus that lets anyone — a court, a maintainer, a stranger — confirm **when it existed**, anchored to Bitcoin with no trusted party, and **who made it**, as strongly as the custody of one signing key allows. Five mechanisms back that up: three are plain repository facts — the fingerprint (§3), the MIT notice (§4), and GitHub's public push history (§4) — and two are cryptographic artifacts generated when the release is **sealed**: the Bitcoin timestamp (§1) and the signed release tag (§2). `bash provenance/verify.sh` reports the live state of each. Every mechanism is paired with exactly what it does *and does not* prove, in the same measured-not-claimed spirit as [RESEARCH.md](RESEARCH.md).
+fabius is original work. This document is the apparatus that lets anyone — a court, a maintainer, a stranger — confirm **when it existed**, anchored to Bitcoin with no trusted party, and **who made it**, as strongly as the custody of one signing key allows. Six mechanisms back that up: three are plain repository facts — the fingerprint (§3), the MIT notice (§4), and GitHub's public push history (§4); one is a **content-bound seal** recomputable from the files themselves (§3·b); and two are cryptographic artifacts generated when the release is **sealed**: the Bitcoin timestamp (§1) and the signed release tag (§2). `bash provenance/verify.sh` reports the live state of each. Every mechanism is paired with exactly what it does *and does not* prove, in the same measured-not-claimed spirit as [RESEARCH.md](RESEARCH.md).
 
 **The honesty stance, up front.** A public git repository **cannot be made uncloneable.** That is not a missing setting — it is how git works: anyone who can read the repo can `git clone` it in full, history included. Disabling forks does not stop it. No code, license, or watermark changes this. Anyone who promises a "clone-proof" public repo is selling a fiction.
 
@@ -53,6 +53,13 @@ Every skill file carries a provenance marker:
 - **What it does NOT do.** It is *not* a barrier. A determined adversary can `grep -v` it out in seconds. It defeats lazy and automated copying, nothing stronger — and it says so.
 - **What removal does and does not cost the thief.** Stripping the marker defeats the web-search tripwire, so the fingerprint protects only against **verbatim** copies that keep the comment. It is **not** re-derivable from stolen files — nothing in this repo reconstructs the token from content, and a content-bound value could not survive the rewording a determined thief would do anyway. The fingerprint is a convenience for *discovery* of lazy/verbatim clones; the durable *proof* lives in the timestamp and signature (§1, §2), not the comment.
 
+### 3·b — A content-bound seal: a value anyone can recompute
+
+The fingerprint above is a *discovery* aid; it is not derived from the content. `provenance/seal-manifest.json` adds the **content-bound** half: a SHA-256 over every skill contract (`skills/*/SKILL.md`) and the core system docs (`ARCHITECTURE.md`, `CORPUS.md`, `AGENTS.md`), plus a **binary Merkle root** over those leaves and the algorithm identifier. `bash provenance/seal-skills.sh` builds it; `verify.sh` recomputes it.
+
+- **What it does.** Unlike the comment, every value here is **recomputable from the public files** — a verifier hashes the bytes and compares. Forging a seal for altered content requires a **hash collision**, which is a public, detectable event (the *detectability-by-construction* property). The Merkle root commits all fifteen files at once, so the OpenTimestamps anchor over the sealed commit (§1) — which contains this manifest — extends an **un-backdatable date to the exact bytes of every skill**, not just to a comment.
+- **What it does NOT do.** It binds the **exact expression**: rewording a skill changes its hash, by design. So it strengthens detection of **verbatim or substantial** copies and gives integrity (tamper-evidence) for this repo's own files — it does not reach an idea-level reimplementation, the same honest limit as everything here. This is **boring cryptography only** (a hash and a Merkle tree — no trusted setup, no token), drawn from fabius's own SEAL research; the primitive and its rules are documented in [`skills/fabius-catena/references/sealing.md`](skills/fabius-catena/references/sealing.md).
+
 ---
 
 ## 4 · Two records you already hold for free
@@ -82,14 +89,17 @@ What this package **cannot** stop: a determined actor who rewrites fabius from s
 bash provenance/verify.sh
 ```
 
-It checks, in order: the fingerprint is intact in every skill; the sealed commit is in this branch's history; the OpenTimestamps proof (and whether it is Bitcoin-confirmed yet); and the signed tag. The fingerprint check runs today; the timestamp and signed-tag checks become meaningful **after the release is sealed** and report NOTE until then. Manual equivalents (available after sealing):
+It checks, in order: the fingerprint is intact in every skill; the sealed commit is in this branch's history; the OpenTimestamps proof (and whether it is Bitcoin-confirmed yet); the signed tag; and the **content-bound seal** — recomputing every sealed file's SHA-256 and the Merkle root against `provenance/seal-manifest.json`. The fingerprint and seal-manifest checks run today; the timestamp and signed-tag checks become meaningful **after the release is sealed** and report NOTE until then. Manual equivalents:
 
 ```bash
+shasum -a 256 skills/*/SKILL.md ARCHITECTURE.md CORPUS.md AGENTS.md                # content-bound seal — compare to provenance/seal-manifest.json
 ots verify provenance/sealed-commit.txt.ots                                       # priority date (Bitcoin)
 git -c gpg.ssh.allowedSignersFile=provenance/allowed_signers \
     verify-tag "$(git tag --list 'v*-sealed' --sort=-version:refname | head -1)"  # authorship
 grep -rl "provenance fab1-" skills/*/SKILL.md                                     # fingerprint coverage
 ```
+
+After editing any skill or core doc, rebuild the seal so it stays valid: `bash provenance/seal-skills.sh` (then re-tag and re-stamp to refresh §1–§2).
 
 ---
 

@@ -1,6 +1,6 @@
 # Credits & inspiration
 
-The fabius **system** — the nine skills, the router/dispatch policy, `AGENTS.md`, `CORPUS.md`, the architecture, and the evals — is original work, written from scratch under one stance (*scout wide, strike narrow*). Each skill is an original operating contract in fabius's own voice.
+The fabius **system** — the twelve skills, the router/dispatch policy, `AGENTS.md`, `CORPUS.md`, the architecture, the provenance apparatus, and the evals — is original work, written from scratch under one stance (*scout wide, strike narrow*). Each skill is an original operating contract in fabius's own voice.
 
 What we owe to the open community is the **learning**: the on-demand depth under each skill's `references/` was **informed by and adapted from** the open work below. We studied these projects and wrote our own version; credit where it's due. Two honest rules govern this file:
 
@@ -15,20 +15,31 @@ What we owe to the open community is the **learning**: the on-demand depth under
 | `fabius` (long-horizon loop · R12) | the "Ralph" autonomous-loop technique (Geoff Huntley) via ralph-claude-code (frankbria) | see repo |
 | `fabius-parcus` (lean guidelines) | the caveman (prose-trim) and ponytail (code-trim) disciplines | — |
 | `fabius-disciplina` (process · method) | compound-engineering-plugin (EveryInc), get-shit-done (gsd-build), learn-claude-code (shareAI-lab), claude-code-best-practice (shanraisshan), gstack (garrytan) | see repos |
+| `fabius-disciplina` (on-simulator prove loop) | ios-simulator-skill (conorluddy) — accessibility-tree-first verification, progressive-disclosure build output, simctl recipes | MIT |
 | `fabius-decor` (design library) | open design teardowns + skill bundles (open-design, GSAP animation, UI/UX, HyperFrames) | see repos |
 | `fabius-decor` (figura / data-viz) | graphify (safishamsi) — chart/graph generation for agents | see repo |
+| `fabius-decor` (generative imagery) | skill-prompt-generator (huangserva) — slot-based image-prompt schema, mandatory-lighting, era/culture cascades, conflict pass | MIT |
+| `fabius-decor` (explanatory diagrams) | Understand-Anything (Yuxiang Lin / Infinite Universe, Egonex-AI) — deterministic-extract-then-LLM, typed-graph schema, topology-driven pedagogical tour | MIT |
 | `fabius-cohors` (swarm orchestration) | claude-flow / ruflo by ruvnet — coordinator + specialized-worker swarms, anti-drift, worktree isolation ([repo](https://github.com/ruvnet/ruflo)) | see repo |
 | `fabius-cohors` (agent catalog) | wshobson/agents, VoltAgent/awesome-claude-code-subagents, open production-agent corpora (Google ADK samples and similar) | MIT (wshobson) · see repos |
 | `fabius-archivum` (memory, LLM-wiki) | Andrej Karpathy's "the wiki pattern" — incrementally-built personal knowledge bases ([gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)) | — |
 | `fabius-archivum` (vector engine) | the `fabius-vec` knowledge engine, after open vector-search work (turbovec / ruvector) | see repos |
-| `fabius-archivum` (memory mechanisms) | claude-mem (thedotmack), oh-my-claudecode (Yeachan-Heo) | see repos |
+| `fabius-archivum` (auto-recall · re-injection) | claude-mem (thedotmack) — the capture → compress → re-inject loop wired to session lifecycle; oh-my-claudecode (Yeachan-Heo) | **Apache-2.0** (claude-mem) · see repos |
+| `fabius-archivum` (external-corpus connector) | notebooklm-skill (PleasePrompto) — source-grounded KB connector, source registry, ask-until-complete loop | MIT |
 | `fabius-mercatus` (go-to-market) | marketingskills (coreyhaines31) | see repo |
 | `fabius-praesidium` (defensive security) | Anthropic-Cybersecurity-Skills (mukul975) — defensive guidance only | **Apache-2.0** |
+| `fabius-praesidium` (AI diff/PR review) | claude-code-security-review (Anthropic) — confidence-gate, do-not-report exclusion list, two-stage filter, exploit-path requirement | MIT |
 | `fabius-ludus` (game craft) | Claude-Code-Game-Studios (Donchitos) | see repo |
+| `fabius-catena` (on-chain dev) | solana-dev-skill (Solana Foundation) — account-validation-first checklist, Anchor/Pinocchio rules, the LiteSVM/Mollusk/Surfpool testing pyramid, toolchain corpus | MIT |
+| `fabius-catena` (provenance sealing) | **SEAL** — Ariel Shemesh's own research (`research/SEAL_Whitepaper_v2.0`): provenance-not-truth, content-bound hard binding, boring-cryptography-only, Bitcoin-anchored timestamps, self-contained verification bundles, crypto-agile renewal | original (author's own) |
+| `fabius-machina` (automation) | n8n-skills (Romuald Członkowski, aiadvisors.pl) — the n8n-mcp tool-per-intent decision tree, silent-failure gotchas, validate-AND-verify-before-activate discipline | MIT · hooks layer **Apache-2.0** |
+| `fabius-scientia` (science · bio) | scientific-agent-skills (K-Dense Inc.) — per-domain single-concern skills, pipeline-as-router, the unified database-lookup contract + cross-ID maps, the hypothesis-generation loop, reproducibility gotchas | MIT (per-skill varies) |
 
 ### Apache-2.0 note (security corpus)
 
 The cybersecurity skills corpus (mukul975/Anthropic-Cybersecurity-Skills) is **Apache-2.0**. `fabius-praesidium` currently re-expresses its **defensive** concepts (STRIDE, the OWASP pass, the finding contract) in fabius's own voice — inspiration, no files carried, and nothing offensive imported. If any Apache-2.0 file is later bundled into the corpus, its `LICENSE` and `NOTICE` ship alongside it, with changes stated, per the license.
+
+Two more sources carry **Apache-2.0** terms: **claude-mem** (thedotmack), which informed `fabius-archivum`'s auto-recall loop, and the **hooks layer of n8n-skills**, which informed `fabius-machina`. In both cases fabius re-expresses the *pattern* in its own words — **no upstream code or prose is bundled** — so no NOTICE travels with the install today. If any Apache-2.0 file is later vendored, its `LICENSE`/`NOTICE` and a statement of changes ship with it.
 
 ## Research grounding — the agent-research canon
 

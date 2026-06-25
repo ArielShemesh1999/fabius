@@ -1,7 +1,7 @@
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 # Fabius — system architecture
 
-Fabius is **one system**, not a bundle of plugins. A single super-skill routes eight coordinated capability layers over a thin supporting spine — nine skills in all, counting the router itself — so any agent gains end-to-end engineering capability from one install. The router dispatches on three axes together: **which layer(s)**, **how much machinery**, and **which model tier**. This document is the system's own architecture and its capability matrix.
+Fabius is **one system**, not a bundle of plugins. A single super-skill routes eleven coordinated capability layers over a thin supporting spine — twelve skills in all, counting the router itself — so any agent gains end-to-end engineering capability from one install. The router dispatches on three axes together: **which layer(s)**, **how much machinery**, and **which model tier**. This document is the system's own architecture and its capability matrix.
 
 The organizing idea is the Fabian one: **scout wide, strike narrow.** Investigate broadly (process and memory make you wide); deliver the single smallest correct thing (lean makes you narrow). The layers below split exactly along that line.
 
@@ -17,12 +17,12 @@ The organizing idea is the Fabian one: **scout wide, strike narrow.** Investigat
                                         │
    CORE       ───►  fabius-parcus — always-on lean core (runs under every layer)
                                         │
-      ┌──────────┬──────────┬──────────┼──────────┬──────────┬──────────┐
-      ▼          ▼          ▼          ▼          ▼          ▼          ▼
-  disciplina   decor      cohors    archivum   mercatus  praesidium   ludus
-  eng.       design +    agent      persistent go-to-     defensive   game
-  process    data-viz    eng.       memory     market     security    craft
-      └──────────┴──────────┴──────────┴──────────┴──────────┴──────────┘
+      ┌─────────┬─────────┬─────────┬───┴─────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
+      ▼         ▼         ▼         ▼         ▼         ▼         ▼         ▼         ▼         ▼
+ disciplina  decor     cohors   archivum  mercatus praesidium  ludus    catena   machina  scientia
+ eng.      design +   agent    persistent go-to-   defensive   game    on-chain  automa-  science
+ process   data-viz   eng.     memory     market   security    craft   + seal    tion     + bio
+      └─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┘
                                         │
                     ┌───────────────────────────────────────────────┐
    SPINE      ───►  │  references/ · CORPUS.md · evals/ · AGENTS.md  │
@@ -30,8 +30,8 @@ The organizing idea is the Fabian one: **scout wide, strike narrow.** Investigat
                     └───────────────────────────────────────────────┘
                                         │
                                         ▼
-   end to end: code · prose · UI + data-viz · agents · debug · memory
-               · marketing · defensive-security · games
+   end to end: code · prose · UI + data-viz · agents · debug · memory · marketing
+               · defensive-security · games · on-chain + provenance · automation · science
 ```
 
 - **`fabius`** — the router / super-skill (the *praetorium*). Reads the task, sets the working stance, and dispatches on three axes: which layer(s), how much machinery (the capability ladder), and which model tier. Owns the system-level kill-switch and the *scout-wide / strike-narrow* maxim.
@@ -43,10 +43,13 @@ The organizing idea is the Fabian one: **scout wide, strike narrow.** Investigat
 - **`fabius-mercatus`** — the go-to-market layer: positioning, message-to-awareness match, proof over adjectives, a one-action funnel, converting copy, the smallest-campaign launch loop.
 - **`fabius-praesidium`** — the defensive-security layer: STRIDE threat-modeling per trust boundary, the OWASP pass, secrets + least-privilege hygiene, and a severity→fix→proof finding contract. Hardens, never weaponizes.
 - **`fabius-ludus`** — the game-craft layer: the core loop first, deliberate game feel (juice), state as an explicit machine, the pixel-art lane, balance one knob at a time, jam-sized scope.
+- **`fabius-catena`** — the on-chain layer: account-validation-first smart-contract / program development (EVM + Solana), money-safe transaction flow, and the verifiable cryptographic-provenance *sealing* primitive (content hash → signature → Bitcoin-anchored timestamp → offline verification bundle, boring-cryptography only). Defensive; references `fabius-praesidium`'s threat model and `fabius-parcus`'s never-trim floor.
+- **`fabius-machina`** — the automation layer: deterministic service-to-service workflow glue (n8n-class) — discover-from-live-schema → build incrementally → validate AND verify → activate, plus the silent-failure gotcha discipline. Distinct from `fabius-cohors`: machina wires fixed steps, cohors orchestrates generative agents.
+- **`fabius-scientia`** — the scientific-research layer: the empirical method made executable (competing falsifiable hypotheses → experiment design → reproducible result), a unified scientific-database lookup with cross-identifier mapping, pipeline-as-router over field-standard tools, and the domain reproducibility checklist.
 
 ## Coordination contract — single owner, zero overlap
 
-Each rule has exactly one owning layer; every other layer references it instead of restating it. This is what keeps nine skills from contradicting each other:
+Each rule has exactly one owning layer; every other layer references it instead of restating it. This is what keeps twelve skills from contradicting each other:
 
 | Rule | Owner |
 |---|---|
@@ -57,6 +60,9 @@ Each rule has exactly one owning layer; every other layer references it instead 
 | Message + positioning + the funnel path + converting copy | `fabius-mercatus` |
 | Threat model, the audit, the finding contract (active security work) | `fabius-praesidium` |
 | The game loop, game feel, balance, the studio pipeline | `fabius-ludus` |
+| On-chain account validation + transaction safety + the provenance-sealing primitive | `fabius-catena` |
+| The automation build-and-verify discipline + the silent-failure catalog | `fabius-machina` |
+| The scientific method, the database-lookup contract, the reproducibility checklist | `fabius-scientia` |
 | Agent-shape catalog, wiki schema (the deep references) | `fabius-cohors` / `fabius-archivum` `references/` |
 
 `fabius-parcus` keeps the *never-trim* security floor (don't cut validation/security); `fabius-praesidium` owns the *active* security work (model the threat, name the check, prove it closed) and references that floor instead of restating it — single owner on each side of the line.
@@ -74,15 +80,18 @@ prompt → fabius (router)   ── dispatch: which layer(s) · how much machine
          ├─ build / orchestrate agents     → fabius-cohors     → references/agent-patterns.md · references/agents/ (catalog + fabius-vec.db)
          ├─ remember / knowledge base      → fabius-archivum   → references/memory-schema.md · references/knowledge/ (vector · wiki · rag)
          ├─ copy / launch / positioning    → fabius-mercatus   → references/marketing-playbook.md · corpus slot
-         ├─ secure / threat-model / audit  → fabius-praesidium → references/security-playbook.md · corpus slot
-         └─ game / loop / juice / playable → fabius-ludus      → references/game-playbook.md · corpus slot
+         ├─ secure / threat-model / audit  → fabius-praesidium → references/security-playbook.md · references/ai-review.md · corpus slot
+         ├─ game / loop / juice / playable → fabius-ludus      → references/game-playbook.md · corpus slot
+         ├─ on-chain / contract / seal     → fabius-catena     → references/onchain-playbook.md · references/sealing.md
+         ├─ automate / workflow / webhook  → fabius-machina    → references/automation-playbook.md
+         └─ science / bio / hypothesis     → fabius-scientia   → references/science-playbook.md
 ```
 
 Skills self-surface by their `description`; the router composes them. "Build a landing page" resolves to `fabius-disciplina` (brainstorm the spec) → `fabius-decor` (execute at quality), all under `fabius-parcus`. A vertical (a game, a launch, a security review) runs a studio: the domain skill leads, process plans, execution follows (routing-policy R13).
 
 ## The spine
 
-- **`references/`** — on-demand depth bundled per layer, loaded only when a layer needs it so the skills stay lean. Each specialist ships a lean entry doc **plus a full library**: `fabius-decor` → a 69-brand design teardown library (`references/design/`) + the figura visualization entry (`references/visualization.md`); `fabius-cohors` → a 200+-agent production catalog with a `fabius-vec.db` memory index (`references/agents/`); `fabius-archivum` → a knowledge engine, wiki pattern, and RAG pipeline (`references/knowledge/`); `fabius-disciplina` → the craft + discipline process library (`references/process/`); `fabius-mercatus` → a channel + swipe library (`references/channel-swipe-library.md`); `fabius-praesidium` → a hardening + audit library (`references/hardening-guides.md`); `fabius-ludus` → an engine + feel library (`references/engine-recipes.md`); `fabius-parcus` → the lean guidelines (`references/lean/`).
+- **`references/`** — on-demand depth bundled per layer, loaded only when a layer needs it so the skills stay lean. Each specialist ships a lean entry doc **plus a full library**: `fabius-decor` → a 69-brand design teardown library (`references/design/`) + the figura visualization entry (`references/visualization.md`); `fabius-cohors` → a 200+-agent production catalog with a `fabius-vec.db` memory index (`references/agents/`); `fabius-archivum` → a knowledge engine, wiki pattern, and RAG pipeline (`references/knowledge/`); `fabius-disciplina` → the craft + discipline process library (`references/process/`); `fabius-mercatus` → a channel + swipe library (`references/channel-swipe-library.md`); `fabius-praesidium` → a hardening + audit library (`references/hardening-guides.md`); `fabius-ludus` → an engine + feel library (`references/engine-recipes.md`); `fabius-catena` → the on-chain dev + sealing playbooks (`references/onchain-playbook.md` + `references/sealing.md`); `fabius-machina` → the automation build-and-verify playbook (`references/automation-playbook.md`); `fabius-scientia` → the scientific-method + database-lookup playbook (`references/science-playbook.md`); `fabius-parcus` → the lean guidelines (`references/lean/`).
 - **`CORPUS.md`** — the one fabius-branded index over every capability library; the brain holds the index and pages in only the matching slice (routing-policy M9 · R9 · M7).
 - **`evals/`** — a runnable, vendor-agnostic benchmark harness that scores a model with and without the fabius stance: `eval.mjs` (Anthropic/OpenAI), `portable_eval.py` (cross-vendor), a `harness.workflow.js` multi-agent variant, and the `results.json` they write on a run (gitignored — the measured numbers are recorded in [BENCHMARKS.md](BENCHMARKS.md)).
 - **`AGENTS.md`** — the cross-tool bridge. The stance, compiled to plain markdown, so Codex / Cursor / Windsurf / Cline / Copilot / OpenCode / Gemini all run fabius.
@@ -106,6 +115,10 @@ What an engineer (or an agent) can do end-to-end under fabius:
 | Market a thing | mercatus | positioning, converting copy, a one-action funnel, a tested launch |
 | Harden / audit (defensive) | praesidium | a STRIDE model, the OWASP pass, severity→fix→proof findings |
 | Build a small game | ludus | a fun core loop, deliberate juice, an explicit state machine, jam-sized scope |
+| Develop on-chain | catena | account-validation-first contracts/programs (EVM + Solana), money-safe transactions, the right toolchain |
+| Prove provenance (seal) | catena | a content-bound hash + signature + Bitcoin-anchored timestamp, verifiable offline by anyone, forever |
+| Wire an automation | machina | discover-from-live-schema → build incrementally → validate AND verify → activate, silent-failures caught |
+| Research scientifically | scientia | competing falsifiable hypotheses, source-grounded lookups, reproducible field-standard pipelines |
 | Talk lean | parcus | shorter output, full substance |
 | Never cut what matters | parcus (guardrail) | validation, security, a11y, data-loss handling preserved |
 

@@ -10,6 +10,10 @@ description: >
   reproducible-SVG path live in references/visualization.md (the fabius-figura corpus library); the
   full 69-brand teardown library (DESIGN-apple.md, DESIGN-stripe.md, DESIGN-linear.app.md …) plus the
   fabius-design, GSAP-animation, fabius-frames and fabius-uiux bundles live in references/design/.
+  Also covers generating images — prompt-craft for image models (references/generative-imagery.md) — and
+  explanatory diagrams / concept maps that teach a system (references/explanatory-diagrams.md). Use it too
+  when the user says "generate an image", "make a poster", "diagram this", "explain this codebase visually",
+  or "map the concepts".
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -53,6 +57,28 @@ A chart is a design artifact, not a different discipline — the same tokens and
 5. **Reproducible, tokenized SVG.** Prefer generated SVG from data over a screenshot — versionable, themeable, crisp. The repo's `assets/charts/` (`svgplot.py` · `render_figures.py`) is the numpy→SVG path; figures re-render from source, never hand-edited.
 
 Depth — chart-type decision table, the data-ink checklist, accessible color ramps, and the SVG recipes (the **fabius-figura** corpus library) → `references/visualization.md`, paged in on demand (R9 · M9). The diagram-as-code path (flowcharts, architecture) pairs with `fabius-disciplina`.
+
+## Explanatory diagrams — teach the system, don't just draw it
+
+A diagram that *explains* (a codebase, a domain, a flow) is a pedagogy problem, not a drawing one — and the method is repeatable:
+
+- **Extract deterministically, then add meaning.** Run a parser/structural pass first to get reproducible facts (the parts and their connections); have the model add *only* the semantic judgment on top (summaries, grouping, layering) — and forbid it from re-deriving facts the parser already produced. Cheaper, and it kills invented structure.
+- **Make the artifact a typed graph.** Enumerate a *small* set of node and edge types up front, give each a stable id convention, and weight the edges — a fixed vocabulary is what lets parts compose and stay consistent. (Keep the set small and domain-fit; don't import a 13-node/26-edge code-analysis taxonomy into a general concept map.)
+- **Order by topology, teach by narrative.** Rank importance by fan-in (widely-depended-upon → teach early), scope by fan-out, find the entry point, then walk outward (BFS) and map depth to step order — depth 0 is the overview, depth 1 the direct dependencies. The result is a guided tour that *tells the story the README tells, through the lens of the actual code*, not a flat node dump.
+
+Concept-map structuring method, the typed-graph schema pattern, and the topology-to-tour algorithm → `references/explanatory-diagrams.md`.
+
+## Generative imagery — prompt the image, don't wish for it
+
+Generating an image is a *design* act under the same restraint as everything else here — and an image prompt is a **structured slot fill**, not a freeform sentence:
+
+1. **Slots, not a sentence.** Fill ordered slots — subject → facial/detail → styling → expression → **lighting** → scene → technical/quality. Fill the required ones with intelligent defaults even when the user is silent; leave optional ones empty rather than padding noise.
+2. **Lighting is mandatory.** It is the single highest-leverage lever and the biggest amateur-vs-pro gap — always specify it (map "cinematic" → cinematic, neon/cyberpunk → neon, unspecified → natural). Never omit it.
+3. **Cascade from one signal.** A high-level cue should propagate: era/setting sets makeup *and* hair *and* wardrobe together — derive the coupled attributes instead of asking for each.
+4. **Run a conflict pass before emitting.** Check cultural, temporal, and biological consistency; on a clash, explain it, show the auto-correction, and let the user override. Keep *style* separate from *identity* — "anime" is a render technique, not an ethnicity; a style keyword must not silently overwrite an attribute slot.
+5. **Library + free-text.** Keep recombinable elements (lighting recipes, camera/lens, palettes) as a reusable set; let the model supply the open-set content it can't enumerate (named characters, specific materials); merge both into one coherent prompt. End on a completeness check: subject, lighting, explicit style, quality/technical tags.
+
+The slot schema, the lighting/era mapping tables, the conflict-resolution rules, and the structured-palette recipe → `references/generative-imagery.md`.
 
 ## Using a brand spec as a target
 

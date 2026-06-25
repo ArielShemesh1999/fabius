@@ -10,6 +10,7 @@ description: >
   for vulnerabilities", or "security review". Defensive only — it hardens, never weaponizes. The
   STRIDE template, the OWASP checklist, and the finding format live in references/security-playbook.md;
   the hardening guides and audit library live in references/hardening-guides.md, bundled and indexed by CORPUS.md, paged in on demand.
+  The AI-driven diff/PR review pass — the confidence gate, the do-not-report exclusion list, and the two-stage filter — lives in references/ai-review.md.
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -73,6 +74,19 @@ Every finding ships as a triple, never a vague warning:
 
 Severity sets order: critical/high first, and a critical at a trust boundary stops the ship. (Prove-before-done is `fabius-disciplina`; praesidium gives it the security-specific evidence.)
 
+## 7. The AI review pass — review the diff, flag only what's exploitable
+
+When the job is to **review a change** (a diff, a PR) rather than design a system, run an AI security pass — but the value is entirely in the *discipline that suppresses noise*, not in flagging everything:
+
+- **Stance:** a senior security engineer doing a *focused* review for **high-confidence, actually-exploitable** issues. Set the bar in the instructions, not after the fact.
+- **Confidence gate.** Report a finding only when you're confident it's *truly exploitable* (≈0.8+). A clear, named exploit pattern qualifies; "suspicious / conditional" does **not** — drop it. *Better to miss a theoretical issue than to flood the report and get ignored.*
+- **Every finding carries an exploit path.** If you can't write a plausible `exploit_scenario`, it isn't a finding — that field self-enforces the gate.
+- **A do-not-report list, not a vibe.** Hardcode the low-signal classes you'll suppress unless impact is proven: generic DoS / rate-limiting / resource-exhaustion, open redirects, input-validation with no shown impact, secrets merely stored on disk, theoretical races, memory-safety outside languages that can express it. These are *tunable per project*, not universally safe to ignore — say so.
+- **Two-stage filter (order matters for cost).** A cheap deterministic pre-filter (drop excluded classes, docs-only files) first; only then spend tokens on per-finding LLM adjudication.
+- **Scope narrow, read wide.** Analyze only the changed lines, but explore the surrounding repo for context — and flag where the new code *deviates* from the security pattern the codebase already uses.
+
+**Hard caveat:** an AI reviewer is **not** hardened against prompt injection. Run it only on **trusted** diffs; an untrusted external contribution can carry instructions in the diff itself. Gate external-PR review on maintainer approval. (Confidence threshold and model are point-in-time tuning, not laws — keep them configurable. Full method in `references/ai-review.md`.)
+
 ## When NOT to over-secure
 
 - **The threat-model sets the bar, not paranoia.** Don't add crypto, controls, or ceremony a real adversary model doesn't justify (`fabius-parcus`: does this control need to exist?) — but **never** drop below the never-trim floor to save effort.
@@ -83,5 +97,6 @@ Severity sets order: critical/high first, and a critical at a trust boundary sto
 
 - STRIDE-per-boundary template, the OWASP checklist as a runnable list, the secrets-hygiene checklist, and the severity→fix→proof format → `references/security-playbook.md`.
 - Hardening guides and the audit library → `references/hardening-guides.md`, bundled and indexed by [CORPUS.md](../../CORPUS.md); page in the one slice the task needs (R9 · M9). Defensive only — guides to harden and detect, never to attack.
+- The AI diff/PR review pass — the confidence gate, the do-not-report exclusion list, the two-stage filter, and the prompt-injection caveat → `references/ai-review.md`.
 
 Boundary: defensive only — no offensive tooling, ever. The never-trim security floor is `fabius-parcus`; the test discipline is `fabius-disciplina`; agent least-privilege is `fabius-cohors`. This layer owns the threat model and the audit. The user's instruction wins on everything except cutting a guardrail; `stop fabius` drops the stance.

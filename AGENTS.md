@@ -2,7 +2,7 @@
 
 This file is the portable form of the **fabius super-skill**. It is plain markdown, so it works in any agent that reads a standing-instructions file — Codex / OpenAI, Cursor, Windsurf, Cline, GitHub Copilot, OpenCode, Gemini CLI, or a raw system prompt. Copy it into your repo (or paste it into your tool's rules) and the agent operates end-to-end under fabius.
 
-> For Claude Code, install the full plugin instead (`/plugin install fabius`) — you get the nine skills with progressive disclosure. This file is the lite, universal bridge.
+> For Claude Code, install the full plugin instead (`/plugin install fabius`) — you get the twelve skills with progressive disclosure. This file is the lite, universal bridge.
 
 ---
 
@@ -29,16 +29,25 @@ One accent color; design tokens, never inline hex; hierarchy from type, not boxe
 Precise description + tight tool allowlist + explicit output contract + least privilege. One agent unless the work truly splits; then sequential / parallel / hierarchical / human-in-the-loop.
 
 ### Persistent memory
-Don't re-derive. Write what you learn into interlinked notes with an index + a log; retrieve from them before redoing the work.
+Don't re-derive. Write what you learn into interlinked notes with an index + a log; retrieve from them before redoing the work. Make recall *automatic*: capture (non-blocking) → compress into a typed+titled record → re-inject a compact index at the next session's start, full detail on demand (progressive disclosure). When an answer must be source-true, ask an authoritative external corpus that answers only from its sources — keep a source registry, and loop "ask → diff against the request → re-query the gaps" until complete, then synthesize.
 
 ### Marketing
 Position before you write: for [who] who [need], [product] is the [category] that [outcome]; unlike [alt], it [difference]. Match the message to the reader's awareness level. Proof over adjectives — a number/demo/quote, not "fast"/"easy". One next-step per surface; delete competing CTAs. The headline carries most of it; specific beats clever. Ship the smallest campaign that tests the claim, measure one metric, iterate.
 
 ### Defensive security
-Hardens, never weaponizes. Threat-model first (STRIDE per trust boundary: spoof/tamper/repudiate/info-leak/DoS/elevation). Run the OWASP pass — verify present, don't assume: parameterized queries, server-side authorization on every request, sessions that expire, no SSRF, no secrets in code/logs/history/bundle, audited+pinned deps, output encoded, errors that don't leak. Least privilege on every token. Every finding ships as `severity → fix → regression-test`. Don't over-secure past the threat model; never roll your own crypto/auth; never drop below the never-trim floor.
+Hardens, never weaponizes. Threat-model first (STRIDE per trust boundary: spoof/tamper/repudiate/info-leak/DoS/elevation). Run the OWASP pass — verify present, don't assume: parameterized queries, server-side authorization on every request, sessions that expire, no SSRF, no secrets in code/logs/history/bundle, audited+pinned deps, output encoded, errors that don't leak. Least privilege on every token. Every finding ships as `severity → fix → regression-test`. Don't over-secure past the threat model; never roll your own crypto/auth; never drop below the never-trim floor. Reviewing a diff/PR: flag only high-confidence, *actually-exploitable* findings — each must carry an exploit path; suppress low-signal classes (generic DoS, open redirect, theoretical races); cheap deterministic filter first, then LLM adjudication. An AI reviewer is not prompt-injection-hardened — run it only on trusted diffs.
 
 ### Game craft
 The loop is the game. Find the ~10s core loop (act → feedback → reward → again) and make it fun with grey boxes before any art. Add juice deliberately — response on every input, hit-stop, sparing shake, easing, particles on the verbs done most. Model state as an explicit machine, not boolean soup. Hold the pixel lane (one palette, integer scale, snap to grid). Balance one knob at a time. Use the engine; don't hand-roll it. Scope to a jam-sized cut — one mechanic done well.
+
+### On-chain & sealing
+On-chain code is account-validation-first: assume the adversary controls every account, argument, ordering, and the call graph; check owner/signer/CPI-target/reinit/PDA-sharing/type/duplicate/revival on every program. Money-safety is non-negotiable — never sign or send without surfacing recipient/amount/token/fee-payer/network, default to a testnet, simulate before signing, never touch a private key, treat on-chain data as untrusted. Match the toolchain end-to-end and commit the lockfile. To prove provenance, *seal*: a content-bound hash + an EUF-CMA signature + a Bitcoin-anchored timestamp + a self-contained offline verification bundle — boring cryptography only, renew on a schedule. Rely on the signature, never on a coin.
+
+### Automation (workflows)
+Deterministic service-to-service glue (not agent orchestration). Discover each node from its *live* schema, never memory; build incrementally with surgical edits, not one-shot regenerates; validate AND verify the connections (validation passing ≠ workflow correct); test on sample data (writes write, messages send) before activating. Keep a silent-failure catalog for your platform (payload nesting, return-shape, credential placeholders, ID format, loop wiring, default success codes). Idempotent, with explicit error paths; secrets in env.
+
+### Science (method)
+Empirical method, executable: clarify → literature → 3–5 *competing* falsifiable hypotheses → score (testability/parsimony/explanatory-power) → experiment design with controls → quantitative predictions → report. Ground every fact in an authoritative database (primary + validation source; count-first then paginate; return provenance); know the cross-ID maps (gene→NCBI→Ensembl/UniProt; compound→PubChem→ChEMBL). Pipelines are routers over field-standard tools (prefer the audited standard). Probe hardware before choosing tools. Honor the reproducibility gotchas (raw counts not TPM, ≥3 replicates, batch confounding, species case, pinned versions). Provenance over a confident guess.
 
 ### Pick the model tier
 Spend the cheapest model that holds per sub-task; reserve the strong tier for ambiguity, architecture, security, and irreversible calls. Escalate a tier on a verifiable miss, not a hunch.

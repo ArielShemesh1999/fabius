@@ -9,7 +9,8 @@ description: >
   test anti-patterns live in references/process-playbook.md; the full process library — the craft
   skills (brainstorm, prototype, TDD, grill, handoff, writing) and the discipline skills
   (systematic-debugging, writing-plans, verification-before-completion, parallel agents) — lives in
-  references/process/.
+  references/process/. The on-device prove loop for a UI app — build + assert state on a simulator,
+  semantic-tree-first and token-cheap — lives in references/simulator-verify.md.
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -78,6 +79,13 @@ A claim of success needs evidence. Before reporting complete:
 - Skipped a step? say so. Tests failing? show the output. Report outcomes faithfully.
 
 "Almost works" and a code-only answer don't count. Hit the real path and watch it.
+
+For a **UI app**, "hit the real path" means **run it on a device/simulator and assert the state** — the same prove rule `fabius-decor` ends on (verify live, not just in the code). Do it the cheap, robust way:
+
+- **Assert via the semantic tree, not pixels.** Query the live UI by *meaning* (text / type / id) to check it reached the expected state — orders of magnitude cheaper than a screenshot and resilient to layout change. Reserve screenshots for visual-diff and bug reports.
+- **Progressive-disclosure build output.** Don't dump the full build log — return a summary line + a result-bundle id, and fetch specific errors on demand. Cap and size everything you send the model.
+- **The loop:** health-check the environment → build + test → boot/launch → assert state via the tree → screenshot only for visual confirmation → capture the full state (screenshot + hierarchy + logs) on failure.
+- **Prove with a number where you can.** A before/after task-success rate beats "it built." (iOS `simctl`/`xcodebuild` workflow, the troubleshooting table, and the test recipes → `references/simulator-verify.md`.)
 
 The full process library — craft skills (brainstorm, prototype, TDD, grill, handoff, writing) and discipline skills (systematic-debugging, writing-plans, verification-before-completion, parallel agents) — is in `references/process/`; the worked debug walkthrough and test anti-patterns in `references/process-playbook.md`.
 
