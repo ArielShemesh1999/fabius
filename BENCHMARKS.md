@@ -40,7 +40,7 @@ same tasks, output length:   31–52 % SHORTER than baseline — and the blind j
 
 The point isn't "fabius is shorter" (so is TERSE). It's that fabius is shorter **and** wins the quality score — the one move plain brevity can't make.
 
-### 1 — In-repo eval, 3 Claude tiers (`evals/harness.workflow.js`, run v2, 2026-06-20)
+### 1 — In-repo eval, 3 Claude tiers (`evals/harness.workflow.js`)
 
 8 tasks × 3 arms, blind judge (`claude-opus-4-8`). Total out of 15:
 
@@ -69,7 +69,7 @@ The pattern repeats on all four families: **large lift on trust/order/build, ~ze
 
 > **Gemini** is the runnable fifth family — `python evals/portable_eval.py --models gemini` with `GEMINI_API_KEY` set produces a real `gemini-2.5-pro` row on the same three arms. It is left out of the table above rather than estimated: this doc commits no number it didn't measure. Drop the measured row in here once the run exists.
 
-### 3 — Landing-page build, stance vs full mechanism (Mundial 2026, 2026-06-22)
+### 3 — Landing-page build, stance vs full mechanism
 
 Three live builds of the same brief — **T1** fabius stance only · **T2** no fabius · **T3** fabius + all six skills.
 
@@ -83,7 +83,7 @@ Three live builds of the same brief — **T1** fabius stance only · **T2** no f
 
 The reading: the bare stance maximizes **design polish** (T1 wins on the judge's eye); the full six-skill mechanism shifts toward **lean + functional** — T3 shipped 40% less code *and the only working form*. They optimize different things, and **this is the live proof the mechanism fires on its own** (see "what this does / doesn't test" below).
 
-### 4 — Twelve-skill coverage: every specialist domain (`evals/harness.v3.workflow.js`, 2026-06-25)
+### 4 — Twelve-skill coverage: every specialist domain (`evals/harness.v3.workflow.js`)
 
 The run that closes the gap Run 3's version-note named. **13 tasks, one per specialist domain** — the YAGNI traps, correctness, security, a11y, agents, design, **on-chain (catena)**, **automation (machina)**, **science (scientia)**, marketing, game — × the same three arms, generated on two tiers, **judged blind by `claude-opus-4-8`** (156 agents total). Here the `fabius` arm injects the shipped stance **plus the relevant specialist's operative contract** for each domain task — so this measures the routed *twelve-skill mechanism*, not the stance alone.
 

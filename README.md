@@ -59,17 +59,19 @@ Same model, one concentrated set of operating rules. The stance changes the *sha
 
 Across four model families — Grok, Mistral, GPT, Claude — the pattern holds: the advantage is largest at trust, ordering, and genuine-build boundaries, and near zero on pure over-engineering traps. Shorter answers that the blind judge scores *higher*.
 
-**Every specialist domain, measured.** A second blind run ([Run 4](BENCHMARKS.md), 2026-06-25) puts one task through *each* of the ten specialists — including the on-chain, automation, and science verticals — with the router injecting the relevant skill. fabius is the **only arm that beats both the bare baseline and the "be concise" control on both tiers**, ≥ baseline in all 11 domains, while cutting output ~40%. The biggest lifts land exactly where they should — the technical verticals:
+**Every specialist domain, measured.** A second blind run puts one task through *each* of the ten specialists — including the on-chain, automation, and science verticals — with the router injecting the relevant skill. fabius is the **only arm that beats both the bare model and a "be concise" control on both tiers**, scoring at or above the bare model in all 11 domains while cutting output ~40%. How much the output quality improves, blind score out of 15 (bare model → under fabius):
 
-| Domain (skill) | fabius − "be concise" | fabius − baseline |
-|---|:---:|:---:|
-| Science · RNA-seq (`scientia`) | **+4.0** | **+4.5** |
-| Automation · webhook (`machina`) | **+3.5** | +1.5 |
-| On-chain · SPL balance (`catena`) | +1.0 | +1.5 |
-| Design · security · a11y · game | +0.5 … +1.0 | +1.5 … +3.0 |
-| Pure-YAGNI trap | −1.75 (by design) | +0.25 |
+| Domain (skill) | bare model | under fabius | quality gain |
+|---|:---:|:---:|:---:|
+| Science · RNA-seq (`scientia`) | 10.5 | **15.0** | **+4.5** |
+| Game · core loop (`ludus`) | 10.0 | 13.0 | +3.0 |
+| On-chain · token balance (`catena`) | 11.5 | 13.0 | +1.5 |
+| Automation · webhook (`machina`) | 12.5 | 14.0 | +1.5 |
+| Design · UI (`decor`) | 13.5 | **15.0** | +1.5 |
+| Security · auth / upload (`praesidium`) | 13.5 | 14.5 | +1.0 |
+| **Overall · all domains** | **12.7** | **13.9** | **+1.2** |
 
-Sharpest cell: the RNA-seq task on Haiku — baseline **7**, "be concise" **8**, **fabius 15** — the multiple-testing-correction the controls dropped. **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — twelve single-owner contracts, every reference live, the content-bound seal verifiable — **17/17**.
+Sharpest case: the RNA-seq task — bare model **7/15**, **fabius 15/15** — the multiple-testing-correction the bare model dropped. **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — twelve single-owner contracts, every reference live, the content-bound seal verifiable — **17/17**.
 
 > The claim the data supports: **structure beats brevity, and the advantage grows as the model's default discipline drops.** Not "smarter," not "10× on everything" — a scope-control system that knows when to compress and when to expand. Method, mechanism, and caveats: **[BENCHMARKS.md](BENCHMARKS.md)**.
 
