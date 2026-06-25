@@ -107,4 +107,6 @@ The memory rules from the routing policy (MemGPT, Voyager, the memory surveys; f
 - **Promote verified solutions to skills (M6).** After a self-contained sub-problem is solved *and verified*, file it as a named reusable skill page; query archivum and compose existing skills before planning from scratch; supersede, don't duplicate. Failures leave an anti-pattern note. *(Voyager)*
 - **Tie-break by recency + load-bearingness (M8).** When index entries tie on relevance, surface the freshest decision-bearing pages first; fold a grown batch of log lines up into a synthesis page. *(Generative Agents, analogy)*
 
+**Live tier (optional).** The markdown index + log + grep needs nothing; auto-recall uses Claude Code lifecycle hooks, and an external-corpus connector is provider-agnostic (NotebookLM / `notebooklm-mcp` / a vector store) — you configure it. fabius bundles the *pattern*, not the service — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
+
 Pairs with: `fabius-disciplina` (resolved facts and post-mortems get filed here), `fabius-cohors` (grounding and cross-session memory for agents), `fabius-parcus` (don't build the heavy retrieval engine before the corpus demands it).

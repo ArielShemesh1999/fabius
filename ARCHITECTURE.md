@@ -97,6 +97,20 @@ Skills self-surface by their `description`; the router composes them. "Build a l
 - **`AGENTS.md`** — the cross-tool bridge. The stance, compiled to plain markdown, so Codex / Cursor / Windsurf / Cline / Copilot / OpenCode / Gemini all run fabius.
 - **Decision policy** — the `fabius` router carries `references/routing-policy.md` (the proven core R1–R10 / M1–M8, plus the operational extensions R11–R13 / M9, each sourced honestly to the agent-research canon — ReAct, Toolformer, Tree of Thoughts, RAP, Reflexion, MemGPT, DSPy, Voyager, the efficiency and memory surveys…), `references/agent-research.md` (the knowledge base + the source-mapped canon table), and `references/failures.md` (a Reflexion-style lesson log that grows from real incidents). The reasoning, the math, and the direct-vs-analogy honesty ledger are in [RESEARCH.md](RESEARCH.md).
 
+## External connections — the optional live tier
+
+fabius is plain-markdown skills: it bundles **no runtime and no MCP server**, and requires **no external service to install**. Most capabilities are pure knowledge contracts that produce code, prose, or a plan. A few have an **optional live tier** — to *run* the capability against a real system you configure an MCP server or an API the skill names. fabius encodes the *pattern*, never the dependency, and the never-build-it-until-you-need-it gate (`fabius-parcus`) governs whether you stand it up at all.
+
+| Capability | Optional live tier — *you* configure it | Works without it |
+|---|---|---|
+| `fabius-machina` | the **`n8n-mcp`** MCP server + `N8N_API_URL` / `N8N_API_KEY` (or the per-platform equivalent) | design, discovery, and validation need no API |
+| `fabius-catena` (on-chain) | an **RPC endpoint** (EVM: Infura / Alchemy / public; Solana: a cluster) + an optional **Solana MCP** | writing/reviewing contracts offline; one-shot reads via `curl` to any RPC |
+| `fabius-catena` (sealing) | **OpenTimestamps → Bitcoin** for the anchor | hashing, signing, and verification run fully offline/local |
+| `fabius-archivum` | Claude Code lifecycle **hooks** (auto-recall) and an external-corpus connector (**NotebookLM** / `notebooklm-mcp` / a vector store) | the markdown index + log + grep needs nothing |
+| `fabius-scientia` | external scientific-DB **REST APIs** (NCBI / Ensembl / PubChem …) + keys / rate-limits | the method, scoring, and pipeline structure are pure |
+
+The other seven skills (`parcus`, `disciplina`, `decor`, `cohors`, `mercatus`, `praesidium`, `ludus`) need no external connection at all. Nothing here is bundled; each live tier is the user's to wire — the same lean rule everywhere: **hold the pattern, add the runtime only when the task demands it.**
+
 ## Capability matrix
 
 What an engineer (or an agent) can do end-to-end under fabius:

@@ -135,7 +135,7 @@ A one-shot read is not a project. A balance / transaction / token-account lookup
 | Program + IDL | **Anchor** > Pinocchio unless CU / size pressure forces manual `no_std` |
 | IDL → client | **Codama** |
 | Testing | LiteSVM / Mollusk (unit) → Surfpool (forked integration) |
-| Infra | RPC provider + the right cluster |
+| Infra | RPC provider + the right cluster — **user-supplied; no default is bundled** (EVM: Infura / Alchemy / public; Solana: a cluster endpoint, + optional Solana MCP) |
 
 Reach for the full kit only when you're actually *building*.
 

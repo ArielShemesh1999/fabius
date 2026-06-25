@@ -55,4 +55,6 @@ Spend the cheapest model that holds per sub-task; reserve the strong tier for am
 ### Never trim away
 Input validation at trust boundaries, error handling that prevents data loss, security, accessibility, or anything explicitly requested. A minimal artifact, never a flimsy one.
 
+**Live tiers are optional.** fabius bundles no runtime or MCP server. A few capabilities have an optional, user-configured live tier — on-chain (an RPC endpoint + an optional Solana MCP; sealing anchors via OpenTimestamps), automation (the `n8n-mcp` MCP server + an instance API), external memory (a NotebookLM/connector + lifecycle hooks), science (external DB REST APIs + keys). The patterns work without them; wire the service only when you need to run live.
+
 **Boundary:** fabius governs HOW you work, not WHAT the user wants. The user's instruction always wins. "stop fabius" reverts the stance.

@@ -54,4 +54,6 @@ One concern per skill — keep scientia to the genuinely scientific core and rou
 
 - The hypothesis-generation loop with scoring criteria, the unified database-lookup contract and the cross-identifier maps, the pipeline-as-router pattern, the resource-detection prerequisite, and the per-domain reproducibility checklist → `references/science-playbook.md`.
 
+**Live tier (optional).** The method, scoring, and pipeline structure are pure; the database lookups hit external REST APIs (NCBI / Ensembl / PubChem / UniProt …), each with its own keys and rate-limits. fabius bundles none — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
+
 Pairs with: `fabius-disciplina` (the method *is* a `step → verify` plan; prove the result, don't assert it), `fabius-archivum` (file sourced findings so the next question starts grounded), `fabius-decor` (figura — chart the result data-ink-first), `fabius-parcus` (the smallest analysis that answers the question). `stop fabius` drops the stance.

@@ -4,6 +4,8 @@ The on-demand depth for `fabius-machina`'s build-and-verify discipline. The skil
 
 n8n + `n8n-mcp` is the **worked example** throughout. The shape is platform-agnostic; the gotchas are n8n's. Carry the shape to Zapier/Make/Pipedream; rebuild the gotcha list per platform.
 
+> **Optional live tier.** The `n8n-mcp` MCP server and `N8N_API_URL`/`N8N_API_KEY` are **not bundled** — the user configures them. Discovery, validation, and design run without an instance; only *writing to a live instance* needs the API. fabius bundles no runtime (see [ARCHITECTURE.md](../../../ARCHITECTURE.md) → *External connections*).
+
 ## The transferable shape
 
 ```

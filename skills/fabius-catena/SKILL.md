@@ -61,4 +61,6 @@ Two standing rules from the research: **boring cryptography only** (collision-re
 - On-chain development — the account-validation checklist (Anchor + Pinocchio + Solidity), money-safe transaction flow, the EVM-vs-Solana fork, the testing pyramid, and the toolchain/error corpus → `references/onchain-playbook.md`.
 - The sealing primitive — hash → sign → anchor → verify, the verification-bundle schema, confidential sealing, and crypto-agile renewal → `references/sealing.md`.
 
+**Live tier (optional).** Writing and reviewing contracts, and sealing's hash → sign → **verify**, run fully local; *running against a chain* needs an RPC endpoint (EVM: Infura / Alchemy / a public RPC; Solana: a cluster + an optional Solana MCP), and the seal's Bitcoin anchor uses OpenTimestamps. fabius bundles none of these — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
+
 Pairs with: `fabius-praesidium` (threat model + the never-weaponize boundary), `fabius-disciplina` (test-first contracts — a contract bug is unrecoverable, so prove before deploy), `fabius-parcus` (the smallest contract that holds; don't roll your own crypto — use the vetted primitive). Defensive only; `stop fabius` drops the stance.

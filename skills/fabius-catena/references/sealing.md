@@ -22,6 +22,8 @@ seal(artifact) = { exactHash, signature, timestampProof, bundle }
 
 Verification is free and runs anywhere: recompute `H(artifact)`, check it equals `exactHash`, verify the signature against the pinned key, and confirm the timestamp proof against the chain.
 
+**What needs an external service.** Hashing, signing, and verification are **local** — no network, no account. Only the timestamp *anchor* reaches an external service (an **OpenTimestamps** calendar → Bitcoin); it is the one optional live-tier dependency, and even an un-anchored seal still binds content and authorship. fabius bundles none of it (see [the catena skill](../SKILL.md) and [ARCHITECTURE.md](../../../ARCHITECTURE.md) → *External connections*).
+
 ## The five rules of the trust core
 
 The deepest commitment, drawn from the cryptographic-failure record (BCTV14's undetectable counterfeit, "Frozen Heart", even Bitcoin's own CVE-2018-17144): **the trust core must be boring.**

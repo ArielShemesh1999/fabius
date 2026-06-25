@@ -54,7 +54,7 @@ Resolve to a stable accession early, carry it through the pipeline, and log ever
 
 ## 4. Per-API operational facts (data — re-verify, point-in-time)
 
-Capture these as DATA, not lore; APIs drift.
+Every database lookup hits an **external REST API** the user configures (base URL, key, rate-limit) — none is bundled with fabius. Capture these as DATA, not lore; APIs drift.
 
 | Fact | Databases | Consequence |
 |---|---|---|
