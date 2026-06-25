@@ -5,7 +5,8 @@ The real measurement behind [`../BENCHMARKS.md`](../BENCHMARKS.md). No estimated
 | File | What it is |
 |---|---|
 | `structural.mjs` | **Deterministic** structural suite — no model, no key, no network. Proves the *system* is well-formed: fourteen single-owner contracts, every `SKILL.md` under budget, every reference live, the content-bound seal verifiable. 17/17 must pass. `node evals/structural.mjs` |
-| `harness.v3.workflow.js` | Claude-Code harness for **Run 4** — 13 tasks (one per specialist domain, incl. the on-chain / automation / science verticals) × 3 arms × 2 tiers, blind Opus judge. The `fabius` arm injects the stance **+ the relevant specialist contract**. This is the specialist-domain behavioral proof (the two later verticals — doctrina, fortuna — not yet exercised). |
+| `harness.v3.workflow.js` | Claude-Code harness for **Run 4** — 13 tasks (one per specialist domain, incl. the on-chain / automation / science verticals) × 3 arms × 2 tiers, blind Opus judge. The `fabius` arm injects the stance **+ the relevant specialist contract**. This is the specialist-domain behavioral proof. |
+| `harness.v3-ext.workflow.js` | **Run 4 extension** — same method, the two later verticals `doctrina` (ML eval) + `fortuna` (trading backtest). Markets +2.0, ML eval +0.5 vs baseline; now every fourteen-skill domain is exercised. |
 | `results.v3.json` | The published Run 4 receipt — per-cell scores, length, per-domain deltas. Committed (the one raw receipt that ships). |
 | `harness.workflow.js` | Earlier Claude-Code harness (Run 1). 3 Claude tiers × 3 arms × 8 tasks, blind Opus judge. |
 | `eval.mjs` | Node harness — clean **no-system-prompt** API baseline (the strictest baseline). `--selftest` checks wiring with no key. |

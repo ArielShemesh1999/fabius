@@ -44,12 +44,19 @@
     "automation": { "baseline": 12.5, "terse": 10.5, "fabius": 14.0,  "fab_minus_terse": 3.5,   "fab_minus_base": 1.5,  "spec": "machina (NEW)" },
     "science":    { "baseline": 10.5, "terse": 11.0, "fabius": 15.0,  "fab_minus_terse": 4.0,   "fab_minus_base": 4.5,  "spec": "scientia (NEW)" },
     "marketing":  { "baseline": 13.5, "terse": 14.5, "fabius": 14.0,  "fab_minus_terse": -0.5,  "fab_minus_base": 0.5,  "spec": "mercatus" },
-    "game":       { "baseline": 10.0, "terse": 13.5, "fabius": 13.0,  "fab_minus_terse": -0.5,  "fab_minus_base": 3.0,  "spec": "ludus" }
+    "game":       { "baseline": 10.0, "terse": 13.5, "fabius": 13.0,  "fab_minus_terse": -0.5,  "fab_minus_base": 3.0,  "spec": "ludus" },
+    "ml":         { "baseline": 10.5, "terse": 10.5, "fabius": 11.0,  "fab_minus_terse": 0.5,   "fab_minus_base": 0.5,  "spec": "doctrina (NEW)",  "run": "extension 2026-06-25", "chars_base": 13602, "chars_fabius": 6263 },
+    "markets":    { "baseline": 10.5, "terse": 9.5,  "fabius": 12.5,  "fab_minus_terse": 3.0,   "fab_minus_base": 2.0,  "spec": "fortuna (NEW)",   "run": "extension 2026-06-25", "chars_base": 4347,  "chars_fabius": 2617 }
+  },
+  "extension": {
+    "note": "Run 4 was extended (evals/harness.v3-ext.workflow.js, same method — baseline/terse/fabius x sonnet+haiku, blind opus judge) to cover the two verticals added after the original run: fabius-doctrina (AI/ML engineering) and fabius-fortuna (markets & finance). All fourteen skills' specialist domains are now exercised.",
+    "ml_doctrina":   { "task": "decide if a fine-tuned model beats the base model and is shippable", "baseline": 10.5, "terse": 10.5, "fabius": 11.0, "per_tier": { "sonnet": "13/13/14", "haiku": "8/8/8" }, "output_cut_vs_baseline_pct": 54, "reading": "modest lift (+0.5 vs both) — ML evaluation is well-known territory, so the bare model already holds; fabius still wins on sonnet and is ~54% shorter." },
+    "markets_fortuna": { "task": "backtest a moving-average crossover and decide whether to trade it", "baseline": 10.5, "terse": 9.5, "fabius": 12.5, "per_tier": { "sonnet": "13/12/15", "haiku": "8/7/10" }, "output_cut_vs_baseline_pct": 40, "reading": "strong, consistent lift (+3.0 vs terse, +2.0 vs baseline on both tiers; sonnet fabius = perfect 15) — the controls overfit the in-sample backtest, skipped costs, and gave a flat 'yes trade it'; fortuna forced out-of-sample + costs + risk + analysis-not-advice." }
   },
   "highlights": [
     "fabius is the only arm that beats BOTH the bare baseline AND the 'be concise' control on BOTH tiers, while cutting output 31-51%.",
-    "The three new verticals show the largest lifts: science +4.5, automation +3.5 (vs terse), on-chain +1.5 vs baseline — the new specialists fire, not just the stance.",
-    "Sharpest single result: the RNA-seq task on haiku — baseline 7, 'be concise' 8, fabius 15 — the multiple-testing-correction guardrail the controls dropped.",
-    "Pure-YAGNI is the one place plain brevity matches or beats fabius (-1.75 vs terse) — by design: over-building adds nothing, so there's no scope to control."
+    "The new verticals show the largest lifts where a domain guardrail gets dropped: science +4.5, automation +3.5 (vs terse), markets +3.0 (vs terse), on-chain +1.5 vs baseline — the specialists fire, not just the stance.",
+    "Sharpest single result: the RNA-seq task on haiku — baseline 7, 'be concise' 8, fabius 15 — the multiple-testing-correction guardrail the controls dropped. The backtest task (sonnet) is the mirror image: fabius 15 vs control 12, by forcing out-of-sample validation + costs + 'analysis not advice'.",
+    "Where the bare model already knows the practice (ML evaluation), the lift is small (+0.5) but fabius still wins and runs ~54% shorter. Pure-YAGNI is the one place plain brevity beats fabius (-1.75 vs terse) — by design."
   ]
 }

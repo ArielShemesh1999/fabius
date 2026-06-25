@@ -24,7 +24,7 @@ The length numbers are bias-free (a character count can't be flattered). The qua
 
 ## Measured results
 
-Four runs, four different lenses, plus a deterministic structural suite. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.** Run 4 is the one that exercises the **specialist surface** — one task per specialist domain as it stood, including the on-chain / automation / science verticals — so the proof reaches the technical verticals, not just the lean stance. (The two specialists added since, `fabius-doctrina` and `fabius-fortuna`, are not yet exercised — see the note under Run 4.)
+Four runs, four different lenses, plus a deterministic structural suite. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.** Run 4 is the one that exercises the **specialist surface** — one task per specialist domain as it stood, including the on-chain / automation / science verticals — so the proof reaches the technical verticals, not just the lean stance. (The two specialists added since, `fabius-doctrina` and `fabius-fortuna`, were then measured in the Run 4 **extension** below — every fourteen-skill domain is now exercised.)
 
 ### The margin, at a glance
 
@@ -101,10 +101,12 @@ The lift concentrates exactly where the thesis predicts — the technical vertic
 
 ```
 science  (scientia)    +4.5 vs base  ████████████████████  ← largest — multiple-testing-correction trap
-game     (ludus)       +3.0 vs base  █████████████
 automation (machina)   +3.5 vs terse █████████████████     ← idempotency / auth / retry the controls dropped
+game     (ludus)       +3.0 vs base  █████████████
+markets  (fortuna)     +3.0 vs terse █████████████         ← out-of-sample + costs + "not advice" (extension)
 on-chain (catena)      +1.5 vs base  ██████                 ← SPL owner/mint validation, money-safety
 design · security · a11y · agents    +0.5…+1.5
+ML eval  (doctrina)    +0.5 vs both  ██                     ← bare model already holds; +0.5 and ~54% shorter (extension)
 YAGNI (pure)           −1.75 vs terse ▓▓                     ← brevity matches/beats, by design
 ```
 
@@ -129,7 +131,16 @@ Separate from "does the stance help," a deterministic suite proves the *system* 
 
 **17/17 pass.** This is the structural complement to the behavioral runs: Runs 1–4 measure that fabius *acts* better; the structural suite proves it is *built* right — single-owner, under budget, every reference live, and the seal verifiable.
 
-> Two specialists were added after Run 4 and are **not** exercised by it — `fabius-doctrina` (AI/ML engineering) and `fabius-fortuna` (markets & finance). Re-run `evals/harness.v3.workflow.js` with a serving/eval/MLOps task and a valuation/backtest task to extend the table. The structural suite already covers both (they are two of the fourteen contracts above).
+#### Extension — the two later verticals (`evals/harness.v3-ext.workflow.js`)
+
+The two specialists added after the original run — `fabius-doctrina` (AI/ML engineering) and `fabius-fortuna` (markets & finance) — were measured in a follow-up with the **same method** (baseline / terse / fabius × sonnet + haiku, blind `claude-opus-4-8` judge). Every fourteen-skill specialist domain is now exercised. Totals out of 15 (n = 2 tiers):
+
+| Domain (skill) | task | baseline | terse | **fabius** | output cut |
+|---|---|---|---|---|---|
+| Markets (`fortuna`) | backtest a strategy, decide whether to trade | 10.5 | 9.5 | **12.5** | −40% |
+| ML eval (`doctrina`) | decide if a fine-tune beats the base model, ship? | 10.5 | 10.5 | **11.0** | −54% |
+
+**Markets is the mirror image of the science result** — fabius **+3.0 vs the "be concise" control**, +2.0 vs baseline on both tiers, the sonnet build a perfect **15/15**. The controls overfit the in-sample backtest, ignored transaction costs, and answered the loaded question with a flat *"yes, trade it"*; `fortuna` forced out-of-sample validation, costs/slippage, risk sizing, and the bright line — *analysis, not advice*. **ML eval is the honest small-lift case**: model evaluation is well-trodden ground, so the bare model already holds — fabius wins by only +0.5, but still wins (sonnet +1, haiku tie) **and runs ~54% shorter**. The pattern holds: the lift is largest where a domain drops a guardrail, smallest where the default already knows the move.
 
 ---
 
@@ -177,8 +188,9 @@ OPENAI_API_KEY=...     node evals/eval.mjs --provider openai --model gpt-4o
 # cross-vendor (OpenAI / Mistral / Anthropic / Gemini) — your keys
 GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini
 
-# the every-domain run (Run 4), inside Claude Code:
+# the every-domain run (Run 4) + its two-vertical extension, inside Claude Code:
 #   Workflow({ scriptPath: "evals/harness.v3.workflow.js" })
+#   Workflow({ scriptPath: "evals/harness.v3-ext.workflow.js" })   # doctrina + fortuna
 ```
 
 The `fabius` arm injects the **actual** shipped `AGENTS.md` (and, in Run 4, the relevant specialist contract), so you benchmark the real stance, not a paraphrase. `eval.mjs` writes `evals/results.json`; the published Run 4 receipt is [`evals/results.v3.json`](evals/results.v3.json). Swap `--model` / `--judge` to benchmark anything; add tasks in the `TASKS` array.
