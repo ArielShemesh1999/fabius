@@ -1,7 +1,7 @@
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 # Fabius Corpus — the indexed body
 
-One fabius-branded index over **every** capability library. The brain (the `fabius` router) holds this index, never the bulk: on a task it queries the index → pages in the one matching slice → strikes narrow (routing-policy **M9 · R9 · M7**). Every library is fabius-named and reached through the same `fabius-vec` retrieval. The research fabius drew on and the inspiration behind each library are recorded in [credits/](credits/README.md).
+One fabius-branded index over **every** capability library in the fourteen-skill system. The brain (the `fabius` router) holds this index, never the bulk: on a task it queries the index → pages in the one matching slice → strikes narrow (routing-policy **M9 · R9 · M7**). Every library is fabius-named and reached through the same `fabius-vec` retrieval. The research fabius drew on and the inspiration behind each library are recorded in [credits/](credits/README.md).
 
 ---
 
@@ -33,6 +33,6 @@ One fabius-branded index over **every** capability library. The brain (the `fabi
 
 ## Externalization (M9) — the packaging direction
 
-The standing rule (routing-policy **M9**): the brain should hold the **index**, not the library. As a library grows past a lean entry doc, its bulk moves **out** of the installed plugin into the indexed `fabius-corpus`, reached through the same index — so the install stays a lean brain and **adding a capability is adding a row to this index, not a megabyte.** Today the six full libraries are bundled under `references/`; the index is built so they can externalize without any skill changing how it reaches them. The research and inspiration behind every library are kept honestly in [credits/](credits/README.md) — fabius's own record of what it studied.
+The standing rule (routing-policy **M9**): the brain should hold the **index**, not the library. As a library grows past a lean entry doc, its bulk moves **out** of the installed plugin into the indexed `fabius-corpus`, reached through the same index — so the install stays a lean brain and **adding a capability is adding a row to this index, not a megabyte.** Today the eleven full libraries are bundled under `references/`; the index is built so they can externalize without any skill changing how it reaches them. The research and inspiration behind every library are kept honestly in [credits/](credits/README.md) — fabius's own record of what it studied.
 
 > One brain, one index, one corpus — every strength reachable as a fabius library, the install kept lean as the library scales.
