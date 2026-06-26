@@ -23,11 +23,11 @@
 <text x="65" y="52.0" text-anchor="end" font-size="11.5" fill="#57606a">1</text>
 <line x1="186.0" y1="48" x2="186.0" y2="350" stroke="#2ea44f" stroke-width="1.2" stroke-dasharray="4 3"/>
 <text x="186.0" y="43" text-anchor="middle" font-size="11" fill="#2ea44f">soft cap</text>
-<line x1="298.0" y1="48" x2="298.0" y2="350" stroke="#1f6feb" stroke-width="1.2" stroke-dasharray="4 3"/>
-<text x="298.0" y="43" text-anchor="middle" font-size="11" fill="#1f6feb">hard cap</text>
-<polyline points="74.0,214.1 186.0,150.7 298.0,108.4 410.0,87.3 522.0,78.2 634.0,72.2" fill="none" stroke="#1f6feb" stroke-width="2.6"/>
+<line x1="298.0" y1="48" x2="298.0" y2="350" stroke="#7a3dff" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="298.0" y="43" text-anchor="middle" font-size="11" fill="#7a3dff">hard cap</text>
+<polyline points="74.0,214.1 186.0,150.7 298.0,108.4 410.0,87.3 522.0,78.2 634.0,72.2" fill="none" stroke="#7a3dff" stroke-width="2.6"/>
 <polyline points="74.0,229.2 186.0,168.8 298.0,171.8 410.0,177.9 522.0,180.9 634.0,183.9" fill="none" stroke="#2ea44f" stroke-width="2.6"/>
-<line x1="88" y1="58" x2="112" y2="58" stroke="#1f6feb" stroke-width="3"/>
+<line x1="88" y1="58" x2="112" y2="58" stroke="#7a3dff" stroke-width="3"/>
 <text x="118" y="62" font-size="11.5" fill="#1f2328">hard oracle (test/compiler) — Reflexion</text>
 <line x1="88" y1="77" x2="112" y2="77" stroke="#2ea44f" stroke-width="3"/>
 <text x="118" y="81" font-size="11.5" fill="#1f2328">soft self-critique — Self-Refine</text>

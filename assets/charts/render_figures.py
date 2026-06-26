@@ -10,7 +10,7 @@ import numpy as np
 from svgplot import plot
 
 OUT = os.path.join(os.path.dirname(__file__), "..")
-B, G, R, GR = "#1f6feb", "#2ea44f", "#cf222e", "#8c959f"
+B, G, R, GR = "#7a3dff", "#2ea44f", "#cf222e", "#8c959f"
 def p(name): return os.path.join(OUT, name)
 
 # F1 — capability ladder: capability = 1 - e^(-k·cost); knee where slope < 0.3·slope0

@@ -13,9 +13,9 @@
   <line x1="560" y1="48" x2="560" y2="72" stroke="#8c959f" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- router -->
-  <rect x="160" y="74" width="800" height="58" rx="11" fill="#1f6feb"/>
+  <rect x="160" y="74" width="800" height="58" rx="11" fill="#7a3dff"/>
   <text x="560" y="100" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">fabius — the router</text>
-  <text x="560" y="120" text-anchor="middle" font-size="12.5" fill="#cfe0ff">reads the job, sets the stance — dispatches by layer · machinery · model-tier</text>
+  <text x="560" y="120" text-anchor="middle" font-size="12.5" fill="#ece4ff">reads the job, sets the stance — dispatches by layer · machinery · model-tier</text>
 
   <!-- arrows router -> row 1 (6 specialists) -->
   <g stroke="#8c959f" stroke-width="2">
@@ -30,63 +30,63 @@
   <!-- twelve specialists, two rows of six (box w=168, gap=10; centers 114·292·470·648·826·1004) -->
   <g font-size="12.5">
     <!-- row 1 -->
-    <rect x="30"  y="166" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <rect x="30"  y="166" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#7a3dff" stroke-width="1.5"/>
     <text x="114" y="193" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-disciplina</text>
     <text x="114" y="213" text-anchor="middle" font-size="10.5" fill="#57606a">process</text>
     <text x="114" y="230" text-anchor="middle" font-size="10.5" fill="#57606a">plan · test · prove</text>
 
-    <rect x="208" y="166" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <rect x="208" y="166" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#7a3dff" stroke-width="1.5"/>
     <text x="292" y="193" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-decor</text>
     <text x="292" y="213" text-anchor="middle" font-size="10.5" fill="#57606a">design + data-viz</text>
     <text x="292" y="230" text-anchor="middle" font-size="10.5" fill="#57606a">tokens · charts</text>
 
-    <rect x="386" y="166" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <rect x="386" y="166" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#7a3dff" stroke-width="1.5"/>
     <text x="470" y="193" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-cohors</text>
     <text x="470" y="213" text-anchor="middle" font-size="10.5" fill="#57606a">agents</text>
     <text x="470" y="230" text-anchor="middle" font-size="10.5" fill="#57606a">least-privilege</text>
 
-    <rect x="564" y="166" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <rect x="564" y="166" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#7a3dff" stroke-width="1.5"/>
     <text x="648" y="193" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-archivum</text>
     <text x="648" y="213" text-anchor="middle" font-size="10.5" fill="#57606a">memory</text>
     <text x="648" y="230" text-anchor="middle" font-size="10.5" fill="#57606a">auto-recall</text>
 
-    <rect x="742" y="166" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <rect x="742" y="166" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#7a3dff" stroke-width="1.5"/>
     <text x="826" y="193" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-mercatus</text>
     <text x="826" y="213" text-anchor="middle" font-size="10.5" fill="#57606a">marketing</text>
     <text x="826" y="230" text-anchor="middle" font-size="10.5" fill="#57606a">position · convert</text>
 
-    <rect x="920" y="166" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <rect x="920" y="166" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#7a3dff" stroke-width="1.5"/>
     <text x="1004" y="193" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-praesidium</text>
     <text x="1004" y="213" text-anchor="middle" font-size="10.5" fill="#57606a">defensive security</text>
     <text x="1004" y="230" text-anchor="middle" font-size="10.5" fill="#57606a">STRIDE · OWASP</text>
 
     <!-- row 2 -->
-    <rect x="30"  y="262" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <rect x="30"  y="262" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#7a3dff" stroke-width="1.5"/>
     <text x="114" y="289" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-ludus</text>
     <text x="114" y="309" text-anchor="middle" font-size="10.5" fill="#57606a">games</text>
     <text x="114" y="326" text-anchor="middle" font-size="10.5" fill="#57606a">loop · juice</text>
 
-    <rect x="208" y="262" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <rect x="208" y="262" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#7a3dff" stroke-width="1.5"/>
     <text x="292" y="289" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-catena</text>
     <text x="292" y="309" text-anchor="middle" font-size="10.5" fill="#57606a">on-chain + sealing</text>
     <text x="292" y="326" text-anchor="middle" font-size="10.5" fill="#57606a">validate · prove</text>
 
-    <rect x="386" y="262" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <rect x="386" y="262" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#7a3dff" stroke-width="1.5"/>
     <text x="470" y="289" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-machina</text>
     <text x="470" y="309" text-anchor="middle" font-size="10.5" fill="#57606a">automation</text>
     <text x="470" y="326" text-anchor="middle" font-size="10.5" fill="#57606a">wire · verify</text>
 
-    <rect x="564" y="262" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <rect x="564" y="262" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#7a3dff" stroke-width="1.5"/>
     <text x="648" y="289" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-scientia</text>
     <text x="648" y="309" text-anchor="middle" font-size="10.5" fill="#57606a">science</text>
     <text x="648" y="326" text-anchor="middle" font-size="10.5" fill="#57606a">hypothesis · evidence</text>
 
-    <rect x="742" y="262" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <rect x="742" y="262" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#7a3dff" stroke-width="1.5"/>
     <text x="826" y="289" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-doctrina</text>
     <text x="826" y="309" text-anchor="middle" font-size="10.5" fill="#57606a">AI/ML engineering</text>
     <text x="826" y="326" text-anchor="middle" font-size="10.5" fill="#57606a">serve · eval · MLOps</text>
 
-    <rect x="920" y="262" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#1f6feb" stroke-width="1.5"/>
+    <rect x="920" y="262" width="168" height="80" rx="10" fill="#f6f8fa" stroke="#7a3dff" stroke-width="1.5"/>
     <text x="1004" y="289" text-anchor="middle" font-weight="700" fill="#1f2328">fabius-fortuna</text>
     <text x="1004" y="309" text-anchor="middle" font-size="10.5" fill="#57606a">markets &amp; finance</text>
     <text x="1004" y="326" text-anchor="middle" font-size="10.5" fill="#57606a">analyze · risk-first</text>
