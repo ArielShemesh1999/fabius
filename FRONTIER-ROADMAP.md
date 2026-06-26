@@ -55,7 +55,7 @@ Grounded in `synapse/worker/src/index.js` (the executable runtime) + the 14 skil
 - Native **tool-calling + structured output** in `callLLM` for Anthropic + OpenAI (the loop currently hand-rolls JSON-action parsing; `callLLM` is text-in/text-only-out). This unblocks reliable tool use *and* is the foundation CUA needs.
 
 **Phase 1 — make the central claim TRUE (highest credibility-leap per effort).**
-- **Execution-grounded verify + fail-closed flip:** when the deliverable is code, *run it/its tests* in a sandbox as a **hard oracle** that overrides the LLM judge; flip the no-reviewer default from `{pass:true,score:60}` → **fail-closed** (`fabiusVerify` ~2549, `verifyStep` ~1584). This converts verify-gated memory from soft opinion to real signal — fabius's whole differentiator, made true.
+- **Execution-grounded verify (SHIPPED):** when the deliverable is code, *run it/its tests* in a sandbox as a **hard oracle** that overrides the LLM judge (`fabiusVerify`). The no-reviewer default stays `{pass:true,score:60}` — deliberately **not** flipped to fail-closed, because the memory gate is already honest (score 60 < the 70 write gate → unverified output never compounds). This converts verify-gated memory from soft opinion to real signal — fabius's whole differentiator, made true.
 - **CodeAct tool:** one `AGENT_TOOLS` entry that POSTs model-emitted code to **one** external sandbox (E2B/Modal) and feeds stdout/stderr back (the executor at ~2527 already runs any registered tool). Same sandbox serves the oracle.
 - **Web tool pack:** `web_search` + `fetch` + `file` as registry entries (untrusted-content hardening reused).
 - **Per-run cost/time/sandbox-minute budget governor** (extend the `ratelimit` table) — autonomy without it is a cost bomb.

@@ -123,10 +123,10 @@ Separate from "does the stance help," a deterministic suite proves the *system* 
 | Exactly fourteen skill contracts; one router, one always-on core; names unique | **PASS** |
 | Frontmatter `name` matches directory; declares `name` + `description` | **PASS** |
 | Progressive disclosure — every `SKILL.md` ≤ 12 KB (depth lives in `references/`) | **PASS** (max 11.2 KB) |
-| Provenance `fab1-` fingerprint embedded in all 12 contracts | **PASS** |
+| Provenance `fab1-` fingerprint embedded in all 14 contracts | **PASS** |
 | Reference integrity — every linked `references/*.md` resolves | **PASS** (26/26) |
 | Plugin manifest skill list == skills on disk; version 1.0.0 | **PASS** |
-| Content-bound seal — 15 sealed files hash-match + Merkle root recomputes | **PASS** |
+| Content-bound seal — 17 sealed files hash-match + Merkle root recomputes | **PASS** |
 | Count coherence — README / ARCHITECTURE / AGENTS all state "fourteen" | **PASS** |
 
 **17/17 pass.** This is the structural complement to the behavioral runs: Runs 1–4 measure that fabius *acts* better; the structural suite proves it is *built* right — single-owner, under budget, every reference live, and the seal verifiable.
