@@ -93,7 +93,7 @@ One router over an always-on lean core and twelve specialists, on a thin spine. 
 
 <div align="center">
 
-<img src="assets/architecture.svg?v=4" alt="How fabius works: your prompt goes to the fabius router, which dispatches by layer, machinery, and model-tier to twelve specialists — disciplina (process), decor (design + data-viz), cohors (agents), archivum (memory), mercatus (marketing), praesidium (defensive security), ludus (games), catena (on-chain + sealing), machina (automation), scientia (science), doctrina (ML engineering), fortuna (markets & finance) — all running on the always-on fabius-parcus lean core, producing the smallest correct result." width="100%" />
+<img src="assets/architecture.svg" alt="How fabius works: your prompt goes to the fabius router, which dispatches by layer, machinery, and model-tier to twelve specialists — disciplina (process), decor (design + data-viz), cohors (agents), archivum (memory), mercatus (marketing), praesidium (defensive security), ludus (games), catena (on-chain + sealing), machina (automation), scientia (science), doctrina (ML engineering), fortuna (markets & finance) — all running on the always-on fabius-parcus lean core, producing the smallest correct result." width="100%" />
 
 </div>
 
