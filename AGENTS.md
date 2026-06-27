@@ -1,8 +1,8 @@
 # AGENTS.md — the fabius stance (tool-agnostic)
 
-This file is the portable form of the **fabius super-skill**. It is plain markdown, so it works in any agent that reads a standing-instructions file — Codex / OpenAI, Cursor, Windsurf, Cline, GitHub Copilot, OpenCode, Gemini CLI, or a raw system prompt. Copy it into your repo (or paste it into your tool's rules) and the agent operates end-to-end under fabius.
+This file is the portable operating stance of **fabius — the autonomous AI agent that runs on every major model**. It is plain markdown, so it works in any agent that reads a standing-instructions file — Codex / OpenAI, Cursor, Windsurf, Cline, GitHub Copilot, OpenCode, Gemini CLI, or a raw system prompt. Copy it into your repo (or paste it into your tool's rules) and that tool runs end-to-end under the fabius stance.
 
-> For Claude Code, install the full plugin instead (`/plugin install fabius`) — you get the fourteen skills with progressive disclosure. This file is the lite, universal bridge.
+> Internally, the owner runs fabius as a private Claude Code plugin whose fourteen coordinated layers (router `fabius` + always-on `fabius-parcus` + 12 specialists) load with progressive disclosure. This file is the lite, universal bridge to that same stance. To use the fabius agent as a product, open the synapse console (synapse-vert-one.vercel.app).
 
 ---
 

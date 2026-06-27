@@ -1,6 +1,6 @@
 """Minimal numpy->SVG line-plotter for fabius research figures. Stdlib + numpy only.
 
-Renders clean, GitHub-friendly line plots (light card, dark ink, blue/green accents).
+Renders clean, GitHub-friendly line plots (light card, dark ink, violet/green accents).
 Used by render_figures.py to produce the conceptual decision-model diagrams in RESEARCH.md.
 The figures are ILLUSTRATIVE shapes of documented principles, not fabius measurements.
 """
@@ -41,7 +41,7 @@ def plot(path, title, xlabel, ylabel, series, xlim, ylim,
     for ser in series:
         pts=" ".join(f"{_sx(xx,xlim):.1f},{_sy(yy,ylim):.1f}" for xx,yy in zip(ser['x'],ser['y']))
         dash=f' stroke-dasharray="{ser["dash"]}"' if ser.get('dash') else ''
-        s.append(f'<polyline points="{pts}" fill="none" stroke="{ser.get("color","#1f6feb")}" stroke-width="{ser.get("width",2.6)}"{dash}/>')
+        s.append(f'<polyline points="{pts}" fill="none" stroke="{ser.get("color","#7a3dff")}" stroke-width="{ser.get("width",2.6)}"{dash}/>')
     for p in (points or []):
         s.append(f'<circle cx="{_sx(p["x"],xlim):.1f}" cy="{_sy(p["y"],ylim):.1f}" r="4.5" fill="{p.get("color","#2ea44f")}"/>')
         if p.get('label'):

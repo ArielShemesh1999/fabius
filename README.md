@@ -4,22 +4,22 @@
 
 #### scout wide · strike narrow
 
-*One skill that equips Claude end to end — code, prose, agents, design, debug, memory.*
+*An autonomous AI agent that runs on every major model — Anthropic · OpenAI · Google · Mistral · Groq — from one console.*
 
 <br/>
 
-<img src="assets/hero.webp" alt="fabius — fourteen coordinated skills fused into one super-skill" width="100%" />
+<img src="assets/hero.webp" alt="fabius — an autonomous AI agent of fourteen coordinated capability layers, one console, every model" width="100%" />
 
 <br/>
 <br/>
 
-[![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-plugin-D97757?style=for-the-badge&logo=anthropic&logoColor=white)](https://docs.anthropic.com/en/docs/claude-code)
-[![Fourteen skills](https://img.shields.io/badge/architecture-14_skills,_one_install-1f6feb?style=for-the-badge)](#architecture)
+[![Autonomous agent](https://img.shields.io/badge/fabius-autonomous_AI_agent-7a3dff?style=for-the-badge)](https://synapse-vert-one.vercel.app)
+[![Runs on every model](https://img.shields.io/badge/runs_on-every_model-7a3dff?style=for-the-badge)](#what-it-is)
+[![Open the console](https://img.shields.io/badge/console-synapse-6322e8?style=for-the-badge)](https://synapse-vert-one.vercel.app)
 [![Benchmark](https://img.shields.io/badge/benchmark-blind,_reproducible-2ea44f?style=for-the-badge)](#what-it-does)
 [![Structural tests](https://img.shields.io/badge/structural_tests-17%2F17-2ea44f?style=for-the-badge)](BENCHMARKS.md)
-[![Research-grounded](https://img.shields.io/badge/research--grounded-routing_policy-8957e5?style=for-the-badge)](RESEARCH.md)
-[![Whitepaper](https://img.shields.io/badge/whitepaper-40pp_·_proofs_+_coherence-D97757?style=for-the-badge)](paper/fabius-as-a-system.pdf)
-[![License](https://img.shields.io/badge/license-MIT-555?style=for-the-badge)](#license)
+[![Research-grounded](https://img.shields.io/badge/research--grounded-routing_policy-7a3dff?style=for-the-badge)](RESEARCH.md)
+[![Whitepaper](https://img.shields.io/badge/whitepaper-40pp_·_proofs_+_coherence-7a3dff?style=for-the-badge)](paper/fabius-as-a-system.pdf)
 
 </div>
 
@@ -27,9 +27,15 @@
 
 ## What it is
 
-fabius is one super-skill you hand the agent. It sets *how* the agent works across the whole job — write code, write prose, build and orchestrate agents, design UI, visualize data, debug, market the value, harden security, build games, develop on-chain and cryptographically seal artifacts, wire automations, research the sciences, and remember — and routes to a specialist only when a task needs depth. One stance, applied everywhere: talk lean, build lean, run a disciplined process, design at ship quality, build other agents, and stop re-deriving.
+fabius is an autonomous AI agent. It runs on **every major model** — Anthropic · OpenAI · Google · Mistral · Groq — managed from one console, with a **Scout → Plan → Strike → Prove → Record** loop, an independent verifier, verify-gated compounding memory, least-privilege operator tools (`fetch` · `web_search` · `code`-exec), voice, and channels (Telegram [@fabiusagent_bot](https://t.me/fabiusagent_bot), WhatsApp). It sets *how* the work gets done across the whole job — write code, write prose, build and orchestrate other agents, design UI, visualize data, debug, market the value, harden security, build games, develop on-chain and cryptographically seal artifacts, wire automations, research the sciences, engineer and serve ML systems, analyze markets, and remember — drawing on a specialist layer only when a task needs depth. One stance, applied everywhere: talk lean, build lean, run a disciplined process, design at ship quality, build other agents, and stop re-deriving.
 
-It is named for the Fabian doctrine: **scout the whole field, fight only the battle that matters.** One system of fourteen coordinated, non-overlapping skills — a router, an always-on lean core, and twelve engineering specialists — installed as a single plugin.
+It lives across three aligned surfaces:
+
+- **Brain** — this private, provenance-sealed repo.
+- **Face** — the landing: **[fabius-landing.vercel.app](https://fabius-landing.vercel.app)**
+- **Console** — synapse, the system itself: **[synapse-vert-one.vercel.app](https://synapse-vert-one.vercel.app)**
+
+It is named for the Fabian doctrine: **scout the whole field, fight only the battle that matters.** Internally the agent is composed of fourteen coordinated, non-overlapping capability layers — a router (`fabius`), an always-on lean core (`fabius-parcus`), and twelve engineering specialists — that decide how each job is done.
 
 ---
 
@@ -95,9 +101,9 @@ Each rule has exactly one owning layer; every other layer links to it instead of
 
 ---
 
-## The fourteen skills
+## The fourteen capability layers
 
-| Skill | Role | What it delivers |
+| Layer | Role | What it delivers |
 |---|---|---|
 | `fabius` | router | reads the job, sets the stance, dispatches by layer + machinery + model-tier |
 | `fabius-parcus` | lean core, always on | terse output · the YAGNI ladder · surgical changes · no speculative scope |
@@ -151,16 +157,21 @@ The full treatment — the fourteen-skill architecture, the proven core of eight
 
 ---
 
-## Install
+## Run it
 
-A standard Claude Code plugin — zero build, zero config.
+fabius runs from **one console — [synapse-vert-one.vercel.app](https://synapse-vert-one.vercel.app)** — across every major model (Anthropic · OpenAI · Google · Mistral · Groq): pick a model, give it the goal, and watch the Scout → Plan → Strike → Prove → Record loop run with an independent verifier and verify-gated memory. Reach the agent on Telegram [@fabiusagent_bot](https://t.me/fabiusagent_bot) or WhatsApp. Read the paper → **[paper/fabius-as-a-system.pdf](paper/fabius-as-a-system.pdf)**.
+
+<details>
+<summary>Owner-only — the brain is also a private Claude Code plugin</summary>
+
+The sealed brain in this repo doubles as the owner's own Claude Code plugin (zero build, zero config):
 
 ```bash
 /plugin marketplace add ArielShemesh1999/fabius
 /plugin install fabius
 ```
 
-Or drop any single `skills/<name>/` folder straight into a project's `.claude/skills/`. Start any task with the `fabius` skill — it loads the stance and routes to the rest. The specialists also self-surface by their description:
+Or drop any single `skills/<name>/` folder into a project's `.claude/skills/`. The router loads the stance and routes to the rest; the specialists also self-surface by description:
 
 ```text
 write code          → fabius-parcus
@@ -177,23 +188,25 @@ automate a workflow → fabius-machina
 research (science)  → fabius-scientia
 ```
 
+</details>
+
 ---
 
-## Any agent, any tool
+## Portable stance
 
-fabius is plain-markdown skills — model- and tool-agnostic. The portable bridge is [`AGENTS.md`](AGENTS.md): copy it into your repo or paste it into your tool's rules, and the agent operates under fabius end to end.
+The agent's operating stance is plain markdown, so it travels. The portable bridge is [`AGENTS.md`](AGENTS.md) — drop it into any other tool (or paste it into a system prompt) and that tool runs under the same fabius stance end to end.
 
-| Tool | How to install |
+| Tool | Carry the stance in via |
 |---|---|
-| Claude Code | `/plugin install fabius` — all fourteen skills with progressive disclosure |
-| Codex / OpenAI | drop [`AGENTS.md`](AGENTS.md) at the repo root (read automatically) |
+| Claude Code | the private plugin — `/plugin install fabius` (all fourteen layers, progressive disclosure) |
+| Codex / OpenAI | [`AGENTS.md`](AGENTS.md) at the repo root (read automatically) |
 | OpenCode | `AGENTS.md` at the repo root, or copy `skills/` into `.opencode/` |
-| Cursor | copy `AGENTS.md` into `.cursor/rules/fabius.mdc` |
+| Cursor | `AGENTS.md` → `.cursor/rules/fabius.mdc` |
 | Windsurf | `.windsurf/rules/fabius.md` |
 | Cline | `.clinerules/fabius.md` |
 | GitHub Copilot | `.github/copilot-instructions.md` |
 | Gemini CLI | `GEMINI.md` at the repo root |
-| Any LLM / raw prompt | paste `AGENTS.md` (or a single `SKILL.md`) into the system prompt |
+| Any model / raw prompt | paste `AGENTS.md` (or a single `SKILL.md`) into the system prompt |
 
 ---
 
@@ -228,7 +241,7 @@ fabius/
 ├── paper/                  the 40-page whitepaper (PDF) — proofs + coherence theorem
 ├── assets/charts/          numpy → SVG figure renderer (reproducible)
 ├── credits/                inspiration and attribution
-└── LICENSE                 MIT
+└── LICENSE                 usage terms + attribution
 ```
 
 ---
@@ -241,9 +254,9 @@ fabius governs *how* the agent works, never *what* you want. Your instruction al
 
 ---
 
-## License
+## Credits
 
-MIT. The bundled `references/` adapt open work — see [credits/](credits/) for inspiration and attribution.
+Some bundled `references/` adapt prior work — see [credits/](credits/) for attribution. fabius is private and provenance-sealed; authorship is proven, not asserted — see [PROVENANCE.md](PROVENANCE.md).
 
 <div align="center">
 <br/>

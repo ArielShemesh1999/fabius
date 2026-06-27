@@ -1,7 +1,7 @@
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 # Fabius — system architecture
 
-Fabius is **one system**, not a bundle of plugins. A single super-skill routes thirteen coordinated capability layers over a thin supporting spine — fourteen skills in all, counting the router itself — so any agent gains end-to-end engineering capability from one install. The router dispatches on three axes together: **which layer(s)**, **how much machinery**, and **which model tier**. This document is the system's own architecture and its capability matrix.
+Fabius is **one agent**, not a bundle of plugins. A router (`fabius` itself) coordinates thirteen capability layers over a thin supporting spine — fourteen layers in all, counting the router — composing the agent's end-to-end engineering capability. The router dispatches on three axes together: **which layer(s)**, **how much machinery**, and **which model tier**. This document is the system's own architecture and its capability matrix.
 
 The organizing idea is the Fabian one: **scout wide, strike narrow.** Investigate broadly (process and memory make you wide); deliver the single smallest correct thing (lean makes you narrow). The layers below split exactly along that line.
 
@@ -34,7 +34,7 @@ The organizing idea is the Fabian one: **scout wide, strike narrow.** Investigat
                · defensive-security · games · on-chain + provenance · automation · science
 ```
 
-- **`fabius`** — the router / super-skill (the *praetorium*). Reads the task, sets the working stance, and dispatches on three axes: which layer(s), how much machinery (the capability ladder), and which model tier. Owns the system-level kill-switch and the *scout-wide / strike-narrow* maxim.
+- **`fabius`** — the router (the *praetorium*). Reads the task, sets the working stance, and dispatches on three axes: which layer(s), how much machinery (the capability ladder), and which model tier. Owns the system-level kill-switch and the *scout-wide / strike-narrow* maxim.
 - **`fabius-parcus`** — the always-on lean core. Runs *underneath* every other layer (never instead of one): terse prose, the YAGNI ladder, surgical changes, assumption-checking.
 - **`fabius-disciplina`** — the engineering-process layer: brainstorm → plan → test-first → prove, grilling ambiguity, root-cause debugging. Owns planning, test discipline, and the clarifying-question procedure.
 - **`fabius-decor`** — the design layer: token vocabulary, the one-accent laws, mobile-first, the live-verify checklist — **and the data-visualization concern** (the *figura* library: data-ink charts, reproducible tokenized SVG, diagrams-as-code).
@@ -150,13 +150,13 @@ What an engineer (or an agent) can do end-to-end under fabius:
 
 - **Add a capability layer** — a new `skills/fabius-<name>/SKILL.md` plus its path in `plugin.json` `skills[]`. Give it a precise `description` and a single owned concern; link to siblings, don't duplicate them.
 - **Deepen a layer** — add a `references/<file>.md` and point the skill at it (progressive disclosure).
-- **Externalize the corpus** — bulk reference material (agent catalogs, design teardowns, swipe files, hardening guides, vector stores) belongs **outside** the installed plugin as the indexed **fabius corpus** ([CORPUS.md](CORPUS.md) — one fabius-branded index over every capability library); the skill ships a lean entry doc + an index and pages in only the matching slice on demand (routing-policy R9 · M7 · M9). Adding a capability = adding a row to the corpus index, not a megabyte. The install stays lean; the library scales without it.
+- **Externalize the corpus** — bulk reference material (agent catalogs, design teardowns, swipe files, hardening guides, vector stores) belongs **outside** the agent's core as the indexed **fabius corpus** ([CORPUS.md](CORPUS.md) — one fabius-branded index over every capability library); the skill ships a lean entry doc + an index and pages in only the matching slice on demand (routing-policy R9 · M7 · M9). Adding a capability = adding a row to the corpus index, not a megabyte. The agent's core stays lean; the library scales without it.
 - **Add a benchmark model or task** — edit `evals/eval.mjs`.
 - **Target a new tool** — copy `AGENTS.md` into that tool's rules path.
 
 ## Design principles
 
-1. **One system, one stance** — install once, work end-to-end.
+1. **One system, one stance** — one agent, work end-to-end.
 2. **Single owner, zero overlap** — one rule, one home; everyone else links.
 3. **Lean by default, never flimsy** — minimal artifact, guardrails non-negotiable.
 4. **Scout wide, strike narrow** — fan out to understand; deliver the smallest correct thing.

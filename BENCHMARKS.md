@@ -1,9 +1,9 @@
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
-# Benchmarks — does fabius actually improve model output?
+# Benchmarks — does the fabius agent measurably out-perform the bare model?
 
 Fabius ships **a runnable harness *and* the measured runs behind it.** You can reproduce every number on your own machine with your own key, for the exact model you care about — and below are the runs already done, with their caveats stated plainly. Nothing here is estimated; every figure was measured on a real model at a named moment.
 
-That double posture is deliberate. A stance like fabius is prompt-level scaffolding, so a number measured on one model at one moment doesn't transfer cleanly to yours. The defensible thing to publish is the **method, the mechanism, and the measured signal that repeats across models** — plus a one-command way to re-measure it for real.
+That double posture is deliberate. fabius is an autonomous agent; its decision layer is prompt-level scaffolding read at runtime, so a number measured on one model at one moment doesn't transfer cleanly to the model you run it on. The defensible thing to publish is the **method, the mechanism, and the measured signal that repeats across models** — plus a one-command way to re-measure it for real.
 
 ---
 
