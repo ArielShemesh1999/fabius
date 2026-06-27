@@ -6,19 +6,16 @@ definitions are the original work of Ariel Shemesh.
 
 LICENSE & ATTRIBUTION
 --------------------
-fabius is released under the MIT License (see LICENSE). The MIT License is
-permissive, but it is NOT a waiver of authorship. As an explicit, binding
-condition of that license:
+fabius is private and proprietary — all rights reserved (see LICENSE). No
+license or permission to use, copy, fork, redistribute, or create derivatives
+is granted to anyone. Because no permission is granted, any reproduction of a
+verbatim or substantial part of this work is copyright infringement from the
+first copy. (You still must show they copied substantial protected expression;
+there is simply no license defense available to them.)
 
-    "The above copyright notice and this permission notice shall be
-     included in all copies or substantial portions of the Software."
-
-Any copy, fork, redistribution, or derivative — in whole or in substantial
-part — MUST retain the copyright notice above. For such a copy, removing the
-notice means the copier never met the license condition, so the work is used
-outside the license — i.e. ordinary copyright infringement. (You still must
-show they copied substantial protected expression; the notice point removes
-their license defense, it is not a standalone win.)
+The copyright notice above MUST NOT be removed from any copy. Materials under
+skills/**/references/ that adapt third-party work retain their own upstream
+licenses and are attributed in credits/.
 
 PROVENANCE
 ----------

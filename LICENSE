@@ -1,21 +1,30 @@
-MIT License
+fabius — Proprietary License
 
-Copyright (c) 2026 Ariel Shemesh
+Copyright (c) 2026 Ariel Shemesh. All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This repository and its contents — the software, research, prose, figures, and
+skill definitions (the "Software") — are private and proprietary, the original
+work of Ariel Shemesh.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+No license or permission is granted to any person to use, copy, modify, merge,
+publish, distribute, sublicense, or sell any part of the Software, in whole or
+in substantial part, without the prior written permission of the copyright
+holder. Possessing or accessing a copy conveys no such rights.
+
+The Software is provenance-sealed; its authorship and integrity are
+independently verifiable (see PROVENANCE.md). Because no license is granted, any
+unauthorized reproduction of substantial protected expression is copyright
+infringement from the first copy — there is no license condition to satisfy or
+forfeit.
+
+Some materials under `skills/**/references/` adapt third-party works that retain
+their own upstream licenses; those works remain governed by their original terms
+and are attributed in `credits/`. This proprietary notice applies to the
+original fabius work, not to such third-party materials.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

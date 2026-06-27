@@ -6,7 +6,7 @@
 
 </div>
 
-fabius is original work. This document is the apparatus that lets anyone — a court, a maintainer, a stranger — confirm **when it existed**, anchored to Bitcoin with no trusted party, and **who made it**, as strongly as the custody of one signing key allows. Six mechanisms back that up: three are plain repository facts — the fingerprint (§3), the MIT notice (§4), and GitHub's public push history (§4); one is a **content-bound seal** recomputable from the files themselves (§3·b); and two are cryptographic artifacts generated when the release is **sealed**: the Bitcoin timestamp (§1) and the signed release tag (§2). `bash provenance/verify.sh` reports the live state of each. Every mechanism is paired with exactly what it does *and does not* prove, in the same measured-not-claimed spirit as [RESEARCH.md](RESEARCH.md).
+fabius is original work. This document is the apparatus that lets anyone — a court, a maintainer, a stranger — confirm **when it existed**, anchored to Bitcoin with no trusted party, and **who made it**, as strongly as the custody of one signing key allows. Six mechanisms back that up: three are plain repository facts — the fingerprint (§3), the proprietary copyright notice (§4), and GitHub's retained push history (§4); one is a **content-bound seal** recomputable from the files themselves (§3·b); and two are cryptographic artifacts generated when the release is **sealed**: the Bitcoin timestamp (§1) and the signed release tag (§2). `bash provenance/verify.sh` reports the live state of each. Every mechanism is paired with exactly what it does *and does not* prove, in the same measured-not-claimed spirit as [RESEARCH.md](RESEARCH.md).
 
 **The honesty stance, up front.** A public git repository **cannot be made uncloneable.** That is not a missing setting — it is how git works: anyone who can read the repo can `git clone` it in full, history included. Disabling forks does not stop it. No code, license, or watermark changes this. Anyone who promises a "clone-proof" public repo is selling a fiction.
 
@@ -64,8 +64,8 @@ The fingerprint above is a *discovery* aid; it is not derived from the content. 
 
 ## 4 · Two records you already hold for free
 
-- **MIT's attribution clause (legal hook).** fabius is MIT-licensed — permissive on use, but it makes one thing *binding*: the **copyright line and permission notice in `LICENSE`** "shall be included in all copies or substantial portions." (`NOTICE` restates that for visibility; MIT itself does not require a separate NOTICE file.) For a verbatim or substantial copy, stripping the notice means the copier never met the license condition, so the work is used outside the license — ordinary copyright infringement. You still must show they copied substantial protected expression; the notice point removes their license defense, it is not a standalone win.
-- **GitHub's public history (third-party record).** Every commit and push to a public GitHub repo is timestamped and retained by a neutral third party. Your commit timeline is itself corroborating evidence of priority, independent of §1.
+- **No license granted (legal hook).** fabius is private and **proprietary — all rights reserved** (`LICENSE`; `NOTICE` restates it for visibility). No permission to use, copy, or redistribute is granted to anyone, so a verbatim or substantial copy is copyright infringement from the first copy — there is no license condition to satisfy or forfeit, and no license defense to raise. You still must show they copied substantial protected expression; the proprietary status removes any permission argument, it is not a standalone win.
+- **GitHub's retained history (third-party record).** Every commit and push to this GitHub repo is timestamped and retained by a neutral third party (the repo is private, so this record is not public, but it is preserved and producible). Your commit timeline is corroborating evidence of priority, independent of §1.
 
 ---
 
@@ -73,11 +73,11 @@ The fingerprint above is a *discovery* aid; it is not derived from the content. 
 
 | Adversary | What they do | What stops / catches them |
 |---|---|---|
-| **Automated scraper / re-uploader** | clone, re-publish verbatim | embedded fingerprint (§3) → web-search hit; MIT-notice violation (§4) |
+| **Automated scraper / re-uploader** | clone, re-publish verbatim | embedded fingerprint (§3) → web-search hit; unlicensed copy = infringement (§4) |
 | **Lazy human** | fork, swap the README, claim it | fingerprint + signed tag + your earlier OTS date (§1–3) |
 | **Determined plagiarist** | strip markers, reword, re-commit | OTS priority date + GitHub history (§1, §4) give priority + authorship evidence that *supports* a substantial-similarity claim — but priority alone does not prove their copy is a derivative; that needs a similarity analysis a court performs, and the fingerprint cannot help once they reword |
-| **"It's MIT, I can"** | redistribute, drop your name | MIT *requires* the notice in a verbatim/substantial copy — stripping it forfeits the license (→ infringement); idea-level reimplementations are out of reach (§4) |
-| **Anyone** | "make it private so no one clones it" | the only thing that *prevents* cloning — out of scope here by your choice; see the honesty stance |
+| **"I can just copy it"** | redistribute, drop your name | fabius grants **no** license — any verbatim/substantial copy is infringement from the first byte (§4); idea-level reimplementations are out of reach |
+| **Anyone** | obtain & re-clone the repo | the repo is **private** — access control is the first barrier that *prevents* casual cloning; the seal (§1–4) is the insurance if a copy escapes |
 
 What this package **cannot** stop: a determined actor who rewrites fabius from scratch using only the *ideas*. Ideas are not protected by any of this — only the expression, the date, and the authorship are. That gap is real and is the price of publishing.
 

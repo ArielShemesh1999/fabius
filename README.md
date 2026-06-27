@@ -256,7 +256,7 @@ fabius governs *how* the agent works, never *what* you want. Your instruction al
 
 ## Credits
 
-Some bundled `references/` adapt prior work — see [credits/](credits/) for attribution. fabius is private and provenance-sealed; authorship is proven, not asserted — see [PROVENANCE.md](PROVENANCE.md).
+Some bundled `references/` adapt prior work — see [credits/](credits/) for attribution. fabius is private and proprietary — all rights reserved (see [LICENSE](LICENSE)); authorship is proven, not asserted — see [PROVENANCE.md](PROVENANCE.md).
 
 <div align="center">
 <br/>
