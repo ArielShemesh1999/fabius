@@ -2,7 +2,7 @@
 // fabius structural tests — the invariants that hold with NO model, NO key, NO network.
 //
 // Where eval.mjs / harness.workflow.js measure whether the *stance* improves output,
-// this file proves the *system* is well-formed: one router + one always-on core + ten
+// this file proves the *system* is well-formed: one router + one always-on core + thirteen
 // single-owner specialists, every lean contract under budget (progressive disclosure),
 // every reference resolvable, and the content-bound provenance seal intact. These are
 // pass/fail facts, not judge opinions — they reproduce byte-for-byte on any clone.
@@ -34,8 +34,8 @@ const skills = skillNames.map((d) => {
   return { dir: d, path, raw, bytes: Buffer.byteLength(raw), name, hasDesc };
 });
 
-// ---- 1. shape: 12 skills, one router, one always-on core, names unique ----------
-ok("count: exactly fourteen skill contracts", skills.length === 14, `${skills.length} found`);
+// ---- 1. shape: 15 skills, one router, one always-on core, names unique ----------
+ok("count: exactly fifteen skill contracts", skills.length === 15, `${skills.length} found`);
 ok("naming: every skill is fabius-prefixed", skills.every((s) => s.name === "fabius" || s.name.startsWith("fabius-")),
    skills.map((s) => s.name).join(", "));
 ok("naming: frontmatter name matches its directory", skills.every((s) => s.name === s.dir),
@@ -110,8 +110,8 @@ const root = level[0].toString("hex");
 ok("seal: recomputed Merkle root matches the manifest", root === manifest.merkle_root,
    root === manifest.merkle_root ? root.slice(0, 16) + "…" : `got ${root.slice(0, 16)}… want ${manifest.merkle_root.slice(0, 16)}…`);
 
-// ---- 7. count coherence: canonical docs say "twelve"/"ten", no stale counts ------
-for (const [file, must] of [["README.md", "fourteen"], ["ARCHITECTURE.md", "fourteen"], ["AGENTS.md", "fourteen"]]) {
+// ---- 7. count coherence: canonical docs all state the layer count, no stale counts ------
+for (const [file, must] of [["README.md", "fifteen"], ["ARCHITECTURE.md", "fifteen"], ["AGENTS.md", "fifteen"]]) {
   const t = readFileSync(join(ROOT, file), "utf8").toLowerCase();
   ok(`coherence: ${file} states "${must}" skills`, t.includes(must), t.includes(must) ? "present" : "missing");
 }

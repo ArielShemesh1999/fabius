@@ -1,6 +1,6 @@
 # Credits & inspiration
 
-The fabius **system** — the fourteen skills, the router/dispatch policy, `AGENTS.md`, `CORPUS.md`, the architecture, the provenance apparatus, and the evals — is original work, written from scratch under one stance (*scout wide, strike narrow*). Each skill is an original operating contract in fabius's own voice.
+The fabius **system** — the fifteen skills, the router/dispatch policy, `AGENTS.md`, `CORPUS.md`, the architecture, the provenance apparatus, and the evals — is original work, written from scratch under one stance (*scout wide, strike narrow*). Each skill is an original operating contract in fabius's own voice.
 
 What we owe to the open community is the **learning**: the on-demand depth under each skill's `references/` was **informed by and adapted from** the open work below. We studied these projects and wrote our own version; credit where it's due. Two honest rules govern this file:
 
@@ -34,6 +34,7 @@ What we owe to the open community is the **learning**: the on-demand depth under
 | `fabius-catena` (provenance sealing) | **SEAL** — Ariel Shemesh's own research (`research/SEAL_Whitepaper_v2.0`): provenance-not-truth, content-bound hard binding, boring-cryptography-only, Bitcoin-anchored timestamps, self-contained verification bundles, crypto-agile renewal | original (author's own) |
 | `fabius-machina` (automation) | n8n-skills (Romuald Członkowski, aiadvisors.pl) — the n8n-mcp tool-per-intent decision tree, silent-failure gotchas, validate-AND-verify-before-activate discipline | MIT · hooks layer **Apache-2.0** |
 | `fabius-scientia` (science · bio) | scientific-agent-skills (K-Dense Inc.) — per-domain single-concern skills, pipeline-as-router, the unified database-lookup contract + cross-ID maps, the hypothesis-generation loop, reproducibility gotchas | MIT (per-skill varies) |
+| `fabius-concilium` (cross-model council) | Andrej Karpathy's **llm-council** — the council pattern: dispatch one question to N models, anonymized cross-review/ranking, a chairman model that synthesizes the field ([repo](https://github.com/karpathy/llm-council)) | see repo |
 
 ### Apache-2.0 note (security corpus)
 

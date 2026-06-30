@@ -3,14 +3,15 @@
   "algorithm": "sha256",
   "merkle": "binary, leaf = sha256(path \\u0000 filehash), leaves sorted, last duplicated if odd",
   "note": "Content-bound seal of the fabius skill contracts and core docs. Every value is recomputable from the public files: recompute each file's sha256 and the merkle root and compare. See PROVENANCE.md §3 and skills/fabius-catena/references/sealing.md.",
-  "count": 17,
+  "count": 18,
   "files": {
-    "AGENTS.md": "3e81cf9bbe3b0d10e75c1f100a651088be37a923df4c145b3987af063c60b1ca",
-    "ARCHITECTURE.md": "8ab02b49c895a6af1fefebae812f030f03ad3c8b0d3a8df8224ab95d07f346ba",
-    "CORPUS.md": "dd96a99c64178bf8df3606c41d402224edd849f81e058c1ca5b21170d5779fe9",
+    "AGENTS.md": "981f52b3dd40c1ebe970037a31089faf4cde28fb0cdf48460fd2e76b88f9a006",
+    "ARCHITECTURE.md": "1eff54895c7cced336801e86cb9cc17276828c2d7691c620ba138e67a2bee95f",
+    "CORPUS.md": "c3434b5df52ebdfcec63ff2168268d35f9964ae7586df8956f50878038c18fe3",
     "skills/fabius-archivum/SKILL.md": "13fde5038eb663b3dcae39377ba2527d446a0a08b39d548738516ad34211de8d",
     "skills/fabius-catena/SKILL.md": "a30efb99223b0cce239fa904f0681bfce16894628bffd2bdb6f98c80742cfb51",
     "skills/fabius-cohors/SKILL.md": "9d2838481f70faa28b485ca44377bbff235431170c540578f0adc5914133f3a3",
+    "skills/fabius-concilium/SKILL.md": "3324b530946a12528a2773f55554a19ebd9889db169bc729e19b5fdd8306f04c",
     "skills/fabius-decor/SKILL.md": "4bb612316a412eefd9526f5561962d3b924d4da1082c8f93aadfdd6965947d0e",
     "skills/fabius-disciplina/SKILL.md": "523d1b47042de928da15ecdffa0ba8e852ed115193ca05be73257f54f0312694",
     "skills/fabius-doctrina/SKILL.md": "397eba057c4b1ff815513da09395be174d580de71e70f733d8633cf73852e5ca",
@@ -21,7 +22,7 @@
     "skills/fabius-parcus/SKILL.md": "ffde62796f955a67ffeb58918c34c9af471dfbb7e6da45cd0a2583748d2f1bdc",
     "skills/fabius-praesidium/SKILL.md": "61b62e089028c598d577259ae4c267bb0cea6c41287409b52770ea10f741441f",
     "skills/fabius-scientia/SKILL.md": "7384e2f9fdce34d4f96090ebbdda9ac3bbf407b0c2537ff3cba0f88cfcadc637",
-    "skills/fabius/SKILL.md": "181980e50e5d2bd80853b65a54d20607f529d15cfb37427069b8f5086e241b50"
+    "skills/fabius/SKILL.md": "89a0bc33a35ae02dd8022e825a1520ea96e0d248d07ebe33293e624b3c00d7e8"
   },
-  "merkle_root": "e7a0270a41737a27e15de94054685020a077288348a4b4c59cfcf5e64a64305c"
+  "merkle_root": "eb6f695a2935acf9d66601fd21a102202aa760e103b729fc2bc3c9e817798643"
 }

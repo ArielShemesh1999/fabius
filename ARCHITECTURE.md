@@ -1,7 +1,7 @@
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 # Fabius — system architecture
 
-Fabius is **one agent**, not a bundle of plugins. A router (`fabius` itself) coordinates thirteen capability layers over a thin supporting spine — fourteen layers in all, counting the router — composing the agent's end-to-end engineering capability. The router dispatches on three axes together: **which layer(s)**, **how much machinery**, and **which model tier**. This document is the system's own architecture and its capability matrix.
+Fabius is **one agent**, not a bundle of plugins. A router (`fabius` itself) coordinates fourteen capability layers over a thin supporting spine — fifteen layers in all, counting the router — composing the agent's end-to-end engineering capability. The router dispatches on three axes together: **which layer(s)**, **how much machinery**, and **which model tier**. This document is the system's own architecture and its capability matrix.
 
 The organizing idea is the Fabian one: **scout wide, strike narrow.** Investigate broadly (process and memory make you wide); deliver the single smallest correct thing (lean makes you narrow). The layers below split exactly along that line.
 
@@ -48,10 +48,11 @@ The organizing idea is the Fabian one: **scout wide, strike narrow.** Investigat
 - **`fabius-scientia`** — the scientific-research layer: the empirical method made executable (competing falsifiable hypotheses → experiment design → reproducible result), a unified scientific-database lookup with cross-identifier mapping, pipeline-as-router over field-standard tools, and the domain reproducibility checklist.
 - **`fabius-doctrina`** — the AI/ML-engineering layer: the model lifecycle as production software (dataset → train/fine-tune → evaluate → serve → monitor) — model serving and inference (vLLM-class), MLOps and experiment tracking (MLflow-class), and rigorous model/LLM evaluation (held-out sets, blind judges, regression gates). Distinct from `fabius-scientia` (the scientific method over natural-science data) and `fabius-cohors` (doctrina owns the model an agent calls, not the agent).
 - **`fabius-fortuna`** — the markets-and-economics layer: method over money — equity/market analysis (fundamental + technical + quantitative), economic data and indicators, valuation, backtesting with honest statistics (lookahead/survivorship/overfitting controls), portfolio construction, and risk-first position sizing. Reads the market; `fabius-decor` (figura) draws the chart. Distinct from `fabius-scientia` (natural-science data), `fabius-doctrina` (a predictive model it may serve), and `fabius-mercatus` (go-to-market). Defensive and honest: analysis not advice, never market manipulation.
+- **`fabius-concilium`** — the cross-model deliberation layer: convene a **council** of heterogeneous models on one question and aggregate their answers into a better single one — first opinions (each model answers independently) → anonymized peer-review (each ranks the others blind) → chairman synthesis (one model fuses the ranked field). Ensemble epistemics that spends the *every-model* identity to cut single-model error and bias. Gated hard by `fabius-parcus` (a council is N+N+1 model calls — convene only when a wrong answer is costly). Distinct from `fabius-cohors` (which splits the *work* across task-specialist agents; concilium aggregates one *answer* across whole models) and `fabius-doctrina` (whose blind-judge discipline it borrows for the ranking, but does not own).
 
 ## Coordination contract — single owner, zero overlap
 
-Each rule has exactly one owning layer; every other layer references it instead of restating it. This is what keeps fourteen skills from contradicting each other:
+Each rule has exactly one owning layer; every other layer references it instead of restating it. This is what keeps fifteen skills from contradicting each other:
 
 | Rule | Owner |
 |---|---|
@@ -67,6 +68,7 @@ Each rule has exactly one owning layer; every other layer references it instead 
 | The scientific method, the database-lookup contract, the reproducibility checklist | `fabius-scientia` |
 | The model lifecycle — serving, MLOps/experiment-tracking, model/LLM evaluation | `fabius-doctrina` |
 | Market & economic analysis, valuation, honest backtesting, risk/position sizing | `fabius-fortuna` |
+| Cross-model council — first opinions, blind peer-review, chairman synthesis | `fabius-concilium` |
 | Agent-shape catalog, wiki schema (the deep references) | `fabius-cohors` / `fabius-archivum` `references/` |
 
 `fabius-parcus` keeps the *never-trim* security floor (don't cut validation/security); `fabius-praesidium` owns the *active* security work (model the threat, name the check, prove it closed) and references that floor instead of restating it — single owner on each side of the line.
@@ -90,14 +92,15 @@ prompt → fabius (router)   ── dispatch: which layer(s) · how much machine
          ├─ automate / workflow / webhook  → fabius-machina    → references/automation-playbook.md
          ├─ science / bio / hypothesis     → fabius-scientia   → references/science-playbook.md
          ├─ serve / eval / train a model   → fabius-doctrina   → references/ml-engineering-playbook.md
-         └─ stock / market / econ / backtest → fabius-fortuna   → references/markets-and-quant-playbook.md
+         ├─ stock / market / econ / backtest → fabius-fortuna   → references/markets-and-quant-playbook.md
+         └─ council / ask several models     → fabius-concilium → references/council-protocol.md · references/council.mjs
 ```
 
 Skills self-surface by their `description`; the router composes them. "Build a landing page" resolves to `fabius-disciplina` (brainstorm the spec) → `fabius-decor` (execute at quality), all under `fabius-parcus`. A vertical (a game, a launch, a security review) runs a studio: the domain skill leads, process plans, execution follows (routing-policy R13).
 
 ## The spine
 
-- **`references/`** — on-demand depth bundled per layer, loaded only when a layer needs it so the skills stay lean. Each specialist ships a lean entry doc **plus a full library**: `fabius-decor` → a 69-brand design teardown library (`references/design/`) + the figura visualization entry (`references/visualization.md`); `fabius-cohors` → a 200+-agent production catalog with a `fabius-vec.db` memory index (`references/agents/`); `fabius-archivum` → a knowledge engine, wiki pattern, and RAG pipeline (`references/knowledge/`); `fabius-disciplina` → the craft + discipline process library (`references/process/`); `fabius-mercatus` → a channel + swipe library (`references/channel-swipe-library.md`); `fabius-praesidium` → a hardening + audit library (`references/hardening-guides.md`); `fabius-ludus` → an engine + feel library (`references/engine-recipes.md`); `fabius-catena` → the on-chain dev + sealing playbooks (`references/onchain-playbook.md` + `references/sealing.md`); `fabius-machina` → the automation build-and-verify playbook (`references/automation-playbook.md`); `fabius-scientia` → the scientific-method + database-lookup playbook (`references/science-playbook.md`); `fabius-doctrina` → the ML-engineering playbook — serving, MLOps, evaluation (`references/ml-engineering-playbook.md`); `fabius-fortuna` → the markets & quant playbook — analysis, valuation, honest backtesting, risk (`references/markets-and-quant-playbook.md`); `fabius-parcus` → the lean guidelines (`references/lean/`).
+- **`references/`** — on-demand depth bundled per layer, loaded only when a layer needs it so the skills stay lean. Each specialist ships a lean entry doc **plus a full library**: `fabius-decor` → a 69-brand design teardown library (`references/design/`) + the figura visualization entry (`references/visualization.md`); `fabius-cohors` → a 200+-agent production catalog with a `fabius-vec.db` memory index (`references/agents/`); `fabius-archivum` → a knowledge engine, wiki pattern, and RAG pipeline (`references/knowledge/`); `fabius-disciplina` → the craft + discipline process library (`references/process/`); `fabius-mercatus` → a channel + swipe library (`references/channel-swipe-library.md`); `fabius-praesidium` → a hardening + audit library (`references/hardening-guides.md`); `fabius-ludus` → an engine + feel library (`references/engine-recipes.md`); `fabius-catena` → the on-chain dev + sealing playbooks (`references/onchain-playbook.md` + `references/sealing.md`); `fabius-machina` → the automation build-and-verify playbook (`references/automation-playbook.md`); `fabius-scientia` → the scientific-method + database-lookup playbook (`references/science-playbook.md`); `fabius-doctrina` → the ML-engineering playbook — serving, MLOps, evaluation (`references/ml-engineering-playbook.md`); `fabius-fortuna` → the markets & quant playbook — analysis, valuation, honest backtesting, risk (`references/markets-and-quant-playbook.md`); `fabius-concilium` → the council protocol + a zero-dependency runnable reference (`references/council-protocol.md` + `references/council.mjs`); `fabius-parcus` → the lean guidelines (`references/lean/`).
 - **`CORPUS.md`** — the one fabius-branded index over every capability library; the brain holds the index and pages in only the matching slice (routing-policy M9 · R9 · M7).
 - **`evals/`** — a runnable, vendor-agnostic benchmark harness that scores a model with and without the fabius stance: `eval.mjs` (Anthropic/OpenAI), `portable_eval.py` (cross-vendor), a `harness.workflow.js` multi-agent variant, and the `results.json` they write on a run (gitignored — the measured numbers are recorded in [BENCHMARKS.md](BENCHMARKS.md)).
 - **`AGENTS.md`** — the cross-tool bridge. The stance, compiled to plain markdown, so Codex / Cursor / Windsurf / Cline / Copilot / OpenCode / Gemini all run fabius.
@@ -118,6 +121,7 @@ fabius is plain-markdown skills: it bundles **no runtime and no MCP server**, an
 | `fabius-cohors` | **MCP tool servers** the agents call (reference servers / Composio / a bridge) and a **code-execution sandbox** (E2B / Modal / Docker) | defining agents, least-privilege, output contracts, and the orchestration patterns are pure |
 | `fabius-doctrina` | the user's own **compute** (a GPU for serving/training), an **MLflow**-class tracking server + model registry, and any hosted **inference API** | the rung ladder, the eval design, and the lifecycle decisions are pure knowledge |
 | `fabius-fortuna` | a **market-data API** (prices/fundamentals — yfinance / OpenBB / a data MCP), a **macro source** (FRED-class), and any **broker/exchange API** for live data or execution (CCXT / Alpaca) | the frameworks, valuation, backtest discipline, and risk rules are pure knowledge |
+| `fabius-concilium` | **LLM API access for several models** — one **OpenRouter** key (every provider through one gateway) or the synapse console's own 5-provider runtime + `X-LLM-Key` vault; to *run* a council you must reach the seats | the protocol, the stage prompts, the anonymization, and the Borda aggregation are pure — `references/council.mjs --selftest` proves them with no key |
 
 The other five skills (`parcus`, `decor`, `mercatus`, `praesidium`, `ludus`) need no external connection at all. Nothing here is bundled; each live tier is the user's to wire — the same lean rule everywhere: **hold the pattern, add the runtime only when the task demands it.**
 
@@ -143,6 +147,7 @@ What an engineer (or an agent) can do end-to-end under fabius:
 | Prove provenance (seal) | catena | a content-bound hash + signature + Bitcoin-anchored timestamp, verifiable offline by anyone, forever |
 | Wire an automation | machina | discover-from-live-schema → build incrementally → validate AND verify → activate, silent-failures caught |
 | Research scientifically | scientia | competing falsifiable hypotheses, source-grounded lookups, reproducible field-standard pipelines |
+| Convene a model council | concilium | first opinions → blind peer-review → chairman synthesis — one answer better than any single seat |
 | Talk lean | parcus | shorter output, full substance |
 | Never cut what matters | parcus (guardrail) | validation, security, a11y, data-loss handling preserved |
 

@@ -15,7 +15,7 @@ Open every non-trivial task by naming its load on three axes, then route each lo
 - **Memory** — spans sessions, or a fact/decision worth keeping? → `fabius-archivum`
 - **Tools / Action** — needs external state, or a computation the model botches? → `fabius-cohors` (a tool; a *second agent* only when work splits)
 - **Planning** — multi-step with dependencies? → `fabius-disciplina`
-- **Domain** — does the task sit in a named vertical? → its owner: UI / data-viz / image / diagram → `fabius-decor`; go-to-market → `fabius-mercatus`; defensive security → `fabius-praesidium`; game → `fabius-ludus`; on-chain or provenance-sealing → `fabius-catena`; automation / workflow → `fabius-machina`; science / bio → `fabius-scientia`. Domain picks WHAT; still classify the three process axes above for HOW, and run the vertical as a studio (R13).
+- **Domain** — does the task sit in a named vertical? → its owner: UI / data-viz / image / diagram → `fabius-decor`; go-to-market → `fabius-mercatus`; defensive security → `fabius-praesidium`; game → `fabius-ludus`; on-chain or provenance-sealing → `fabius-catena`; automation / workflow → `fabius-machina`; science / bio → `fabius-scientia`; model serving / MLOps / LLM-evaluation → `fabius-doctrina`; markets / economy / backtest → `fabius-fortuna`; cross-model council / ensemble deliberation → `fabius-concilium`. Domain picks WHAT; still classify the three process axes above for HOW, and run the vertical as a studio (R13).
 
 Zero axes loaded → stay in the lean `fabius-parcus` core. Publish the classification as the routing rationale.
 *Fires: first move on any non-trivial task, before picking a layer or spawning anything.*

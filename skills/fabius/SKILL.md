@@ -10,7 +10,8 @@ description: >
   chain, automate the workflow, research by method, engineer and serve ML/LLM systems, analyze markets
   with method, keep memory — and routes to the specialist layers fabius-parcus, fabius-disciplina,
   fabius-decor, fabius-cohors, fabius-archivum, fabius-mercatus, fabius-praesidium, fabius-ludus,
-  fabius-catena, fabius-machina, fabius-scientia, fabius-doctrina, and fabius-fortuna. Use when the
+  fabius-catena, fabius-machina, fabius-scientia, fabius-doctrina, fabius-fortuna, and
+  fabius-concilium. Use when the
   user says "fabius", wants the agent, or wants end-to-end capability from one place.
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
@@ -19,7 +20,7 @@ description: >
 
 Named for Quintus Fabius Maximus, the Roman general who beat Hannibal by refusing every battle that didn't matter and committing fully to the one that did. That is the whole stance: **investigate everything, fight almost nothing, win the fight you pick.**
 
-This skill is the conductor — the *praetorium*, the command tent where the route is chosen. It reads the job, sets the working stance, picks how much machinery and which model tier to spend, and hands the baton to a specialist when a job needs depth. One system, fourteen coordinated capability layers, run as one agent. (Layer model in [ARCHITECTURE.md](../../ARCHITECTURE.md); the full decision policy — R1–R13 / M1–M9 — in [`references/routing-policy.md`](references/routing-policy.md).)
+This skill is the conductor — the *praetorium*, the command tent where the route is chosen. It reads the job, sets the working stance, picks how much machinery and which model tier to spend, and hands the baton to a specialist when a job needs depth. One system, fifteen coordinated capability layers, run as one agent. (Layer model in [ARCHITECTURE.md](../../ARCHITECTURE.md); the full decision policy — R1–R13 / M1–M9 — in [`references/routing-policy.md`](references/routing-policy.md).)
 
 ## The maxim that always runs
 
@@ -75,6 +76,8 @@ serve a model · fine-tune · eval prompts ·   → fabius-doctrina    (the mode
   MLOps · inference · train · vLLM / MLflow
 stock · market · economy · valuation ·       → fabius-fortuna     (analysis, not advice)
   backtest · portfolio · risk · indicator
+"council" · "ask several models" · panel ·   → fabius-concilium   (ensemble; expensive — gate first)
+  cross-model deliberation · llm-council
 ```
 
 **Process picks HOW, domain picks WHAT — load process first.** "Build a landing page" = `fabius-disciplina` (brainstorm the spec) → `fabius-decor` (execute at quality), all under `fabius-parcus`. The router composes layers; it doesn't make you choose one.

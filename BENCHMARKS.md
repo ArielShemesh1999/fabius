@@ -24,7 +24,7 @@ The length numbers are bias-free (a character count can't be flattered). The qua
 
 ## Measured results
 
-Four runs, four different lenses, plus a deterministic structural suite. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.** Run 4 is the one that exercises the **specialist surface** — one task per specialist domain as it stood, including the on-chain / automation / science verticals — so the proof reaches the technical verticals, not just the lean stance. (The two specialists added since, `fabius-doctrina` and `fabius-fortuna`, were then measured in the Run 4 **extension** below — every fourteen-skill domain is now exercised.)
+Four runs, four different lenses, plus a deterministic structural suite. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.** Run 4 is the one that exercises the **specialist surface** — one task per specialist domain as it stood, including the on-chain / automation / science verticals — so the proof reaches the technical verticals, not just the lean stance. (The two specialists added since, `fabius-doctrina` and `fabius-fortuna`, were then measured in the Run 4 **extension** below — every then-existing specialist domain is now exercised. The cross-model `fabius-concilium` layer, added later still, is honestly *not yet* in a blind run: it deliberates *across* models on one question rather than adding a task domain, so its proper test is whether a council beats its best single seat — a measurement to add, not a claim to make here.)
 
 ### The margin, at a glance
 
@@ -120,20 +120,20 @@ Separate from "does the stance help," a deterministic suite proves the *system* 
 
 | Invariant | Result |
 |---|---|
-| Exactly fourteen skill contracts; one router, one always-on core; names unique | **PASS** |
+| Exactly fifteen skill contracts; one router, one always-on core; names unique | **PASS** |
 | Frontmatter `name` matches directory; declares `name` + `description` | **PASS** |
 | Progressive disclosure — every `SKILL.md` ≤ 12 KB (depth lives in `references/`) | **PASS** (max 11.2 KB) |
-| Provenance `fab1-` fingerprint embedded in all 14 contracts | **PASS** |
-| Reference integrity — every linked `references/*.md` resolves | **PASS** (26/26) |
+| Provenance `fab1-` fingerprint embedded in all 15 contracts | **PASS** |
+| Reference integrity — every linked `references/*.md` resolves | **PASS** (5/5) |
 | Plugin manifest skill list == skills on disk; version 1.0.0 | **PASS** |
-| Content-bound seal — 17 sealed files hash-match + Merkle root recomputes | **PASS** |
-| Count coherence — README / ARCHITECTURE / AGENTS all state "fourteen" | **PASS** |
+| Content-bound seal — 18 sealed files hash-match + Merkle root recomputes | **PASS** |
+| Count coherence — README / ARCHITECTURE / AGENTS all state "fifteen" | **PASS** |
 
 **17/17 pass.** This is the structural complement to the behavioral runs: Runs 1–4 measure that fabius *acts* better; the structural suite proves it is *built* right — single-owner, under budget, every reference live, and the seal verifiable.
 
 #### Extension — the two later verticals (`evals/harness.v3-ext.workflow.js`)
 
-The two specialists added after the original run — `fabius-doctrina` (AI/ML engineering) and `fabius-fortuna` (markets & finance) — were measured in a follow-up with the **same method** (baseline / terse / fabius × sonnet + haiku, blind `claude-opus-4-8` judge). Every fourteen-skill specialist domain is now exercised. Totals out of 15 (n = 2 tiers):
+The two specialists added after the original run — `fabius-doctrina` (AI/ML engineering) and `fabius-fortuna` (markets & finance) — were measured in a follow-up with the **same method** (baseline / terse / fabius × sonnet + haiku, blind `claude-opus-4-8` judge). Every then-existing specialist domain is now exercised; the later `fabius-concilium` layer is the one not yet in a blind run (it deliberates across models on one question rather than adding a task domain). Totals out of 15 (n = 2 tiers):
 
 | Domain (skill) | task | baseline | terse | **fabius** | output cut |
 |---|---|---|---|---|---|
