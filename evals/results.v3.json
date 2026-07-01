@@ -10,7 +10,7 @@
     "generations": 78,
     "judgements": 78,
     "agents": 156,
-    "fabius_arm": "the shipped lean stance (AGENTS.md, verbatim) PLUS the relevant specialist's operative contract for domain tasks — so this measures the routed twelve-skill mechanism, not the stance alone",
+    "fabius_arm": "a faithful condensed transcription of the lean stance plus the relevant specialist's operative contract for domain tasks, hand-transcribed into the harness from AGENTS.md and the SKILL.md contracts (not the shipped files read verbatim at runtime) — so this measures the routed twelve-skill mechanism, not the stance alone",
     "conservative_bias": "baseline here is a Claude-Code subagent, which already carries a lean-ish system prompt, so the baseline arm is unusually strong. That can only UNDERstate fabius's lift vs a clean no-system-prompt API baseline (see evals/eval.mjs run v2 in BENCHMARKS.md run 1). The wins below survive that headwind.",
     "objective_metric": "output length in characters, computed in code from the returned answer — bias-free"
   },

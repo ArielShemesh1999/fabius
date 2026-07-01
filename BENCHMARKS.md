@@ -40,7 +40,7 @@ same tasks, output length:   31–52 % SHORTER than baseline — and the blind j
 
 The point isn't "fabius is shorter" (so is TERSE). It's that fabius is shorter **and** wins the quality score — the one move plain brevity can't make.
 
-### 1 — In-repo eval, 3 Claude tiers (`evals/harness.workflow.js`)
+### 1 — In-repo eval, 3 Claude tiers (`evals/eval.mjs` → `evals/results.json`)
 
 8 tasks × 3 arms, blind judge (`claude-opus-4-8`). Total out of 15:
 
@@ -85,7 +85,7 @@ The reading: the bare stance maximizes **design polish** (T1 wins on the judge's
 
 ### 4 — Specialist-domain coverage: one task per specialist (`evals/harness.v3.workflow.js`)
 
-The run that closes the gap Run 3's version-note named. **13 tasks, one per specialist domain** — the YAGNI traps, correctness, security, a11y, agents, design, **on-chain (catena)**, **automation (machina)**, **science (scientia)**, marketing, game — × the same three arms, generated on two tiers, **judged blind by `claude-opus-4-8`** (156 agents total). Here the `fabius` arm injects the shipped stance **plus the relevant specialist's operative contract** for each domain task — so this measures the routed *specialist mechanism*, not the stance alone.
+The run that closes the gap Run 3's version-note named. **13 tasks across 11 blind-judged task domains** — the YAGNI traps, correctness, security, a11y, agents, design, **on-chain (catena)**, **automation (machina)**, **science (scientia)**, marketing, game — × the same three arms, generated on two tiers, **judged blind by `claude-opus-4-8`** (156 agents total). Tasks outnumber domains: two domains carry two tasks each (YAGNI: cache + config-flag; security: query route + upload threat-model). Here the `fabius` arm injects a **faithful condensed transcription of the stance plus the relevant specialist's operative contract** for each domain task (hand-transcribed into the harness from `AGENTS.md` and the `SKILL.md` contracts, not the shipped files read at runtime) — so this measures the routed *specialist mechanism*, not the stance alone. The arm that injects the shipped `AGENTS.md` **verbatim** is Run 1 (`eval.mjs`).
 
 Totals out of 15 (n = 13 per cell):
 
@@ -122,14 +122,16 @@ Separate from "does the stance help," a deterministic suite proves the *system* 
 |---|---|
 | Exactly fifteen skill contracts; one router, one always-on core; names unique | **PASS** |
 | Frontmatter `name` matches directory; declares `name` + `description` | **PASS** |
+| Every flattened frontmatter `description` ≤ 1024 chars (discovery budget) | **PASS** |
 | Progressive disclosure — every `SKILL.md` ≤ 12 KB (depth lives in `references/`) | **PASS** (max 11.2 KB) |
 | Provenance `fab1-` fingerprint embedded in all 15 contracts | **PASS** |
-| Reference integrity — every linked `references/*.md` resolves | **PASS** (5/5) |
+| Reference integrity — every linked **and backtick-quoted** `references/` path resolves | **PASS** |
 | Plugin manifest skill list == skills on disk; version 1.0.0 | **PASS** |
+| No sealed-set drift — seal-manifest file list == skills on disk + ARCHITECTURE/CORPUS/AGENTS | **PASS** |
 | Content-bound seal — 18 sealed files hash-match + Merkle root recomputes | **PASS** |
 | Count coherence — README / ARCHITECTURE / AGENTS all state "fifteen" | **PASS** |
 
-**17/17 pass.** This is the structural complement to the behavioral runs: Runs 1–4 measure that fabius *acts* better; the structural suite proves it is *built* right — single-owner, under budget, every reference live, and the seal verifiable.
+**19/19 pass** (once the seal is re-computed; hash-match is the one invariant that goes red mid-edit and green on re-seal). This is the structural complement to the behavioral runs: Runs 1–4 measure that fabius *acts* better; the structural suite proves it is *built* right — single-owner, under budget, every reference live, and the seal verifiable.
 
 #### Extension — the two later verticals (`evals/harness.v3-ext.workflow.js`)
 
@@ -164,7 +166,7 @@ A good result is **shorter answers the blind judge scores higher** — brevity *
 - Runs 1–2 test **#1 — does injecting the stance improve output.** Yes, consistently, cross-model.
 - Run 3 (T3) tests **#2 — does the multi-skill mechanism fire and act on its own.** Yes — it shipped the leanest, only-functional build live in Claude Code.
 - Run 4 tests **#3 — does each benchmarked specialist, including the new on-chain / automation / science verticals, improve its own domain.** Yes — fabius beats both controls on both tiers, and the largest lifts land on those technical verticals.
-- The structural suite tests **#4 — is the system built right** (single-owner, under budget, references live, seal verifiable). 17/17.
+- The structural suite tests **#4 — is the system built right** (single-owner, under budget, references live, seal verifiable). 19/19.
 - The advantage **grows as the model's default discipline drops** (Run 1: sonnet/haiku gain more than opus; Run 2: lean-BASE Grok gains most, verbose-BASE Mistral least). The advantage is always present; its *size* tracks how undisciplined the default is.
 - **Not tested by a one-shot eval:** `fabius-archivum` (persistent memory only pays off across sessions) and the `fabius` router's dispatch accuracy. Memory is excluded rather than faked; routing is checked structurally, not behaviorally.
 
@@ -173,7 +175,7 @@ A good result is **shorter answers the blind judge scores higher** — brevity *
 ## Reproduce it (one command)
 
 ```bash
-# structural suite — no key, no cost, no network; 17/17 must pass (Run 4 sibling)
+# structural suite — no key, no cost, no network; 19/19 must pass (Run 4 sibling)
 node evals/structural.mjs
 
 # behavioral wiring check — no key, no cost
@@ -193,7 +195,7 @@ GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini
 #   Workflow({ scriptPath: "evals/harness.v3-ext.workflow.js" })   # doctrina + fortuna
 ```
 
-The `fabius` arm injects the **actual** shipped `AGENTS.md` (and, in Run 4, the relevant specialist contract), so you benchmark the real stance, not a paraphrase. `eval.mjs` writes `evals/results.json`; the published Run 4 receipt is [`evals/results.v3.json`](evals/results.v3.json). Swap `--model` / `--judge` to benchmark anything; add tasks in the `TASKS` array.
+In Run 1 (`eval.mjs`) the `fabius` arm reads the shipped `AGENTS.md` **verbatim** at runtime — you benchmark the exact stance the agent ships. Run 4 (`harness.v3.workflow.js`) instead injects a **faithful condensed transcription** of that stance plus the routed specialist's operative contract, hand-transcribed into the harness rather than read from the shipped files — so it measures the specialist mechanism, not a byte-for-byte copy of the source. `eval.mjs` writes `evals/results.json`; the published Run 4 receipt is [`evals/results.v3.json`](evals/results.v3.json). Swap `--model` / `--judge` to benchmark anything; add tasks in the `TASKS` array.
 
 ---
 
@@ -205,4 +207,4 @@ The `fabius` arm injects the **actual** shipped `AGENTS.md` (and, in Run 4, the 
 - **Blind scores lower — and that's reassurance.** The blind cross-family runs scored fabius lower than the self-judged ones (86/82 vs 89/87). A judge that doesn't love itself scores harder; the pattern held anyway.
 - **Versions move.** Every number was measured on one model at one moment. Don't generalize past that — re-run it.
 
-> The claim the data supports: **fabius gives a consistent, cross-model quality lift that grows as the model's default gets less disciplined — large at trust / order / genuine-build boundaries and across the technical verticals (on-chain, automation, science), negligible at pure YAGNI. It is the only arm that beats both a bare baseline and a "be concise" control while cutting output ~40%. It is not a "shorten" prompt; it is a scope-control system that knows when to compress and when to expand — and it is built right: 17/17 structural invariants, a verifiable content-bound seal.** Not "smarter." Not "10× on everything." That sentence survives technical scrutiny; the inflated one doesn't.
+> The claim the data supports: **fabius gives a consistent, cross-model quality lift that grows as the model's default gets less disciplined — large at trust / order / genuine-build boundaries and across the technical verticals (on-chain, automation, science), negligible at pure YAGNI. It is the only arm that beats both a bare baseline and a "be concise" control while cutting output ~40%. It is not a "shorten" prompt; it is a scope-control system that knows when to compress and when to expand — and it is built right: 19/19 structural invariants, a verifiable content-bound seal.** Not "smarter." Not "10× on everything." That sentence survives technical scrutiny; the inflated one doesn't.

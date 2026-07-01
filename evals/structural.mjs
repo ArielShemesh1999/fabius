@@ -3,9 +3,11 @@
 //
 // Where eval.mjs / harness.workflow.js measure whether the *stance* improves output,
 // this file proves the *system* is well-formed: one router + one always-on core + thirteen
-// single-owner specialists, every lean contract under budget (progressive disclosure),
-// every reference resolvable, and the content-bound provenance seal intact. These are
-// pass/fail facts, not judge opinions — they reproduce byte-for-byte on any clone.
+// single-owner specialists, every lean contract under budget (progressive disclosure), every
+// flattened description under the discovery budget, every reference resolvable (markdown links
+// AND backtick-quoted mentions), no sealed-set drift (manifest file list == on-disk set), and
+// the content-bound provenance seal intact. These are pass/fail facts, not judge opinions —
+// they reproduce byte-for-byte on any clone.
 //
 //   node evals/structural.mjs            # run, print the report, exit non-zero on any FAIL
 //   node evals/structural.mjs --json     # also write evals/structural.json
@@ -25,13 +27,29 @@ const ok = (name, pass, detail) => checks.push({ name, pass: !!pass, detail });
 // ---- load every skill contract --------------------------------------------------
 const skillDir = join(ROOT, "skills");
 const skillNames = readdirSync(skillDir).filter((d) => existsSync(join(skillDir, d, "SKILL.md")));
+// flatten a YAML frontmatter description (block scalar or inline) to a single-line string
+const flattenDescription = (fmText) => {
+  const lines = (fmText || "").split("\n");
+  const i = lines.findIndex((l) => /^description:/.test(l));
+  if (i === -1) return "";
+  const first = lines[i].replace(/^description:\s*/, "");
+  const parts = [];
+  if (first && !/^[|>][-+]?\s*$/.test(first)) parts.push(first); // inline value, not a block indicator
+  for (let j = i + 1; j < lines.length; j++) {
+    if (/^\S/.test(lines[j])) break; // next top-level key ends the block
+    parts.push(lines[j].trim());
+  }
+  return parts.join(" ").replace(/\s+/g, " ").trim();
+};
+
 const skills = skillNames.map((d) => {
   const path = join(skillDir, d, "SKILL.md");
   const raw = readFileSync(path, "utf8");
   const fm = raw.match(/^---\n([\s\S]*?)\n---/);
   const name = (fm?.[1].match(/^name:\s*(.+)$/m)?.[1] || "").trim();
   const hasDesc = /^description:\s*>/m.test(fm?.[1] || "");
-  return { dir: d, path, raw, bytes: Buffer.byteLength(raw), name, hasDesc };
+  const descFlat = flattenDescription(fm?.[1] || "");
+  return { dir: d, path, raw, bytes: Buffer.byteLength(raw), name, hasDesc, descFlat };
 });
 
 // ---- 1. shape: 15 skills, one router, one always-on core, names unique ----------
@@ -46,6 +64,13 @@ ok("router present: fabius", skills.some((s) => s.name === "fabius"));
 ok("always-on core present: fabius-parcus", skills.some((s) => s.name === "fabius-parcus"));
 ok("frontmatter: every contract declares name + description", skills.every((s) => s.name && s.hasDesc));
 
+// every description, flattened to a single line, fits the discovery budget
+const DESC_BUDGET = 1024;
+const descOver = skills.filter((s) => s.descFlat.length > DESC_BUDGET);
+const maxDesc = Math.max(...skills.map((s) => s.descFlat.length));
+ok(`frontmatter: every flattened description ≤ ${DESC_BUDGET} chars`, descOver.length === 0,
+   `max ${maxDesc} chars (${skills.find((s) => s.descFlat.length === maxDesc).name}); ${descOver.length} over`);
+
 // ---- 2. progressive disclosure: every lean contract under budget -----------------
 const BUDGET = 12000; // bytes; depth lives in references/, not in SKILL.md
 const over = skills.filter((s) => s.bytes > BUDGET);
@@ -59,18 +84,26 @@ const marked = skills.filter((s) => s.raw.includes(FP));
 ok("provenance: fab1- fingerprint in every contract", marked.length === skills.length,
    `${marked.length}/${skills.length} marked`);
 
-// ---- 4. reference integrity: every linked references/*.md resolves on disk -------
-// resolve the FULL markdown link target relative to the skill dir, so cross-skill
-// links (../fabius/references/routing-policy.md) and local ones both check correctly.
+// ---- 4. reference integrity: every referenced references/ path resolves on disk --
+// Two sources, both checked:
+//   (a) markdown links — resolve the FULL link target relative to the skill dir, so
+//       cross-skill links (../fabius/references/routing-policy.md) and local ones work.
+//   (b) backtick-quoted mentions — inline `references/<path>` (files or dirs). The
+//       lookbehind keeps us from re-capturing the tail of a longer ../…/references/ path
+//       already covered by (a). Glob/wildcard paths are skipped (they name a set, not a file).
+const hasGlob = (p) => /[*?[\]]/.test(p);
 let refTotal = 0, refMissing = [];
 for (const s of skills) {
   const links = [...s.raw.matchAll(/\]\(([^)`]*references\/[a-z0-9-]+\.md)\)/g)].map((m) => m[1].replace(/^`|`$/g, ""));
-  for (const link of new Set(links)) {
+  const backticks = [...s.raw.matchAll(/`([^`]+)`/g)].map((m) => m[1]).filter((t) => t.includes("references/"))
+    .flatMap((t) => t.match(/(?<![\w/.-])references\/[A-Za-z0-9._/-]+/g) || []);
+  for (const link of new Set([...links, ...backticks])) {
+    if (hasGlob(link)) continue;
     refTotal++;
     if (!existsSync(join(skillDir, s.dir, link))) refMissing.push(`${s.dir} → ${link}`);
   }
 }
-ok("reference integrity: every linked references/*.md exists", refMissing.length === 0,
+ok("reference integrity: every linked + backtick-quoted references/ path exists", refMissing.length === 0,
    `${refTotal - refMissing.length}/${refTotal} resolve` + (refMissing.length ? ` — missing: ${refMissing.join(", ")}` : ""));
 
 // ---- 5. plugin manifest == filesystem (no phantom / dropped skills) --------------
@@ -84,6 +117,23 @@ ok("manifest: version is 1.0.0", plugin.version === "1.0.0", plugin.version);
 
 // ---- 6. content-bound seal: file hashes + Merkle root recompute & match ----------
 const manifest = JSON.parse(readFileSync(join(ROOT, "provenance", "seal-manifest.json"), "utf8"));
+
+// no sealed-set drift: the manifest's file LIST must equal exactly the on-disk sealed set
+// (every skills/*/SKILL.md + the three canonical docs). Hashes are checked separately below;
+// this asserts membership only, so it stays green while the seal is re-computed out of band.
+const sealedExpected = [...skills.map((s) => `skills/${s.dir}/SKILL.md`), "ARCHITECTURE.md", "CORPUS.md", "AGENTS.md"].sort();
+const sealedActual = Object.keys(manifest.files).sort();
+ok("seal: manifest file list == skills on disk + ARCHITECTURE/CORPUS/AGENTS",
+   JSON.stringify(sealedActual) === JSON.stringify(sealedExpected),
+   JSON.stringify(sealedActual) === JSON.stringify(sealedExpected)
+     ? `${sealedActual.length} files, sets equal`
+     : `manifest ${sealedActual.length} vs expected ${sealedExpected.length}` +
+       (() => {
+         const extra = sealedActual.filter((p) => !sealedExpected.includes(p));
+         const missing = sealedExpected.filter((p) => !sealedActual.includes(p));
+         return (extra.length ? ` — extra: ${extra.join(", ")}` : "") + (missing.length ? ` — missing: ${missing.join(", ")}` : "");
+       })());
+
 let hashMismatch = [];
 for (const [p, want] of Object.entries(manifest.files)) {
   const got = existsSync(join(ROOT, p)) ? sha256hex(readFileSync(join(ROOT, p))) : "MISSING";
