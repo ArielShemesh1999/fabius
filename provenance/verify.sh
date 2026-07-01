@@ -59,7 +59,7 @@ fi
 
 # 4) Signed tag (authorship) ----------------------------------------------
 if [ -f provenance/allowed_signers ]; then
-  tag=$(git tag --list 'v*-sealed' --sort=-version:refname | head -1)
+  tag=$(git tag --list 'v*-sealed*' --sort=-creatordate | head -1)
   if [ -n "$tag" ] && git -c gpg.ssh.allowedSignersFile=provenance/allowed_signers verify-tag "$tag" 2>&1 | grep -qi "Good .*signature"; then
     pass "release tag '$tag' carries a valid signature from the committed key"
   else
@@ -102,6 +102,22 @@ PY
   fi
 else
   note "provenance/seal-manifest.json missing — create the content-bound seal: bash provenance/seal-skills.sh"
+fi
+
+# 6) Seal freshness — the Bitcoin anchor must cover the CURRENT manifest ----
+if [ -f provenance/seal-manifest.json ] && [ -n "${sealed:-}" ] && git cat-file -e "$sealed^{commit}" 2>/dev/null; then
+  if git cat-file -e "$sealed:provenance/seal-manifest.json" 2>/dev/null \
+     && git show "$sealed:provenance/seal-manifest.json" 2>/dev/null | cmp -s - provenance/seal-manifest.json; then
+    pass "anchored sealed commit contains the current seal manifest — the Bitcoin date covers every sealed file"
+  else
+    note "current seal manifest postdates the Bitcoin anchor (anchor covers commit ${sealed:0:7} only) — re-tag and re-stamp per PROVENANCE.md §6"
+  fi
+  freshtag=$(git tag --list 'v*-sealed*' --sort=-creatordate | head -1)
+  if [ -n "$freshtag" ] && git show "$freshtag^{commit}:provenance/sealed-commit.txt" 2>/dev/null | cmp -s - provenance/sealed-commit.txt; then
+    pass "newest sealed tag '$freshtag' matches the current anchor record"
+  else
+    note "newest sealed tag predates the current anchor record — re-tag per PROVENANCE.md §6"
+  fi
 fi
 
 say ""

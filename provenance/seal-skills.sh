@@ -5,7 +5,7 @@
 # system docs, then a binary Merkle root over those leaves, and writes the result
 # to provenance/seal-manifest.json. This is the *content-bound* half of the
 # provenance apparatus (PROVENANCE.md §3): unlike the embedded fab1- comment, every
-# value here is recomputable from the public files — forging one needs a hash
+# value here is recomputable from the repo files — forging one needs a hash
 # collision. Re-run after changing any sealed file, then re-tag + re-stamp (§6).
 #
 #   bash provenance/seal-skills.sh
@@ -51,7 +51,7 @@ manifest = {
     "spec": "fabius-seal/v1",
     "algorithm": "sha256",
     "merkle": "binary, leaf = sha256(path \\u0000 filehash), leaves sorted, last duplicated if odd",
-    "note": "Content-bound seal of the fabius skill contracts and core docs. Every value is recomputable from the public files: recompute each file's sha256 and the merkle root and compare. See PROVENANCE.md §3 and skills/fabius-catena/references/sealing.md.",
+    "note": "Content-bound seal of the fabius skill contracts and core docs. Every value is recomputable from the repo files: recompute each file's sha256 and the merkle root and compare. See PROVENANCE.md §3 and skills/fabius-catena/references/sealing.md.",
     "count": len(file_hashes),
     "files": dict(sorted(file_hashes.items())),
     "merkle_root": merkle_root,

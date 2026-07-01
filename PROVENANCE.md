@@ -27,7 +27,7 @@ The strongest evidence of ownership is a timestamp no one can backdate. A thief 
 At seal time, `provenance/sealed-commit.txt` records the full git commit hash and tree hash of the sealed release. A commit hash is the SHA over the root of a Merkle (hash) tree covering every tracked file, *plus* the commit metadata and parent links — so that one 40-character hash commits every file **and** the full ancestor history; change a single byte anywhere and the hash changes. (Git's object hash is SHA-1 by default: collision-weakened but still second-preimage-secure, and the OpenTimestamps anchor over the file uses SHA-256 — so backdating requires breaking the timestamp, not just git.) `provenance/sealed-commit.txt.ots` is the **OpenTimestamps** proof that anchors the SHA-256 of that file into the **Bitcoin blockchain**.
 
 - **What it proves.** That the sealed commit — and therefore every file it contains — existed no later than the timestamp's Bitcoin block. This is checkable by anyone, forever, with no trusted third party: the proof is math against the public chain.
-- **What it does NOT prove.** Existence-by-a-date is not, by itself, authorship — it proves the *data* was there, not that *you* are the only one who had it. Its power is in combination (§2, §4): priority date **+** your signature **+** GitHub's public push history makes "I had it first, signed, in public" provable from three independent directions.
+- **What it does NOT prove.** Existence-by-a-date is not, by itself, authorship — it proves the *data* was there, not that *you* are the only one who had it. Its power is in combination (§2, §4): priority date **+** your signature **+** GitHub's retained push history (private but producible, §4) makes "I had it first, signed, third-party-recorded" provable from three independent directions.
 - **Honest caveat.** A fresh OpenTimestamps proof is initially attested by calendar servers and *upgrades* to full Bitcoin confirmation within a few hours to a day. Run `ots upgrade provenance/sealed-commit.txt.ots` to pull the Bitcoin attestation once it is mined; `verify.sh` reports which state it is in.
 
 ---
@@ -57,7 +57,7 @@ Every skill file carries a provenance marker:
 
 The fingerprint above is a *discovery* aid; it is not derived from the content. `provenance/seal-manifest.json` adds the **content-bound** half: a SHA-256 over every skill contract (`skills/*/SKILL.md`) and the core system docs (`ARCHITECTURE.md`, `CORPUS.md`, `AGENTS.md`), plus a **binary Merkle root** over those leaves and the algorithm identifier. `bash provenance/seal-skills.sh` builds it; `verify.sh` recomputes it.
 
-- **What it does.** Unlike the comment, every value here is **recomputable from the public files** — a verifier hashes the bytes and compares. Forging a seal for altered content requires a **hash collision**, which is a public, detectable event (the *detectability-by-construction* property). The Merkle root commits all seventeen files at once, so the OpenTimestamps anchor over the sealed commit (§1) — which contains this manifest — extends an **un-backdatable date to the exact bytes of every skill contract and core doc**, not just to a comment.
+- **What it does.** Unlike the comment, every value here is **recomputable from the files themselves** — a verifier hashes the bytes and compares. Forging a seal for altered content requires a **hash collision**, which is a public, detectable event (the *detectability-by-construction* property). The Merkle root commits every sealed file at once (the exact count and list live in `provenance/seal-manifest.json`), so the OpenTimestamps anchor over the **latest sealed commit** (§1) — which contains this manifest — extends an **un-backdatable date to the exact bytes of every sealed skill contract and core doc**, not just to a comment. Between an edit and the next re-seal + re-tag + re-stamp (§6), the manifest stays recomputable but the new bytes are not yet Bitcoin-anchored — `verify.sh` reports that state explicitly.
 - **What it does NOT do.** It binds the **exact expression**: rewording a skill changes its hash, by design. So it strengthens detection of **verbatim or substantial** copies and gives integrity (tamper-evidence) for this repo's own files — it does not reach an idea-level reimplementation, the same honest limit as everything here. This is **boring cryptography only** (a hash and a Merkle tree — no trusted setup, no token), drawn from fabius's own SEAL research; the primitive and its rules are documented in [`skills/fabius-catena/references/sealing.md`](skills/fabius-catena/references/sealing.md).
 
 ---
@@ -89,13 +89,13 @@ What this package **cannot** stop: a determined actor who rewrites fabius from s
 bash provenance/verify.sh
 ```
 
-It checks, in order: the fingerprint is intact in every skill; the sealed commit is in this branch's history; the OpenTimestamps proof (and whether it is Bitcoin-confirmed yet); the signed tag; and the **content-bound seal** — recomputing every sealed file's SHA-256 and the Merkle root against `provenance/seal-manifest.json`. The fingerprint and seal-manifest checks run today; the timestamp and signed-tag checks become meaningful **after the release is sealed** and report NOTE until then. Manual equivalents:
+It checks, in order: the fingerprint is intact in every skill; the sealed commit is in this branch's history; the OpenTimestamps proof (and whether it is Bitcoin-confirmed yet); the signed tag; the **content-bound seal** — recomputing every sealed file's SHA-256 and the Merkle root against `provenance/seal-manifest.json`; and **seal freshness** — that the Bitcoin-anchored commit actually contains the current manifest and the newest sealed tag matches the current anchor record (a stale anchor reports NOTE until you re-tag and re-stamp). The fingerprint and seal-manifest checks run today; the timestamp and signed-tag checks become meaningful **after the release is sealed** and report NOTE until then. Manual equivalents:
 
 ```bash
 shasum -a 256 skills/*/SKILL.md ARCHITECTURE.md CORPUS.md AGENTS.md                # content-bound seal — compare to provenance/seal-manifest.json
 ots verify provenance/sealed-commit.txt.ots                                       # priority date (Bitcoin)
 git -c gpg.ssh.allowedSignersFile=provenance/allowed_signers \
-    verify-tag "$(git tag --list 'v*-sealed' --sort=-version:refname | head -1)"  # authorship
+    verify-tag "$(git tag --list 'v*-sealed*' --sort=-creatordate | head -1)"  # authorship
 grep -rl "provenance fab1-" skills/*/SKILL.md                                     # fingerprint coverage
 ```
 
