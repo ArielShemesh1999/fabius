@@ -10,6 +10,7 @@ __pycache__/
 evals/results.json
 evals/results.*.json
 !evals/results.v3.json
+!evals/results.v5.json
 evals/structural.json
 
 # partial / temp downloads

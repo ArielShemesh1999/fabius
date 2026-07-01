@@ -24,7 +24,7 @@ The length numbers are bias-free (a character count can't be flattered). The qua
 
 ## Measured results
 
-Four runs, four different lenses, plus a deterministic structural suite. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.** Run 4 is the one that exercises the **specialist surface** — one task per specialist domain as it stood, including the on-chain / automation / science verticals — so the proof reaches the technical verticals, not just the lean stance. (The two specialists added since, `fabius-doctrina` and `fabius-fortuna`, were then measured in the Run 4 **extension** below — every then-existing specialist domain is now exercised. The cross-model `fabius-concilium` layer, added later still, is honestly *not yet* in a blind run: it deliberates *across* models on one question rather than adding a task domain, so its proper test is whether a council beats its best single seat — a measurement to add, not a claim to make here.)
+Five runs, five different lenses, plus a deterministic structural suite. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.** Run 5 is the widest: **all four internal models** (haiku · sonnet · opus · fable) with the `fabius` arm carrying the **shipped files verbatim** and **two blind judges** — it shows the output cut is universal and the quality lift is real on the frontier tiers and on any routed specialist, while reporting honestly where the full contracts overwhelm the smallest model. Run 4 is the one that exercises the **specialist surface** — one task per specialist domain as it stood, including the on-chain / automation / science verticals — so the proof reaches the technical verticals, not just the lean stance. (The two specialists added since, `fabius-doctrina` and `fabius-fortuna`, were then measured in the Run 4 **extension** below — every then-existing specialist domain is now exercised. The cross-model `fabius-concilium` layer, added later still, is honestly *not yet* in a blind run: it deliberates *across* models on one question rather than adding a task domain, so its proper test is whether a council beats its best single seat — a measurement to add, not a claim to make here.)
 
 ### The margin, at a glance
 
@@ -114,6 +114,27 @@ The sharpest single cell: the **RNA-seq differential-expression** task on haiku 
 
 Honest reading of the misses: **pure-YAGNI** is the one category where plain "be concise" beats fabius (−1.75) — exactly as designed, since over-building adds nothing there so there is no scope to control. Marketing copy and one game-loop cell were ~ties. And the **baseline here is a Claude-Code subagent** that already carries a lean-ish system prompt, so it is an unusually strong baseline — fabius wins *into a headwind*, which is the conservative direction. Full per-task data: [`evals/results.v3.json`](evals/results.v3.json).
 
+### 5 — All four internal models, shipped files read verbatim (`evals/harness.v5.workflow.js`)
+
+The run that answers a sharper question than Run 4: what happens on **every internal model** — `haiku`, `sonnet`, `opus`, `fable` — when the `fabius` arm carries the **actual shipped files, byte-for-byte** (the whole `AGENTS.md` stance, plus the routed specialist's whole `SKILL.md` contract), not a hand-condensed transcription? **15 tasks × 4 models × 3 arms = 180 generations, each scored by two blind judges** (`opus` + `fable`, averaged — so no model grades only its own work; inter-judge mean gap 0.69/15). 551 real agents. Receipt: [`evals/results.v5.json`](evals/results.v5.json).
+
+Totals out of 15 (n = 15 per cell), and the output cut vs the bare model:
+
+| Model | baseline | terse | **fabius** | Δ vs baseline | Δ vs terse | output cut |
+|---|---|---|---|---|---|---|
+| **fable** (frontier) | 14.50 | 14.60 | **14.73** | **+0.23** | **+0.13** | **−25.3%** |
+| **opus** (frontier) | 14.40 | 14.43 | **14.60** | **+0.20** | **+0.17** | **−20.0%** |
+| sonnet (mid) | 14.27 | 14.33 | 14.20 | −0.07 | −0.13 | −20.3% |
+| haiku (fast) | 11.73 | 12.43 | 11.40 | −0.33 | −1.03 | −35.5% |
+
+Three findings, stated straight:
+
+1. **The output cut is universal — −20% to −35% on every model.** The scope-control claim doesn't depend on the tier; it holds everywhere.
+2. **On the frontier tiers fabius actually runs at — Opus 4.8 and Fable 5 — it beats *both* the bare model *and* the "be concise" control** while cutting output ~20–25%. Leaner *and* better, together.
+3. **Where a specialist contract is routed, the lift is large even on the smallest model.** Split Haiku's tasks by kind: on the **twelve specialist tasks its average delta is +0.71** — security route **9.0 → 14.5**, on-chain SPL balance **10.5 → 14.5**, CSS **12.5 → 14.0**, ML ship-decision **13.0 → 14.0**. The contract adds real domain rigor a small model doesn't supply on its own.
+
+**The honest miss, and why it's instructive.** Haiku's overall −0.33 is driven entirely by the **three trivial tasks** (a one-line token fix, a cache one-liner, a basic modal), where its average delta is **−4.50** — the one-line `off-by-one` fix regressed from 14.5 to 3.0. Dumping a 10 KB verbatim contract in front of a *fast* model for a *one-line* job overwhelms it. That is not an argument against the contracts; it is a live demonstration of exactly why fabius **routes by model-tier and gates on the lean core first** — you send the fast tier a condensed stance and let `fabius-parcus` skip the machinery when the job is trivial (Run 4, which injected the *condensed* stance, is where haiku gains). The capable models show no such overwhelm: on trivial tasks Opus and Fable are still **+0.33 / +0.50**. And pooled across all four models and all 15 tasks, fabius (13.73) ties the bare model (13.72) while terse edges both (13.95) — so the value here is **the 26% output cut plus the frontier and specialist lifts**, not a pooled quality win. No number is hidden; the receipt has every cell.
+
 ### Structural tests — the system is well-formed (no model, no key)
 
 Separate from "does the stance help," a deterministic suite proves the *system* is intact. These are pass/fail facts that reproduce byte-for-byte on any clone — [`node evals/structural.mjs`](evals/structural.mjs):
@@ -166,6 +187,7 @@ A good result is **shorter answers the blind judge scores higher** — brevity *
 - Runs 1–2 test **#1 — does injecting the stance improve output.** Yes, consistently, cross-model.
 - Run 3 (T3) tests **#2 — does the multi-skill mechanism fire and act on its own.** Yes — it shipped the leanest, only-functional build live in Claude Code.
 - Run 4 tests **#3 — does each benchmarked specialist, including the new on-chain / automation / science verticals, improve its own domain.** Yes — fabius beats both controls on both tiers, and the largest lifts land on those technical verticals.
+- Run 5 tests **#3′ — with the shipped files verbatim, across all four internal models, does it still hold.** Partly, and instructively: output drops 20–35% everywhere; on the frontier tiers (Opus, Fable) fabius beats both controls; any routed specialist lifts quality even on Haiku (+0.71 on its specialist tasks). The one regression — Haiku on *trivial* tasks under a full verbatim contract — is the empirical case for model-tier-aware routing and the lean gate, not against them.
 - The structural suite tests **#4 — is the system built right** (single-owner, under budget, references live, seal verifiable). 19/19.
 - The advantage **grows as the model's default discipline drops** (Run 1: sonnet/haiku gain more than opus; Run 2: lean-BASE Grok gains most, verbose-BASE Mistral least). The advantage is always present; its *size* tracks how undisciplined the default is.
 - **Not tested by a one-shot eval:** `fabius-archivum` (persistent memory only pays off across sessions) and the `fabius` router's dispatch accuracy. Memory is excluded rather than faked; routing is checked structurally, not behaviorally.
@@ -193,6 +215,9 @@ GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini
 # the every-domain run (Run 4) + its two-vertical extension, inside Claude Code:
 #   Workflow({ scriptPath: "evals/harness.v3.workflow.js" })
 #   Workflow({ scriptPath: "evals/harness.v3-ext.workflow.js" })   # doctrina + fortuna
+
+# all four internal models, shipped files verbatim, two blind judges (Run 5):
+#   Workflow({ scriptPath: "evals/harness.v5.workflow.js" })       # -> evals/results.v5.json
 ```
 
 In Run 1 (`eval.mjs`) the `fabius` arm reads the shipped `AGENTS.md` **verbatim** at runtime — you benchmark the exact stance the agent ships. Run 4 (`harness.v3.workflow.js`) instead injects a **faithful condensed transcription** of that stance plus the routed specialist's operative contract, hand-transcribed into the harness rather than read from the shipped files — so it measures the specialist mechanism, not a byte-for-byte copy of the source. `eval.mjs` writes `evals/results.json`; the published Run 4 receipt is [`evals/results.v3.json`](evals/results.v3.json). Swap `--model` / `--judge` to benchmark anything; add tasks in the `TASKS` array.

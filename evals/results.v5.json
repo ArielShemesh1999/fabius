@@ -1,0 +1,2972 @@
+{
+  "_meta": {
+    "run": "Run 5",
+    "generated_models": [
+      "haiku",
+      "sonnet",
+      "opus",
+      "fable"
+    ],
+    "arms": [
+      "baseline",
+      "terse",
+      "fabius"
+    ],
+    "judges": [
+      "opus",
+      "fable"
+    ],
+    "tasks": 15,
+    "fabius_arm": "The shipped AGENTS.md stance loaded verbatim from the repo at run time, PLUS the routed specialist's shipped SKILL.md contract verbatim for the 12 specialist tasks. Not a paraphrase — the actual files.",
+    "blind": "Judges are told only the task and the answer text; never the model, arm, or stance. Two judges (opus + fable) per answer, averaged, so no single model grades only its own work.",
+    "load_ok": true
+  },
+  "byModel": {
+    "haiku": {
+      "baseline": 11.73,
+      "terse": 12.43,
+      "fabius": 11.4,
+      "gain_vs_baseline": -0.33,
+      "gain_vs_terse": -1.03,
+      "output_reduction_vs_baseline_pct": 35.5,
+      "baseline_chars": 4111,
+      "fabius_chars": 2653
+    },
+    "sonnet": {
+      "baseline": 14.27,
+      "terse": 14.33,
+      "fabius": 14.2,
+      "gain_vs_baseline": -0.07,
+      "gain_vs_terse": -0.13,
+      "output_reduction_vs_baseline_pct": 20.3,
+      "baseline_chars": 3521,
+      "fabius_chars": 2806
+    },
+    "opus": {
+      "baseline": 14.4,
+      "terse": 14.43,
+      "fabius": 14.6,
+      "gain_vs_baseline": 0.2,
+      "gain_vs_terse": 0.17,
+      "output_reduction_vs_baseline_pct": 20,
+      "baseline_chars": 3570,
+      "fabius_chars": 2855
+    },
+    "fable": {
+      "baseline": 14.5,
+      "terse": 14.6,
+      "fabius": 14.73,
+      "gain_vs_baseline": 0.23,
+      "gain_vs_terse": 0.13,
+      "output_reduction_vs_baseline_pct": 25.3,
+      "baseline_chars": 3087,
+      "fabius_chars": 2307
+    }
+  },
+  "byModelArm": {
+    "haiku/baseline": {
+      "n": 15,
+      "total": 11.73,
+      "chars": 4111,
+      "correctness": 4.33,
+      "minimality": 3.53,
+      "best_practice": 3.87
+    },
+    "haiku/terse": {
+      "n": 15,
+      "total": 12.43,
+      "chars": 2454,
+      "correctness": 4.33,
+      "minimality": 4.27,
+      "best_practice": 3.83
+    },
+    "haiku/fabius": {
+      "n": 15,
+      "total": 11.4,
+      "chars": 2653,
+      "correctness": 3.9,
+      "minimality": 3.57,
+      "best_practice": 3.93
+    },
+    "sonnet/baseline": {
+      "n": 15,
+      "total": 14.27,
+      "chars": 3521,
+      "correctness": 5,
+      "minimality": 4.37,
+      "best_practice": 4.9
+    },
+    "sonnet/terse": {
+      "n": 15,
+      "total": 14.33,
+      "chars": 1659,
+      "correctness": 4.9,
+      "minimality": 4.83,
+      "best_practice": 4.6
+    },
+    "sonnet/fabius": {
+      "n": 15,
+      "total": 14.2,
+      "chars": 2806,
+      "correctness": 4.9,
+      "minimality": 4.53,
+      "best_practice": 4.77
+    },
+    "opus/baseline": {
+      "n": 15,
+      "total": 14.4,
+      "chars": 3570,
+      "correctness": 5,
+      "minimality": 4.47,
+      "best_practice": 4.93
+    },
+    "opus/terse": {
+      "n": 15,
+      "total": 14.43,
+      "chars": 1274,
+      "correctness": 4.93,
+      "minimality": 5,
+      "best_practice": 4.5
+    },
+    "opus/fabius": {
+      "n": 15,
+      "total": 14.6,
+      "chars": 2855,
+      "correctness": 5,
+      "minimality": 4.63,
+      "best_practice": 4.97
+    },
+    "fable/baseline": {
+      "n": 15,
+      "total": 14.5,
+      "chars": 3087,
+      "correctness": 4.97,
+      "minimality": 4.53,
+      "best_practice": 5
+    },
+    "fable/terse": {
+      "n": 15,
+      "total": 14.6,
+      "chars": 1649,
+      "correctness": 5,
+      "minimality": 4.9,
+      "best_practice": 4.7
+    },
+    "fable/fabius": {
+      "n": 15,
+      "total": 14.73,
+      "chars": 2307,
+      "correctness": 5,
+      "minimality": 4.77,
+      "best_practice": 4.97
+    }
+  },
+  "byCat": {
+    "yagni": {
+      "baseline": 13.38,
+      "terse": 13.81,
+      "fabius": 13.69,
+      "fab_minus_terse": -0.12,
+      "fab_minus_base": 0.31
+    },
+    "build": {
+      "baseline": 14.75,
+      "terse": 13.88,
+      "fabius": 10.5,
+      "fab_minus_terse": -3.38,
+      "fab_minus_base": -4.25
+    },
+    "security": {
+      "baseline": 13.69,
+      "terse": 14.06,
+      "fabius": 14.5,
+      "fab_minus_terse": 0.44,
+      "fab_minus_base": 0.81
+    },
+    "a11y": {
+      "baseline": 13.63,
+      "terse": 14.38,
+      "fabius": 12.75,
+      "fab_minus_terse": -1.63,
+      "fab_minus_base": -0.88
+    },
+    "agents": {
+      "baseline": 13.5,
+      "terse": 13.63,
+      "fabius": 14,
+      "fab_minus_terse": 0.37,
+      "fab_minus_base": 0.5
+    },
+    "design": {
+      "baseline": 14,
+      "terse": 14.25,
+      "fabius": 14.38,
+      "fab_minus_terse": 0.13,
+      "fab_minus_base": 0.38
+    },
+    "onchain": {
+      "baseline": 13.38,
+      "terse": 14.38,
+      "fabius": 14.5,
+      "fab_minus_terse": 0.12,
+      "fab_minus_base": 1.12
+    },
+    "automation": {
+      "baseline": 13.13,
+      "terse": 13.5,
+      "fabius": 14,
+      "fab_minus_terse": 0.5,
+      "fab_minus_base": 0.87
+    },
+    "science": {
+      "baseline": 13.38,
+      "terse": 12.75,
+      "fabius": 13.75,
+      "fab_minus_terse": 1,
+      "fab_minus_base": 0.37
+    },
+    "marketing": {
+      "baseline": 14.13,
+      "terse": 14.13,
+      "fabius": 14,
+      "fab_minus_terse": -0.13,
+      "fab_minus_base": -0.13
+    },
+    "game": {
+      "baseline": 13.88,
+      "terse": 14,
+      "fabius": 13.13,
+      "fab_minus_terse": -0.87,
+      "fab_minus_base": -0.75
+    },
+    "ml": {
+      "baseline": 13.88,
+      "terse": 13.88,
+      "fabius": 14.25,
+      "fab_minus_terse": 0.37,
+      "fab_minus_base": 0.37
+    },
+    "markets": {
+      "baseline": 14.13,
+      "terse": 14.75,
+      "fabius": 14.38,
+      "fab_minus_terse": -0.37,
+      "fab_minus_base": 0.25
+    }
+  },
+  "judgeAgreement": {
+    "mean_abs_total_diff": 0.69,
+    "n": 180,
+    "scale": "0-15 total"
+  },
+  "perTask": [
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "tier": "haiku",
+      "task": "cache",
+      "correctness": 4,
+      "minimality": 3,
+      "best_practice": 3.5,
+      "total": 10.5,
+      "chars": 1750,
+      "byJudge": {
+        "opus": 10,
+        "fable": 11
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "tier": "haiku",
+      "task": "cache",
+      "correctness": 4.5,
+      "minimality": 4.5,
+      "best_practice": 3,
+      "total": 12,
+      "chars": 620,
+      "byJudge": {
+        "opus": 12,
+        "fable": 12
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "tier": "haiku",
+      "task": "cache",
+      "correctness": 3,
+      "minimality": 1.5,
+      "best_practice": 2,
+      "total": 6.5,
+      "chars": 1181,
+      "byJudge": {
+        "opus": 6,
+        "fable": 7
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "tier": "haiku",
+      "task": "flag",
+      "correctness": 5,
+      "minimality": 2.5,
+      "best_practice": 3.5,
+      "total": 11,
+      "chars": 1633,
+      "byJudge": {
+        "opus": 10,
+        "fable": 12
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "tier": "haiku",
+      "task": "flag",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 4.5,
+      "total": 13.5,
+      "chars": 1667,
+      "byJudge": {
+        "opus": 14,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "tier": "haiku",
+      "task": "flag",
+      "correctness": 4,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 13,
+      "chars": 342,
+      "byJudge": {
+        "opus": 13,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "tier": "haiku",
+      "task": "offby1",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 400,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "tier": "haiku",
+      "task": "offby1",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 266,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "tier": "haiku",
+      "task": "offby1",
+      "correctness": 0,
+      "minimality": 2,
+      "best_practice": 1,
+      "total": 3,
+      "chars": 408,
+      "byJudge": {
+        "opus": 3,
+        "fable": 3
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "tier": "haiku",
+      "task": "route",
+      "correctness": 2.5,
+      "minimality": 4,
+      "best_practice": 2.5,
+      "total": 9,
+      "chars": 1227,
+      "byJudge": {
+        "opus": 8,
+        "fable": 10
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "tier": "haiku",
+      "task": "route",
+      "correctness": 4.5,
+      "minimality": 5,
+      "best_practice": 3.5,
+      "total": 13,
+      "chars": 619,
+      "byJudge": {
+        "opus": 12,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "tier": "haiku",
+      "task": "route",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 1241,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "a11y",
+      "tier": "haiku",
+      "task": "modal",
+      "correctness": 3.5,
+      "minimality": 3.5,
+      "best_practice": 3.5,
+      "total": 10.5,
+      "chars": 1983,
+      "byJudge": {
+        "opus": 10,
+        "fable": 11
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "a11y",
+      "tier": "haiku",
+      "task": "modal",
+      "correctness": 4.5,
+      "minimality": 4.5,
+      "best_practice": 4.5,
+      "total": 13.5,
+      "chars": 6610,
+      "byJudge": {
+        "opus": 13,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "a11y",
+      "tier": "haiku",
+      "task": "modal",
+      "correctness": 1.5,
+      "minimality": 2.5,
+      "best_practice": 2.5,
+      "total": 6.5,
+      "chars": 1096,
+      "byJudge": {
+        "opus": 8,
+        "fable": 5
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "agents",
+      "tier": "haiku",
+      "task": "agent",
+      "correctness": 5,
+      "minimality": 2.5,
+      "best_practice": 4.5,
+      "total": 12,
+      "chars": 6282,
+      "byJudge": {
+        "opus": 11,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "agents",
+      "tier": "haiku",
+      "task": "agent",
+      "correctness": 4,
+      "minimality": 3,
+      "best_practice": 4,
+      "total": 11,
+      "chars": 2723,
+      "byJudge": {
+        "opus": 11,
+        "fable": 11
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "agents",
+      "tier": "haiku",
+      "task": "agent",
+      "correctness": 4.5,
+      "minimality": 3.5,
+      "best_practice": 4.5,
+      "total": 12.5,
+      "chars": 4118,
+      "byJudge": {
+        "opus": 13,
+        "fable": 12
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "design",
+      "tier": "haiku",
+      "task": "css",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 3,
+      "total": 12.5,
+      "chars": 4176,
+      "byJudge": {
+        "opus": 13,
+        "fable": 12
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "design",
+      "tier": "haiku",
+      "task": "css",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 3.5,
+      "total": 12.5,
+      "chars": 4067,
+      "byJudge": {
+        "opus": 12,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "design",
+      "tier": "haiku",
+      "task": "css",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 2331,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "onchain",
+      "tier": "haiku",
+      "task": "solana",
+      "correctness": 3,
+      "minimality": 4,
+      "best_practice": 3.5,
+      "total": 10.5,
+      "chars": 1497,
+      "byJudge": {
+        "opus": 10,
+        "fable": 11
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "onchain",
+      "tier": "haiku",
+      "task": "solana",
+      "correctness": 4,
+      "minimality": 5,
+      "best_practice": 3.5,
+      "total": 12.5,
+      "chars": 1281,
+      "byJudge": {
+        "opus": 12,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "onchain",
+      "tier": "haiku",
+      "task": "solana",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 1416,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "automation",
+      "tier": "haiku",
+      "task": "webhook",
+      "correctness": 4.5,
+      "minimality": 2,
+      "best_practice": 3,
+      "total": 9.5,
+      "chars": 10701,
+      "byJudge": {
+        "opus": 8,
+        "fable": 11
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "automation",
+      "tier": "haiku",
+      "task": "webhook",
+      "correctness": 4.5,
+      "minimality": 4,
+      "best_practice": 3,
+      "total": 11.5,
+      "chars": 3335,
+      "byJudge": {
+        "opus": 10,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "automation",
+      "tier": "haiku",
+      "task": "webhook",
+      "correctness": 4.5,
+      "minimality": 3,
+      "best_practice": 3.5,
+      "total": 11,
+      "chars": 5914,
+      "byJudge": {
+        "opus": 11,
+        "fable": 11
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "science",
+      "tier": "haiku",
+      "task": "dge",
+      "correctness": 4,
+      "minimality": 3,
+      "best_practice": 4.5,
+      "total": 11.5,
+      "chars": 8820,
+      "byJudge": {
+        "opus": 12,
+        "fable": 11
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "science",
+      "tier": "haiku",
+      "task": "dge",
+      "correctness": 1,
+      "minimality": 3,
+      "best_practice": 2,
+      "total": 6,
+      "chars": 3415,
+      "byJudge": {
+        "opus": 6,
+        "fable": 6
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "science",
+      "tier": "haiku",
+      "task": "dge",
+      "correctness": 3.5,
+      "minimality": 3.5,
+      "best_practice": 4,
+      "total": 11,
+      "chars": 6604,
+      "byJudge": {
+        "opus": 11,
+        "fable": 11
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "marketing",
+      "tier": "haiku",
+      "task": "positioning",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 4,
+      "total": 13,
+      "chars": 760,
+      "byJudge": {
+        "opus": 13,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "marketing",
+      "tier": "haiku",
+      "task": "positioning",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 14,
+      "chars": 171,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "marketing",
+      "tier": "haiku",
+      "task": "positioning",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 4.5,
+      "total": 13.5,
+      "chars": 882,
+      "byJudge": {
+        "opus": 14,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "tier": "haiku",
+      "task": "threat",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 7508,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "tier": "haiku",
+      "task": "threat",
+      "correctness": 4.5,
+      "minimality": 4,
+      "best_practice": 4.5,
+      "total": 13,
+      "chars": 4011,
+      "byJudge": {
+        "opus": 14,
+        "fable": 12
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "tier": "haiku",
+      "task": "threat",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 4520,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "game",
+      "tier": "haiku",
+      "task": "gameloop",
+      "correctness": 4.5,
+      "minimality": 3,
+      "best_practice": 4,
+      "total": 11.5,
+      "chars": 6967,
+      "byJudge": {
+        "opus": 12,
+        "fable": 11
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "game",
+      "tier": "haiku",
+      "task": "gameloop",
+      "correctness": 4.5,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 13.5,
+      "chars": 3529,
+      "byJudge": {
+        "opus": 13,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "game",
+      "tier": "haiku",
+      "task": "gameloop",
+      "correctness": 3,
+      "minimality": 3.5,
+      "best_practice": 3,
+      "total": 9.5,
+      "chars": 6455,
+      "byJudge": {
+        "opus": 9,
+        "fable": 10
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "ml",
+      "tier": "haiku",
+      "task": "mldecision",
+      "correctness": 4.5,
+      "minimality": 4,
+      "best_practice": 4.5,
+      "total": 13,
+      "chars": 1566,
+      "byJudge": {
+        "opus": 12,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "ml",
+      "tier": "haiku",
+      "task": "mldecision",
+      "correctness": 4,
+      "minimality": 4,
+      "best_practice": 4,
+      "total": 12,
+      "chars": 1309,
+      "byJudge": {
+        "opus": 12,
+        "fable": 12
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "ml",
+      "tier": "haiku",
+      "task": "mldecision",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 1599,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "markets",
+      "tier": "haiku",
+      "task": "backtest",
+      "correctness": 4.5,
+      "minimality": 4,
+      "best_practice": 4.5,
+      "total": 13,
+      "chars": 6401,
+      "byJudge": {
+        "opus": 14,
+        "fable": 12
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "markets",
+      "tier": "haiku",
+      "task": "backtest",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 3182,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "markets",
+      "tier": "haiku",
+      "task": "backtest",
+      "correctness": 4.5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 13.5,
+      "chars": 1681,
+      "byJudge": {
+        "opus": 14,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "tier": "sonnet",
+      "task": "cache",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 1599,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "tier": "sonnet",
+      "task": "cache",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 263,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "tier": "sonnet",
+      "task": "cache",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 673,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "tier": "sonnet",
+      "task": "flag",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 4.5,
+      "total": 13.5,
+      "chars": 2352,
+      "byJudge": {
+        "opus": 14,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "tier": "sonnet",
+      "task": "flag",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 4,
+      "total": 13.5,
+      "chars": 922,
+      "byJudge": {
+        "opus": 14,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "tier": "sonnet",
+      "task": "flag",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 855,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "tier": "sonnet",
+      "task": "offby1",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 651,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "tier": "sonnet",
+      "task": "offby1",
+      "correctness": 3.5,
+      "minimality": 4.5,
+      "best_practice": 3.5,
+      "total": 11.5,
+      "chars": 382,
+      "byJudge": {
+        "opus": 15,
+        "fable": 8
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "tier": "sonnet",
+      "task": "offby1",
+      "correctness": 4,
+      "minimality": 2,
+      "best_practice": 3,
+      "total": 9,
+      "chars": 1065,
+      "byJudge": {
+        "opus": 9,
+        "fable": 9
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "tier": "sonnet",
+      "task": "route",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 1909,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "tier": "sonnet",
+      "task": "route",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 1012,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "tier": "sonnet",
+      "task": "route",
+      "correctness": 4.5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 1864,
+      "byJudge": {
+        "opus": 15,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "a11y",
+      "tier": "sonnet",
+      "task": "modal",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 7099,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "a11y",
+      "tier": "sonnet",
+      "task": "modal",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 2871,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "a11y",
+      "tier": "sonnet",
+      "task": "modal",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 5109,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "agents",
+      "tier": "sonnet",
+      "task": "agent",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 4.5,
+      "total": 13.5,
+      "chars": 5304,
+      "byJudge": {
+        "opus": 14,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "agents",
+      "tier": "sonnet",
+      "task": "agent",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 1860,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "agents",
+      "tier": "sonnet",
+      "task": "agent",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 2765,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "design",
+      "tier": "sonnet",
+      "task": "css",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 3900,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "design",
+      "tier": "sonnet",
+      "task": "css",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 1902,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "design",
+      "tier": "sonnet",
+      "task": "css",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 4220,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "onchain",
+      "tier": "sonnet",
+      "task": "solana",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 2597,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "onchain",
+      "tier": "sonnet",
+      "task": "solana",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 635,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "onchain",
+      "tier": "sonnet",
+      "task": "solana",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 2682,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "automation",
+      "tier": "sonnet",
+      "task": "webhook",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 4602,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "automation",
+      "tier": "sonnet",
+      "task": "webhook",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 14,
+      "chars": 1670,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "automation",
+      "tier": "sonnet",
+      "task": "webhook",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 2871,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "science",
+      "tier": "sonnet",
+      "task": "dge",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 4519,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "science",
+      "tier": "sonnet",
+      "task": "dge",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 2485,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "science",
+      "tier": "sonnet",
+      "task": "dge",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 4578,
+      "byJudge": {
+        "opus": 14,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "marketing",
+      "tier": "sonnet",
+      "task": "positioning",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 206,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "marketing",
+      "tier": "sonnet",
+      "task": "positioning",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 233,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "marketing",
+      "tier": "sonnet",
+      "task": "positioning",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 221,
+      "byJudge": {
+        "opus": 14,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "tier": "sonnet",
+      "task": "threat",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 4722,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "tier": "sonnet",
+      "task": "threat",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 2580,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "tier": "sonnet",
+      "task": "threat",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 4649,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "game",
+      "tier": "sonnet",
+      "task": "gameloop",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 5381,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "game",
+      "tier": "sonnet",
+      "task": "gameloop",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 14,
+      "chars": 3358,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "game",
+      "tier": "sonnet",
+      "task": "gameloop",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 14,
+      "chars": 3702,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "ml",
+      "tier": "sonnet",
+      "task": "mldecision",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 2866,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "ml",
+      "tier": "sonnet",
+      "task": "mldecision",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 1681,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "ml",
+      "tier": "sonnet",
+      "task": "mldecision",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 2444,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "markets",
+      "tier": "sonnet",
+      "task": "backtest",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 5113,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "markets",
+      "tier": "sonnet",
+      "task": "backtest",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 3038,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "markets",
+      "tier": "sonnet",
+      "task": "backtest",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 4388,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "tier": "opus",
+      "task": "cache",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 1583,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "tier": "opus",
+      "task": "cache",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 14,
+      "chars": 291,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "tier": "opus",
+      "task": "cache",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 663,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "tier": "opus",
+      "task": "flag",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 2187,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "tier": "opus",
+      "task": "flag",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 575,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "tier": "opus",
+      "task": "flag",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 1666,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "tier": "opus",
+      "task": "offby1",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 1016,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "tier": "opus",
+      "task": "offby1",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 267,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "tier": "opus",
+      "task": "offby1",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 384,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "tier": "opus",
+      "task": "route",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 2220,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "tier": "opus",
+      "task": "route",
+      "correctness": 4.5,
+      "minimality": 5,
+      "best_practice": 3.5,
+      "total": 13,
+      "chars": 406,
+      "byJudge": {
+        "opus": 14,
+        "fable": 12
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "tier": "opus",
+      "task": "route",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 1808,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "a11y",
+      "tier": "opus",
+      "task": "modal",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 5113,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "a11y",
+      "tier": "opus",
+      "task": "modal",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 14,
+      "chars": 2217,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "a11y",
+      "tier": "opus",
+      "task": "modal",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 5646,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "agents",
+      "tier": "opus",
+      "task": "agent",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 3758,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "agents",
+      "tier": "opus",
+      "task": "agent",
+      "correctness": 4.5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14,
+      "chars": 1426,
+      "byJudge": {
+        "opus": 15,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "agents",
+      "tier": "opus",
+      "task": "agent",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 3147,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "design",
+      "tier": "opus",
+      "task": "css",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 5287,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "design",
+      "tier": "opus",
+      "task": "css",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 2033,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "design",
+      "tier": "opus",
+      "task": "css",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 3312,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "onchain",
+      "tier": "opus",
+      "task": "solana",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 2780,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "onchain",
+      "tier": "opus",
+      "task": "solana",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 1058,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "onchain",
+      "tier": "opus",
+      "task": "solana",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 2447,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "automation",
+      "tier": "opus",
+      "task": "webhook",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 4348,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "automation",
+      "tier": "opus",
+      "task": "webhook",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 14,
+      "chars": 1887,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "automation",
+      "tier": "opus",
+      "task": "webhook",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 3928,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "science",
+      "tier": "opus",
+      "task": "dge",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 6814,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "science",
+      "tier": "opus",
+      "task": "dge",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 969,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "science",
+      "tier": "opus",
+      "task": "dge",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 4725,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "marketing",
+      "tier": "opus",
+      "task": "positioning",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 14,
+      "chars": 261,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "marketing",
+      "tier": "opus",
+      "task": "positioning",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 14,
+      "chars": 194,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "marketing",
+      "tier": "opus",
+      "task": "positioning",
+      "correctness": 5,
+      "minimality": 3.5,
+      "best_practice": 5,
+      "total": 13.5,
+      "chars": 1166,
+      "byJudge": {
+        "opus": 14,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "tier": "opus",
+      "task": "threat",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 4319,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "tier": "opus",
+      "task": "threat",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 1712,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "tier": "opus",
+      "task": "threat",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 3773,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "game",
+      "tier": "opus",
+      "task": "gameloop",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 5882,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "game",
+      "tier": "opus",
+      "task": "gameloop",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 14,
+      "chars": 2549,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "game",
+      "tier": "opus",
+      "task": "gameloop",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 3232,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "ml",
+      "tier": "opus",
+      "task": "mldecision",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 2633,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "ml",
+      "tier": "opus",
+      "task": "mldecision",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 1431,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "ml",
+      "tier": "opus",
+      "task": "mldecision",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 1897,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "markets",
+      "tier": "opus",
+      "task": "backtest",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 5356,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "markets",
+      "tier": "opus",
+      "task": "backtest",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 2089,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "markets",
+      "tier": "opus",
+      "task": "backtest",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 5029,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "tier": "fable",
+      "task": "cache",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 996,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "tier": "fable",
+      "task": "cache",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 301,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "tier": "fable",
+      "task": "cache",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 650,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "tier": "fable",
+      "task": "flag",
+      "correctness": 5,
+      "minimality": 3.5,
+      "best_practice": 5,
+      "total": 13.5,
+      "chars": 2457,
+      "byJudge": {
+        "opus": 14,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "tier": "fable",
+      "task": "flag",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 4,
+      "total": 13.5,
+      "chars": 979,
+      "byJudge": {
+        "opus": 14,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "tier": "fable",
+      "task": "flag",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 421,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "tier": "fable",
+      "task": "offby1",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 478,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "tier": "fable",
+      "task": "offby1",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 155,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "tier": "fable",
+      "task": "offby1",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 189,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "tier": "fable",
+      "task": "route",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 1664,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "tier": "fable",
+      "task": "route",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 847,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "tier": "fable",
+      "task": "route",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 1570,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "a11y",
+      "tier": "fable",
+      "task": "modal",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 5444,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "a11y",
+      "tier": "fable",
+      "task": "modal",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 1631,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "a11y",
+      "tier": "fable",
+      "task": "modal",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 3575,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "agents",
+      "tier": "fable",
+      "task": "agent",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 3476,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "agents",
+      "tier": "fable",
+      "task": "agent",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 2170,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "agents",
+      "tier": "fable",
+      "task": "agent",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 1930,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "design",
+      "tier": "fable",
+      "task": "css",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 3933,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "design",
+      "tier": "fable",
+      "task": "css",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 2456,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "design",
+      "tier": "fable",
+      "task": "css",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 2669,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "onchain",
+      "tier": "fable",
+      "task": "solana",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 3357,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "onchain",
+      "tier": "fable",
+      "task": "solana",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 984,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "onchain",
+      "tier": "fable",
+      "task": "solana",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 1556,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "automation",
+      "tier": "fable",
+      "task": "webhook",
+      "correctness": 4.5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 4274,
+      "byJudge": {
+        "opus": 15,
+        "fable": 13
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "automation",
+      "tier": "fable",
+      "task": "webhook",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 2202,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "automation",
+      "tier": "fable",
+      "task": "webhook",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 4027,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "science",
+      "tier": "fable",
+      "task": "dge",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 4818,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "science",
+      "tier": "fable",
+      "task": "dge",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 1601,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "science",
+      "tier": "fable",
+      "task": "dge",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 3559,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "marketing",
+      "tier": "fable",
+      "task": "positioning",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 282,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "marketing",
+      "tier": "fable",
+      "task": "positioning",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4,
+      "total": 14,
+      "chars": 195,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "marketing",
+      "tier": "fable",
+      "task": "positioning",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 663,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "tier": "fable",
+      "task": "threat",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 3423,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "tier": "fable",
+      "task": "threat",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 2926,
+      "byJudge": {
+        "opus": 14,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "tier": "fable",
+      "task": "threat",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 3466,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "game",
+      "tier": "fable",
+      "task": "gameloop",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 3782,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "game",
+      "tier": "fable",
+      "task": "gameloop",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 2916,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "game",
+      "tier": "fable",
+      "task": "gameloop",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 4.5,
+      "total": 14.5,
+      "chars": 4397,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "ml",
+      "tier": "fable",
+      "task": "mldecision",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 2519,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "ml",
+      "tier": "fable",
+      "task": "mldecision",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 1650,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "ml",
+      "tier": "fable",
+      "task": "mldecision",
+      "correctness": 5,
+      "minimality": 4,
+      "best_practice": 5,
+      "total": 14,
+      "chars": 2733,
+      "byJudge": {
+        "opus": 14,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "baseline",
+      "cat": "markets",
+      "tier": "fable",
+      "task": "backtest",
+      "correctness": 5,
+      "minimality": 4.5,
+      "best_practice": 5,
+      "total": 14.5,
+      "chars": 5408,
+      "byJudge": {
+        "opus": 15,
+        "fable": 14
+      }
+    },
+    {
+      "arm": "terse",
+      "cat": "markets",
+      "tier": "fable",
+      "task": "backtest",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 3715,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    },
+    {
+      "arm": "fabius",
+      "cat": "markets",
+      "tier": "fable",
+      "task": "backtest",
+      "correctness": 5,
+      "minimality": 5,
+      "best_practice": 5,
+      "total": 15,
+      "chars": 3202,
+      "byJudge": {
+        "opus": 15,
+        "fable": 15
+      }
+    }
+  ],
+  "pooled": {
+    "baseline": 13.72,
+    "terse": 13.95,
+    "fabius": 13.73,
+    "gain_vs_baseline": 0.01,
+    "gain_vs_terse": -0.22,
+    "output_reduction_pct": 25.7
+  }
+}
