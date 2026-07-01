@@ -209,13 +209,13 @@ window.MathJax = {
     <tr><td><b>R8</b></td><td>refine only on a verifiable signal; signal type sets the budget</td><td>Reflexion · Self-Refine</td><td class="num">direct</td></tr>
     <tr><td><b>R9</b></td><td>retrieve on demand; read the index, page in only the matching slice</td><td>MemGPT</td><td class="num">direct</td></tr>
     <tr><td><b>R10</b></td><td>state breadth tasks once; hard-steer only narrow contracts</td><td>Classifier-Free Guidance</td><td class="num">analogy</td></tr>
-    <tr><td><b>M1</b></td><td>spawn a second agent only to prevent a named error</td><td>Toolformer-spirit</td><td class="num">real-math</td></tr>
-    <tr><td><b>M2</b></td><td>add a reducer only when partial results merge (associativity)</td><td>Graph of Thoughts</td><td class="num">real-math</td></tr>
-    <tr><td><b>M3</b></td><td>scale verification depth to measured per-route failure</td><td>Consistency Models</td><td class="num">real-math</td></tr>
-    <tr><td><b>M4</b></td><td>reflect-then-retry; escalate when hypotheses run out</td><td>Reflexion</td><td class="num">real-math</td></tr>
-    <tr><td><b>M5</b></td><td>accept a prompt rewrite only on a held-out metric delta</td><td>DSPy</td><td class="num">real-math</td></tr>
-    <tr><td><b>M6</b></td><td>promote verified solutions to a reusable skill; query before planning</td><td>Voyager</td><td class="num">real-math</td></tr>
-    <tr><td><b>M7</b></td><td>page memory explicitly; write only decision-changing facts</td><td>MemGPT</td><td class="num">real-math</td></tr>
+    <tr><td><b>M1</b></td><td>spawn a second agent only to prevent a named error</td><td>Toolformer-spirit</td><td class="num">analogy</td></tr>
+    <tr><td><b>M2</b></td><td>add a reducer only when partial results merge (associativity)</td><td>Graph of Thoughts</td><td class="num">analogy</td></tr>
+    <tr><td><b>M3</b></td><td>scale verification depth to measured per-route failure</td><td>Consistency Models</td><td class="num">analogy</td></tr>
+    <tr><td><b>M4</b></td><td>reflect-then-retry; escalate when hypotheses run out</td><td>Reflexion</td><td class="num">direct</td></tr>
+    <tr><td><b>M5</b></td><td>accept a prompt rewrite only on a held-out metric delta</td><td>DSPy</td><td class="num">direct</td></tr>
+    <tr><td><b>M6</b></td><td>promote verified solutions to a reusable skill; query before planning</td><td>Voyager</td><td class="num">direct</td></tr>
+    <tr><td><b>M7</b></td><td>page memory explicitly; write only decision-changing facts</td><td>MemGPT</td><td class="num">direct</td></tr>
     <tr><td><b>M8</b></td><td>rank index ties by relevance, then recency and load-bearingness</td><td>Generative Agents</td><td class="num">analogy</td></tr>
   </tbody>
 </table>
@@ -361,7 +361,7 @@ window.MathJax = {
   <p>The source proves something about a different domain and fabius transfers the shape, not a measured agent result: Toolformer's loss-reduction filter is a training-time criterion against the gold continuation, uncomputable at routing time, so R3/M1 borrow only its spirit; the efficiency surveys assert diminishing returns directionally but fit no curve, so R2's knee is qualitative; Chain of Abstraction measured ~1.4× on single-tool tasks, not agent fan-out, so R6's parallel benefit is unmeasured here; Graph of Thoughts' numbers are intra-LLM, transplanted to agent topology (M2); and the three generative-model rules — Flow Matching (R4), Classifier-Free Guidance (R10), Consistency Models (M3) — together with Generative Agents' recency kernel (M8b), are <strong>all</strong> analogies, because those papers prove their claims about sampling and image fidelity and say nothing about agents, routing, or verification budgets.</p>
 </div>
 
-<p>The bar held throughout: <strong>measured where a paper measured it in-domain; analogy everywhere the transfer crosses domains — labelled, so no claim is overstated.</strong> Of the eighteen core rules, fifteen rest on mathematics that genuinely governs the decision, one (R5) is an explicit qualitative invariant, and four are analogies that carry their caveat inline and never govern a route the way the real-math rules do.</p>
+<p>The bar held throughout: <strong>measured where a paper measured it in-domain; analogy everywhere the transfer crosses domains — labelled, so no claim is overstated.</strong> Of the eighteen core rules, nine map directly from in-domain agent results and nine borrow their source only by analogy — the table of §3.2, row by row. At the level of the governing equation the ledger is stricter still: fifteen rest on mathematics that genuinely governs the decision, one (R5) is an explicit qualitative invariant, and two (R4, R10) are pure analogies — joined at the sub-rule level by M8b's recency kernel and M2's transplanted Graph-of-Thoughts numbers — that carry their caveat inline and never govern a route the way the real-math gates do.</p>
 
 <p>The same discipline draws the line between the <em>proven core</em> and the <em>operational edge</em>. The coherence theorem is claimed over the eighteen-rule core only; the four extensions of §4.7 are presented as sound and useful but explicitly outside the proof. A whitepaper that quietly extended the theorem to cover features it had just added would be doing exactly the over-claiming fabius is built to refuse. The boundary is the honest thing, and it is drawn in ink, not pencil.</p>
 </section>
