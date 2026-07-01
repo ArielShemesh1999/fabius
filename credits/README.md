@@ -5,7 +5,7 @@ The fabius **system** — the fifteen skills, the router/dispatch policy, `AGENT
 What we owe to the open community is the **learning**: the on-demand depth under each skill's `references/` was **informed by and adapted from** the open work below. We studied these projects and wrote our own version; credit where it's due. Two honest rules govern this file:
 
 1. **Inspiration vs. bundling.** Most rows below are *informed-by* — concepts re-expressed in fabius's own words, no upstream files copied. Where actual upstream **files are bundled** under a `references/` tree, that project's original `LICENSE` travels with them (e.g. `skills/fabius-cohors/references/agents/orchestration/LICENSE`), and for Apache-2.0 sources the `NOTICE` is retained too.
-2. **No silent relicensing.** fabius is MIT; that covers fabius's own code and prose. It does **not** re-license anyone else's bundled work — each keeps its upstream terms.
+2. **No silent relicensing.** fabius itself is **proprietary — all rights reserved** (see [LICENSE](../LICENSE)); that covers fabius's own code and prose. Bundled third-party work is **not** relicensed in either direction — each keeps its upstream terms.
 
 ## Inspired / adapted from — by layer
 
@@ -31,7 +31,7 @@ What we owe to the open community is the **learning**: the on-demand depth under
 | `fabius-praesidium` (AI diff/PR review) | claude-code-security-review (Anthropic) — confidence-gate, do-not-report exclusion list, two-stage filter, exploit-path requirement | MIT |
 | `fabius-ludus` (game craft) | Claude-Code-Game-Studios (Donchitos) | see repo |
 | `fabius-catena` (on-chain dev) | solana-dev-skill (Solana Foundation) — account-validation-first checklist, Anchor/Pinocchio rules, the LiteSVM/Mollusk/Surfpool testing pyramid, toolchain corpus | MIT |
-| `fabius-catena` (provenance sealing) | **SEAL** — Ariel Shemesh's own research (`research/SEAL_Whitepaper_v2.0`): provenance-not-truth, content-bound hard binding, boring-cryptography-only, Bitcoin-anchored timestamps, self-contained verification bundles, crypto-agile renewal | original (author's own) |
+| `fabius-catena` (provenance sealing) | **SEAL** — Ariel Shemesh's own research (SEAL whitepaper v2.0, kept outside this repo): provenance-not-truth, content-bound hard binding, boring-cryptography-only, Bitcoin-anchored timestamps, self-contained verification bundles, crypto-agile renewal | original (author's own) |
 | `fabius-machina` (automation) | n8n-skills (Romuald Członkowski, aiadvisors.pl) — the n8n-mcp tool-per-intent decision tree, silent-failure gotchas, validate-AND-verify-before-activate discipline | MIT · hooks layer **Apache-2.0** |
 | `fabius-scientia` (science · bio) | scientific-agent-skills (K-Dense Inc.) — per-domain single-concern skills, pipeline-as-router, the unified database-lookup contract + cross-ID maps, the hypothesis-generation loop, reproducibility gotchas | MIT (per-skill varies) |
 | `fabius-concilium` (cross-model council) | Andrej Karpathy's **llm-council** — the council pattern: dispatch one question to N models, anonymized cross-review/ranking, a chairman model that synthesizes the field ([repo](https://github.com/karpathy/llm-council)) | see repo |
@@ -55,4 +55,4 @@ fabius's routing policy is sourced to the literature, with a direct-vs-analogy h
 
 ## Closing
 
-Names inside the bundled references were aligned to fabius for consistency; the ideas are theirs, the synthesis and the system are ours. fabius stands on this open work and tries to credit it honestly. If you own one of these and want a change to the attribution — or a stronger license notice — open an issue and it will be fixed.
+Names inside the bundled references were aligned to fabius for consistency; the ideas are theirs, the synthesis and the system are ours. fabius stands on this open work and tries to credit it honestly. If you own one of these and want a change to the attribution — or a stronger license notice — contact the author (the repo is private, so an issue won't reach us) and it will be fixed.
