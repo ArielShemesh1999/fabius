@@ -47,6 +47,8 @@ Rules that fall out of it: no abstraction with a single implementation, no facto
 
 The same ladder governs *orchestration*, not just code. The capability-deployment ladder (`inline → one tool → retrieval → plan → single subagent → swarm`, the router's routing-policy R2) is this code ladder's twin — don't instantiate a swarm, a corrector, or a vector engine until the rung below it is shown insufficient on *this* task. Over-steering a sub-agent — repeating or stacking a constraint (R10) — is the orchestration form of over-building: state a constraint once on breadth tasks; hard-steer only narrow contracts.
 
+The heaviest rung of all is a cross-model council (`fabius-concilium`) — **N + N + 1** model calls where a single strike is one. This layer owns the convene-at-all gate: a council passes the ladder only when the answer is high-stakes and a wrong one is expensive, genuinely contested, or the user explicitly asks for a panel. Otherwise: one strike, one model.
+
 Mark a deliberate shortcut with a `fabius:` comment that names the ceiling and the upgrade path:
 `# fabius: global lock for now; per-account locks if throughput ever matters.`
 
@@ -74,7 +76,7 @@ Two stdlib options the same size → take the one that's correct on the edge cas
 
 Hardware never matches the spec sheet — a real clock drifts, a real sensor reads a few percent off. Physical and hardware paths keep a calibration knob, not just less code; the world needs a tuning the minimal model can't see.
 
-And lean is not less verification: non-trivial logic — a branch, a loop, a parser, a money or security path — ships with its check. (The test-first discipline and the trivial-code exception are owned by `fabius-disciplina` — one rule, not two.)
+And lean is not less verification: non-trivial logic — a branch, a loop, a parser, a money or security path — ships with its check. (The test-first discipline and its narrow exceptions — throwaway prototypes, generated code, pure config — are owned by `fabius-disciplina`; one rule, not two.)
 
 ## Output shape
 
@@ -82,6 +84,6 @@ Code first. Then at most three short lines: what you skipped, when to add it. If
 
 Pattern: `[code] → skipped: [X], add when [Y].`
 
-The extended lean rule set — the full caveman (prose-trim) and ponytail (code-trim) guidelines this layer distills — lives in `references/lean/guidelines/`.
+The extended code-trim guidelines this layer distills live in `references/lean/guidelines/`; the prose-trim rules are inlined in full in section 1 above.
 
 Boundary: the user insists on the full version → build it, no re-arguing. (The system kill-switch and the "governs HOW, not WHAT" rule live in `fabius`.)

@@ -2,18 +2,15 @@
 name: fabius-doctrina
 description: >
   fabius's AI/ML-engineering layer — train, serve, evaluate, and operate machine-learning and LLM
-  systems as production software. This is the model lifecycle: dataset → train / fine-tune → EVALUATE →
+  systems as production software. The model lifecycle: dataset → train / fine-tune → EVALUATE →
   serve / infer → monitor. It owns model serving and inference (vLLM-class, OpenAI-compatible
-  endpoints, batching, quantization), MLOps and experiment tracking (MLflow-class — runs, params,
-  metrics, model registry, reproducibility), and rigorous model/LLM evaluation (eval harnesses, blind
-  judges, ground-truth sets, regression gates). It is NOT the scientific method over natural-science
-  data — that's fabius-scientia; it is NOT agent orchestration — that's fabius-cohors (doctrina owns
-  the MODEL an agent calls, not the agent). Use when the task is to train / fine-tune a model, serve or
-  deploy a model, evaluate a model or prompt, track ML experiments, set up an inference endpoint, build
-  a RAG/LLM-app's model tier, or when the user says "serve this model", "fine-tune", "eval my prompts",
-  "track these runs", "MLOps", "why is inference slow", or names vLLM / MLflow / an eval harness. The
-  serving recipes, the MLOps + experiment-tracking contract, and the evaluation playbook live in
-  references/ml-engineering-playbook.md.
+  endpoints, batching, quantization), MLOps and experiment tracking (MLflow-class), and rigorous
+  model/LLM evaluation (eval harnesses, blind judges, regression gates). It is NOT agent
+  orchestration — that's fabius-cohors (doctrina owns the MODEL an agent calls, not the agent).
+  Use when the task is to train / fine-tune a model, serve or deploy a model, evaluate a model or
+  prompt, track ML experiments, set up an inference endpoint, build a RAG/LLM-app's model tier, or
+  when the user says "serve this model", "fine-tune", "eval my prompts", "track these runs",
+  "MLOps", "why is inference slow", or names vLLM / MLflow / an eval harness.
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -79,4 +76,4 @@ One concern per skill. Keep doctrina to the genuinely ML-engineering core and ro
 
 **Live tier (optional).** The decision rules, the eval design, and the lifecycle are pure knowledge. *Running* the work needs the user's own compute and services: a **GPU** for serving/training, an MLflow (or equivalent) **tracking server**, a **model registry / hub**, and any hosted **inference API**. fabius bundles none — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
 
-Pairs with: `fabius-disciplina` (the eval *is* the prove step — gate on it), `fabius-scientia` (shares the resource-first + reproducibility discipline; hands off when the task is natural-science data), `fabius-cohors` (owns the agent that calls the model doctrina serves), `fabius-praesidium` (hardens the model and its supply chain), `fabius-parcus` (the smallest model / stack / run that clears the bar). `stop fabius` drops the stance.
+Pairs with: `fabius-disciplina` (the eval *is* the prove step — gate on it), `fabius-scientia` (shares the resource-first + reproducibility discipline; hands off when the task is natural-science data), `fabius-cohors` (owns the agent that calls the model doctrina serves), `fabius-praesidium` (hardens the model and its supply chain), `fabius-parcus` (the smallest model / stack / run that clears the bar). `stop fabius` drops the stance (kill-switch owned by `fabius`).

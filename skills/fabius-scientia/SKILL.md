@@ -57,4 +57,4 @@ One concern per skill — keep scientia to the genuinely scientific core and rou
 
 **Live tier (optional).** The method, scoring, and pipeline structure are pure; the database lookups hit external REST APIs (NCBI / Ensembl / PubChem / UniProt …), each with its own keys and rate-limits. fabius bundles none — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
 
-Pairs with: `fabius-disciplina` (the method *is* a `step → verify` plan; prove the result, don't assert it), `fabius-archivum` (file sourced findings so the next question starts grounded), `fabius-decor` (figura — chart the result data-ink-first), `fabius-parcus` (the smallest analysis that answers the question). `stop fabius` drops the stance.
+Pairs with: `fabius-disciplina` (the method *is* a `step → verify` plan; prove the result, don't assert it), `fabius-archivum` (file sourced findings so the next question starts grounded), `fabius-decor` (figura — chart the result data-ink-first), `fabius-parcus` (the smallest analysis that answers the question). `stop fabius` drops the stance (kill-switch owned by `fabius`).

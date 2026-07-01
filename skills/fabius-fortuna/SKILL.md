@@ -5,16 +5,12 @@ description: >
   (fundamental + technical + quantitative), economic data and indicators, financial modeling,
   backtesting with honest statistics, portfolio construction, and risk-first position sizing. It
   turns "is this a good stock / what will the economy do / does this strategy work" into a sourced,
-  risk-bounded, falsifiable analysis — never a confident prediction. It is NOT the scientific method
-  over natural-science data (that's fabius-scientia), NOT chart rendering (that's fabius-decor's
-  figura — fortuna decides WHAT to show and reads it; decor draws it), and NOT go-to-market
-  (that's fabius-mercatus). Use when the task touches a stock / equity / ticker, a market or index,
-  an economic indicator (GDP, CPI, rates, employment), a trading or investment strategy, a backtest,
-  valuation, a portfolio, risk/volatility, or when the user says "analyze this stock", "is this a buy",
-  "what's the market doing", "backtest this", "value this company", or "model the economy". The
-  analysis frameworks, the backtest-honesty checklist, the data-source map, and the risk contract live
-  in references/markets-and-quant-playbook.md. Defensive and honest — it analyzes and manages risk,
-  never manipulates a market and never gives personalized financial advice.
+  risk-bounded, falsifiable analysis — never a confident prediction. Use when the task touches a
+  stock / equity / ticker, a market or index, an economic indicator (GDP, CPI, rates, employment),
+  a trading or investment strategy, a backtest, valuation, a portfolio, risk/volatility, or when
+  the user says "analyze this stock", "is this a buy", "what's the market doing", "backtest this",
+  "value this company", or "model the economy". Defensive and honest — it analyzes and manages
+  risk, never manipulates a market and never gives personalized financial advice.
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -80,4 +76,4 @@ A financial fact has a source; produce it (the `fabius-scientia` lookup discipli
 
 **Live tier (optional).** The frameworks, the risk rules, and the backtest discipline are pure knowledge. *Pulling live data* needs the user's own feeds — a market-data API (prices/fundamentals), a macro source (FRED-class), and any broker/exchange API for execution. fabius bundles none — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*). Never put a broker key or account credential in code (`fabius-praesidium`, `fabius-parcus`).
 
-Pairs with: `fabius-decor` (figura — it charts what fortuna reads), `fabius-doctrina` (serves/evaluates a predictive model fortuna uses), `fabius-scientia` (shares the source-it + multiple-testing discipline), `fabius-disciplina` (a backtest is a `step → verify` plan — prove it out-of-sample), `fabius-parcus` (the smallest analysis that answers, the risk floor that never trims). `stop fabius` drops the stance.
+Pairs with: `fabius-decor` (figura — it charts what fortuna reads), `fabius-doctrina` (serves/evaluates a predictive model fortuna uses), `fabius-scientia` (shares the source-it + multiple-testing discipline), `fabius-disciplina` (a backtest is a `step → verify` plan — prove it out-of-sample), `fabius-parcus` (the smallest analysis that answers, the risk floor that never trims). `stop fabius` drops the stance (kill-switch owned by `fabius`).

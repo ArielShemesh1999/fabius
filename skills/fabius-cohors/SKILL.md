@@ -6,7 +6,7 @@ description: >
   patterns (sequential / parallel / hierarchical / human-in-the-loop / swarm). Use when the user wants to
   build an agent, a subagent, a tool-using assistant, a multi-agent system, a swarm, or an
   orchestration workflow. A copy-from schema and proven agent shapes live in
-  references/agent-patterns.md; the full production agent catalog (200+ agents across 15 domains
+  references/agent-patterns.md; the full production agent catalog (200+ agents across 17 domains
   + Python/Go/Java/Kotlin/Android/TypeScript packs, with a fabius-vec.db memory index) lives in
   references/agents/, indexed by references/agent-catalog.md.
 ---

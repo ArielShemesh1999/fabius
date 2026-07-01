@@ -2,7 +2,7 @@
 
 The verbal episodic memory of routing. A Reflexion-style lesson log: when a route fails in a way the [routing policy](routing-policy.md) didn't prevent, write the lesson here so the next attempt is conditioned on it — **no fine-tuning, the learning lives in this file.**
 
-This file is **empty by design** and grows from *real incidents only* — never from anticipation (`fabius-parcus`: a rule that no failure has demanded yet does not exist). A repeated lesson here is the signal that a routing rule (R1–R10 / M1–M8) needs to change; promote it.
+This file is **empty by design** and grows from *real incidents only* — never from anticipation (`fabius-parcus`: a rule that no failure has demanded yet does not exist). A repeated lesson here is the signal that a routing rule (R1–R13 / M1–M9) needs to change; promote it.
 
 ## How an entry is written
 

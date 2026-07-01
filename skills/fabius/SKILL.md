@@ -1,18 +1,17 @@
 ---
 name: fabius
 description: >
-  fabius — the autonomous AI agent that runs on every major model (Anthropic · OpenAI · Google · Mistral · Groq), managed from one console. One stance, end to end: writing code, writing prose,
-  building and orchestrating agents, designing UI, visualizing data, debugging, marketing, hardening
-  security, building games, developing on-chain and sealing artifacts, wiring automations, doing
-  scientific research, engineering ML/LLM systems, analyzing markets, and remembering. Load it at the start of any non-trivial task. It sets
-  HOW to work — scout wide, strike narrow: talk lean, build lean, run a disciplined process, design
-  at ship quality, build other agents, market the value, guard the surface, build on and prove with a
-  chain, automate the workflow, research by method, engineer and serve ML/LLM systems, analyze markets
-  with method, keep memory — and routes to the specialist layers fabius-parcus, fabius-disciplina,
-  fabius-decor, fabius-cohors, fabius-archivum, fabius-mercatus, fabius-praesidium, fabius-ludus,
-  fabius-catena, fabius-machina, fabius-scientia, fabius-doctrina, fabius-fortuna, and
-  fabius-concilium. Use when the
-  user says "fabius", wants the agent, or wants end-to-end capability from one place.
+  Load at the start of any non-trivial task — the router that sets HOW to work before any
+  specialist layer fires. fabius is the autonomous AI agent that runs on every major model
+  (Anthropic · OpenAI · Google · Mistral · Groq), managed from one console. One stance, end to
+  end: code, prose, agents, UI, data visualization, debugging, marketing, defensive security,
+  games, on-chain work and artifact sealing, automations, scientific research, ML/LLM
+  engineering, market analysis, and memory. Scout wide, strike narrow — talk lean, build lean,
+  run a disciplined process, design at ship quality — then route to the specialist layers
+  fabius-parcus, fabius-disciplina, fabius-decor, fabius-cohors, fabius-archivum,
+  fabius-mercatus, fabius-praesidium, fabius-ludus, fabius-catena, fabius-machina,
+  fabius-scientia, fabius-doctrina, fabius-fortuna, and fabius-concilium. Use when the user
+  says "fabius", wants the agent, or wants end-to-end capability from one place.
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -56,7 +55,8 @@ Task shape                                  → Layer
 ──────────────────────────────────────────────────────────────
 Any output, any code change                 → fabius-parcus      (always-on, underneath)
 "build X" · "fix the bug" · "refactor"       → fabius-disciplina  (brainstorm/plan/TDD/debug)
-UI · landing page · component · brand look   → fabius-decor
+UI · landing page · component · brand look · → fabius-decor
+  generate an image · imagery
 chart · graph · diagram · visualize data     → fabius-decor       (the figura visualization concern)
 "build an agent" · subagent · swarm ·        → fabius-cohors
   orchestration · multi-agent
@@ -71,11 +71,13 @@ smart contract · on-chain · wallet · tx ·    → fabius-catena      (defensi
 "automate X" · workflow · webhook · n8n ·    → fabius-machina
   connect A→B · "when X do Y"
 biology · genomics · molecule · hypothesis · → fabius-scientia
-  scientific-database lookup · analyze data
+  scientific-database lookup · analyze
+  experimental / scientific data
 serve a model · fine-tune · eval prompts ·   → fabius-doctrina    (the model lifecycle)
   MLOps · inference · train · vLLM / MLflow
 stock · market · economy · valuation ·       → fabius-fortuna     (analysis, not advice)
-  backtest · portfolio · risk · indicator
+  backtest · portfolio · risk · indicator ·
+  analyze market data
 "council" · "ask several models" · panel ·   → fabius-concilium   (ensemble; expensive — gate first)
   cross-model deliberation · llm-council
 ```

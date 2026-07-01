@@ -6,7 +6,8 @@ description: >
   that converts, channel fit, and a smallest-campaign launch loop. Use when writing the copy for a
   landing page, a launch, an ad, an email, a LinkedIn/X post, a cold outreach, a value proposition,
   or a pricing/positioning page (the page's visual build routes to fabius-decor; mercatus owns the message) — or when the user says "market this", "write copy", "position this",
-  "name the benefit", or "why isn't this converting?". The positioning canvas, the awareness-level
+  "name the benefit", "why isn't this converting?", "SEO", "rank on Google", "search visibility",
+  or "show up in AI answers" (organic search and discoverability route here). The positioning canvas, the awareness-level
   table, and the high-converting copy structures live in references/marketing-playbook.md; the
   channel playbooks and swipe library live in references/channel-swipe-library.md, bundled and indexed by CORPUS.md, paged in on demand.
 ---
@@ -85,4 +86,4 @@ Don't build the funnel; test the message. Ship the smallest asset that puts the 
 - Channel playbooks (landing · email · social · cold outreach · launch) and the swipe library → `references/channel-swipe-library.md`, bundled and indexed by [CORPUS.md](../../CORPUS.md); page in the one slice the task needs (R9 · M9).
 - SEO & the organic-discovery channel — keyword/intent match, honest on-page + JSON-LD, the technical floor, content clusters, AI-answer visibility, and the SEO→funnel link → `references/seo-and-discoverability.md`.
 
-Boundary: prose-trim is `fabius-parcus`; demand-validation and the clarifying grill are `fabius-disciplina`; visual execution is `fabius-decor`. This layer owns the message and the path. The user's brand and instruction always win; `stop fabius` drops the stance.
+Boundary: prose-trim is `fabius-parcus`; demand-validation and the clarifying grill are `fabius-disciplina`; visual execution is `fabius-decor`. This layer owns the message and the path. The user's brand and instruction always win; `stop fabius` drops the stance (kill-switch owned by `fabius`).

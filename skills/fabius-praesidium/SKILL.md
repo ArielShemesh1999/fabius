@@ -7,10 +7,7 @@ description: >
   with a severity, a fix, and a regression test. Use when building or reviewing anything that
   touches auth, user input, secrets, payments, file upload, external requests, or dependencies — or
   when the user says "is this secure?", "threat-model this", "audit this", "harden this", "review
-  for vulnerabilities", or "security review". Defensive only — it hardens, never weaponizes. The
-  STRIDE template, the OWASP checklist, and the finding format live in references/security-playbook.md;
-  the hardening guides and audit library live in references/hardening-guides.md, bundled and indexed by CORPUS.md, paged in on demand.
-  The AI-driven diff/PR review pass — the confidence gate, the do-not-report exclusion list, and the two-stage filter — lives in references/ai-review.md.
+  for vulnerabilities", or "security review". Defensive only — it hardens, never weaponizes.
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -100,4 +97,4 @@ When the job is to **review a change** (a diff, a PR) rather than design a syste
 - The AI diff/PR review pass — the confidence gate, the do-not-report exclusion list, the two-stage filter, and the prompt-injection caveat → `references/ai-review.md`.
 - The supply-chain leg — auditing third-party AI artifacts (skills, plugins, agents, MCP servers) and CI before you adopt them: the exec/data/net/creds gate, SHA-pinning against the auto-update blind window, sandboxing, least-privilege creds, and repeatable Semgrep / Action-pinning rule packs → `references/supply-chain-and-ai-artifacts.md`.
 
-Boundary: defensive only — no offensive tooling, ever. The never-trim security floor is `fabius-parcus`; the test discipline is `fabius-disciplina`; agent least-privilege is `fabius-cohors`. This layer owns the threat model and the audit. The user's instruction wins on everything except cutting a guardrail; `stop fabius` drops the stance.
+Boundary: defensive only — no offensive tooling, ever. The never-trim security floor is `fabius-parcus`; the test discipline is `fabius-disciplina`; agent least-privilege is `fabius-cohors`. This layer owns the threat model and the audit — with one carve-out: the pre-deploy audit gate for smart contracts and on-chain programs (Slither / Echidna / Foundry invariants) is `fabius-catena`'s; praesidium owns every other audit surface. The user's instruction wins on everything except cutting a guardrail; `stop fabius` drops the stance (kill-switch owned by `fabius`).

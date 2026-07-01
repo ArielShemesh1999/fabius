@@ -9,8 +9,8 @@ description: >
   re-check offline, forever. Use when the task touches a smart contract, a program, a wallet, a
   transaction, a token/mint, an on-chain read, or when the user says "seal this", "sign this file",
   "prove provenance", "anchor it", or "verify authenticity". Boring-cryptography only; defensive — it
-  hardens and proves, never weaponizes. The on-chain dev playbook lives in references/onchain-playbook.md;
-  the sealing primitive (hash → sign → anchor → verify) lives in references/sealing.md.
+  hardens and proves, never weaponizes: no exploit tooling, no wallet-draining, no rug mechanics,
+  no market-manipulation code — hardening and verification only.
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -37,7 +37,7 @@ The vulnerabilities to check on every program, named so you can't skip one: miss
 
 Task-classify before scaffolding — a one-shot read is not a project. A balance/transaction/account lookup is a public-RPC JSON-RPC call (`curl`), not an SDK install. Reach for the full kit only when you're *building*.
 
-- **EVM** (the default for this stack — Solidity, Foundry, `forge test`, EIP-712 typed signatures, revm) — fits Argent, SEAL-on-Base, and click-pdf's signing path.
+- **EVM** (the default for this stack — Solidity, Foundry, `forge test`, EIP-712 typed signatures, revm) — the owner's own chain work (an L1 runtime and the document-sealing/signing projects) runs EVM-side.
 - **Solana** when the target is Solana: **Anchor** by default (declarative constraints, IDL + codegen), **Pinocchio** only when compute-unit / size pressure justifies the manual `no_std` discipline.
 - **Test in a pyramid:** fast in-process unit tests as the CI gate (Foundry; LiteSVM / Mollusk on Solana), forked-mainnet integration in a separate stage.
 
@@ -64,4 +64,4 @@ Two standing rules from the research: **boring cryptography only** (collision-re
 
 **Live tier (optional).** Writing and reviewing contracts, and sealing's hash → sign → **verify**, run fully local; *running against a chain* needs an RPC endpoint (EVM: Infura / Alchemy / a public RPC; Solana: a cluster + an optional Solana MCP), and the seal's Bitcoin anchor uses OpenTimestamps. fabius bundles none of these — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
 
-Pairs with: `fabius-praesidium` (threat model + the never-weaponize boundary), `fabius-disciplina` (test-first contracts — a contract bug is unrecoverable, so prove before deploy), `fabius-parcus` (the smallest contract that holds; don't roll your own crypto — use the vetted primitive). Defensive only; `stop fabius` drops the stance.
+Pairs with: `fabius-praesidium` (threat model + the never-weaponize boundary), `fabius-disciplina` (test-first contracts — a contract bug is unrecoverable, so prove before deploy), `fabius-parcus` (the smallest contract that holds; don't roll your own crypto — use the vetted primitive). Defensive only; `stop fabius` drops the stance (kill-switch owned by `fabius`).

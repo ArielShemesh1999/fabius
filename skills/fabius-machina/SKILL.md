@@ -51,4 +51,4 @@ Idempotency (a re-fired trigger must not double-act), explicit error responses (
 
 **Live tier (optional).** Discovery, validation, and design need no runtime; *driving a live instance* needs the `n8n-mcp` MCP server + `N8N_API_URL` / `N8N_API_KEY` (or the per-platform equivalent). fabius bundles none — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
 
-Pairs with: `fabius-cohors` (when a step needs a real LLM agent — own that node there), `fabius-disciplina` (the `step → verify` plan *is* the workflow; prove it on sample data before live), `fabius-praesidium` + `fabius-parcus` (credentials in env, least privilege, smallest wiring that holds). `stop fabius` drops the stance.
+Pairs with: `fabius-cohors` (when a step needs a real LLM agent — own that node there), `fabius-disciplina` (the `step → verify` plan *is* the workflow; prove it on sample data before live), `fabius-praesidium` + `fabius-parcus` (credentials in env, least privilege, smallest wiring that holds). `stop fabius` drops the stance (kill-switch owned by `fabius`).

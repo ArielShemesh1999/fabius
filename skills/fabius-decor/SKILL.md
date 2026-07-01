@@ -3,17 +3,15 @@ name: fabius-decor
 description: >
   fabius's ship-grade design layer — gives the agent a token vocabulary, the universal laws that
   separate amateur UI from shipped UI, and a quality checklist. Use when building or reviewing any
-  UI — a landing page, a component, a screen, an email, a slide, a brand surface, a chart, a graph,
-  a diagram, a data visualization — when the user references a brand look, or asks to make something
-  "look good", "more polished", "production quality", "chart this", "graph this", or "visualize this
-  data". The token contract lives in references/design-tokens.md; the data-visualization laws and the
-  reproducible-SVG path live in references/visualization.md (the fabius-figura corpus library); the
-  full 69-brand teardown library (DESIGN-apple.md, DESIGN-stripe.md, DESIGN-linear.app.md …) plus the
-  fabius-design, GSAP-animation, fabius-frames and fabius-uiux bundles live in references/design/.
-  Also covers generating images — prompt-craft for image models (references/generative-imagery.md) — and
-  explanatory diagrams / concept maps that teach a system (references/explanatory-diagrams.md). Use it too
-  when the user says "generate an image", "make a poster", "diagram this", "explain this codebase visually",
-  or "map the concepts".
+  UI — a landing page (visual execution; the message and copy are fabius-mercatus), a component, a
+  screen, an email, a slide, a brand surface, a chart, a graph, a diagram, a data visualization —
+  when the user references a brand look, or asks to make something "look good", "more polished",
+  "production quality", "chart this", "graph this", or "visualize this data". Also covers
+  generating images (prompt-craft for image models) and explanatory diagrams / concept maps that
+  teach a system: "generate an image", "make a poster", "diagram this", "explain this codebase
+  visually", "map the concepts". The 69-brand teardown library plus the fabius-design,
+  fabius-motion, fabius-frames, fabius-uiux and uiverse bundles live in references/design/; entry
+  doc references/design-system.md.
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -82,7 +80,7 @@ The slot schema, the lighting/era mapping tables, the conflict-resolution rules,
 
 ## Using a brand spec as a target
 
-1. Pick the closest brand in `references/design/` (69 systems — `DESIGN-apple.md`, `DESIGN-stripe.md`, `DESIGN-linear.app.md` …) as the visual DNA; the token contract is in `references/design-tokens.md`.
+1. Pick the closest brand in `references/design/` (69 systems — `DESIGN-apple.md`, `DESIGN-stripe.md`, `DESIGN-linear.app.md` …) as the visual DNA; the token contract is in `references/design-tokens.md`. The fabius-design library's entry doc — the token vocabulary plus three worked brand reference points — is `references/design-system.md` (the entry CORPUS.md designates); the bundled animation and component libraries (`fabius-design`, `fabius-motion`, `fabius-frames`, `fabius-uiux`, `uiverse`) sit alongside the teardowns in `references/design/`.
 2. Lift its **principles**, not its pixels — the type ratios, the accent discipline, the spacing rhythm, the do/don'ts.
 3. Re-map to the project's own brand color and font. Keep the structure, swap the identity.
 4. Substitute fonts honestly: name the closest open-source match (Inter for SF Pro, Manrope for Gilroy) and nudge tracking and leading to match.
@@ -102,4 +100,4 @@ Before calling UI done:
 
 When a design is declared final, accessibility work is **ARIA-attribute-only** — don't swap tags (div→table, h4→fieldset), which pulls in UA default styles and breaks the design even with no CSS change.
 
-Pairs with: `fabius-disciplina` (brainstorm the layout, prove it live), `fabius-parcus` (the smallest CSS that holds the look).
+Pairs with: `fabius-disciplina` (brainstorm the layout, prove it live), `fabius-parcus` (the smallest CSS that holds the look), `fabius-mercatus` (on a landing page, the message and copy are mercatus's; this layer owns the visual execution).

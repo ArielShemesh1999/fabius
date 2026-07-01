@@ -5,7 +5,7 @@
 //
 // Convene N heterogeneous models on one question, then aggregate their answers into one:
 //   stage 1  first opinions    — every seat answers the question independently (parallel)
-//   stage 2  blind peer-review — each seat ranks the others' answers with identities stripped
+//   stage 2  blind peer-review — each seat ranks all answers, identities stripped (own included; self-scores dropped at tally)
 //   stage 3  chairman synthesis— one model fuses the ranked field into the final answer
 //
 // Zero dependencies (Node ≥18, native fetch). Every model through ONE OpenRouter key — same
@@ -16,14 +16,14 @@
 // Usage:
 //   node council.mjs --selftest                     # wiring + Borda check — no key, no network, no cost
 //   export OPENROUTER_API_KEY=sk-or-...
-//   export COUNCIL_MODELS=anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro,x-ai/grok-4
+//   export COUNCIL_MODELS=anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro,mistralai/mistral-large
 //   export COUNCIL_CHAIRMAN=anthropic/claude-opus-4.8
 //   node council.mjs "Should a 3-person startup use a monolith or microservices?"
 //   node council.mjs --json "..."   > run.json
 
 import { pathToFileURL } from "node:url"; // node builtin — still zero npm dependencies
 
-const DEFAULT_SEATS = "anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro,x-ai/grok-4";
+const DEFAULT_SEATS = "anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro"; // fabius roster seats, odd count for tie-breaks; widen via COUNCIL_MODELS (e.g. add mistralai/mistral-large)
 const DEFAULT_CHAIR = "anthropic/claude-opus-4.8";
 
 const REVIEW_SYS =

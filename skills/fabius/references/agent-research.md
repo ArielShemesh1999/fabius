@@ -26,6 +26,7 @@ The literature fabius is built on, at a glance; each row is detailed below. **fo
 | Autonomous-Agents survey (Wang) | — | R1 | direct |
 | Toward Efficient Agents (Yang et al., survey) | 2601.14192 | R2 · R11 · M3 | direct |
 | Memory for Autonomous LLM Agents (Du, survey) | 2603.07670 | R9 · M7 · M8 · M9 | direct |
+| "Ralph" autonomous-loop technique (Huntley) | github (ralph-claude-code, frankbria) | R12 | direct |
 | Flow Matching | 2210.02747 | R4 | analogy |
 | Consistency Models | 2303.01469 | M3 | analogy |
 | Classifier-Free Guidance | 2207.12598 | R10 | analogy |
@@ -119,6 +120,10 @@ One frozen LLM improves its output via **generate → self-critique → refine**
 ### Voyager (Wang et al., 2023) · direct · backs M6
 Lifelong skill acquisition via a growing **library of executable, documented, retrieval-keyed skills**: solved tasks are stored and composed by future tasks instead of re-derived, so capability compounds. The hard gate: a skill is added **only after self-verification** confirms it works; failures yield feedback, not a library entry.
 → **fabius:** archivum as a skill library (M6) — verify-then-store, retrieve-before-plan, supersede-don't-duplicate; failures leave anti-pattern notes. Turns per-task reflection into compounding cross-session leverage. The closest paper to fabius's own skills model.
+
+### The "Ralph" autonomous-loop technique (Geoff Huntley) · direct · backs R12
+Not a paper — a practitioner technique: run one agent through the same task prompt in a bounded loop, letting each cycle make incremental verified progress until an explicit completion condition holds. The point is the gate, not the loop: an exit condition, a cycle cap, and checkpoints are what separate "autonomous" from "infinite". Credited in [credits/README.md](../../../credits/README.md) via **ralph-claude-code** (frankbria).
+→ **fabius:** the long-horizon `step → verify` loop with a dual exit gate (R12) — completion condition *and* explicit done-signal must both hold, cycles are hard-capped, a stuck loop escalates (M4) instead of spinning. **Direct** on the loop-plus-gate shape; the specific caps are fabius's operational heuristics.
 
 ---
 

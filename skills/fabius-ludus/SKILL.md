@@ -47,12 +47,12 @@ Each state owns its update/render/input; transitions are named events, not scatt
 
 For a pixel game, the discipline *is* the look:
 
-- **One fixed palette** — lock it and don't drift. (For this project's brand: the green palette + the red mascot — one identity, applied consistently.)
+- **One fixed palette** — lock the project's own brand palette and identity up front, then don't drift. One palette, one identity, applied consistently.
 - **Integer scaling only** — 2×, 3×, 4× — never fractional, or it shimmers.
 - **Snap to the pixel grid** — positions round to whole device-pixels; sub-pixel motion blurs the crispness that *is* the aesthetic.
 - **One unit size** — a consistent base tile/sprite size; the grid is the rhythm.
 
-(RTL/Hebrew UI keeps its own reading direction — left-pointing arrows are correct for "back/next" in that layout; don't flip them.)
+(On RTL surfaces — Hebrew, Arabic — the UI keeps its own reading direction: left-pointing arrows are correct for "back/next" in that layout; don't flip them.)
 
 ## 5. Balance one knob at a time
 
@@ -86,4 +86,4 @@ Pick the **smallest shippable game that proves the loop** — a jam-sized cut. O
 - Core-loop template, the juice checklist, the FSM skeleton, the pixel-art constants, and jam-scoping rules → `references/game-playbook.md`.
 - Engine recipes, feel patterns, and the pixel-art kit → `references/engine-recipes.md`, bundled and indexed by [CORPUS.md](../../CORPUS.md); page in the one slice the task needs (R9 · M9).
 
-Boundary: lean code is `fabius-parcus`; plan + prove is `fabius-disciplina`; UI/animation laws are `fabius-decor`; enemy/NPC agents are `fabius-cohors`. This layer owns the loop, the feel, and the balance. The user's design and brand always win; `stop fabius` drops the stance.
+Boundary: lean code is `fabius-parcus`; plan + prove is `fabius-disciplina`; UI/animation laws are `fabius-decor`; enemy/NPC agents are `fabius-cohors`. This layer owns the loop, the feel, and the balance. The user's design and brand always win; `stop fabius` drops the stance (kill-switch owned by `fabius`).
