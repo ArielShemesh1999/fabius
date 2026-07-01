@@ -36,15 +36,17 @@ Grounded in `synapse/worker/src/index.js` (the executable runtime) + the 15 skil
 - **Live org-graph console** (Synapse) on a real CF Worker + D1 + Vectorize backend.
 - **The wedge** — the Fabian stance compiled to a **proven 18-rule routing policy** (sourced to ReAct/ToT/Reflexion/MemGPT/DSPy/Voyager), **content-bound provenance seal**, 15 single-owner skills.
 
-## The gap (the hands + autonomy)
+## The gap as of 2026-06-26, pre-Phase-0 (the hands + autonomy)
 
-1. **No acting tools.** The ReAct loop has only 2 **read-only** tools (`recall`, `route`) — it advises, it can't *do* (`AGENT_TOOLS` ~2407).
-2. **No code execution / CodeAct sandbox** — the frontier's primary action space.
+*Historical baseline, kept as written. Items 1, 2, 5, and 7 closed 2026-06-26 with Phase 0–1 — see Status. Items 3, 4, and 6 map to Phases 3–5; item 8 stands by design (bring-your-own-key).*
+
+1. **No acting tools.** The ReAct loop has only 2 **read-only** tools (`recall`, `route`) — it advises, it can't *do* (`AGENT_TOOLS` ~2407). *(closed 2026-06-26)*
+2. **No code execution / CodeAct sandbox** — the frontier's primary action space. *(closed 2026-06-26)*
 3. **No computer/GUI use.**
 4. **Long-horizon capped short** — 5-step loop, 4-step waves, externally driven (no self-driver).
-5. **Verifier is a soft LLM opinion** that *defaults to pass* on reviewer failure — the one place the discipline leaks.
+5. **Verifier is a soft LLM opinion** that *defaults to pass* on reviewer failure — the one place the discipline leaks. *(closed 2026-06-26 — execution oracle hard-overrides the judge; the pass default stays, honestly gated by the memory score)*
 6. **Two stacks not unified** — the Flow/orchestrate path is Anthropic-only, tool-less, single-message.
-7. **`callLLM` is text-only** — no multimodal/native tool-calling (prerequisite for CUA + reliable tool use).
+7. **`callLLM` is text-only** — no multimodal/native tool-calling (prerequisite for CUA + reliable tool use). *(closed 2026-06-26)*
 8. **Execution gated on a key** — no key → everything simulates.
 
 ## The build ladder (corrected by the feasibility review)

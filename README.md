@@ -17,9 +17,9 @@
 [![Runs on every model](https://img.shields.io/badge/runs_on-every_model-7a3dff?style=for-the-badge)](#what-it-is)
 [![Open the console](https://img.shields.io/badge/console-synapse-6322e8?style=for-the-badge)](https://synapse-vert-one.vercel.app)
 [![Benchmark](https://img.shields.io/badge/benchmark-blind,_reproducible-2ea44f?style=for-the-badge)](#what-it-does)
-[![Structural tests](https://img.shields.io/badge/structural_tests-17%2F17-2ea44f?style=for-the-badge)](BENCHMARKS.md)
+[![Structural tests](https://img.shields.io/badge/structural_tests-19%2F19-2ea44f?style=for-the-badge)](BENCHMARKS.md)
 [![Research-grounded](https://img.shields.io/badge/research--grounded-routing_policy-7a3dff?style=for-the-badge)](RESEARCH.md)
-[![Whitepaper](https://img.shields.io/badge/whitepaper-40pp_·_proofs_+_coherence-7a3dff?style=for-the-badge)](paper/fabius-as-a-system.pdf)
+[![Whitepaper](https://img.shields.io/badge/whitepaper-proofs_+_coherence-7a3dff?style=for-the-badge)](paper/fabius-as-a-system.pdf)
 
 </div>
 
@@ -67,7 +67,7 @@ Same model, one concentrated set of operating rules. The stance changes the *sha
 
 Across four model families — Grok, Mistral, GPT, Claude — the pattern holds: the advantage is largest at trust, ordering, and genuine-build boundaries, and near zero on pure over-engineering traps. Shorter answers that the blind judge scores *higher*.
 
-**Every specialist domain, measured.** A second blind run, plus a follow-up extension, puts one task through *each* of the **twelve** specialists then in the system — from on-chain to science to ML engineering to markets — with the router injecting the relevant skill. fabius is the **only arm that beats both the bare model and a "be concise" control on both tiers**, scoring at or above the bare model in all 13 domains while cutting output ~40%. (The cross-model `fabius-concilium` layer, added since, isn't a task domain — its test is whether a council beats its best single seat, not this per-domain run, so it is honestly not yet in a blind run.) How much the output quality improves, blind score out of 15 (bare model → under fabius):
+**Every specialist domain, measured.** A second blind run (13 tasks across 11 blind-judged task domains), plus a two-domain follow-up extension (ML evaluation, markets) — 15 tasks across 13 domains in all, one through *each* of the **twelve** specialists then in the system, from on-chain to science to ML engineering to markets — with the router injecting the relevant skill. fabius is the **only arm that beats both the bare model and a "be concise" control on both tiers**, scoring at or above the bare model in all 13 domains while cutting output ~40%. (The cross-model `fabius-concilium` layer, added since, isn't a task domain — its test is whether a council beats its best single seat, not this per-domain run, so it is honestly not yet in a blind run.) How much the output quality improves, blind score out of 15 (bare model → under fabius):
 
 | Domain (skill) | bare model | under fabius | quality gain |
 |---|:---:|:---:|:---:|
@@ -79,9 +79,9 @@ Across four model families — Grok, Mistral, GPT, Claude — the pattern holds:
 | Design · UI (`decor`) | 13.5 | **15.0** | +1.5 |
 | Security · auth / upload (`praesidium`) | 13.5 | 14.5 | +1.0 |
 | ML eval · ship-decision (`doctrina`) | 10.5 | 11.0 | +0.5 |
-| **Overall · all domains** | **12.4** | **13.6** | **+1.2** |
+| **Overall · domain-average** | **12.3** | **13.6** | **+1.3** |
 
-Sharpest cases: the RNA-seq task — bare model **7/15**, **fabius 15/15** (the FDR correction the bare model dropped) — and its mirror, the trading backtest (sonnet) — control **12/15**, **fabius 15/15** (out-of-sample validation, costs, and *analysis not advice*). **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — fifteen single-owner contracts, every reference live, the content-bound seal verifiable — **17/17**.
+Sharpest cases: the RNA-seq task — bare model **7/15**, **fabius 15/15** (the FDR correction the bare model dropped) — and its mirror, the trading backtest (sonnet) — control **12/15**, **fabius 15/15** (out-of-sample validation, costs, and *analysis not advice*). **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — fifteen single-owner contracts, every reference live, the content-bound seal verifiable — **19/19**.
 
 > The claim the data supports: **structure beats brevity, and the advantage grows as the model's default discipline drops.** Not "smarter," not "10× on everything" — a scope-control system that knows when to compress and when to expand. Method, mechanism, and caveats: **[BENCHMARKS.md](BENCHMARKS.md)**.
 
@@ -154,7 +154,7 @@ fabius's decisions aren't hand-waving. Its routing policy is drawn from the agen
 
 Under the policy sits a **mathematical-foundations layer**: every rule reduced to its formal statement (decision theory, information theory, optimization, scheduling) — adversarially verified, then *proven* to compose as **one consistent, gap-free, model-applicable decision system** (all 18 rules are the same expected-loss / value-of-information threshold wrapped in a measurable task-partition). The decision policy, the math behind all seven figures, the foundations table, the coherence proof, and the direct-vs-analogy honesty ledger live in **[RESEARCH.md](RESEARCH.md)**. The figures are conceptual shapes of documented principles, not fabius measurements — reproduce them with `python3 assets/charts/render_figures.py`.
 
-The full treatment — the fifteen-skill architecture, the proven core of eighteen rules with **a complete proof of the mathematics under each one** (every proof adversarially verified, ten corrected before publication), the coherence theorem, the four operational extensions held honestly at the edge, the blind benchmark, and the honesty ledger — is collected as a 40-page **whitepaper**: **[paper/fabius-as-a-system.pdf](paper/fabius-as-a-system.pdf)** (reproduce with `bash paper/build.sh`).
+The full treatment — the fifteen-skill architecture, the proven core of eighteen rules with **a complete proof of the mathematics under each one** (every proof adversarially verified, ten corrected before publication), the coherence theorem, the four operational extensions held honestly at the edge, the blind benchmark, and the honesty ledger — is collected as a **whitepaper** (40+ pages): **[paper/fabius-as-a-system.pdf](paper/fabius-as-a-system.pdf)** (reproduce with `bash paper/build.sh`).
 
 ---
 
@@ -235,7 +235,7 @@ fabius/
 │   ├── fabius-doctrina/    AI/ML engineering    · references: serving · MLOps · evaluation playbook
 │   ├── fabius-fortuna/     markets & finance    · references: analysis · valuation · honest backtesting · risk
 │   └── fabius-concilium/   cross-model council  · references: council protocol · council.mjs (runnable)
-├── evals/                  proof — structural.mjs (17/17) · harness.v3.workflow.js · results.v3.json · eval.mjs · portable_eval.py
+├── evals/                  proof — structural.mjs (19/19) · harness.v3.workflow.js · results.v3.json · eval.mjs · portable_eval.py
 ├── provenance/             content-bound seal — verify.sh · seal manifest · OTS Bitcoin proof · signed tag
 ├── PROVENANCE.md           how authorship is proven, not asserted (with the limits up front)
 ├── AGENTS.md               tool-agnostic bridge (Codex / Cursor / Gemini / …)
@@ -243,7 +243,7 @@ fabius/
 ├── BENCHMARKS.md           method · mechanism · how to reproduce
 ├── RESEARCH.md             the decision policy, the math, the honesty ledger
 ├── CORPUS.md               the fabius corpus index — every capability library, one index
-├── paper/                  the 40-page whitepaper (PDF) — proofs + coherence theorem
+├── paper/                  the whitepaper (PDF) — proofs + coherence theorem
 ├── assets/charts/          numpy → SVG figure renderer (reproducible)
 ├── credits/                inspiration and attribution
 └── LICENSE                 usage terms + attribution

@@ -26,7 +26,7 @@ Brainstorm before building; for multi-step work write a `step → verify` plan. 
 One accent color; design tokens, never inline hex; hierarchy from type, not boxes; generous whitespace; mobile-first; design the focus and pressed states; verify live in a browser. Charts are design too: maximize data-ink (kill gridline clutter / 3-D / shadows), one accent for the signal series, label directly, title with the takeaway not the axes, and prefer reproducible tokenized SVG over a screenshot.
 
 ### Agent building
-Precise description + tight tool allowlist + explicit output contract + least privilege. One agent unless the work truly splits; then sequential / parallel / hierarchical / human-in-the-loop.
+Precise description + tight tool allowlist + explicit output contract + least privilege. One agent unless the work truly splits; then sequential / parallel / hierarchical / human-in-the-loop / swarm.
 
 ### Persistent memory
 Don't re-derive. Write what you learn into interlinked notes with an index + a log; retrieve from them before redoing the work. Make recall *automatic*: capture (non-blocking) → compress into a typed+titled record → re-inject a compact index at the next session's start, full detail on demand (progressive disclosure). When an answer must be source-true, ask an authoritative external corpus that answers only from its sources — keep a source registry, and loop "ask → diff against the request → re-query the gaps" until complete, then synthesize.

@@ -17,12 +17,12 @@ The organizing idea is the Fabian one: **scout wide, strike narrow.** Investigat
                                         │
    CORE       ───►  fabius-parcus — always-on lean core (runs under every layer)
                                         │
-      ┌─────────┬─────────┬─────────┬───┴─────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-      ▼         ▼         ▼         ▼         ▼         ▼         ▼         ▼         ▼         ▼
- disciplina  decor     cohors   archivum  mercatus praesidium  ludus    catena   machina  scientia
- eng.      design +   agent    persistent go-to-   defensive   game    on-chain  automa-  science
- process   data-viz   eng.     memory     market   security    craft   + seal    tion     + bio
-      └─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┘
+      ┌─────────┬─────────┬─────────┬───┴─────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
+      ▼         ▼         ▼         ▼         ▼         ▼         ▼         ▼         ▼         ▼         ▼         ▼         ▼
+ disciplina   decor    cohors   archivum  mercatus praesidium   ludus    catena    machina  scientia  doctrina   fortuna  concilium
+    eng.    design +    agent  persistent  go-to-   defensive   game    on-chain   automa-   science   ML eng.   markets cross-model
+   process  data-viz    eng.     memory    market   security    craft    + seal     tion      + bio    + eval   + finance  council
+      └─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┘
                                         │
                     ┌───────────────────────────────────────────────┐
    SPINE      ───►  │  references/ · CORPUS.md · evals/ · AGENTS.md  │
@@ -32,6 +32,7 @@ The organizing idea is the Fabian one: **scout wide, strike narrow.** Investigat
                                         ▼
    end to end: code · prose · UI + data-viz · agents · debug · memory · marketing
                · defensive-security · games · on-chain + provenance · automation · science
+               · ML engineering · markets & finance · the cross-model council
 ```
 
 - **`fabius`** — the router (the *praetorium*). Reads the task, sets the working stance, and dispatches on three axes: which layer(s), how much machinery (the capability ladder), and which model tier. Owns the system-level kill-switch and the *scout-wide / strike-narrow* maxim.
