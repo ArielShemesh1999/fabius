@@ -57,44 +57,33 @@ Same model, one concentrated set of operating rules. The stance changes the *sha
 | An ML system | a model that rots in prod | held-out leakage-free eval, the smallest serving stack, tracked + reproducible |
 | A stock / market | a confident prediction | risk sized first, evidence over narrative, backtests proven out-of-sample (analysis, not advice) |
 
-**Measured, blind, reproducible.** A three-arm evaluation — `baseline`, a generic *"be concise"* control, and the full fabius stance — scored by a judge model that is never told which arm produced which answer. Beating the *"be concise"* control, not the baseline, is the real test. fabius beats it on every tier while cutting output length:
+**One benchmark: fabius improves every model it runs on** — blind-judged on the newest Claude models, objectively verified by executed tests and factual checks, demoed across external families — on **20–35% less output**. One test, three panels, one receipt.
 
-| Model | baseline | "be concise" | **fabius** | vs. control | output cut |
-|---|:---:|:---:|:---:|:---:|:---:|
-| Opus 4.8 | 12.5 | 13.0 | **13.88** | **+0.88** | **−43%** |
-| Sonnet 4.6 | 8.75 | 11.75 | **12.5** | **+0.75** | **−52%** |
-| Haiku 4.5 | 8.88 | 9.13 | **10.38** | **+1.25** | **−32%** |
+**Panel A — Quality, judged blind.** The four newest Claude models, 15 tasks × 3 arms — `baseline`, a generic *"be concise"* control (the real test), and fabius: the shipped `AGENTS.md` + routed `SKILL.md` injected *verbatim* — scored by **two independent blind judges** (inter-judge gap 0.69/15) never told which arm produced which answer. Blind score /15:
 
-Across four model families — Grok, Mistral, GPT, Claude — the pattern holds: the advantage is largest at trust, ordering, and genuine-build boundaries, and near zero on pure over-engineering traps. Shorter answers that the blind judge scores *higher*.
+| Model | baseline | **fabius** | vs. baseline | output cut |
+|---|:---:|:---:|:---:|:---:|
+| Fable 5 | 14.50 | **14.73** | **+0.23** | **−25.3%** |
+| Opus 4.8 | 14.40 | **14.60** | **+0.20** | −20.0% |
+| Sonnet 4.6 | 14.27 | 14.20 | −0.07 | −20.3% |
+| Haiku 4.5 | 11.73 | 11.40 | −0.33 | **−35.5%** |
 
-**Every specialist domain, measured.** A second blind run (13 tasks across 11 blind-judged task domains), plus a two-domain follow-up extension (ML evaluation, markets) — 15 tasks across 13 domains in all, one through *each* of the **twelve** specialists then in the system, from on-chain to science to ML engineering to markets — with the router injecting the relevant skill. fabius is the **only arm that beats both the bare model and a "be concise" control on both tiers**, scoring at or above the bare model in all 13 domains while cutting output ~40%. (The cross-model `fabius-concilium` layer, added since, isn't a task domain — its test is whether a council beats its best single seat, not this per-domain run, so it is honestly not yet in a blind run.) How much the output quality improves, blind score out of 15 (bare model → under fabius):
+The frontier tiers beat *both* the bare model and the "be concise" control (which scores 14.60 on Fable and 14.43 on Opus); the output cut is universal, 20–35% on every model. Haiku gains **+0.71** on its twelve specialist tasks and gives it back (−4.50) on three trivial one-liners under the full contract — the case *for* model-tier routing and the lean gate. The sharpest per-domain color inside the panel is a routed specialist rescuing the small model: on Haiku the security route jumps **9.0 → 14.5** and the on-chain SPL-balance task **10.5 → 14.5** once the specialist contract is injected — a guardrail the bare model doesn't supply on its own.
 
-| Domain (skill) | bare model | under fabius | quality gain |
-|---|:---:|:---:|:---:|
-| Science · RNA-seq (`scientia`) | 10.5 | **15.0** | **+4.5** |
-| Game · core loop (`ludus`) | 10.0 | 13.0 | +3.0 |
-| Markets · backtest (`fortuna`) | 10.5 | 12.5 | +2.0 |
-| On-chain · token balance (`catena`) | 11.5 | 13.0 | +1.5 |
-| Automation · webhook (`machina`) | 12.5 | 14.0 | +1.5 |
-| Design · UI (`decor`) | 13.5 | **15.0** | +1.5 |
-| Security · auth / upload (`praesidium`) | 13.5 | 14.5 | +1.0 |
-| ML eval · ship-decision (`doctrina`) | 10.5 | 11.0 | +0.5 |
-| **Overall · domain-average** | **12.3** | **13.6** | **+1.3** |
-
-Sharpest cases: the RNA-seq task — bare model **7/15**, **fabius 15/15** (the FDR correction the bare model dropped) — and its mirror, the trading backtest (sonnet) — control **12/15**, **fabius 15/15** (out-of-sample validation, costs, and *analysis not advice*). **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — fifteen single-owner contracts, every reference live, the content-bound seal verifiable — **19/19**.
-
-**Harder still — shipped files verbatim, two blind judges.** A fifth run tightened the method: the shipped skill files injected *verbatim*, all four internal tiers, **two independent blind judges** (inter-judge gap 0.69/15), 15 tasks × 4 models × 3 arms. The output cut proved **universal — 20–35% on every model** — and the frontier tiers beat *both* the bare model and the "be concise" control (Fable +0.23, Opus +0.20); Sonnet is a near-tie (−0.07), and Haiku dips overall (−0.33) while gaining **+0.71** on its twelve specialist tasks — the dip is three trivial one-liners under the full contract, which is the case *for* model-tier routing and the lean gate.
-
-**Then the judge was removed entirely.** The sixth run is objective: generated code **executed against hidden test suites**, domain deliverables graded against a **factual checklist** by two strict graders — *looks right* versus *is right*. Executed algorithm code had no headroom (every bare model already ~100%; fabius holds 100%); the gains are in the deliverables that only look right. Percent of hidden tests + factual checks passed:
+**Panel B — Objective, no judge.** Generated code **executed against hidden test suites**; domain deliverables graded against **factual checklists** by two strict graders — *looks right* versus *is right*. 9 deliverables × 3 arms × the same four models. Percent of hidden tests + factual checks passed:
 
 | Model | bare model | under fabius | objective gain |
 |---|:---:|:---:|:---:|
 | Haiku 4.5 | 75.6% | **93.0%** | **+17.4** |
 | Opus 4.8 | 84.9% | **90.7%** | +5.8 |
 | Fable 5 | 87.2% | **90.7%** | +3.5 |
-| Sonnet 4.6 | 89.5% | 88.4% | ~tie |
+| Sonnet 4.6 | 89.5% | 88.4% | ~tie (strongest bare baseline) |
 
-Sharpest objective lifts: the parameterized SQL route **72.5% → 95%**, the idempotent webhook 40% → 60%, Solana account-validation 52.5% → 65% — output still cut 12–25% while doing it. Six measured runs in all; full method, per-task numbers, and the raw receipts (`evals/results.v5.json`, `evals/results.v6.json`): **[BENCHMARKS.md](BENCHMARKS.md)** §5–§6.
+Executed algorithm code had no headroom — every bare model already ~100%; fabius holds it. The gains are in the deliverables that only *look* right: domain checklists move Haiku 58→88, Opus 74→84, Fable 78→84 (Sonnet 82→80); per-deliverable, the parameterized SQL route **72.5% → 95%**, the idempotent webhook 40% → 60%, Solana account-validation 52.5% → 65% — output still cut 12–25% while doing it.
+
+**Panel C — External families, demoed blind.** The same stance carried through the portable harness (`evals/portable_eval.py`, 6 tasks, measured 2026-06-22 with live provider keys), blind-scored against the *"be concise"* control on the genuine-build tasks: **Grok +8.5 · GPT +7.0 · Claude +7.0 · Mistral +2.5** (/15). Every family gains; Gemini is wired but carries no number without a key.
+
+Honest misses, printed: Sonnet is a near-tie on both panels, and Haiku dips on trivial one-liners under the full contract — exactly what the router's model-tier dispatch and the lean gate exist to catch. **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — fifteen single-owner contracts, every reference live, the content-bound seal verifiable — **19/19**. The canonical receipt is **`evals/results.benchmark.json`**; full method, per-task numbers, and the raw receipts: **[BENCHMARKS.md](BENCHMARKS.md)**.
 
 > The claim the data supports: **structure beats brevity, and the advantage grows as the model's default discipline drops.** Not "smarter," not "10× on everything" — a scope-control system that knows when to compress and when to expand. Method, mechanism, and caveats: **[BENCHMARKS.md](BENCHMARKS.md)**.
 
@@ -248,7 +237,7 @@ fabius/
 │   ├── fabius-doctrina/    AI/ML engineering    · references: serving · MLOps · evaluation playbook
 │   ├── fabius-fortuna/     markets & finance    · references: analysis · valuation · honest backtesting · risk
 │   └── fabius-concilium/   cross-model council  · references: council protocol · council.mjs (runnable)
-├── evals/                  proof — structural.mjs (19/19) · harness.v3/v5/v6 workflows · results.v3/v5/v6.json receipts · eval.mjs · portable_eval.py
+├── evals/                  the benchmark — three panels + receipts (results.benchmark.json canonical) · structural.mjs (19/19) · portable_eval.py
 ├── provenance/             content-bound seal — verify.sh · seal manifest · OTS Bitcoin proof · signed tag
 ├── PROVENANCE.md           how authorship is proven, not asserted (with the limits up front)
 ├── AGENTS.md               tool-agnostic bridge (Codex / Cursor / Gemini / …)

@@ -19,3 +19,4 @@ evals/structural.json
 *.crdownload
 *.part
 *.partial
+!evals/results.benchmark.json

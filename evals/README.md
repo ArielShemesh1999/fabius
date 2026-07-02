@@ -1,21 +1,22 @@
 # evals/
 
-The real measurement behind [`../BENCHMARKS.md`](../BENCHMARKS.md). No estimated numbers — this folder is the receipt.
+The measurement behind **the fabius benchmark** ([`../BENCHMARKS.md`](../BENCHMARKS.md)) — one test, three panels, one canonical receipt: [`results.benchmark.json`](results.benchmark.json). No estimated numbers — this folder is the receipt. Each harness below serves one of the benchmark's panels (or the structural suite); the older harnesses are the method iterations kept as raw history.
 
 | File | What it is |
 |---|---|
-| `structural.mjs` | **Deterministic** structural suite — no model, no key, no network. Proves the *system* is well-formed: fifteen single-owner contracts, every `SKILL.md` under budget, every flattened `description` ≤ 1024 chars, every reference live (markdown links **and** backtick-quoted mentions), no sealed-set drift (manifest file list == on-disk set), the content-bound seal verifiable. 19/19 must pass (the seal hash-match goes red mid-edit, green on re-seal). `node evals/structural.mjs` |
-| `harness.v3.workflow.js` | Claude-Code harness for **Run 4** — 13 tasks (one per specialist domain, incl. the on-chain / automation / science verticals) × 3 arms × 2 tiers, blind Opus judge. The `fabius` arm injects the stance **+ the relevant specialist contract**. This is the specialist-domain behavioral proof. |
-| `harness.v3-ext.workflow.js` | **Run 4 extension** — same method, the two later verticals `doctrina` (ML eval) + `fortuna` (trading backtest). Markets +2.0, ML eval +0.5 vs baseline; now every then-existing specialist domain is exercised (the later `fabius-concilium` layer deliberates across models, not a task domain — not yet in a blind run). |
-| `results.v3.json` | The published Run 4 receipt — per-cell scores, length, per-domain deltas. Committed. |
-| `harness.v5.workflow.js` | **Run 5** — the quality run with the shipped skill files injected **verbatim**: 15 tasks × all four internal models × 3 arms, **two blind judges** (Opus + Fable, inter-judge gap 0.69/15). Universal 20–35% output cut; frontier tiers beat both controls. |
-| `results.v5.json` | The published Run 5 receipt — per-cell scores from both judges, lengths, per-model deltas. Committed. |
-| `harness.v6.workflow.js` | **Run 6** — the **objective** run, no judge taste: generated code **executed against hidden test suites** + domain deliverables graded against a **factual checklist** by two strict graders. 9 tasks × 4 models × 3 arms. |
-| `results.v6.json` | The published Run 6 receipt — per-task pass rates (tests + checks) per cell. Committed. |
-| `harness.workflow.js` | Earlier Claude-Code harness. 3 arms × 6 tasks, blind Opus judge. |
-| `eval.mjs` | Node harness — clean **no-system-prompt** API baseline (the strictest baseline). `--selftest` checks wiring with no key. |
-| `results.json` | Raw output `eval.mjs` writes on a run — gitignored; transcribed numbers live in [`../BENCHMARKS.md`](../BENCHMARKS.md). |
-| `portable_eval.py` | **Vendor-agnostic** harness — stdlib only, no pip. Same 3-arm design against **OpenAI (GPT/Codex), Mistral, Anthropic, Gemini**. This is how you get real Codex/Mistral numbers. |
+| `results.benchmark.json` | **THE canonical receipt** — the three panels (A quality / B objective / C external demos) consolidated, with per-panel pointers to the raw files below. Committed. |
+| `structural.mjs` | The benchmark's **deterministic structural suite** — no model, no key, no network. Proves the *system* is well-formed: fifteen single-owner contracts, every `SKILL.md` under budget, every flattened `description` ≤ 1024 chars, every reference live (markdown links **and** backtick-quoted mentions), no sealed-set drift (manifest file list == on-disk set), the content-bound seal verifiable. 19/19 must pass (the seal hash-match goes red mid-edit, green on re-seal). `node evals/structural.mjs` |
+| `harness.v5.workflow.js` | **Panel A harness** — quality, blind, the four newest Claude models: 15 tasks × 4 models × 3 arms with the shipped skill files injected **verbatim**, **two blind judges** (Opus + Fable, inter-judge gap 0.69/15). |
+| `results.v5.json` | **Panel A raw** — per-cell scores from both judges, lengths, per-model and per-domain deltas. Committed. |
+| `harness.v6.workflow.js` | **Panel B harness** — objective, no judge taste: generated code **executed against hidden test suites** + domain deliverables graded against a **factual checklist** by two strict graders. 9 deliverables × 4 models × 3 arms. |
+| `results.v6.json` | **Panel B raw** — per-task pass rates (tests + checks) per cell. Committed. |
+| `portable_eval.py` | **Panel C harness** — vendor-agnostic, stdlib only, no pip. Same 3-arm design against **OpenAI (GPT/Codex), Grok-compatible, Mistral, Anthropic, Gemini**, judged blind cross-family. Writes `results.portable.json` on run. |
+| `harness.v3.workflow.js` | Method history — specialist-domain coverage: 13 tasks (one per specialist domain, incl. the on-chain / automation / science verticals) × 3 arms × 2 tiers, blind Opus judge, condensed contract transcriptions. The iteration that led to Panel A's shipped-files-verbatim arm. |
+| `harness.v3-ext.workflow.js` | Method history — same method extended to the two later verticals `doctrina` (ML eval) + `fortuna` (trading backtest), so every then-existing specialist domain was exercised (the later `fabius-concilium` layer deliberates across models, not a task domain — not yet in a blind run). |
+| `results.v3.json` | Raw receipt for the specialist-coverage iteration — per-cell scores, length, per-domain deltas. Committed. |
+| `harness.workflow.js` | Earlier Claude-Code harness. 3 arms × 6 tasks, blind Opus judge. Method history. |
+| `eval.mjs` | Node harness — clean **no-system-prompt** API baseline (the strictest baseline). `--selftest` checks wiring with no key. The first version of the benchmark's arm design. |
+| `results.json` | Raw output `eval.mjs` writes on a run — gitignored. |
 
 ## Structural suite (no key, no network)
 
@@ -41,9 +42,9 @@ Writes `results.portable.json`. No fabrication — rows appear only for vendors 
 
 ## Design (three-arm, blind)
 
-- **Arms:** `baseline` (task only) · `terse` (task + generic "be concise, write minimal code") · `fabius` (task + the fabius stance). `eval.mjs` reads the shipped `AGENTS.md` **verbatim**; the Run 4 workflow injects a **faithful condensed transcription** of the stance plus the routed specialist's operative contract, hand-transcribed into the harness. The `terse` arm is the control that separates fabius's **structure** from plain brevity.
-- **Models:** `claude-opus-4-8`, `claude-sonnet-4-6`, `claude-haiku-4-5` — each actually run via per-agent model override.
-- **Judge:** `claude-opus-4-8`, **blind** (never told which arm wrote which answer), scoring correctness / minimality / best-practice, 0–5 each.
+- **Arms:** `baseline` (task only) · `terse` (task + generic "be concise, write minimal code") · `fabius` (task + the fabius stance). The Panel A/B harnesses (`harness.v5` / `harness.v6`) and `eval.mjs` load the shipped `AGENTS.md` (+ routed `SKILL.md`) **verbatim**; the older `harness.v3` iteration injected a faithful condensed transcription instead. The `terse` arm is the control that separates fabius's **structure** from plain brevity — the real test.
+- **Models:** the four newest Claude models — Fable 5, `claude-opus-4-8`, `claude-sonnet-4-6`, `claude-haiku-4-5` — each actually run via per-agent model override (Panel A/B). Panel C carries the same arms cross-family (GPT / Grok / Mistral / Gemini) through `portable_eval.py`.
+- **Judge:** Panel A uses **two** blind judges (Opus + Fable, averaged; inter-judge gap 0.69/15); the older single-judge iterations used `claude-opus-4-8`, **blind** (never told which arm wrote which answer), scoring correctness / minimality / best-practice, 0–5 each. Panel B removes the judge entirely — executed tests + factual checklists.
 - **Objective metric:** average output length (chars) — bias-free.
 
 ## Run it yourself
