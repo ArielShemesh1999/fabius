@@ -24,7 +24,7 @@ The length numbers are bias-free (a character count can't be flattered). The qua
 
 ## Measured results
 
-Five runs, five different lenses, plus a deterministic structural suite. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.** Run 5 is the widest: **all four internal models** (haiku · sonnet · opus · fable) with the `fabius` arm carrying the **shipped files verbatim** and **two blind judges** — it shows the output cut is universal and the quality lift is real on the frontier tiers and on any routed specialist, while reporting honestly where the full contracts overwhelm the smallest model. Run 4 is the one that exercises the **specialist surface** — one task per specialist domain as it stood, including the on-chain / automation / science verticals — so the proof reaches the technical verticals, not just the lean stance. (The two specialists added since, `fabius-doctrina` and `fabius-fortuna`, were then measured in the Run 4 **extension** below — every then-existing specialist domain is now exercised. The cross-model `fabius-concilium` layer, added later still, is honestly *not yet* in a blind run: it deliberates *across* models on one question rather than adding a task domain, so its proper test is whether a council beats its best single seat — a measurement to add, not a claim to make here.)
+Six runs, six different lenses, plus a deterministic structural suite. They agree on the shape: **structure beats brevity, and the gap is largest where lean-done-naively would be *wrong*.** Run 5 is the widest quality test: **all four internal models** (haiku · sonnet · opus · fable) with the `fabius` arm carrying the **shipped files verbatim** and **two blind judges**. Run 6 is the most objective: it **runs the generated code against hidden tests** and **grades the domain deliverables against a factual checklist** — no LLM taste in the loop — and finds fabius lifts real correctness most where the model would otherwise skip a guardrail (Haiku +17.4 points overall, +30 on domain work; SQL-injection safety 72.5% → 95%). Run 4 is the one that exercises the **specialist surface** — one task per specialist domain as it stood, including the on-chain / automation / science verticals — so the proof reaches the technical verticals, not just the lean stance. (The two specialists added since, `fabius-doctrina` and `fabius-fortuna`, were then measured in the Run 4 **extension** below — every then-existing specialist domain is now exercised. The cross-model `fabius-concilium` layer, added later still, is honestly *not yet* in a blind run: it deliberates *across* models on one question rather than adding a task domain, so its proper test is whether a council beats its best single seat — a measurement to add, not a claim to make here.)
 
 ### The margin, at a glance
 
@@ -135,6 +135,38 @@ Three findings, stated straight:
 
 **The honest miss, and why it's instructive.** Haiku's overall −0.33 is driven entirely by the **three trivial tasks** (a one-line token fix, a cache one-liner, a basic modal), where its average delta is **−4.50** — the one-line `off-by-one` fix regressed from 14.5 to 3.0. Dumping a 10 KB verbatim contract in front of a *fast* model for a *one-line* job overwhelms it. That is not an argument against the contracts; it is a live demonstration of exactly why fabius **routes by model-tier and gates on the lean core first** — you send the fast tier a condensed stance and let `fabius-parcus` skip the machinery when the job is trivial (Run 4, which injected the *condensed* stance, is where haiku gains). The capable models show no such overwhelm: on trivial tasks Opus and Fable are still **+0.33 / +0.50**. And pooled across all four models and all 15 tasks, fabius (13.73) ties the bare model (13.72) while terse edges both (13.95) — so the value here is **the 26% output cut plus the frontier and specialist lifts**, not a pooled quality win. No number is hidden; the receipt has every cell.
 
+### 6 — Objective deliverable tests: run the code, grade the domain work against facts (`evals/harness.v6.workflow.js`)
+
+Every run above ends in an LLM *quality* score. This one removes the judge from the loop for the parts that can be checked mechanically. **Executable code is written to a file and RUN against a hidden test suite** — the score is real tests passed / total. **Research / security / on-chain / automation deliverables are graded against a fixed factual checklist** (parameterized query present? FDR correction applied? token account validated? handler idempotent?) by two strict graders, per checkpoint. 9 tasks (4 executed, 5 checklist-graded) × 4 models × 3 arms; the `fabius` arm carries the shipped files verbatim. Receipt: [`evals/results.v6.json`](evals/results.v6.json).
+
+Objective score = % of tests + checklist points passed, out of 43 per model-arm:
+
+| Model | baseline | terse | **fabius** | Δ vs baseline | output cut |
+|---|---|---|---|---|---|
+| haiku | 75.6% | 76.7% | **93.0%** | **+17.4** | −25% |
+| opus | 84.9% | 83.7% | **90.7%** | **+5.8** | −24% |
+| fable | 87.2% | 80.2% | **90.7%** | **+3.5** | −12% |
+| sonnet | 89.5% | 76.7% | 88.4% | −1.1 | −24% |
+
+The split is the whole story. Break each model's score into the two tracks:
+
+| Track | what it measures | haiku | sonnet | opus | fable |
+|---|---|---|---|---|---|
+| **Executable code** (offby1, cache, merge-intervals, parse-query) | real tests passed | 100 → **100** | 100 → **100** | 100 → **100** | 100 → **100** |
+| **Domain deliverables** (SQL route, RNA-seq, Solana, webhook, threat-model) | factual-checklist % | 58 → **88** (+30) | 82 → 80 | 74 → **84** (+10) | 78 → **84** (+6) |
+
+- **On pure algorithmic code there is no headroom** — every bare model already passes ~100% of the hidden tests, so fabius neither helps nor hurts (it did repair the one terse off-by-one regression: sonnet-terse 94.4% → fabius 100%). Scope control cannot improve a test the model already passes.
+- **On domain deliverables — where "looks correct" and "is correct" diverge — fabius moves objective correctness hard.** The specialist contract makes the model actually *do* the safety-critical thing:
+
+```
+SQL route (parameterized query, not string-concat)   baseline 72.5%  ->  fabius 95.0%   +22.5  ← real injection risk removed
+webhook   (idempotency, auth, retry, secret-in-env)  baseline 40.0%  ->  fabius 60.0%   +20.0
+Solana    (account exists/owner/mint validation)     baseline 52.5%  ->  fabius 65.0%   +12.5  ← untrusted-input money safety
+RNA-seq / threat-model                               baseline 100%   ->  fabius 100%    (already at ceiling)
+```
+
+**Which model gains, and how much.** Ranked by objective lift: **Haiku +17.4** (its bare defaults skip the most guardrails, so the contract has the most to add — +30 points on domain work), **Opus +5.8**, **Fable +3.5**, **Sonnet ≈ tie** (−1.1; its bare baseline was already the strongest at 89.5%, so little headroom). Every model got there while producing 12–25% *less* text. This is the cleanest statement of the thesis: **the fabius lift is exactly the gap between an answer that reads right and one that passes the test — invisible to a quality judge, caught by an objective check, and largest on the models that need the discipline most.**
+
 ### Structural tests — the system is well-formed (no model, no key)
 
 Separate from "does the stance help," a deterministic suite proves the *system* is intact. These are pass/fail facts that reproduce byte-for-byte on any clone — [`node evals/structural.mjs`](evals/structural.mjs):
@@ -188,6 +220,7 @@ A good result is **shorter answers the blind judge scores higher** — brevity *
 - Run 3 (T3) tests **#2 — does the multi-skill mechanism fire and act on its own.** Yes — it shipped the leanest, only-functional build live in Claude Code.
 - Run 4 tests **#3 — does each benchmarked specialist, including the new on-chain / automation / science verticals, improve its own domain.** Yes — fabius beats both controls on both tiers, and the largest lifts land on those technical verticals.
 - Run 5 tests **#3′ — with the shipped files verbatim, across all four internal models, does it still hold.** Partly, and instructively: output drops 20–35% everywhere; on the frontier tiers (Opus, Fable) fabius beats both controls; any routed specialist lifts quality even on Haiku (+0.71 on its specialist tasks). The one regression — Haiku on *trivial* tasks under a full verbatim contract — is the empirical case for model-tier-aware routing and the lean gate, not against them.
+- Run 6 tests **#3″ — does the deliverable pass an objective test, not just please a judge.** Yes, exactly where it should: executed code is already at ceiling for every model (no headroom), while on domain deliverables the routed contract lifts real, checkable correctness — Haiku +30, Opus +10, Fable +6 points — turning "reads right" into "is right" (parameterized SQL 72.5% → 95%, idempotent webhook 40% → 60%). Sonnet ties (strongest baseline). Biggest overall gain on the smallest model, which needs the discipline most.
 - The structural suite tests **#4 — is the system built right** (single-owner, under budget, references live, seal verifiable). 19/19.
 - The advantage **grows as the model's default discipline drops** (Run 1: sonnet/haiku gain more than opus; Run 2: lean-BASE Grok gains most, verbose-BASE Mistral least). The advantage is always present; its *size* tracks how undisciplined the default is.
 - **Not tested by a one-shot eval:** `fabius-archivum` (persistent memory only pays off across sessions) and the `fabius` router's dispatch accuracy. Memory is excluded rather than faked; routing is checked structurally, not behaviorally.
@@ -218,6 +251,9 @@ GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini
 
 # all four internal models, shipped files verbatim, two blind judges (Run 5):
 #   Workflow({ scriptPath: "evals/harness.v5.workflow.js" })       # -> evals/results.v5.json
+
+# objective deliverable tests — run the code + grade domain work vs a checklist (Run 6):
+#   Workflow({ scriptPath: "evals/harness.v6.workflow.js" })       # -> evals/results.v6.json
 ```
 
 In Run 1 (`eval.mjs`) the `fabius` arm reads the shipped `AGENTS.md` **verbatim** at runtime — you benchmark the exact stance the agent ships. Run 4 (`harness.v3.workflow.js`) instead injects a **faithful condensed transcription** of that stance plus the routed specialist's operative contract, hand-transcribed into the harness rather than read from the shipped files — so it measures the specialist mechanism, not a byte-for-byte copy of the source. `eval.mjs` writes `evals/results.json`; the published Run 4 receipt is [`evals/results.v3.json`](evals/results.v3.json). Swap `--model` / `--judge` to benchmark anything; add tasks in the `TASKS` array.

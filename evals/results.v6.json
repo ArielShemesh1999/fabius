@@ -1,0 +1,1786 @@
+{
+  "_meta": {
+    "run": "Run 6 — objective deliverable tests",
+    "generated_models": [
+      "haiku",
+      "sonnet",
+      "opus",
+      "fable"
+    ],
+    "arms": [
+      "baseline",
+      "terse",
+      "fabius"
+    ],
+    "graders": [
+      "opus",
+      "fable"
+    ],
+    "method": "EXEC tasks: the generated code is written to a file and RUN against a hidden test suite; the score is real tests passed / total. RUBRIC tasks (research/security/on-chain/automation): the deliverable is graded against a fixed factual checklist by two strict graders (opus+fable), averaged per checkpoint. No LLM \"quality\" score — pass/fail facts only.",
+    "fabius_arm": "Shipped AGENTS.md verbatim + the routed specialist SKILL.md verbatim (rubric tasks). Real files, not a paraphrase.",
+    "exec_tasks": [
+      "offby1",
+      "cache",
+      "merge",
+      "parse"
+    ],
+    "rubric_tasks": [
+      "dge",
+      "route",
+      "solana",
+      "webhook",
+      "threat"
+    ],
+    "load_ok": true
+  },
+  "byModel": {
+    "haiku": {
+      "baseline_pct": 75.6,
+      "terse_pct": 76.7,
+      "fabius_pct": 93,
+      "gain_vs_baseline": 17.4,
+      "gain_vs_terse": 16.3,
+      "exec": {
+        "baseline": 100,
+        "terse": 100,
+        "fabius": 100,
+        "gain": 0
+      },
+      "rubric": {
+        "baseline": 58,
+        "terse": 60,
+        "fabius": 88,
+        "gain": 30
+      },
+      "output_cut_pct": 25
+    },
+    "sonnet": {
+      "baseline_pct": 89.5,
+      "terse_pct": 76.7,
+      "fabius_pct": 88.4,
+      "gain_vs_baseline": -1.1,
+      "gain_vs_terse": 11.7,
+      "exec": {
+        "baseline": 100,
+        "terse": 94.4,
+        "fabius": 100,
+        "gain": 0
+      },
+      "rubric": {
+        "baseline": 82,
+        "terse": 64,
+        "fabius": 80,
+        "gain": -2
+      },
+      "output_cut_pct": 24.4
+    },
+    "opus": {
+      "baseline_pct": 84.9,
+      "terse_pct": 83.7,
+      "fabius_pct": 90.7,
+      "gain_vs_baseline": 5.8,
+      "gain_vs_terse": 7,
+      "exec": {
+        "baseline": 100,
+        "terse": 100,
+        "fabius": 100,
+        "gain": 0
+      },
+      "rubric": {
+        "baseline": 74,
+        "terse": 72,
+        "fabius": 84,
+        "gain": 10
+      },
+      "output_cut_pct": 24.2
+    },
+    "fable": {
+      "baseline_pct": 87.2,
+      "terse_pct": 80.2,
+      "fabius_pct": 90.7,
+      "gain_vs_baseline": 3.5,
+      "gain_vs_terse": 10.5,
+      "exec": {
+        "baseline": 100,
+        "terse": 100,
+        "fabius": 100,
+        "gain": 0
+      },
+      "rubric": {
+        "baseline": 78,
+        "terse": 66,
+        "fabius": 84,
+        "gain": 6
+      },
+      "output_cut_pct": 11.5
+    }
+  },
+  "byModelArm": {
+    "haiku/baseline": {
+      "overall": {
+        "pts": 32.5,
+        "total": 43,
+        "pct": 75.6,
+        "chars": 4310
+      },
+      "exec": {
+        "pts": 18,
+        "total": 18,
+        "pct": 100,
+        "chars": 1375
+      },
+      "rubric": {
+        "pts": 14.5,
+        "total": 25,
+        "pct": 58,
+        "chars": 6657
+      }
+    },
+    "haiku/terse": {
+      "overall": {
+        "pts": 33,
+        "total": 43,
+        "pct": 76.7,
+        "chars": 1696
+      },
+      "exec": {
+        "pts": 18,
+        "total": 18,
+        "pct": 100,
+        "chars": 631
+      },
+      "rubric": {
+        "pts": 15,
+        "total": 25,
+        "pct": 60,
+        "chars": 2548
+      }
+    },
+    "haiku/fabius": {
+      "overall": {
+        "pts": 40,
+        "total": 43,
+        "pct": 93,
+        "chars": 3234
+      },
+      "exec": {
+        "pts": 18,
+        "total": 18,
+        "pct": 100,
+        "chars": 690
+      },
+      "rubric": {
+        "pts": 22,
+        "total": 25,
+        "pct": 88,
+        "chars": 5270
+      }
+    },
+    "sonnet/baseline": {
+      "overall": {
+        "pts": 38.5,
+        "total": 43,
+        "pct": 89.5,
+        "chars": 2737
+      },
+      "exec": {
+        "pts": 18,
+        "total": 18,
+        "pct": 100,
+        "chars": 1034
+      },
+      "rubric": {
+        "pts": 20.5,
+        "total": 25,
+        "pct": 82,
+        "chars": 4100
+      }
+    },
+    "sonnet/terse": {
+      "overall": {
+        "pts": 33,
+        "total": 43,
+        "pct": 76.7,
+        "chars": 1110
+      },
+      "exec": {
+        "pts": 17,
+        "total": 18,
+        "pct": 94.4,
+        "chars": 339
+      },
+      "rubric": {
+        "pts": 16,
+        "total": 25,
+        "pct": 64,
+        "chars": 1727
+      }
+    },
+    "sonnet/fabius": {
+      "overall": {
+        "pts": 38,
+        "total": 43,
+        "pct": 88.4,
+        "chars": 2070
+      },
+      "exec": {
+        "pts": 18,
+        "total": 18,
+        "pct": 100,
+        "chars": 831
+      },
+      "rubric": {
+        "pts": 20,
+        "total": 25,
+        "pct": 80,
+        "chars": 3062
+      }
+    },
+    "opus/baseline": {
+      "overall": {
+        "pts": 36.5,
+        "total": 43,
+        "pct": 84.9,
+        "chars": 2800
+      },
+      "exec": {
+        "pts": 18,
+        "total": 18,
+        "pct": 100,
+        "chars": 1003
+      },
+      "rubric": {
+        "pts": 18.5,
+        "total": 25,
+        "pct": 74,
+        "chars": 4237
+      }
+    },
+    "opus/terse": {
+      "overall": {
+        "pts": 36,
+        "total": 43,
+        "pct": 83.7,
+        "chars": 732
+      },
+      "exec": {
+        "pts": 18,
+        "total": 18,
+        "pct": 100,
+        "chars": 289
+      },
+      "rubric": {
+        "pts": 18,
+        "total": 25,
+        "pct": 72,
+        "chars": 1087
+      }
+    },
+    "opus/fabius": {
+      "overall": {
+        "pts": 39,
+        "total": 43,
+        "pct": 90.7,
+        "chars": 2123
+      },
+      "exec": {
+        "pts": 18,
+        "total": 18,
+        "pct": 100,
+        "chars": 658
+      },
+      "rubric": {
+        "pts": 21,
+        "total": 25,
+        "pct": 84,
+        "chars": 3295
+      }
+    },
+    "fable/baseline": {
+      "overall": {
+        "pts": 37.5,
+        "total": 43,
+        "pct": 87.2,
+        "chars": 2242
+      },
+      "exec": {
+        "pts": 18,
+        "total": 18,
+        "pct": 100,
+        "chars": 628
+      },
+      "rubric": {
+        "pts": 19.5,
+        "total": 25,
+        "pct": 78,
+        "chars": 3533
+      }
+    },
+    "fable/terse": {
+      "overall": {
+        "pts": 34.5,
+        "total": 43,
+        "pct": 80.2,
+        "chars": 1212
+      },
+      "exec": {
+        "pts": 18,
+        "total": 18,
+        "pct": 100,
+        "chars": 381
+      },
+      "rubric": {
+        "pts": 16.5,
+        "total": 25,
+        "pct": 66,
+        "chars": 1878
+      }
+    },
+    "fable/fabius": {
+      "overall": {
+        "pts": 39,
+        "total": 43,
+        "pct": 90.7,
+        "chars": 1985
+      },
+      "exec": {
+        "pts": 18,
+        "total": 18,
+        "pct": 100,
+        "chars": 567
+      },
+      "rubric": {
+        "pts": 21,
+        "total": 25,
+        "pct": 84,
+        "chars": 3119
+      }
+    }
+  },
+  "byTask": {
+    "offby1": {
+      "baseline": 100,
+      "terse": 93.8,
+      "fabius": 100,
+      "gain": 0,
+      "kind": "exec"
+    },
+    "cache": {
+      "baseline": 100,
+      "terse": 100,
+      "fabius": 100,
+      "gain": 0,
+      "kind": "exec"
+    },
+    "merge": {
+      "baseline": 100,
+      "terse": 100,
+      "fabius": 100,
+      "gain": 0,
+      "kind": "exec"
+    },
+    "parse": {
+      "baseline": 100,
+      "terse": 100,
+      "fabius": 100,
+      "gain": 0,
+      "kind": "exec"
+    },
+    "dge": {
+      "baseline": 100,
+      "terse": 85,
+      "fabius": 100,
+      "gain": 0,
+      "kind": "rubric"
+    },
+    "route": {
+      "baseline": 72.5,
+      "terse": 57.5,
+      "fabius": 95,
+      "gain": 22.5,
+      "kind": "rubric"
+    },
+    "solana": {
+      "baseline": 52.5,
+      "terse": 47.5,
+      "fabius": 65,
+      "gain": 12.5,
+      "kind": "rubric"
+    },
+    "webhook": {
+      "baseline": 40,
+      "terse": 37.5,
+      "fabius": 60,
+      "gain": 20,
+      "kind": "rubric"
+    },
+    "threat": {
+      "baseline": 100,
+      "terse": 100,
+      "fabius": 100,
+      "gain": 0,
+      "kind": "rubric"
+    }
+  },
+  "perItem": [
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "haiku",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 423,
+      "note": "Candidate isValid uses expiresAt > Date.now(). RESULT 4/4, all tests passed."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "haiku",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 63,
+      "note": "Candidate isValid uses strict > against Date.now(); all 4 tests passed including the inside-1s case."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "haiku",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 296,
+      "note": "All 4 tests passed. Candidate returns token.expiresAt > Date.now() with no +1000 offset; valid/expired/inside-1s cases all correct."
+    },
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "haiku",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 1493,
+      "note": "lru_cache candidate passed all checks: get_user defined, 2 db hits for [1,1,2], cached result equal, different arg works."
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "haiku",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 891,
+      "note": "Used first lru_cache candidate block. All checks passed: get_user defined, 2 db hits for [1,1,2], cached equal, arg 2 works."
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "haiku",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 438,
+      "note": "lru_cache candidate ran clean. RESULT 4/4: caching gave 2 db hits for [1,1,2], cached results equal, distinct arg works."
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "haiku",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1234,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "haiku",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 874,
+      "note": "RESULT 5/5. All cases pass: basic overlap, touching endpoints, empty, fully contained, unsorted all-overlap."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "haiku",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1104,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "haiku",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 2351,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "haiku",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 697,
+      "note": "All tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "haiku",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 921,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "baseline",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 16989,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "dge",
+      "passed": 4,
+      "total": 5,
+      "frac": 0.8,
+      "chars": 2469,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 10189,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "route",
+      "passed": 1.5,
+      "total": 5,
+      "frac": 0.3,
+      "chars": 799,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "route",
+      "passed": 1.5,
+      "total": 5,
+      "frac": 0.3,
+      "chars": 526,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "route",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1303,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "solana",
+      "passed": 1,
+      "total": 5,
+      "frac": 0.2,
+      "chars": 436,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "solana",
+      "passed": 2.5,
+      "total": 5,
+      "frac": 0.5,
+      "chars": 1454,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "solana",
+      "passed": 3,
+      "total": 5,
+      "frac": 0.6,
+      "chars": 2937,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "webhook",
+      "passed": 2,
+      "total": 5,
+      "frac": 0.4,
+      "chars": 6237,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "webhook",
+      "passed": 2,
+      "total": 5,
+      "frac": 0.4,
+      "chars": 3046,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "webhook",
+      "passed": 4,
+      "total": 5,
+      "frac": 0.8,
+      "chars": 8051,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 8824,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 5245,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "haiku",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 3871,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 469,
+      "note": "All 4 tests passed. Candidate uses direct comparison (no offset), so token valid inside 1s returns true."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "offby1",
+      "ran": true,
+      "passed": 3,
+      "total": 4,
+      "frac": 0.75,
+      "chars": 70,
+      "note": "Ran clean. 3/4 passed; failed 'still valid inside 1s' — candidate subtracts 1000ms causing off-by-one (now+400 returned false)."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 779,
+      "note": "All 4 tests passed. Candidate uses `token.expiresAt > Date.now()`, no padding."
+    },
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 1132,
+      "note": "lru_cache candidate; RESULT 4/4 all passed (defined, caching 2 hits, cached equal, diff arg works)."
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 157,
+      "note": "lru_cache memoization; RESULT 4/4, all checks passed."
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 551,
+      "note": "lru_cache candidate passed all checks: 2 db hits for [1,1,2], cached equal, distinct arg works."
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 984,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 475,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 739,
+      "note": "All 5 tests passed. RESULT 5/5. No errors."
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1550,
+      "note": "All 5 tests passed. RESULT 5/5. No export line to strip; candidate ran as-is."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 653,
+      "note": "All tests passed. RESULT 5/5. Candidate had no export line to strip."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1254,
+      "note": "All 5 tests passed. Removed module.exports line; function tested as written."
+    },
+    {
+      "arm": "baseline",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 5457,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "dge",
+      "passed": 3,
+      "total": 5,
+      "frac": 0.6,
+      "chars": 2713,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 3886,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "route",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 2152,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "route",
+      "passed": 4,
+      "total": 5,
+      "frac": 0.8,
+      "chars": 660,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "route",
+      "passed": 4,
+      "total": 5,
+      "frac": 0.8,
+      "chars": 1963,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "solana",
+      "passed": 3.5,
+      "total": 5,
+      "frac": 0.7,
+      "chars": 3689,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "solana",
+      "passed": 2,
+      "total": 5,
+      "frac": 0.4,
+      "chars": 589,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "solana",
+      "passed": 3.5,
+      "total": 5,
+      "frac": 0.7,
+      "chars": 2026,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "webhook",
+      "passed": 2,
+      "total": 5,
+      "frac": 0.4,
+      "chars": 4216,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "webhook",
+      "passed": 2,
+      "total": 5,
+      "frac": 0.4,
+      "chars": 1796,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "webhook",
+      "passed": 2.5,
+      "total": 5,
+      "frac": 0.5,
+      "chars": 2470,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 4987,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 2876,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 4963,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "opus",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 475,
+      "note": "All 4 tests passed. Candidate isValid uses expiresAt >= Date.now(); no off-by-one."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "opus",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 63,
+      "note": "All 4 tests passed. Candidate uses strict `>` compare against Date.now(); token +400ms still valid."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "opus",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 471,
+      "note": "All 4 tests passed. Candidate removed the +1000 offset; token with 400ms remaining correctly reports valid."
+    },
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "opus",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 880,
+      "note": "lru_cache-based get_user passed all checks: defined, 2 db hits for [1,1,2], cached equal, different arg works."
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "opus",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 261,
+      "note": "All 4 tests passed. lru_cache memoizes correctly: 2 db hits for [1,1,2], cached results equal, different arg works."
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "opus",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 494,
+      "note": "lru_cache solution: all checks pass (defined, 2 db hits for [1,1,2], cached equal, diff arg works)."
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "opus",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1342,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "opus",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 359,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "opus",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 699,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "opus",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1314,
+      "note": "All 5 baseline tests passed. No export line present to strip."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "opus",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 472,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "opus",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 966,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "baseline",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 5522,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1196,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 4523,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "route",
+      "passed": 4,
+      "total": 5,
+      "frac": 0.8,
+      "chars": 2298,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "route",
+      "passed": 3,
+      "total": 5,
+      "frac": 0.6,
+      "chars": 554,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "route",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1580,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "solana",
+      "passed": 2.5,
+      "total": 5,
+      "frac": 0.5,
+      "chars": 4073,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "solana",
+      "passed": 3,
+      "total": 5,
+      "frac": 0.6,
+      "chars": 704,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "solana",
+      "passed": 3,
+      "total": 5,
+      "frac": 0.6,
+      "chars": 3178,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "webhook",
+      "passed": 2,
+      "total": 5,
+      "frac": 0.4,
+      "chars": 4600,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "webhook",
+      "passed": 2,
+      "total": 5,
+      "frac": 0.4,
+      "chars": 1289,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "webhook",
+      "passed": 3,
+      "total": 5,
+      "frac": 0.6,
+      "chars": 3576,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 4694,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1692,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "opus",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 3620,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "fable",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 223,
+      "note": "All 4 tests passed. Candidate uses `token.expiresAt > Date.now()` without the off-by-one +1000."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "fable",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 268,
+      "note": "All 4 tests passed. Candidate compares token.expiresAt > Date.now() directly; no off-by-one."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "fable",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 249,
+      "note": "Candidate compares expiresAt > Date.now(); all 4 tests passed including the 1s off-by-one case."
+    },
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "fable",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 932,
+      "note": "lru_cache solution: all 4 checks pass (defined, 2 db hits for [1,1,2], cached equal, diff arg works)."
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "fable",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 333,
+      "note": "lru_cache memoization: 2 db hits for [1,1,2], cached equality and distinct-arg all pass."
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "fable",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 490,
+      "note": "lru_cache-based get_user; RESULT 4/4. Caching (2 db hits for [1,1,2]), cached equality, and distinct-arg all pass."
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "fable",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 634,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "fable",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 391,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "fable",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 557,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "fable",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 723,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "fable",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 532,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "fable",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 971,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "baseline",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 4825,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 2164,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 3973,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "route",
+      "passed": 4,
+      "total": 5,
+      "frac": 0.8,
+      "chars": 1377,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "route",
+      "passed": 3,
+      "total": 5,
+      "frac": 0.6,
+      "chars": 780,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "route",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1536,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "solana",
+      "passed": 3.5,
+      "total": 5,
+      "frac": 0.7,
+      "chars": 2358,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "solana",
+      "passed": 2,
+      "total": 5,
+      "frac": 0.4,
+      "chars": 1539,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "solana",
+      "passed": 3.5,
+      "total": 5,
+      "frac": 0.7,
+      "chars": 2384,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "webhook",
+      "passed": 2,
+      "total": 5,
+      "frac": 0.4,
+      "chars": 4977,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "webhook",
+      "passed": 1.5,
+      "total": 5,
+      "frac": 0.3,
+      "chars": 1997,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "webhook",
+      "passed": 2.5,
+      "total": 5,
+      "frac": 0.5,
+      "chars": 3981,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 4129,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 2908,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "fable",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 3722,
+      "graders": 2
+    }
+  ],
+  "pooled_exec": {
+    "baseline": 100,
+    "terse": 98.6,
+    "fabius": 100
+  },
+  "pooled_rubric": {
+    "baseline": 73,
+    "terse": 65.5,
+    "fabius": 84
+  },
+  "pooled_all": {
+    "baseline": 84.3,
+    "terse": 79.4,
+    "fabius": 90.7
+  }
+}
