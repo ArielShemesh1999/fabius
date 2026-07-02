@@ -59,16 +59,16 @@ Same model, one concentrated set of operating rules. The stance changes the *sha
 
 **One benchmark: fabius improves every model it runs on** — blind-judged on the newest Claude models, objectively verified by executed tests and factual checks, demoed across external families — on **20–35% less output**. One test, three panels, one receipt.
 
-**Panel A — Quality, judged blind.** The four newest Claude models, 15 tasks × 3 arms — `baseline`, a generic *"be concise"* control (the real test), and fabius: the shipped `AGENTS.md` + routed `SKILL.md` injected *verbatim* — scored by **two independent blind judges** (inter-judge gap 0.69/15) never told which arm produced which answer. Blind score /15:
+**Panel A — Quality, judged blind.** The four newest Claude models, 15 tasks × 3 arms — `baseline`, a generic *"be concise"* control (the real test), and fabius: the shipped `AGENTS.md` + routed `SKILL.md` injected *verbatim* — scored by **two independent blind judges** (inter-judge gap 0.72/15) never told which arm produced which answer. Blind score /15:
 
 | Model | baseline | **fabius** | vs. baseline | output cut |
 |---|:---:|:---:|:---:|:---:|
 | Fable 5 | 14.50 | **14.73** | **+0.23** | **−25.3%** |
+| Sonnet 5 | 14.07 | **14.50** | **+0.43** | **−33.7%** |
 | Opus 4.8 | 14.40 | **14.60** | **+0.20** | −20.0% |
-| Sonnet 4.6 | 14.27 | 14.20 | −0.07 | −20.3% |
 | Haiku 4.5 | 11.73 | 11.40 | −0.33 | **−35.5%** |
 
-The frontier tiers beat *both* the bare model and the "be concise" control (which scores 14.60 on Fable and 14.43 on Opus); the output cut is universal, 20–35% on every model. Haiku gains **+0.71** on its twelve specialist tasks and gives it back (−4.50) on three trivial one-liners under the full contract — the case *for* model-tier routing and the lean gate. The sharpest per-domain color inside the panel is a routed specialist rescuing the small model: on Haiku the security route jumps **9.0 → 14.5** and the on-chain SPL-balance task **10.5 → 14.5** once the specialist contract is injected — a guardrail the bare model doesn't supply on its own.
+Every capable tier beats *both* the bare model and the "be concise" control (which scores 14.60 on Fable, 14.43 on Opus, 14.07 on Sonnet 5) — Sonnet 5's **+0.43** is the largest lift of the four; the output cut is universal, 20–34% on every model. Haiku is the one dip: it gains **+0.71** on its twelve specialist tasks and gives it back (−4.50) on three trivial one-liners under the full contract — the case *for* model-tier routing and the lean gate. The sharpest per-domain color inside the panel is a routed specialist rescuing the small model: on Haiku the security route jumps **9.0 → 14.5** and the on-chain SPL-balance task **10.5 → 14.5** once the specialist contract is injected — a guardrail the bare model doesn't supply on its own.
 
 **Panel B — Objective, no judge.** Generated code **executed against hidden test suites**; domain deliverables graded against **factual checklists** by two strict graders — *looks right* versus *is right*. 9 deliverables × 3 arms × the same four models. Percent of hidden tests + factual checks passed:
 
@@ -76,14 +76,14 @@ The frontier tiers beat *both* the bare model and the "be concise" control (whic
 |---|:---:|:---:|:---:|
 | Haiku 4.5 | 75.6% | **93.0%** | **+17.4** |
 | Opus 4.8 | 84.9% | **90.7%** | +5.8 |
+| Sonnet 5 | 84.9% | **90.7%** | +5.8 |
 | Fable 5 | 87.2% | **90.7%** | +3.5 |
-| Sonnet 4.6 | 89.5% | 88.4% | ~tie (strongest bare baseline) |
 
-Executed algorithm code had no headroom — every bare model already ~100%; fabius holds it. The gains are in the deliverables that only *look* right: domain checklists move Haiku 58→88, Opus 74→84, Fable 78→84 (Sonnet 82→80); per-deliverable, the parameterized SQL route **72.5% → 95%**, the idempotent webhook 40% → 60%, Solana account-validation 52.5% → 65% — output still cut 12–25% while doing it.
+Executed algorithm code had no headroom — every bare model already ~100%; fabius holds it. The gains are in the deliverables that only *look* right: domain checklists move Haiku 58→88, Sonnet 5 74→84, Opus 74→84, Fable 78→84; per-deliverable, the parameterized SQL route **67.5% → 100%**, the idempotent webhook 40% → 67.5%, Solana account-validation 47.5% → 57.5% — output still cut 12–25% while doing it. **Every one of the four models gains objectively** (+3.5 to +17.4).
 
 **Panel C — External families, demoed blind.** The same stance carried through the portable harness (`evals/portable_eval.py`, 6 tasks, measured 2026-06-22 with live provider keys), blind-scored against the *"be concise"* control on the genuine-build tasks: **Grok +8.5 · GPT +7.0 · Claude +7.0 · Mistral +2.5** (/15). Every family gains; Gemini is wired but carries no number without a key.
 
-Honest misses, printed: Sonnet is a near-tie on both panels, and Haiku dips on trivial one-liners under the full contract — exactly what the router's model-tier dispatch and the lean gate exist to catch. **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — fifteen single-owner contracts, every reference live, the content-bound seal verifiable — **19/19**. The canonical receipt is **`evals/results.benchmark.json`**; full method, per-task numbers, and the raw receipts: **[BENCHMARKS.md](BENCHMARKS.md)**.
+Honest miss, printed: Haiku dips on trivial one-liners under the full contract (while gaining on its specialist tasks) — exactly what the router's model-tier dispatch and the lean gate exist to catch; every other model gains on both panels. **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — fifteen single-owner contracts, every reference live, the content-bound seal verifiable — **19/19**. The canonical receipt is **`evals/results.benchmark.json`**; full method, per-task numbers, and the raw receipts: **[BENCHMARKS.md](BENCHMARKS.md)**.
 
 > The claim the data supports: **structure beats brevity, and the advantage grows as the model's default discipline drops.** Not "smarter," not "10× on everything" — a scope-control system that knows when to compress and when to expand. Method, mechanism, and caveats: **[BENCHMARKS.md](BENCHMARKS.md)**.
 

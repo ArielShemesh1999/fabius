@@ -6,7 +6,7 @@ The measurement behind **the fabius benchmark** ([`../BENCHMARKS.md`](../BENCHMA
 |---|---|
 | `results.benchmark.json` | **THE canonical receipt** — the three panels (A quality / B objective / C external demos) consolidated, with per-panel pointers to the raw files below. Committed. |
 | `structural.mjs` | The benchmark's **deterministic structural suite** — no model, no key, no network. Proves the *system* is well-formed: fifteen single-owner contracts, every `SKILL.md` under budget, every flattened `description` ≤ 1024 chars, every reference live (markdown links **and** backtick-quoted mentions), no sealed-set drift (manifest file list == on-disk set), the content-bound seal verifiable. 19/19 must pass (the seal hash-match goes red mid-edit, green on re-seal). `node evals/structural.mjs` |
-| `harness.v5.workflow.js` | **Panel A harness** — quality, blind, the four newest Claude models: 15 tasks × 4 models × 3 arms with the shipped skill files injected **verbatim**, **two blind judges** (Opus + Fable, inter-judge gap 0.69/15). |
+| `harness.v5.workflow.js` | **Panel A harness** — quality, blind, the four newest Claude models: 15 tasks × 4 models × 3 arms with the shipped skill files injected **verbatim**, **two blind judges** (Opus + Fable, inter-judge gap 0.72/15). |
 | `results.v5.json` | **Panel A raw** — per-cell scores from both judges, lengths, per-model and per-domain deltas. Committed. |
 | `harness.v6.workflow.js` | **Panel B harness** — objective, no judge taste: generated code **executed against hidden test suites** + domain deliverables graded against a **factual checklist** by two strict graders. 9 deliverables × 4 models × 3 arms. |
 | `results.v6.json` | **Panel B raw** — per-task pass rates (tests + checks) per cell. Committed. |
@@ -43,8 +43,8 @@ Writes `results.portable.json`. No fabrication — rows appear only for vendors 
 ## Design (three-arm, blind)
 
 - **Arms:** `baseline` (task only) · `terse` (task + generic "be concise, write minimal code") · `fabius` (task + the fabius stance). The Panel A/B harnesses (`harness.v5` / `harness.v6`) and `eval.mjs` load the shipped `AGENTS.md` (+ routed `SKILL.md`) **verbatim**; the older `harness.v3` iteration injected a faithful condensed transcription instead. The `terse` arm is the control that separates fabius's **structure** from plain brevity — the real test.
-- **Models:** the four newest Claude models — Fable 5, `claude-opus-4-8`, `claude-sonnet-4-6`, `claude-haiku-4-5` — each actually run via per-agent model override (Panel A/B). Panel C carries the same arms cross-family (GPT / Grok / Mistral / Gemini) through `portable_eval.py`.
-- **Judge:** Panel A uses **two** blind judges (Opus + Fable, averaged; inter-judge gap 0.69/15); the older single-judge iterations used `claude-opus-4-8`, **blind** (never told which arm wrote which answer), scoring correctness / minimality / best-practice, 0–5 each. Panel B removes the judge entirely — executed tests + factual checklists.
+- **Models:** the four newest Claude models — Fable 5 (`claude-fable-5`), `claude-opus-4-8`, `claude-sonnet-5`, `claude-haiku-4-5` — each actually run via per-agent model override (Panel A/B). The Sonnet tier was re-run on **Sonnet 5** on 2026-07-02 (it had previously run on `claude-sonnet-4-6`). Panel C carries the same arms cross-family (GPT / Grok / Mistral / Gemini) through `portable_eval.py`.
+- **Judge:** Panel A uses **two** blind judges (Opus + Fable, averaged; inter-judge gap 0.72/15); the older single-judge iterations used `claude-opus-4-8`, **blind** (never told which arm wrote which answer), scoring correctness / minimality / best-practice, 0–5 each. Panel B removes the judge entirely — executed tests + factual checklists.
 - **Objective metric:** average output length (chars) — bias-free.
 
 ## Run it yourself

@@ -7,10 +7,11 @@
       "terse (a generic 'be concise' control — the real test)",
       "fabius (the shipped AGENTS.md + routed SKILL.md, verbatim)"
     ],
-    "honest_misses": "Printed, not hidden: sonnet ~ties on both panels (strongest bare baseline); haiku dips on trivial one-liners under a full verbatim contract (-4.50) while gaining +0.71 on its specialist tasks — the empirical case for model-tier routing and the lean gate."
+    "honest_misses": "Printed, not hidden: on the objective panel every one of the four models gains (+3.5 to +17.4); on the quality panel three of the four tiers gain — Sonnet 5 +0.43, Fable 5 +0.23, Opus 4.8 +0.20 — and the single miss is Haiku dipping -0.33 on trivial one-liners under a full verbatim contract (-4.50 on those three tasks) while gaining +0.71 on its specialist tasks — the empirical case for model-tier routing and the lean gate.",
+    "models": "Panel A/B generated on the four newest Claude models, each via per-agent model override: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (claude-haiku-4-5). The Sonnet tier was re-run on Sonnet 5 on 2026-07-02."
   },
   "panelA_quality_newest_claude": {
-    "method": "15 tasks x 3 arms on each of the four newest Claude models (Fable 5, Opus 4.8, Sonnet, Haiku 4.5); every answer scored /15 by TWO blind judges (opus+fable, averaged; inter-judge gap 0.69/15). The fabius arm loads the shipped files at run time — not a paraphrase.",
+    "method": "15 tasks x 3 arms on each of the four newest Claude models (Fable 5, Opus 4.8, Sonnet 5, Haiku 4.5); every answer scored /15 by TWO blind judges (opus+fable, averaged; inter-judge gap 0.72/15). The fabius arm loads the shipped files at run time — not a paraphrase.",
     "byModel": {
       "haiku": {
         "baseline": 11.73,
@@ -23,14 +24,14 @@
         "fabius_chars": 2653
       },
       "sonnet": {
-        "baseline": 14.27,
-        "terse": 14.33,
-        "fabius": 14.2,
-        "gain_vs_baseline": -0.07,
-        "gain_vs_terse": -0.13,
-        "output_reduction_vs_baseline_pct": 20.3,
-        "baseline_chars": 3521,
-        "fabius_chars": 2806
+        "baseline": 14.07,
+        "terse": 14.07,
+        "fabius": 14.5,
+        "gain_vs_baseline": 0.43,
+        "gain_vs_terse": 0.43,
+        "output_reduction_vs_baseline_pct": 33.7,
+        "baseline_chars": 3699,
+        "fabius_chars": 2452
       },
       "opus": {
         "baseline": 14.4,
@@ -55,95 +56,95 @@
     },
     "byCat": {
       "yagni": {
-        "baseline": 13.38,
-        "terse": 13.81,
-        "fabius": 13.69,
-        "fab_minus_terse": -0.12,
+        "baseline": 13.19,
+        "terse": 13.5,
+        "fabius": 13.5,
+        "fab_minus_terse": 0.0,
         "fab_minus_base": 0.31
       },
       "build": {
-        "baseline": 14.75,
-        "terse": 13.88,
-        "fabius": 10.5,
-        "fab_minus_terse": -3.38,
-        "fab_minus_base": -4.25
+        "baseline": 14.62,
+        "terse": 14.75,
+        "fabius": 12.0,
+        "fab_minus_terse": -2.75,
+        "fab_minus_base": -2.62
       },
       "security": {
-        "baseline": 13.69,
-        "terse": 14.06,
-        "fabius": 14.5,
-        "fab_minus_terse": 0.44,
-        "fab_minus_base": 0.81
+        "baseline": 13.56,
+        "terse": 14.0,
+        "fabius": 14.56,
+        "fab_minus_terse": 0.56,
+        "fab_minus_base": 1.0
       },
       "a11y": {
-        "baseline": 13.63,
-        "terse": 14.38,
-        "fabius": 12.75,
-        "fab_minus_terse": -1.63,
-        "fab_minus_base": -0.88
+        "baseline": 13.62,
+        "terse": 13.88,
+        "fabius": 12.38,
+        "fab_minus_terse": -1.5,
+        "fab_minus_base": -1.24
       },
       "agents": {
-        "baseline": 13.5,
-        "terse": 13.63,
-        "fabius": 14,
-        "fab_minus_terse": 0.37,
-        "fab_minus_base": 0.5
+        "baseline": 13.62,
+        "terse": 13.75,
+        "fabius": 14.0,
+        "fab_minus_terse": 0.25,
+        "fab_minus_base": 0.38
       },
       "design": {
-        "baseline": 14,
-        "terse": 14.25,
-        "fabius": 14.38,
-        "fab_minus_terse": 0.13,
-        "fab_minus_base": 0.38
+        "baseline": 14.0,
+        "terse": 14.12,
+        "fabius": 14.5,
+        "fab_minus_terse": 0.38,
+        "fab_minus_base": 0.5
       },
       "onchain": {
         "baseline": 13.38,
-        "terse": 14.38,
+        "terse": 14.25,
         "fabius": 14.5,
-        "fab_minus_terse": 0.12,
+        "fab_minus_terse": 0.25,
         "fab_minus_base": 1.12
       },
       "automation": {
-        "baseline": 13.13,
-        "terse": 13.5,
-        "fabius": 14,
-        "fab_minus_terse": 0.5,
-        "fab_minus_base": 0.87
+        "baseline": 13.12,
+        "terse": 13.25,
+        "fabius": 13.88,
+        "fab_minus_terse": 0.63,
+        "fab_minus_base": 0.76
       },
       "science": {
         "baseline": 13.38,
         "terse": 12.75,
-        "fabius": 13.75,
-        "fab_minus_terse": 1,
-        "fab_minus_base": 0.37
+        "fabius": 13.88,
+        "fab_minus_terse": 1.13,
+        "fab_minus_base": 0.5
       },
       "marketing": {
-        "baseline": 14.13,
-        "terse": 14.13,
-        "fabius": 14,
-        "fab_minus_terse": -0.13,
-        "fab_minus_base": -0.13
+        "baseline": 14.0,
+        "terse": 14.12,
+        "fabius": 14.12,
+        "fab_minus_terse": 0.0,
+        "fab_minus_base": 0.12
       },
       "game": {
-        "baseline": 13.88,
-        "terse": 14,
-        "fabius": 13.13,
-        "fab_minus_terse": -0.87,
-        "fab_minus_base": -0.75
+        "baseline": 13.75,
+        "terse": 13.88,
+        "fabius": 13.25,
+        "fab_minus_terse": -0.63,
+        "fab_minus_base": -0.5
       },
       "ml": {
-        "baseline": 13.88,
+        "baseline": 14.0,
         "terse": 13.88,
         "fabius": 14.25,
         "fab_minus_terse": 0.37,
-        "fab_minus_base": 0.37
+        "fab_minus_base": 0.25
       },
       "markets": {
-        "baseline": 14.13,
-        "terse": 14.75,
-        "fabius": 14.38,
+        "baseline": 14.12,
+        "terse": 14.62,
+        "fabius": 14.25,
         "fab_minus_terse": -0.37,
-        "fab_minus_base": 0.25
+        "fab_minus_base": 0.13
       }
     },
     "judgeAgreement": {
@@ -177,24 +178,24 @@
         "output_cut_pct": 25
       },
       "sonnet": {
-        "baseline_pct": 89.5,
-        "terse_pct": 76.7,
-        "fabius_pct": 88.4,
-        "gain_vs_baseline": -1.1,
-        "gain_vs_terse": 11.7,
+        "baseline_pct": 84.9,
+        "terse_pct": 82.6,
+        "fabius_pct": 90.7,
+        "gain_vs_baseline": 5.8,
+        "gain_vs_terse": 8.1,
         "exec": {
-          "baseline": 100,
-          "terse": 94.4,
-          "fabius": 100,
-          "gain": 0
+          "baseline": 100.0,
+          "terse": 100.0,
+          "fabius": 100.0,
+          "gain": 0.0
         },
         "rubric": {
-          "baseline": 82,
-          "terse": 64,
-          "fabius": 80,
-          "gain": -2
+          "baseline": 74.0,
+          "terse": 70.0,
+          "fabius": 84.0,
+          "gain": 10.0
         },
-        "output_cut_pct": 24.4
+        "output_cut_pct": 22.9
       },
       "opus": {
         "baseline_pct": 84.9,
@@ -239,66 +240,66 @@
     },
     "byTask": {
       "offby1": {
-        "baseline": 100,
-        "terse": 93.8,
-        "fabius": 100,
-        "gain": 0,
+        "baseline": 100.0,
+        "terse": 100.0,
+        "fabius": 100.0,
+        "gain": 0.0,
         "kind": "exec"
       },
       "cache": {
-        "baseline": 100,
-        "terse": 100,
-        "fabius": 100,
-        "gain": 0,
+        "baseline": 100.0,
+        "terse": 100.0,
+        "fabius": 100.0,
+        "gain": 0.0,
         "kind": "exec"
       },
       "merge": {
-        "baseline": 100,
-        "terse": 100,
-        "fabius": 100,
-        "gain": 0,
+        "baseline": 100.0,
+        "terse": 100.0,
+        "fabius": 100.0,
+        "gain": 0.0,
         "kind": "exec"
       },
       "parse": {
-        "baseline": 100,
-        "terse": 100,
-        "fabius": 100,
-        "gain": 0,
+        "baseline": 100.0,
+        "terse": 100.0,
+        "fabius": 100.0,
+        "gain": 0.0,
         "kind": "exec"
       },
       "dge": {
-        "baseline": 100,
-        "terse": 85,
-        "fabius": 100,
-        "gain": 0,
+        "baseline": 100.0,
+        "terse": 95.0,
+        "fabius": 100.0,
+        "gain": 0.0,
         "kind": "rubric"
       },
       "route": {
-        "baseline": 72.5,
+        "baseline": 67.5,
         "terse": 57.5,
-        "fabius": 95,
-        "gain": 22.5,
+        "fabius": 100.0,
+        "gain": 32.5,
         "kind": "rubric"
       },
       "solana": {
-        "baseline": 52.5,
-        "terse": 47.5,
-        "fabius": 65,
-        "gain": 12.5,
+        "baseline": 47.5,
+        "terse": 45.0,
+        "fabius": 57.5,
+        "gain": 10.0,
         "kind": "rubric"
       },
       "webhook": {
-        "baseline": 40,
+        "baseline": 40.0,
         "terse": 37.5,
-        "fabius": 60,
-        "gain": 20,
+        "fabius": 67.5,
+        "gain": 27.5,
         "kind": "rubric"
       },
       "threat": {
-        "baseline": 100,
-        "terse": 100,
-        "fabius": 100,
-        "gain": 0,
+        "baseline": 100.0,
+        "terse": 100.0,
+        "fabius": 100.0,
+        "gain": 0.0,
         "kind": "rubric"
       }
     },

@@ -31,66 +31,73 @@
       "webhook",
       "threat"
     ],
-    "load_ok": true
+    "load_ok": true,
+    "sonnet_model": "claude-sonnet-5",
+    "generated_model_ids": {
+      "haiku": "claude-haiku-4-5",
+      "sonnet": "claude-sonnet-5",
+      "opus": "claude-opus-4-8",
+      "fable": "claude-fable-5"
+    }
   },
   "byModel": {
     "haiku": {
       "baseline_pct": 75.6,
       "terse_pct": 76.7,
-      "fabius_pct": 93,
+      "fabius_pct": 93.0,
       "gain_vs_baseline": 17.4,
       "gain_vs_terse": 16.3,
       "exec": {
-        "baseline": 100,
-        "terse": 100,
-        "fabius": 100,
-        "gain": 0
+        "baseline": 100.0,
+        "terse": 100.0,
+        "fabius": 100.0,
+        "gain": 0.0
       },
       "rubric": {
-        "baseline": 58,
-        "terse": 60,
-        "fabius": 88,
-        "gain": 30
+        "baseline": 58.0,
+        "terse": 60.0,
+        "fabius": 88.0,
+        "gain": 30.0
       },
-      "output_cut_pct": 25
+      "output_cut_pct": 25.0
     },
     "sonnet": {
-      "baseline_pct": 89.5,
-      "terse_pct": 76.7,
-      "fabius_pct": 88.4,
-      "gain_vs_baseline": -1.1,
-      "gain_vs_terse": 11.7,
+      "baseline_pct": 84.9,
+      "terse_pct": 82.6,
+      "fabius_pct": 90.7,
+      "gain_vs_baseline": 5.8,
+      "gain_vs_terse": 8.1,
       "exec": {
-        "baseline": 100,
-        "terse": 94.4,
-        "fabius": 100,
-        "gain": 0
+        "baseline": 100.0,
+        "terse": 100.0,
+        "fabius": 100.0,
+        "gain": 0.0
       },
       "rubric": {
-        "baseline": 82,
-        "terse": 64,
-        "fabius": 80,
-        "gain": -2
+        "baseline": 74.0,
+        "terse": 70.0,
+        "fabius": 84.0,
+        "gain": 10.0
       },
-      "output_cut_pct": 24.4
+      "output_cut_pct": 22.9
     },
     "opus": {
       "baseline_pct": 84.9,
       "terse_pct": 83.7,
       "fabius_pct": 90.7,
       "gain_vs_baseline": 5.8,
-      "gain_vs_terse": 7,
+      "gain_vs_terse": 7.0,
       "exec": {
-        "baseline": 100,
-        "terse": 100,
-        "fabius": 100,
-        "gain": 0
+        "baseline": 100.0,
+        "terse": 100.0,
+        "fabius": 100.0,
+        "gain": 0.0
       },
       "rubric": {
-        "baseline": 74,
-        "terse": 72,
-        "fabius": 84,
-        "gain": 10
+        "baseline": 74.0,
+        "terse": 72.0,
+        "fabius": 84.0,
+        "gain": 10.0
       },
       "output_cut_pct": 24.2
     },
@@ -101,16 +108,16 @@
       "gain_vs_baseline": 3.5,
       "gain_vs_terse": 10.5,
       "exec": {
-        "baseline": 100,
-        "terse": 100,
-        "fabius": 100,
-        "gain": 0
+        "baseline": 100.0,
+        "terse": 100.0,
+        "fabius": 100.0,
+        "gain": 0.0
       },
       "rubric": {
-        "baseline": 78,
-        "terse": 66,
-        "fabius": 84,
-        "gain": 6
+        "baseline": 78.0,
+        "terse": 66.0,
+        "fabius": 84.0,
+        "gain": 6.0
       },
       "output_cut_pct": 11.5
     }
@@ -124,116 +131,116 @@
         "chars": 4310
       },
       "exec": {
-        "pts": 18,
+        "pts": 18.0,
         "total": 18,
-        "pct": 100,
+        "pct": 100.0,
         "chars": 1375
       },
       "rubric": {
         "pts": 14.5,
         "total": 25,
-        "pct": 58,
+        "pct": 58.0,
         "chars": 6657
       }
     },
     "haiku/terse": {
       "overall": {
-        "pts": 33,
+        "pts": 33.0,
         "total": 43,
         "pct": 76.7,
         "chars": 1696
       },
       "exec": {
-        "pts": 18,
+        "pts": 18.0,
         "total": 18,
-        "pct": 100,
+        "pct": 100.0,
         "chars": 631
       },
       "rubric": {
-        "pts": 15,
+        "pts": 15.0,
         "total": 25,
-        "pct": 60,
+        "pct": 60.0,
         "chars": 2548
       }
     },
     "haiku/fabius": {
       "overall": {
-        "pts": 40,
+        "pts": 40.0,
         "total": 43,
-        "pct": 93,
+        "pct": 93.0,
         "chars": 3234
       },
       "exec": {
-        "pts": 18,
+        "pts": 18.0,
         "total": 18,
-        "pct": 100,
+        "pct": 100.0,
         "chars": 690
       },
       "rubric": {
-        "pts": 22,
+        "pts": 22.0,
         "total": 25,
-        "pct": 88,
+        "pct": 88.0,
         "chars": 5270
       }
     },
     "sonnet/baseline": {
       "overall": {
-        "pts": 38.5,
+        "pts": 36.5,
         "total": 43,
-        "pct": 89.5,
-        "chars": 2737
+        "pct": 84.9,
+        "chars": 2586
       },
       "exec": {
-        "pts": 18,
+        "pts": 18.0,
         "total": 18,
-        "pct": 100,
-        "chars": 1034
+        "pct": 100.0,
+        "chars": 1022
       },
       "rubric": {
-        "pts": 20.5,
+        "pts": 18.5,
         "total": 25,
-        "pct": 82,
-        "chars": 4100
+        "pct": 74.0,
+        "chars": 3837
       }
     },
     "sonnet/terse": {
       "overall": {
-        "pts": 33,
+        "pts": 35.5,
         "total": 43,
-        "pct": 76.7,
-        "chars": 1110
+        "pct": 82.6,
+        "chars": 1101
       },
       "exec": {
-        "pts": 17,
+        "pts": 18.0,
         "total": 18,
-        "pct": 94.4,
-        "chars": 339
+        "pct": 100.0,
+        "chars": 352
       },
       "rubric": {
-        "pts": 16,
+        "pts": 17.5,
         "total": 25,
-        "pct": 64,
-        "chars": 1727
+        "pct": 70.0,
+        "chars": 1700
       }
     },
     "sonnet/fabius": {
       "overall": {
-        "pts": 38,
+        "pts": 39.0,
         "total": 43,
-        "pct": 88.4,
-        "chars": 2070
+        "pct": 90.7,
+        "chars": 1994
       },
       "exec": {
-        "pts": 18,
+        "pts": 18.0,
         "total": 18,
-        "pct": 100,
-        "chars": 831
+        "pct": 100.0,
+        "chars": 775
       },
       "rubric": {
-        "pts": 20,
+        "pts": 21.0,
         "total": 25,
-        "pct": 80,
-        "chars": 3062
+        "pct": 84.0,
+        "chars": 2969
       }
     },
     "opus/baseline": {
@@ -244,55 +251,55 @@
         "chars": 2800
       },
       "exec": {
-        "pts": 18,
+        "pts": 18.0,
         "total": 18,
-        "pct": 100,
+        "pct": 100.0,
         "chars": 1003
       },
       "rubric": {
         "pts": 18.5,
         "total": 25,
-        "pct": 74,
+        "pct": 74.0,
         "chars": 4237
       }
     },
     "opus/terse": {
       "overall": {
-        "pts": 36,
+        "pts": 36.0,
         "total": 43,
         "pct": 83.7,
         "chars": 732
       },
       "exec": {
-        "pts": 18,
+        "pts": 18.0,
         "total": 18,
-        "pct": 100,
+        "pct": 100.0,
         "chars": 289
       },
       "rubric": {
-        "pts": 18,
+        "pts": 18.0,
         "total": 25,
-        "pct": 72,
+        "pct": 72.0,
         "chars": 1087
       }
     },
     "opus/fabius": {
       "overall": {
-        "pts": 39,
+        "pts": 39.0,
         "total": 43,
         "pct": 90.7,
         "chars": 2123
       },
       "exec": {
-        "pts": 18,
+        "pts": 18.0,
         "total": 18,
-        "pct": 100,
+        "pct": 100.0,
         "chars": 658
       },
       "rubric": {
-        "pts": 21,
+        "pts": 21.0,
         "total": 25,
-        "pct": 84,
+        "pct": 84.0,
         "chars": 3295
       }
     },
@@ -304,15 +311,15 @@
         "chars": 2242
       },
       "exec": {
-        "pts": 18,
+        "pts": 18.0,
         "total": 18,
-        "pct": 100,
+        "pct": 100.0,
         "chars": 628
       },
       "rubric": {
         "pts": 19.5,
         "total": 25,
-        "pct": 78,
+        "pct": 78.0,
         "chars": 3533
       }
     },
@@ -324,101 +331,101 @@
         "chars": 1212
       },
       "exec": {
-        "pts": 18,
+        "pts": 18.0,
         "total": 18,
-        "pct": 100,
+        "pct": 100.0,
         "chars": 381
       },
       "rubric": {
         "pts": 16.5,
         "total": 25,
-        "pct": 66,
+        "pct": 66.0,
         "chars": 1878
       }
     },
     "fable/fabius": {
       "overall": {
-        "pts": 39,
+        "pts": 39.0,
         "total": 43,
         "pct": 90.7,
         "chars": 1985
       },
       "exec": {
-        "pts": 18,
+        "pts": 18.0,
         "total": 18,
-        "pct": 100,
+        "pct": 100.0,
         "chars": 567
       },
       "rubric": {
-        "pts": 21,
+        "pts": 21.0,
         "total": 25,
-        "pct": 84,
+        "pct": 84.0,
         "chars": 3119
       }
     }
   },
   "byTask": {
     "offby1": {
-      "baseline": 100,
-      "terse": 93.8,
-      "fabius": 100,
-      "gain": 0,
+      "baseline": 100.0,
+      "terse": 100.0,
+      "fabius": 100.0,
+      "gain": 0.0,
       "kind": "exec"
     },
     "cache": {
-      "baseline": 100,
-      "terse": 100,
-      "fabius": 100,
-      "gain": 0,
+      "baseline": 100.0,
+      "terse": 100.0,
+      "fabius": 100.0,
+      "gain": 0.0,
       "kind": "exec"
     },
     "merge": {
-      "baseline": 100,
-      "terse": 100,
-      "fabius": 100,
-      "gain": 0,
+      "baseline": 100.0,
+      "terse": 100.0,
+      "fabius": 100.0,
+      "gain": 0.0,
       "kind": "exec"
     },
     "parse": {
-      "baseline": 100,
-      "terse": 100,
-      "fabius": 100,
-      "gain": 0,
+      "baseline": 100.0,
+      "terse": 100.0,
+      "fabius": 100.0,
+      "gain": 0.0,
       "kind": "exec"
     },
     "dge": {
-      "baseline": 100,
-      "terse": 85,
-      "fabius": 100,
-      "gain": 0,
+      "baseline": 100.0,
+      "terse": 95.0,
+      "fabius": 100.0,
+      "gain": 0.0,
       "kind": "rubric"
     },
     "route": {
-      "baseline": 72.5,
+      "baseline": 67.5,
       "terse": 57.5,
-      "fabius": 95,
-      "gain": 22.5,
+      "fabius": 100.0,
+      "gain": 32.5,
       "kind": "rubric"
     },
     "solana": {
-      "baseline": 52.5,
-      "terse": 47.5,
-      "fabius": 65,
-      "gain": 12.5,
+      "baseline": 47.5,
+      "terse": 45.0,
+      "fabius": 57.5,
+      "gain": 10.0,
       "kind": "rubric"
     },
     "webhook": {
-      "baseline": 40,
+      "baseline": 40.0,
       "terse": 37.5,
-      "fabius": 60,
-      "gain": 20,
+      "fabius": 67.5,
+      "gain": 27.5,
       "kind": "rubric"
     },
     "threat": {
-      "baseline": 100,
-      "terse": 100,
-      "fabius": 100,
-      "gain": 0,
+      "baseline": 100.0,
+      "terse": 100.0,
+      "fabius": 100.0,
+      "gain": 0.0,
       "kind": "rubric"
     }
   },
@@ -757,342 +764,6 @@
       "total": 5,
       "frac": 1,
       "chars": 3871,
-      "graders": 2
-    },
-    {
-      "arm": "baseline",
-      "cat": "build",
-      "kind": "exec",
-      "tier": "sonnet",
-      "task": "offby1",
-      "ran": true,
-      "passed": 4,
-      "total": 4,
-      "frac": 1,
-      "chars": 469,
-      "note": "All 4 tests passed. Candidate uses direct comparison (no offset), so token valid inside 1s returns true."
-    },
-    {
-      "arm": "terse",
-      "cat": "build",
-      "kind": "exec",
-      "tier": "sonnet",
-      "task": "offby1",
-      "ran": true,
-      "passed": 3,
-      "total": 4,
-      "frac": 0.75,
-      "chars": 70,
-      "note": "Ran clean. 3/4 passed; failed 'still valid inside 1s' — candidate subtracts 1000ms causing off-by-one (now+400 returned false)."
-    },
-    {
-      "arm": "fabius",
-      "cat": "build",
-      "kind": "exec",
-      "tier": "sonnet",
-      "task": "offby1",
-      "ran": true,
-      "passed": 4,
-      "total": 4,
-      "frac": 1,
-      "chars": 779,
-      "note": "All 4 tests passed. Candidate uses `token.expiresAt > Date.now()`, no padding."
-    },
-    {
-      "arm": "baseline",
-      "cat": "yagni",
-      "kind": "exec",
-      "tier": "sonnet",
-      "task": "cache",
-      "ran": true,
-      "passed": 4,
-      "total": 4,
-      "frac": 1,
-      "chars": 1132,
-      "note": "lru_cache candidate; RESULT 4/4 all passed (defined, caching 2 hits, cached equal, diff arg works)."
-    },
-    {
-      "arm": "terse",
-      "cat": "yagni",
-      "kind": "exec",
-      "tier": "sonnet",
-      "task": "cache",
-      "ran": true,
-      "passed": 4,
-      "total": 4,
-      "frac": 1,
-      "chars": 157,
-      "note": "lru_cache memoization; RESULT 4/4, all checks passed."
-    },
-    {
-      "arm": "fabius",
-      "cat": "yagni",
-      "kind": "exec",
-      "tier": "sonnet",
-      "task": "cache",
-      "ran": true,
-      "passed": 4,
-      "total": 4,
-      "frac": 1,
-      "chars": 551,
-      "note": "lru_cache candidate passed all checks: 2 db hits for [1,1,2], cached equal, distinct arg works."
-    },
-    {
-      "arm": "baseline",
-      "cat": "build",
-      "kind": "exec",
-      "tier": "sonnet",
-      "task": "merge",
-      "ran": true,
-      "passed": 5,
-      "total": 5,
-      "frac": 1,
-      "chars": 984,
-      "note": "All 5 tests passed. RESULT 5/5."
-    },
-    {
-      "arm": "terse",
-      "cat": "build",
-      "kind": "exec",
-      "tier": "sonnet",
-      "task": "merge",
-      "ran": true,
-      "passed": 5,
-      "total": 5,
-      "frac": 1,
-      "chars": 475,
-      "note": "All 5 tests passed. RESULT 5/5."
-    },
-    {
-      "arm": "fabius",
-      "cat": "build",
-      "kind": "exec",
-      "tier": "sonnet",
-      "task": "merge",
-      "ran": true,
-      "passed": 5,
-      "total": 5,
-      "frac": 1,
-      "chars": 739,
-      "note": "All 5 tests passed. RESULT 5/5. No errors."
-    },
-    {
-      "arm": "baseline",
-      "cat": "build",
-      "kind": "exec",
-      "tier": "sonnet",
-      "task": "parse",
-      "ran": true,
-      "passed": 5,
-      "total": 5,
-      "frac": 1,
-      "chars": 1550,
-      "note": "All 5 tests passed. RESULT 5/5. No export line to strip; candidate ran as-is."
-    },
-    {
-      "arm": "terse",
-      "cat": "build",
-      "kind": "exec",
-      "tier": "sonnet",
-      "task": "parse",
-      "ran": true,
-      "passed": 5,
-      "total": 5,
-      "frac": 1,
-      "chars": 653,
-      "note": "All tests passed. RESULT 5/5. Candidate had no export line to strip."
-    },
-    {
-      "arm": "fabius",
-      "cat": "build",
-      "kind": "exec",
-      "tier": "sonnet",
-      "task": "parse",
-      "ran": true,
-      "passed": 5,
-      "total": 5,
-      "frac": 1,
-      "chars": 1254,
-      "note": "All 5 tests passed. Removed module.exports line; function tested as written."
-    },
-    {
-      "arm": "baseline",
-      "cat": "science",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "dge",
-      "passed": 5,
-      "total": 5,
-      "frac": 1,
-      "chars": 5457,
-      "graders": 2
-    },
-    {
-      "arm": "terse",
-      "cat": "science",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "dge",
-      "passed": 3,
-      "total": 5,
-      "frac": 0.6,
-      "chars": 2713,
-      "graders": 2
-    },
-    {
-      "arm": "fabius",
-      "cat": "science",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "dge",
-      "passed": 5,
-      "total": 5,
-      "frac": 1,
-      "chars": 3886,
-      "graders": 2
-    },
-    {
-      "arm": "baseline",
-      "cat": "security",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "route",
-      "passed": 5,
-      "total": 5,
-      "frac": 1,
-      "chars": 2152,
-      "graders": 2
-    },
-    {
-      "arm": "terse",
-      "cat": "security",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "route",
-      "passed": 4,
-      "total": 5,
-      "frac": 0.8,
-      "chars": 660,
-      "graders": 2
-    },
-    {
-      "arm": "fabius",
-      "cat": "security",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "route",
-      "passed": 4,
-      "total": 5,
-      "frac": 0.8,
-      "chars": 1963,
-      "graders": 2
-    },
-    {
-      "arm": "baseline",
-      "cat": "onchain",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "solana",
-      "passed": 3.5,
-      "total": 5,
-      "frac": 0.7,
-      "chars": 3689,
-      "graders": 2
-    },
-    {
-      "arm": "terse",
-      "cat": "onchain",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "solana",
-      "passed": 2,
-      "total": 5,
-      "frac": 0.4,
-      "chars": 589,
-      "graders": 2
-    },
-    {
-      "arm": "fabius",
-      "cat": "onchain",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "solana",
-      "passed": 3.5,
-      "total": 5,
-      "frac": 0.7,
-      "chars": 2026,
-      "graders": 2
-    },
-    {
-      "arm": "baseline",
-      "cat": "automation",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "webhook",
-      "passed": 2,
-      "total": 5,
-      "frac": 0.4,
-      "chars": 4216,
-      "graders": 2
-    },
-    {
-      "arm": "terse",
-      "cat": "automation",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "webhook",
-      "passed": 2,
-      "total": 5,
-      "frac": 0.4,
-      "chars": 1796,
-      "graders": 2
-    },
-    {
-      "arm": "fabius",
-      "cat": "automation",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "webhook",
-      "passed": 2.5,
-      "total": 5,
-      "frac": 0.5,
-      "chars": 2470,
-      "graders": 2
-    },
-    {
-      "arm": "baseline",
-      "cat": "security",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "threat",
-      "passed": 5,
-      "total": 5,
-      "frac": 1,
-      "chars": 4987,
-      "graders": 2
-    },
-    {
-      "arm": "terse",
-      "cat": "security",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "threat",
-      "passed": 5,
-      "total": 5,
-      "frac": 1,
-      "chars": 2876,
-      "graders": 2
-    },
-    {
-      "arm": "fabius",
-      "cat": "security",
-      "kind": "rubric",
-      "tier": "sonnet",
-      "task": "threat",
-      "passed": 5,
-      "total": 5,
-      "frac": 1,
-      "chars": 4963,
       "graders": 2
     },
     {
@@ -1766,21 +1437,357 @@
       "frac": 1,
       "chars": 3722,
       "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 465,
+      "note": "RESULT 4/4; all tests passed."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 63,
+      "note": "RESULT 4/4. All tests passed."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "offby1",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 689,
+      "note": "Extracted candidate's final recommended fix (return token.expiresAt > Date.now();). RESULT 4/4, all passed."
+    },
+    {
+      "arm": "baseline",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 745,
+      "note": "lru_cache solution: all checks pass (defined, 2 db hits for [1,1,2], cached equal, diff arg works)."
+    },
+    {
+      "arm": "terse",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 157,
+      "note": "lru_cache memoization: 2 db hits for [1,1,2], cached results equal, different arg works. RESULT 4/4."
+    },
+    {
+      "arm": "fabius",
+      "cat": "yagni",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "cache",
+      "ran": true,
+      "passed": 4,
+      "total": 4,
+      "frac": 1,
+      "chars": 662,
+      "note": "lru_cache decorator passed all checks: caching (2 db hits for [1,1,2]), equal cached result, distinct-arg works."
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1277,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 456,
+      "note": "All tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "merge",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 722,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "baseline",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1599,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "terse",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 733,
+      "note": "All 5 tests passed. Output: RESULT 5/5."
+    },
+    {
+      "arm": "fabius",
+      "cat": "build",
+      "kind": "exec",
+      "tier": "sonnet",
+      "task": "parse",
+      "ran": true,
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1028,
+      "note": "All 5 tests passed. RESULT 5/5."
+    },
+    {
+      "arm": "baseline",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 5721,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 2367,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "science",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "dge",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 3390,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "route",
+      "passed": 4,
+      "total": 5,
+      "frac": 0.8,
+      "chars": 1599,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "route",
+      "passed": 4,
+      "total": 5,
+      "frac": 0.8,
+      "chars": 679,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "route",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 1380,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "solana",
+      "passed": 2.5,
+      "total": 5,
+      "frac": 0.5,
+      "chars": 2474,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "solana",
+      "passed": 1.5,
+      "total": 5,
+      "frac": 0.3,
+      "chars": 626,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "onchain",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "solana",
+      "passed": 2,
+      "total": 5,
+      "frac": 0.4,
+      "chars": 1531,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "webhook",
+      "passed": 2,
+      "total": 5,
+      "frac": 0.4,
+      "chars": 4046,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "webhook",
+      "passed": 2,
+      "total": 5,
+      "frac": 0.4,
+      "chars": 1975,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "automation",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "webhook",
+      "passed": 4,
+      "total": 5,
+      "frac": 0.8,
+      "chars": 4239,
+      "graders": 2
+    },
+    {
+      "arm": "baseline",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 5347,
+      "graders": 2
+    },
+    {
+      "arm": "terse",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 2855,
+      "graders": 2
+    },
+    {
+      "arm": "fabius",
+      "cat": "security",
+      "kind": "rubric",
+      "tier": "sonnet",
+      "task": "threat",
+      "passed": 5,
+      "total": 5,
+      "frac": 1,
+      "chars": 4303,
+      "graders": 2
     }
   ],
   "pooled_exec": {
-    "baseline": 100,
-    "terse": 98.6,
-    "fabius": 100
+    "baseline": 100.0,
+    "terse": 100.0,
+    "fabius": 100.0
   },
   "pooled_rubric": {
-    "baseline": 73,
-    "terse": 65.5,
-    "fabius": 84
+    "baseline": 71.0,
+    "terse": 67.0,
+    "fabius": 85.0
   },
   "pooled_all": {
-    "baseline": 84.3,
-    "terse": 79.4,
-    "fabius": 90.7
+    "baseline": 83.1,
+    "terse": 80.8,
+    "fabius": 91.3
   }
 }
