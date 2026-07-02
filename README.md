@@ -83,6 +83,19 @@ Across four model families — Grok, Mistral, GPT, Claude — the pattern holds:
 
 Sharpest cases: the RNA-seq task — bare model **7/15**, **fabius 15/15** (the FDR correction the bare model dropped) — and its mirror, the trading backtest (sonnet) — control **12/15**, **fabius 15/15** (out-of-sample validation, costs, and *analysis not advice*). **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — fifteen single-owner contracts, every reference live, the content-bound seal verifiable — **19/19**.
 
+**Harder still — shipped files verbatim, two blind judges.** A fifth run tightened the method: the shipped skill files injected *verbatim*, all four internal tiers, **two independent blind judges** (inter-judge gap 0.69/15), 15 tasks × 4 models × 3 arms. The output cut proved **universal — 20–35% on every model** — and the frontier tiers beat *both* the bare model and the "be concise" control (Fable +0.23, Opus +0.20); Sonnet is a near-tie (−0.07), and Haiku dips overall (−0.33) while gaining **+0.71** on its twelve specialist tasks — the dip is three trivial one-liners under the full contract, which is the case *for* model-tier routing and the lean gate.
+
+**Then the judge was removed entirely.** The sixth run is objective: generated code **executed against hidden test suites**, domain deliverables graded against a **factual checklist** by two strict graders — *looks right* versus *is right*. Executed algorithm code had no headroom (every bare model already ~100%; fabius holds 100%); the gains are in the deliverables that only look right. Percent of hidden tests + factual checks passed:
+
+| Model | bare model | under fabius | objective gain |
+|---|:---:|:---:|:---:|
+| Haiku 4.5 | 75.6% | **93.0%** | **+17.4** |
+| Opus 4.8 | 84.9% | **90.7%** | +5.8 |
+| Fable 5 | 87.2% | **90.7%** | +3.5 |
+| Sonnet 4.6 | 89.5% | 88.4% | ~tie |
+
+Sharpest objective lifts: the parameterized SQL route **72.5% → 95%**, the idempotent webhook 40% → 60%, Solana account-validation 52.5% → 65% — output still cut 12–25% while doing it. Six measured runs in all; full method, per-task numbers, and the raw receipts (`evals/results.v5.json`, `evals/results.v6.json`): **[BENCHMARKS.md](BENCHMARKS.md)** §5–§6.
+
 > The claim the data supports: **structure beats brevity, and the advantage grows as the model's default discipline drops.** Not "smarter," not "10× on everything" — a scope-control system that knows when to compress and when to expand. Method, mechanism, and caveats: **[BENCHMARKS.md](BENCHMARKS.md)**.
 
 ---
@@ -235,7 +248,7 @@ fabius/
 │   ├── fabius-doctrina/    AI/ML engineering    · references: serving · MLOps · evaluation playbook
 │   ├── fabius-fortuna/     markets & finance    · references: analysis · valuation · honest backtesting · risk
 │   └── fabius-concilium/   cross-model council  · references: council protocol · council.mjs (runnable)
-├── evals/                  proof — structural.mjs (19/19) · harness.v3.workflow.js · results.v3.json · eval.mjs · portable_eval.py
+├── evals/                  proof — structural.mjs (19/19) · harness.v3/v5/v6 workflows · results.v3/v5/v6.json receipts · eval.mjs · portable_eval.py
 ├── provenance/             content-bound seal — verify.sh · seal manifest · OTS Bitcoin proof · signed tag
 ├── PROVENANCE.md           how authorship is proven, not asserted (with the limits up front)
 ├── AGENTS.md               tool-agnostic bridge (Codex / Cursor / Gemini / …)
