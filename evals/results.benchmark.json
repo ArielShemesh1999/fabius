@@ -1,319 +1,449 @@
 {
-  "_meta": {
-    "name": "The fabius benchmark",
-    "claim": "One test, three panels, one receipt: fabius improves every model it runs on — measured blind on all four newest Claude models with the shipped files verbatim, verified objectively by executing the generated code against hidden tests and checking domain deliverables against factual checklists, and demoed blind across external model families — while cutting output on every model.",
-    "arms": [
-      "baseline",
-      "terse (a generic 'be concise' control — the real test)",
-      "fabius (the shipped AGENTS.md + routed SKILL.md, verbatim)"
-    ],
-    "honest_misses": "Printed, not hidden: on the objective panel every one of the four models gains (+3.5 to +17.4); on the quality panel three of the four tiers gain — Sonnet 5 +0.43, Fable 5 +0.23, Opus 4.8 +0.20 — and the single miss is Haiku dipping -0.33 on trivial one-liners under a full verbatim contract (-4.50 on those three tasks) while gaining +0.71 on its specialist tasks — the empirical case for model-tier routing and the lean gate.",
-    "models": "Panel A/B generated on the four newest Claude models, each via per-agent model override: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (claude-haiku-4-5). The Sonnet tier was re-run on Sonnet 5 on 2026-07-02."
+ "_meta": {
+  "name": "The fabius benchmark",
+  "claim": "One test, four panels, one receipt: fabius improves every model it runs on — measured blind on all four newest Claude models with the shipped files verbatim, verified objectively by executing the generated code against hidden tests and checking domain deliverables against factual checklists, and demoed blind across external model families — while cutting output on every model.",
+  "arms": [
+   "baseline",
+   "terse (a generic 'be concise' control — the real test)",
+   "fabius (the shipped AGENTS.md + routed SKILL.md, verbatim)"
+  ],
+  "honest_misses": "Printed, not hidden: on the objective panel every one of the four models gains (+3.5 to +17.4); on the quality panel three of the four tiers gain — Sonnet 5 +0.43, Fable 5 +0.23, Opus 4.8 +0.20 — and the single miss is Haiku dipping -0.33 on trivial one-liners under a full verbatim contract (-4.50 on those three tasks) while gaining +0.71 on its specialist tasks — the empirical case for model-tier routing and the lean gate.",
+  "models": "Panel A/B generated on the four newest Claude models, each via per-agent model override: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (claude-haiku-4-5). The Sonnet tier was re-run on Sonnet 5 on 2026-07-02.",
+  "modes_panelD": "Panel D executes the IDENTITY.md evaluation contract on the versioned Fabius Benchmark Suite (evals/suite/, FBS v1.0): BASE (bare model) / FAB (shipped AGENTS.md + routed SKILL.md verbatim) / FAB_MEMORY (FAB + the task's committed memory_snapshot as recalled fabius-archivum memory)."
+ },
+ "panelA_quality_newest_claude": {
+  "method": "15 tasks x 3 arms on each of the four newest Claude models (Fable 5, Opus 4.8, Sonnet 5, Haiku 4.5); every answer scored /15 by TWO blind judges (opus+fable, averaged; inter-judge gap 0.72/15). The fabius arm loads the shipped files at run time — not a paraphrase.",
+  "byModel": {
+   "haiku": {
+    "baseline": 11.73,
+    "terse": 12.43,
+    "fabius": 11.4,
+    "gain_vs_baseline": -0.33,
+    "gain_vs_terse": -1.03,
+    "output_reduction_vs_baseline_pct": 35.5,
+    "baseline_chars": 4111,
+    "fabius_chars": 2653
+   },
+   "sonnet": {
+    "baseline": 14.07,
+    "terse": 14.07,
+    "fabius": 14.5,
+    "gain_vs_baseline": 0.43,
+    "gain_vs_terse": 0.43,
+    "output_reduction_vs_baseline_pct": 33.7,
+    "baseline_chars": 3699,
+    "fabius_chars": 2452
+   },
+   "opus": {
+    "baseline": 14.4,
+    "terse": 14.43,
+    "fabius": 14.6,
+    "gain_vs_baseline": 0.2,
+    "gain_vs_terse": 0.17,
+    "output_reduction_vs_baseline_pct": 20,
+    "baseline_chars": 3570,
+    "fabius_chars": 2855
+   },
+   "fable": {
+    "baseline": 14.5,
+    "terse": 14.6,
+    "fabius": 14.73,
+    "gain_vs_baseline": 0.23,
+    "gain_vs_terse": 0.13,
+    "output_reduction_vs_baseline_pct": 25.3,
+    "baseline_chars": 3087,
+    "fabius_chars": 2307
+   }
   },
-  "panelA_quality_newest_claude": {
-    "method": "15 tasks x 3 arms on each of the four newest Claude models (Fable 5, Opus 4.8, Sonnet 5, Haiku 4.5); every answer scored /15 by TWO blind judges (opus+fable, averaged; inter-judge gap 0.72/15). The fabius arm loads the shipped files at run time — not a paraphrase.",
-    "byModel": {
-      "haiku": {
-        "baseline": 11.73,
-        "terse": 12.43,
-        "fabius": 11.4,
-        "gain_vs_baseline": -0.33,
-        "gain_vs_terse": -1.03,
-        "output_reduction_vs_baseline_pct": 35.5,
-        "baseline_chars": 4111,
-        "fabius_chars": 2653
-      },
-      "sonnet": {
-        "baseline": 14.07,
-        "terse": 14.07,
-        "fabius": 14.5,
-        "gain_vs_baseline": 0.43,
-        "gain_vs_terse": 0.43,
-        "output_reduction_vs_baseline_pct": 33.7,
-        "baseline_chars": 3699,
-        "fabius_chars": 2452
-      },
-      "opus": {
-        "baseline": 14.4,
-        "terse": 14.43,
-        "fabius": 14.6,
-        "gain_vs_baseline": 0.2,
-        "gain_vs_terse": 0.17,
-        "output_reduction_vs_baseline_pct": 20,
-        "baseline_chars": 3570,
-        "fabius_chars": 2855
-      },
-      "fable": {
-        "baseline": 14.5,
-        "terse": 14.6,
-        "fabius": 14.73,
-        "gain_vs_baseline": 0.23,
-        "gain_vs_terse": 0.13,
-        "output_reduction_vs_baseline_pct": 25.3,
-        "baseline_chars": 3087,
-        "fabius_chars": 2307
-      }
-    },
-    "byCat": {
-      "yagni": {
-        "baseline": 13.19,
-        "terse": 13.5,
-        "fabius": 13.5,
-        "fab_minus_terse": 0.0,
-        "fab_minus_base": 0.31
-      },
-      "build": {
-        "baseline": 14.62,
-        "terse": 14.75,
-        "fabius": 12.0,
-        "fab_minus_terse": -2.75,
-        "fab_minus_base": -2.62
-      },
-      "security": {
-        "baseline": 13.56,
-        "terse": 14.0,
-        "fabius": 14.56,
-        "fab_minus_terse": 0.56,
-        "fab_minus_base": 1.0
-      },
-      "a11y": {
-        "baseline": 13.62,
-        "terse": 13.88,
-        "fabius": 12.38,
-        "fab_minus_terse": -1.5,
-        "fab_minus_base": -1.24
-      },
-      "agents": {
-        "baseline": 13.62,
-        "terse": 13.75,
-        "fabius": 14.0,
-        "fab_minus_terse": 0.25,
-        "fab_minus_base": 0.38
-      },
-      "design": {
-        "baseline": 14.0,
-        "terse": 14.12,
-        "fabius": 14.5,
-        "fab_minus_terse": 0.38,
-        "fab_minus_base": 0.5
-      },
-      "onchain": {
-        "baseline": 13.38,
-        "terse": 14.25,
-        "fabius": 14.5,
-        "fab_minus_terse": 0.25,
-        "fab_minus_base": 1.12
-      },
-      "automation": {
-        "baseline": 13.12,
-        "terse": 13.25,
-        "fabius": 13.88,
-        "fab_minus_terse": 0.63,
-        "fab_minus_base": 0.76
-      },
-      "science": {
-        "baseline": 13.38,
-        "terse": 12.75,
-        "fabius": 13.88,
-        "fab_minus_terse": 1.13,
-        "fab_minus_base": 0.5
-      },
-      "marketing": {
-        "baseline": 14.0,
-        "terse": 14.12,
-        "fabius": 14.12,
-        "fab_minus_terse": 0.0,
-        "fab_minus_base": 0.12
-      },
-      "game": {
-        "baseline": 13.75,
-        "terse": 13.88,
-        "fabius": 13.25,
-        "fab_minus_terse": -0.63,
-        "fab_minus_base": -0.5
-      },
-      "ml": {
-        "baseline": 14.0,
-        "terse": 13.88,
-        "fabius": 14.25,
-        "fab_minus_terse": 0.37,
-        "fab_minus_base": 0.25
-      },
-      "markets": {
-        "baseline": 14.12,
-        "terse": 14.62,
-        "fabius": 14.25,
-        "fab_minus_terse": -0.37,
-        "fab_minus_base": 0.13
-      }
-    },
-    "judgeAgreement": {
-      "mean_abs_total_diff": 0.69,
-      "n": 180,
-      "scale": "0-15 total"
-    },
-    "raw": "evals/results.v5.json"
+  "byCat": {
+   "yagni": {
+    "baseline": 13.19,
+    "terse": 13.5,
+    "fabius": 13.5,
+    "fab_minus_terse": 0.0,
+    "fab_minus_base": 0.31
+   },
+   "build": {
+    "baseline": 14.62,
+    "terse": 14.75,
+    "fabius": 12.0,
+    "fab_minus_terse": -2.75,
+    "fab_minus_base": -2.62
+   },
+   "security": {
+    "baseline": 13.56,
+    "terse": 14.0,
+    "fabius": 14.56,
+    "fab_minus_terse": 0.56,
+    "fab_minus_base": 1.0
+   },
+   "a11y": {
+    "baseline": 13.62,
+    "terse": 13.88,
+    "fabius": 12.38,
+    "fab_minus_terse": -1.5,
+    "fab_minus_base": -1.24
+   },
+   "agents": {
+    "baseline": 13.62,
+    "terse": 13.75,
+    "fabius": 14.0,
+    "fab_minus_terse": 0.25,
+    "fab_minus_base": 0.38
+   },
+   "design": {
+    "baseline": 14.0,
+    "terse": 14.12,
+    "fabius": 14.5,
+    "fab_minus_terse": 0.38,
+    "fab_minus_base": 0.5
+   },
+   "onchain": {
+    "baseline": 13.38,
+    "terse": 14.25,
+    "fabius": 14.5,
+    "fab_minus_terse": 0.25,
+    "fab_minus_base": 1.12
+   },
+   "automation": {
+    "baseline": 13.12,
+    "terse": 13.25,
+    "fabius": 13.88,
+    "fab_minus_terse": 0.63,
+    "fab_minus_base": 0.76
+   },
+   "science": {
+    "baseline": 13.38,
+    "terse": 12.75,
+    "fabius": 13.88,
+    "fab_minus_terse": 1.13,
+    "fab_minus_base": 0.5
+   },
+   "marketing": {
+    "baseline": 14.0,
+    "terse": 14.12,
+    "fabius": 14.12,
+    "fab_minus_terse": 0.0,
+    "fab_minus_base": 0.12
+   },
+   "game": {
+    "baseline": 13.75,
+    "terse": 13.88,
+    "fabius": 13.25,
+    "fab_minus_terse": -0.63,
+    "fab_minus_base": -0.5
+   },
+   "ml": {
+    "baseline": 14.0,
+    "terse": 13.88,
+    "fabius": 14.25,
+    "fab_minus_terse": 0.37,
+    "fab_minus_base": 0.25
+   },
+   "markets": {
+    "baseline": 14.12,
+    "terse": 14.62,
+    "fabius": 14.25,
+    "fab_minus_terse": -0.37,
+    "fab_minus_base": 0.13
+   }
   },
-  "panelB_objective": {
-    "method": "9 deliverables x 3 arms x the same four models. Generated code is written to a file and RUN against a hidden test suite; research/security/on-chain/automation deliverables are graded against a fixed factual checklist by two strict graders. No LLM taste in the loop.",
-    "byModel": {
-      "haiku": {
-        "baseline_pct": 75.6,
-        "terse_pct": 76.7,
-        "fabius_pct": 93,
-        "gain_vs_baseline": 17.4,
-        "gain_vs_terse": 16.3,
-        "exec": {
-          "baseline": 100,
-          "terse": 100,
-          "fabius": 100,
-          "gain": 0
-        },
-        "rubric": {
-          "baseline": 58,
-          "terse": 60,
-          "fabius": 88,
-          "gain": 30
-        },
-        "output_cut_pct": 25
-      },
-      "sonnet": {
-        "baseline_pct": 84.9,
-        "terse_pct": 82.6,
-        "fabius_pct": 90.7,
-        "gain_vs_baseline": 5.8,
-        "gain_vs_terse": 8.1,
-        "exec": {
-          "baseline": 100.0,
-          "terse": 100.0,
-          "fabius": 100.0,
-          "gain": 0.0
-        },
-        "rubric": {
-          "baseline": 74.0,
-          "terse": 70.0,
-          "fabius": 84.0,
-          "gain": 10.0
-        },
-        "output_cut_pct": 22.9
-      },
-      "opus": {
-        "baseline_pct": 84.9,
-        "terse_pct": 83.7,
-        "fabius_pct": 90.7,
-        "gain_vs_baseline": 5.8,
-        "gain_vs_terse": 7,
-        "exec": {
-          "baseline": 100,
-          "terse": 100,
-          "fabius": 100,
-          "gain": 0
-        },
-        "rubric": {
-          "baseline": 74,
-          "terse": 72,
-          "fabius": 84,
-          "gain": 10
-        },
-        "output_cut_pct": 24.2
-      },
-      "fable": {
-        "baseline_pct": 87.2,
-        "terse_pct": 80.2,
-        "fabius_pct": 90.7,
-        "gain_vs_baseline": 3.5,
-        "gain_vs_terse": 10.5,
-        "exec": {
-          "baseline": 100,
-          "terse": 100,
-          "fabius": 100,
-          "gain": 0
-        },
-        "rubric": {
-          "baseline": 78,
-          "terse": 66,
-          "fabius": 84,
-          "gain": 6
-        },
-        "output_cut_pct": 11.5
-      }
-    },
-    "byTask": {
-      "offby1": {
-        "baseline": 100.0,
-        "terse": 100.0,
-        "fabius": 100.0,
-        "gain": 0.0,
-        "kind": "exec"
-      },
-      "cache": {
-        "baseline": 100.0,
-        "terse": 100.0,
-        "fabius": 100.0,
-        "gain": 0.0,
-        "kind": "exec"
-      },
-      "merge": {
-        "baseline": 100.0,
-        "terse": 100.0,
-        "fabius": 100.0,
-        "gain": 0.0,
-        "kind": "exec"
-      },
-      "parse": {
-        "baseline": 100.0,
-        "terse": 100.0,
-        "fabius": 100.0,
-        "gain": 0.0,
-        "kind": "exec"
-      },
-      "dge": {
-        "baseline": 100.0,
-        "terse": 95.0,
-        "fabius": 100.0,
-        "gain": 0.0,
-        "kind": "rubric"
-      },
-      "route": {
-        "baseline": 67.5,
-        "terse": 57.5,
-        "fabius": 100.0,
-        "gain": 32.5,
-        "kind": "rubric"
-      },
-      "solana": {
-        "baseline": 47.5,
-        "terse": 45.0,
-        "fabius": 57.5,
-        "gain": 10.0,
-        "kind": "rubric"
-      },
-      "webhook": {
-        "baseline": 40.0,
-        "terse": 37.5,
-        "fabius": 67.5,
-        "gain": 27.5,
-        "kind": "rubric"
-      },
-      "threat": {
-        "baseline": 100.0,
-        "terse": 100.0,
-        "fabius": 100.0,
-        "gain": 0.0,
-        "kind": "rubric"
-      }
-    },
-    "raw": "evals/results.v6.json"
+  "judgeAgreement": {
+   "mean_abs_total_diff": 0.69,
+   "n": 180,
+   "scale": "0-15 total"
   },
-  "panelC_external_demos": {
-    "method": "Blind cross-family demo on external providers via the portable harness (evals/portable_eval.py; 6 tasks, 3 categories, measured 2026-06-22 with live provider keys). Lift = fabius minus the 'be concise' control on genuine-build tasks, /15.",
-    "lift_vs_control_genuine_build": {
-      "grok": 8.5,
-      "gpt": 7.0,
-      "claude": 7.0,
-      "mistral": 2.5
+  "raw": "evals/results.v5.json"
+ },
+ "panelB_objective": {
+  "method": "9 deliverables x 3 arms x the same four models. Generated code is written to a file and RUN against a hidden test suite; research/security/on-chain/automation deliverables are graded against a fixed factual checklist by two strict graders. No LLM taste in the loop.",
+  "byModel": {
+   "haiku": {
+    "baseline_pct": 75.6,
+    "terse_pct": 76.7,
+    "fabius_pct": 93,
+    "gain_vs_baseline": 17.4,
+    "gain_vs_terse": 16.3,
+    "exec": {
+     "baseline": 100,
+     "terse": 100,
+     "fabius": 100,
+     "gain": 0
     },
-    "note": "Every family gains. Gemini wired in the harness (Google OpenAI-compatible endpoint) — no number committed without a key. Re-run any family: OPENAI_API_KEY/GEMINI_API_KEY/MISTRAL_API_KEY=... python evals/portable_eval.py"
+    "rubric": {
+     "baseline": 58,
+     "terse": 60,
+     "fabius": 88,
+     "gain": 30
+    },
+    "output_cut_pct": 25
+   },
+   "sonnet": {
+    "baseline_pct": 84.9,
+    "terse_pct": 82.6,
+    "fabius_pct": 90.7,
+    "gain_vs_baseline": 5.8,
+    "gain_vs_terse": 8.1,
+    "exec": {
+     "baseline": 100.0,
+     "terse": 100.0,
+     "fabius": 100.0,
+     "gain": 0.0
+    },
+    "rubric": {
+     "baseline": 74.0,
+     "terse": 70.0,
+     "fabius": 84.0,
+     "gain": 10.0
+    },
+    "output_cut_pct": 22.9
+   },
+   "opus": {
+    "baseline_pct": 84.9,
+    "terse_pct": 83.7,
+    "fabius_pct": 90.7,
+    "gain_vs_baseline": 5.8,
+    "gain_vs_terse": 7,
+    "exec": {
+     "baseline": 100,
+     "terse": 100,
+     "fabius": 100,
+     "gain": 0
+    },
+    "rubric": {
+     "baseline": 74,
+     "terse": 72,
+     "fabius": 84,
+     "gain": 10
+    },
+    "output_cut_pct": 24.2
+   },
+   "fable": {
+    "baseline_pct": 87.2,
+    "terse_pct": 80.2,
+    "fabius_pct": 90.7,
+    "gain_vs_baseline": 3.5,
+    "gain_vs_terse": 10.5,
+    "exec": {
+     "baseline": 100,
+     "terse": 100,
+     "fabius": 100,
+     "gain": 0
+    },
+    "rubric": {
+     "baseline": 78,
+     "terse": 66,
+     "fabius": 84,
+     "gain": 6
+    },
+    "output_cut_pct": 11.5
+   }
   },
-  "structural": "19/19 — node evals/structural.mjs (deterministic, no key)"
+  "byTask": {
+   "offby1": {
+    "baseline": 100.0,
+    "terse": 100.0,
+    "fabius": 100.0,
+    "gain": 0.0,
+    "kind": "exec"
+   },
+   "cache": {
+    "baseline": 100.0,
+    "terse": 100.0,
+    "fabius": 100.0,
+    "gain": 0.0,
+    "kind": "exec"
+   },
+   "merge": {
+    "baseline": 100.0,
+    "terse": 100.0,
+    "fabius": 100.0,
+    "gain": 0.0,
+    "kind": "exec"
+   },
+   "parse": {
+    "baseline": 100.0,
+    "terse": 100.0,
+    "fabius": 100.0,
+    "gain": 0.0,
+    "kind": "exec"
+   },
+   "dge": {
+    "baseline": 100.0,
+    "terse": 95.0,
+    "fabius": 100.0,
+    "gain": 0.0,
+    "kind": "rubric"
+   },
+   "route": {
+    "baseline": 67.5,
+    "terse": 57.5,
+    "fabius": 100.0,
+    "gain": 32.5,
+    "kind": "rubric"
+   },
+   "solana": {
+    "baseline": 47.5,
+    "terse": 45.0,
+    "fabius": 57.5,
+    "gain": 10.0,
+    "kind": "rubric"
+   },
+   "webhook": {
+    "baseline": 40.0,
+    "terse": 37.5,
+    "fabius": 67.5,
+    "gain": 27.5,
+    "kind": "rubric"
+   },
+   "threat": {
+    "baseline": 100.0,
+    "terse": 100.0,
+    "fabius": 100.0,
+    "gain": 0.0,
+    "kind": "rubric"
+   }
+  },
+  "raw": "evals/results.v6.json"
+ },
+ "panelC_external_demos": {
+  "method": "Blind cross-family demo on external providers via the portable harness (evals/portable_eval.py; 6 tasks, 3 categories, measured 2026-06-22 with live provider keys). Lift = fabius minus the 'be concise' control on genuine-build tasks, /15.",
+  "lift_vs_control_genuine_build": {
+   "grok": 8.5,
+   "gpt": 7.0,
+   "claude": 7.0,
+   "mistral": 2.5
+  },
+  "note": "Every family gains. Gemini wired in the harness (Google OpenAI-compatible endpoint) — no number committed without a key. Re-run any family: OPENAI_API_KEY/GEMINI_API_KEY/MISTRAL_API_KEY=... python evals/portable_eval.py"
+ },
+ "structural": "19/19 — node evals/structural.mjs (deterministic, no key)",
+ "panelD_fbs_run": {
+  "method": "100 neutral production-shaped tasks (20 smoke / 50 core / 30 stress, categories A-J, toy problems banned, 3-6 objective automatic_checks per task) x 3 modes; scored /28 on a 7-dimension 0-4 rubric by TWO blind judges (opus+fable; inter-judge gap 1.05/28 sonnet, 0.83/28 haiku) + a strict objective grader per answer. Run 2026-07-05.",
+  "suite": "evals/suite/ (FBS v1.0, committed; validator node evals/suite/validate.mjs = 9/9)",
+  "sonnet5_full_suite": {
+   "byMode": {
+    "BASE": {
+     "rubric_28": 26.14,
+     "check_rate_pct": 93.2,
+     "chars": 4001
+    },
+    "FAB": {
+     "rubric_28": 26.16,
+     "check_rate_pct": 93.5,
+     "chars": 3580
+    },
+    "FAB_MEMORY": {
+     "rubric_28": 26.16,
+     "check_rate_pct": 93.3,
+     "chars": 3512
+    }
+   },
+   "deltas": {
+    "FAB_vs_BASE": {
+     "total": 0.02,
+     "check_rate": 0.3,
+     "task_success": 0.0,
+     "instruction_obedience": -0.02,
+     "scope_control": -0.05,
+     "technical_correctness": 0.01,
+     "safety": -0.03,
+     "token_efficiency": 0.09,
+     "quality": 0.02,
+     "output_cut_pct": 10.5
+    },
+    "FABMEM_vs_FAB": {
+     "total": 0.0,
+     "check_rate": -0.2,
+     "task_success": 0.02,
+     "instruction_obedience": 0.02,
+     "scope_control": 0.0,
+     "technical_correctness": -0.04,
+     "safety": 0.0,
+     "token_efficiency": 0.02,
+     "quality": -0.03
+    },
+    "FABMEM_vs_BASE": {
+     "total": 0.02,
+     "check_rate": 0.1,
+     "task_success": 0.02,
+     "instruction_obedience": 0.0,
+     "scope_control": -0.05,
+     "technical_correctness": -0.03,
+     "safety": -0.03,
+     "token_efficiency": 0.11,
+     "quality": -0.01,
+     "output_cut_pct": 12.2
+    }
+   },
+   "byTier_total": {
+    "t1/BASE": 26.05,
+    "t1/FAB": 26.6,
+    "t1/FAB_MEMORY": 27.38,
+    "t2/BASE": 26.12,
+    "t2/FAB": 25.64,
+    "t2/FAB_MEMORY": 25.52,
+    "t3/BASE": 26.25,
+    "t3/FAB": 26.75,
+    "t3/FAB_MEMORY": 26.43
+   }
+  },
+  "haiku45_smoke": {
+   "byMode": {
+    "BASE": {
+     "rubric_28": 25.27,
+     "check_rate_pct": 96.1,
+     "chars": 1531
+    },
+    "FAB": {
+     "rubric_28": 26.0,
+     "check_rate_pct": 97.1,
+     "chars": 1315
+    },
+    "FAB_MEMORY": {
+     "rubric_28": 26.73,
+     "check_rate_pct": 96.1,
+     "chars": 1361
+    }
+   },
+   "deltas": {
+    "FAB_vs_BASE": {
+     "total": 0.73,
+     "check_rate": 1.0,
+     "task_success": 0.1,
+     "instruction_obedience": 0.12,
+     "scope_control": 0.1,
+     "technical_correctness": 0.03,
+     "safety": 0.07,
+     "token_efficiency": 0.23,
+     "quality": 0.07,
+     "output_cut_pct": 14.1
+    },
+    "FABMEM_vs_FAB": {
+     "total": 0.73,
+     "check_rate": -1.0,
+     "task_success": 0.15,
+     "instruction_obedience": 0.05,
+     "scope_control": 0.12,
+     "technical_correctness": 0.07,
+     "safety": 0.07,
+     "token_efficiency": 0.05,
+     "quality": 0.2
+    },
+    "FABMEM_vs_BASE": {
+     "total": 1.46,
+     "check_rate": 0.0,
+     "task_success": 0.25,
+     "instruction_obedience": 0.17,
+     "scope_control": 0.22,
+     "technical_correctness": 0.1,
+     "safety": 0.14,
+     "token_efficiency": 0.28,
+     "quality": 0.27,
+     "output_cut_pct": 11.1
+    }
+   }
+  },
+  "honest_notes": "Core tier is the printed miss (FAB_MEMORY -0.60; FAB -0.48 of which most is one catastrophic 363-char stub answer on FAB-025 scoring 1.5/28 vs 28/28 for BASE and FAB_MEMORY; excluding it core FAB is 26.08 -> 26.13). Memory cuts both ways: design +4.91, security -1.57, error-recovery -1.37. A provider session-limit window interrupted some judge/grade calls; every generation completed and only missing judge/grade calls were re-issued with byte-identical prompts.",
+  "raw": "evals/results.v7.json"
+ }
 }

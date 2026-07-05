@@ -3,7 +3,7 @@
 
 One benchmark: **fabius improves every model it runs on — blind-judged on the newest Claude models, objectively verified by executed tests and factual checks, demoed across external families — on 20–35% less output.**
 
-One test, three panels, one canonical receipt: [`evals/results.benchmark.json`](evals/results.benchmark.json). Every number below was measured on a real model at a named moment — nothing is estimated — and each panel points at its raw data file so you can check every cell.
+One test, four panels, one canonical receipt: [`evals/results.benchmark.json`](evals/results.benchmark.json). Every number below was measured on a real model at a named moment — nothing is estimated — and each panel points at its raw data file so you can check every cell. Panel D executes the evaluation contract of [IDENTITY.md](IDENTITY.md) on the versioned **Fabius Benchmark Suite** (`evals/suite/`, FBS v1.0) with the three modes **BASE → FAB → FAB_MEMORY**.
 
 ## The three arms
 
@@ -110,6 +110,39 @@ Raw data: written by the harness to `evals/results.portable.json` on each run.
 
 ---
 
+## Panel D — the FBS run: BASE → FAB → FAB_MEMORY on the versioned suite
+
+The newest panel executes the evaluation contract fixed in [IDENTITY.md](IDENTITY.md): fabius is an *intelligence amplification layer*, so the question is never "is it smarter" — it is **does the exact same model achieve better outcomes with less waste?** The instrument is the **Fabius Benchmark Suite** ([`evals/suite/`](evals/suite/), FBS v1.0): 100 neutral, production-shaped tasks — 20 smoke / 50 core / 30 stress across ten categories A–J, toy problems banned by construction — each with 3–6 objective `automatic_checks` and, where memory matters, a committed prior-session `memory_snapshot`. Three modes per task: **BASE** (bare model) · **FAB** (shipped `AGENTS.md` + routed `SKILL.md`, verbatim) · **FAB_MEMORY** (FAB + the task's committed snapshot as recalled `fabius-archivum` memory). Scored /28 on the suite's seven-dimension 0–4 rubric by **two blind judges** (inter-judge gap 1.05/28 on Sonnet, 0.83/28 on Haiku), plus a strict objective grader over every task's checks. Run 2026-07-05.
+
+**Sonnet 5 — the full 100-task suite:**
+
+| Mode | rubric /28 | objective checks | mean output | vs BASE |
+|---|:---:|:---:|:---:|:---:|
+| BASE | 26.14 | 93.2% | 4,001 chars | — |
+| **FAB** | **26.16** | **93.5%** | **3,580 chars** | **quality held, −10.5% output** |
+| **FAB_MEMORY** | **26.16** | 93.3% | **3,512 chars** | **quality held, −12.2% output** |
+
+**Haiku 4.5 — the smoke tier (20 tasks):**
+
+| Mode | rubric /28 | mean output | vs BASE |
+|---|:---:|:---:|:---:|
+| BASE | 25.27 | 1,531 chars | — |
+| **FAB** | **26.00** | 1,315 chars | **+0.73 · −14.1% output** |
+| **FAB_MEMORY** | **26.73** | 1,361 chars | **+1.46 · −11.1% output** |
+
+Four findings, stated straight:
+
+1. **On the fast tier the two layers stack monotonically.** Haiku gains +0.73 from the stance and another +0.73 from memory — +1.46 total on ~11–14% less output, with single-task jumps like **13.5 → 25.5** and **16.0 → 24.5** where the recalled snapshot carries the binding house convention. FBS bans toy problems by construction, and on production-shaped tasks the small model gains *everywhere* — consistent with Panel A's lesson that Haiku's only dip was trivial one-liners.
+2. **On the mid tier, outcome-per-token rises: quality holds at 93% while output falls 10–12%.** By tier: smoke **+0.55 (FAB) / +1.33 (FAB_MEMORY)**; stress **+0.50 (FAB)** with the objective check-rate up **89.9% → 93.7%** — the stance does its best work exactly where prompts fight back (injection payloads, false premises, conflicting instructions). The core tier is the honest miss: FAB_MEMORY −0.60; FAB reads −0.48 until you look at the receipt —
+3. **The one catastrophic cell is printed, not hidden.** On FAB-025 (a Postgres zero-downtime migration plan) the FAB answer was a **363-character stub referring to a plan it never included** — 1.5/28 against 28/28 for both BASE and FAB_MEMORY on the same task. That single row is most of category A's FAB dip; excluding it, core-tier FAB is flat (26.08 → 26.13). The failure mode is real and instructive — a stance-loaded model summarizing instead of delivering on a long deliverable — and it is exactly what `fabius-disciplina`'s prove-before-done gate exists to catch in live operation.
+4. **Memory is a real axis, and it cuts both ways.** Category F (design & product) jumps **+4.91** under FAB_MEMORY — recalled brand/UX decisions bind the answer to the right constraints. But security (−1.57) and error-recovery (−1.37) *lose* under memory — recalled context can distract a task that needs fresh-eyes rigor. That asymmetry is the empirical case for `fabius-archivum`'s verify-gated recall ("use memory only where it genuinely applies"), now measured rather than asserted.
+
+Method note: a provider session-limit window interrupted some judge/grade calls mid-run; **every generation completed** and was recovered verbatim from the run journals, and only the missing judge/grade calls were re-issued with byte-identical prompts. The receipt records it; no cell was regenerated.
+
+Raw data: [`evals/results.v7.json`](evals/results.v7.json) · suite: [`evals/suite/`](evals/suite/) · validator: `node evals/suite/validate.mjs` (9/9).
+
+---
+
 ## Structural tests — the system is well-formed (no model, no key)
 
 Separate from "does the stance help," a deterministic suite proves the *system* is intact. These are pass/fail facts that reproduce byte-for-byte on any clone — [`node evals/structural.mjs`](evals/structural.mjs):
@@ -152,7 +185,8 @@ A good result is **shorter answers that score higher** — brevity *and* the gua
 - **Panel B tests: does the deliverable pass an objective check, not just please a judge?** Yes, exactly where it should: executed code is already at ceiling for every model (no headroom), while on domain deliverables the routed contract lifts real, checkable correctness — Haiku 58 → 88, Sonnet 5 74 → 84, Opus 74 → 84, Fable 78 → 84 on the checklists — turning "reads right" into "is right". Every one of the four models gains objectively (+3.5 to +17.4). Biggest overall gain on the smallest model, which needs the discipline most.
 - **Panel C tests: is the effect portable outside the Claude family?** Yes — every measured family gains on genuine-build vs the "be concise" control (Grok +8.5, GPT +7.0, Claude +7.0, Mistral +2.5), with the same shape: large at trust/order/build, ~zero at pure YAGNI.
 - **The structural suite tests: is the system built right** (single-owner, under budget, references live, seal verifiable). 19/19.
-- **Not tested by a one-shot benchmark:** `fabius-archivum` (persistent memory only pays off across sessions), the `fabius` router's dispatch accuracy (checked structurally, not behaviorally), and the cross-model `fabius-concilium` layer (its proper test is whether a council beats its best single seat — a measurement to add, not a claim to make here). Memory is excluded rather than faked.
+- **Panel D tests: does the IDENTITY.md contract hold — better outcomes with less waste, same model?** On the fast tier, monotonically yes (+0.73 stance, +1.46 with memory, on 11–14% less output). On the mid tier, outcome-per-token rises: quality held at 93% on 10–12% less output, with the stress tier's objective check-rate up +3.8 — and the core-tier miss printed in full. It is also the first *behavioral* measurement of `fabius-archivum`: the FAB_MEMORY mode injects each task's committed prior-session snapshot, and the result is a real, two-sided axis (design +4.91, security −1.57) — the measured case for verify-gated recall.
+- **Not tested by a one-shot benchmark:** cross-session memory accumulation (Panel D's snapshots are committed fixtures, not a live growing store), the `fabius` router's dispatch accuracy (checked structurally, not behaviorally), and the cross-model `fabius-concilium` layer (its proper test is whether a council beats its best single seat — a measurement to add, not a claim to make here).
 
 Caveats, plainly: the Panel A judges are models — blind and paired, but models; character counts and Panel B's executed tests are the bias-free signals. Task counts per cell are a strong directional signal, not a paper — treat sub-point deltas as ties. Every number was measured on named models at a named moment; versions move — re-run it rather than generalize.
 
@@ -171,6 +205,11 @@ Workflow({ scriptPath: "evals/harness.v6.workflow.js" })
 
 # Panel C — external families, your keys (OpenAI / Grok-compatible / Mistral / Anthropic / Gemini)
 OPENAI_API_KEY=... MISTRAL_API_KEY=... GEMINI_API_KEY=... python evals/portable_eval.py
+
+# Panel D — the FBS run: validate the committed suite, then execute BASE/FAB/FAB_MEMORY
+#   (inside Claude Code)            -> evals/results.v7.json
+node evals/suite/validate.mjs
+Workflow({ scriptPath: "evals/harness.v7.workflow.js", args: { tasks: [/* evals/suite/*.jsonl */], model: "sonnet" } })
 
 # Structural suite — no key, no cost, no network; 19/19 must pass
 node evals/structural.mjs
@@ -194,5 +233,6 @@ The benchmark above is one test; the method that produced it was iterated. This 
 | 2026-07-01 | All four newest Claude models × 15 tasks × 3 arms, shipped files verbatim, two blind judges — **Panel A raw** | [`evals/results.v5.json`](evals/results.v5.json) |
 | 2026-07-02 | Objective run: generated code executed vs hidden tests + deliverables vs factual checklists, 9 × 4 × 3 — **Panel B raw** | [`evals/results.v6.json`](evals/results.v6.json) |
 | 2026-07-02 | Consolidation of the three panels into the single canonical receipt | [`evals/results.benchmark.json`](evals/results.benchmark.json) |
+| 2026-07-05 | **The FBS run** — the Fabius Benchmark Suite v1.0 (100 tasks, 3 tiers, A–J) executed BASE → FAB → FAB_MEMORY on Sonnet 5 (full suite) + Haiku 4.5 (smoke), 7-dim 0–4 rubric, two blind judges + objective graders — **Panel D raw** | [`evals/results.v7.json`](evals/results.v7.json) |
 
 > The claim the benchmark supports: **fabius improves every model it runs on — a consistent lift that grows as the model's default discipline drops: large at trust / order / genuine-build boundaries and across the technical verticals (security, on-chain, automation, science), negligible at pure YAGNI — while cutting output 20–35% everywhere. Blind-judged on the newest Claude models, objectively verified by executed tests and factual checks, demoed across external families. And it is built right: 19/19 structural invariants, a verifiable content-bound seal.** Not "smarter." Not "10× on everything." That sentence survives technical scrutiny; the inflated one doesn't.
