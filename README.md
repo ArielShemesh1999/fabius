@@ -37,6 +37,8 @@ It lives across three aligned surfaces:
 
 It is named for the Fabian doctrine: **scout the whole field, fight only the battle that matters.** Internally the agent is composed of fifteen coordinated, non-overlapping capability layers — a router (`fabius`), an always-on lean core (`fabius-parcus`), and thirteen engineering specialists — that decide how each job is done.
 
+What fabius *is* — an **intelligence amplification layer**, not a model — and the contract for how it must be judged (same model, BASE → FAB → FAB_MEMORY, better outcomes on less waste) is fixed in **[IDENTITY.md](IDENTITY.md)**; its executable form is the **Fabius Benchmark Suite** in [`evals/suite/`](evals/suite/).
+
 ---
 
 ## What it does
