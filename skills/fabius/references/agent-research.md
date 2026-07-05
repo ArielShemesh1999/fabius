@@ -143,3 +143,49 @@ Studies agent efficiency across **memory, tool learning, and planning** under re
 
 ### Living indexes — the canon, kept current · reference
 Community-maintained catalogs fabius treats as the lint backstop and reading list: **zjunlp/LLMAgentPapers** and **luo-junyu/awesome-agent-papers** (the agent literature, organized by capability) and **e2b-dev/awesome-ai-agents** (production agent *implementations*, the bridge from paper to shipped system). When a real failure exposes a gap rules R1–R13 / M1–M9 don't cover, these are where the next pattern is sourced — and a new rule is added to [`routing-policy.md`](routing-policy.md) only then (never from anticipation; `failures.md` is the trigger).
+
+## The 2026-07 frontier pass — sources admitted after honesty audit
+
+**Cuadron et al. 2025 — The Danger of Overthinking (arXiv:2502.08235).** LLM-judged overthinking scores on 4,018 SWE-bench Verified trajectories predict failure: favoring internal simulation over environment interaction (analysis paralysis, rogue action batches, premature disengagement) correlates with lower resolution, and two low-effort samples with the less-overthinking one selected reached 27.3% at 43% less compute than one high-effort run. fabius takes: in tool loops, make the cheap call instead of reasoning past it — the anchor of R14.
+
+**HAL — Holistic Agent Leaderboard (arXiv:2510.11977).** 21,730 rollouts across 9 models × 9 benchmarks: higher reasoning effort REDUCED accuracy in the majority of runs, scaffold costs vary wildly and go unreported, and many published agent results are irreproducible due to harness bugs. fabius takes: standard effort is the default; raise one step only on a verified reasoning-shaped miss, and price every escalation.
+
+**METR time horizons (arXiv:2503.14499 + TH1.1, 2026) and Ord's half-life refit (arXiv:2505.05115).** The 50%-success time horizon grows exponentially (~131-day doubling post-2023; longest measured frontier horizon ~14.5h, unreliable above ~16h), and success vs duration fits a near-constant per-minute failure hazard. fabius takes: R12 segment sizing — autonomous segments sit well inside the current model's measured horizon, re-checked per model generation, with verification frequency scaling with elapsed work.
+
+**SWE-ABS (arXiv:2603.00520).** Adversarially strengthening the test suites of half of SWE-bench Verified rejected 19.7% of previously passing top-30 agent patches (top score −16.6pp; leaderboard reordered). fabius takes: a green from an unaudited oracle is PLAUSIBLE, not CONFIRMED — audit and strengthen the gate before trusting it (R15).
+
+**Limits of Inference Scaling Through Resampling (arXiv:2411.17501).** With any verifier false-positive rate, resampling saturates at a hard ceiling; the optimal sample count is often under 10, and no resampling budget lets a weak model match a stronger model's single shot. fabius takes: bound every gated retry loop small; when it keeps failing, fix the check or escalate the generator, never raise N.
+
+**TDAD (arXiv:2603.17973).** An AST impact map linking source files to covering tests, queried before each patch, cut agent regressions 70% (6.08%→1.82%) and lifted resolution — while generic TDD procedural prompting WITHOUT the mapped context increased regressions to 9.94%, worse than nothing. fabius takes: test-first works only when bound to concrete covering tests; TDD slogans come out of prompt templates (R16).
+
+**TDFlow (arXiv:2510.23761).** With human-written ground-truth tests defining the target, a narrow propose→debug→revise test-driven workflow reaches 94.3% SWE-bench Verified; the measured bottleneck is writing valid reproduction tests, not solving them. fabius takes: surplus verification budget goes to authoring/validating the reproduction test.
+
+**When To Solve, When To Verify (arXiv:2504.01005).** Compute-matched, self-consistency voting beats generative verification at most practical budgets; a GenRM verifier only catches up at ~8x the inference compute, and compute-optimal scaling grows solutions faster than verifications. fabius takes: for votable outputs the free evaluator wins; pay for a verifier only on unvotable outputs or very large budgets.
+
+**DeepVerifier (arXiv:2601.15808).** Rubrics derived from an automatically built failure taxonomy (5 major / 13 sub-categories) beat vanilla agent-as-judge by 12–48% meta-eval F1, and as a feedback-and-refine gate add 8–11% end-to-end accuracy on hard GAIA/XBench-DeepSearch subsets. fabius takes: prose deliverables get an item-by-item failure-taxonomy rubric gate, not a one-line judge (M11).
+
+**The Verification Horizon (arXiv:2606.26300).** Four verifier constructions for coding agents: every verifier is a proxy for intent, optimization widens the proxy gap (reward hacking, saturation), and easier-to-verify-than-generate inverts for strong agents; partly internal-benchmark/position evidence. fabius takes: gates decay — tighten them when green streaks lengthen and on every generator upgrade.
+
+**Self-MoA (arXiv:2502.00674).** Ensembling N samples of the single best model beat mixed-model MoA (+6.6 AlpacaEval 2.0, +3.8 avg across MMLU/CRUX/MATH); mixing weaker models into the pool lowers quality. fabius takes: the council default is self-samples of the strongest model; a heterogeneous council only on correlated error (M10).
+
+**Talk Isn't Always Cheap (arXiv:2509.05396, ICML MAS Workshop).** Debate accuracy decreases over rounds even when stronger models outnumber weaker ones; models flip correct→incorrect to agree with persuasive but wrong peers. fabius takes: cap debate at one verified round; never mix capability tiers in a debate pool.
+
+**MAST (arXiv:2503.13657).** First empirical multi-agent failure taxonomy: 14 modes in 3 classes (specification, inter-agent misalignment, task verification) from 1600+ traces across 7 frameworks, κ=0.88 — most failures are design/coordination, not capability. fabius takes: M1's "named error" now has a measured vocabulary, and spec-shaped errors mean fix the contract, not add agents.
+
+**Experience-following (arXiv:2505.16067).** Controlled ADD/DELETE experiments on LLM-agent memory: agents reproduce retrieved records — errors included — and polluted stores compound as contaminated outputs re-enter memory; selective addition plus outcome-labeled deletion beats add-everything. fabius takes: writes get outcome gates, reads get match+provenance checks (M7, M12) — and it is the mechanism behind Run 7's measured memory cost on security routes.
+
+**Memory-R1 (arXiv:2508.19828).** An RL-trained ADD/UPDATE/DELETE/NOOP memory gate plus answer-side filtering of retrieved candidates beats heuristic pipelines on LoCoMo; unfiltered retrieval passed wholesale measurably distracts. fabius takes: retrieved ≠ injected — prune candidates before the prompt sees them.
+
+**The Complexity Trap (arXiv:2508.21433, JetBrains).** On SWE-bench Verified across 5 model configs, replacing stale tool observations with placeholders (keeping the reasoning-action spine) matched or slightly beat LLM summarization at roughly half the cost of raw retention. fabius takes: mechanical masking is compaction rung one; pay a summarizer only for spans masking provably loses (M13).
+
+**Less Context, Better Agents (arXiv:2606.10209).** 50-task enterprise tool-agent benchmark: full history retention 71% task completion, pruning to the last 5 tool interactions 79%, prune+summarize 91.6% — each rung also cutting tokens. fabius takes: full retention is the measured-worst context strategy on accuracy AND cost.
+
+**Du et al. — Context Length Alone Hurts (arXiv:2510.05381, EMNLP 2025 Findings).** Even with provably perfect retrieval, performance degrades 13.9–85% as raw input grows — persisting under whitespace substitution and attention masking; recitation before solving recovers only ~4%. fabius takes: length itself is an accuracy tax — slice narrow before paging in (R9).
+
+**Bouchard — Is Escalation Worth It? (arXiv:2605.06350).** Decision-theoretic characterization of LLM cascades validated on five benchmarks/eight models: a lightweight pre-generation router beat the best cascade on 4/5 datasets because cascades structurally pay the cheap model before deciding. fabius takes: with a confident difficulty read, route directly; reserve try-then-escalate for reusable cheap drafts (R11).
+
+**AgentProp-Bench (arXiv:2604.16706).** On tool-using-agent traces with a human-validated subset: substring judging agrees with humans at chance (κ=0.049) while a three-LLM ensemble reaches κ=0.432 with conservative bias; parameter-level injected errors propagate to wrong final answers with p≈0.62. fabius takes: never string-match agent traces; use small cross-family judge ensembles (R8).
+
+**REFLECT (arXiv:2605.19196).** Meta-evaluation of LLM judges on controlled research-agent failure interventions: even the best judges stay below 55% accuracy, weakest on evidence verification. fabius takes: a judge verdict is a tier-3 signal that may localize a failure but never solely close an evidence route.
+
+**ABC — Agentic Benchmark Checklist (arXiv:2507.02825).** Audits of popular agentic benchmarks found flawed task/reward designs (null responses counted as success, insufficient tests) mis-estimating performance by up to 100% relative; checklist application cut CVE-Bench overestimation 33%. fabius takes: null-agent probes and test-adequacy review before any pass rate feeds M3's depth or routing decisions.
