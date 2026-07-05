@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ArielShemesh1999/fabius/evals/suite/schema.json",
+  "title": "Fabius Benchmark Suite task (FBS v1.0)",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^FAB-\\d{3}$" },
+    "tier": { "type": "integer", "enum": [1, 2, 3] },
+    "category_letter": { "type": "string", "enum": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"] },
+    "category": {
+      "type": "string",
+      "enum": ["coding", "debugging", "tool_discipline", "instruction_obedience", "scope_control", "design_product", "memory_retrieval", "agent_workflows", "security_guardrails", "error_recovery"]
+    },
+    "difficulty": { "type": "string", "enum": ["low", "medium", "high"] },
+    "prompt": { "type": "string", "minLength": 120 },
+    "expected_behavior": { "type": "string", "minLength": 40 },
+    "failure_modes": { "type": "array", "items": { "type": "string" }, "minItems": 3, "maxItems": 6 },
+    "automatic_checks": { "type": "array", "items": { "type": "string" }, "minItems": 3, "maxItems": 6 },
+    "human_review_notes": { "type": "string", "minLength": 10 },
+    "routed_skill": {
+      "type": "string",
+      "enum": ["fabius", "fabius-parcus", "fabius-disciplina", "fabius-decor", "fabius-cohors", "fabius-archivum", "fabius-mercatus", "fabius-praesidium", "fabius-ludus", "fabius-catena", "fabius-machina", "fabius-scientia", "fabius-doctrina", "fabius-fortuna"]
+    },
+    "memory_snapshot": { "type": "string", "minLength": 40 },
+    "stress_kind": {
+      "type": "string",
+      "enum": ["long_context", "instruction_conflict", "agent_loop", "tool_trap", "security_trap", "memory_overload", "prompt_injection", "false_assumption", "competing_objectives", "context_pollution", "resource_constraint", "multi_agent_failure"]
+    }
+  },
+  "required": ["id", "tier", "category_letter", "category", "difficulty", "prompt", "expected_behavior", "failure_modes", "automatic_checks", "human_review_notes", "routed_skill"],
+  "additionalProperties": false
+}
