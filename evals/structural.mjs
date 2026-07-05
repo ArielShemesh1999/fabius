@@ -113,7 +113,7 @@ const onDisk = skills.map((s) => s.name).sort();
 ok("manifest: plugin.json skill list == skills on disk",
    JSON.stringify(declared) === JSON.stringify(onDisk),
    declared.length === onDisk.length ? `${declared.length} skills, sets equal` : `declared ${declared.length} vs disk ${onDisk.length}`);
-ok("manifest: version is 1.2.0", plugin.version === "1.2.0", plugin.version);
+ok("manifest: version is 1.3.0", plugin.version === "1.3.0", plugin.version);
 
 // ---- 6. content-bound seal: file hashes + Merkle root recompute & match ----------
 const manifest = JSON.parse(readFileSync(join(ROOT, "provenance", "seal-manifest.json"), "utf8"));

@@ -103,6 +103,17 @@ def main():
     html = html.replace("<!--FIG:fabius-pixel-->", load_svg("fabius-pixel", cls="wordmark"))
     html = html.replace("<!--FIG:architecture-->", load_svg("architecture"))
 
+    # section 4.7 extension cards + section 5 coherence extension
+    by = {p["rule"]: p for p in proofs}
+    ext_cards = "\n".join(card(by[r]) for r in ["R11", "R12", "R13", "M9"])
+    html = html.replace("<!--MATH_EXT-->", ext_cards)
+    coh_ext = math_safe(open(os.path.join(PAPER, "coherence-ext.html")).read().strip())
+    html = html.replace("<!--COHERENCE_EXT-->",
+                        '<div class="rulecard"><div class="rulehead">'
+                        '<span class="ruleid">Extension</span>'
+                        '<span class="ruletitle">R11–R13 and M9 join the pipeline — the theorem over twenty-two rules</span>'
+                        '<span class="badge real">extension</span></div>%s</div>' % coh_ext)
+
     # section 4 + coherence capstone
     html = html.replace("<!--MATH_SECTION-->", build_math_section(proofs))
     html = html.replace("<!--COHERENCE-->",
@@ -112,7 +123,7 @@ def main():
                         '<span class="badge real">capstone</span></div>%s</div>' % coherence)
 
     # sanity: no markers left
-    leftover = re.findall(r"<!--(FIG:[^>]+|MATH_SECTION|COHERENCE)-->", html)
+    leftover = re.findall(r"<!--(FIG:[^>]+|MATH_SECTION|MATH_EXT|COHERENCE|COHERENCE_EXT)-->", html)
     if leftover:
         raise SystemExit("unfilled markers: " + ", ".join(leftover))
 

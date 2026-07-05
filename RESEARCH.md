@@ -148,10 +148,15 @@ Each rule → its formal statement → its source domain → whether the math *g
 | **M8b** | Recency tie-break (among pages tied on relevance): re-rank by w(page)=exp(−λ·Δt)·rel(q,page), an exponential temporal-decay kernel. A heuristic recency re-ranking, NOT a normalized Bayesian posterior (a true temporal prior would sit inside P(relevant\|·)). | stochastic processes / IR — exponential recency-decay memory kernel; Generative Agents (Park 2023) recency·importance·relevance score | **analogy** (Park's score is additive over a simulated stream; fabius drops importance/threshold/fitted-λ, keeps only the decay tie-break on a curated wiki) |
 | **M8c** | Fold grown logs into a synthesis page when the two-part code is strictly cheaper: L(p)+L(L\|p) < Σ L(l_i). MDL — prefer the representation minimizing model cost + data-given-model cost; synthesize exactly when inter-line redundancy exceeds the summary's cost. | information theory — Minimum Description Length / Kolmogorov-flavored compression (Rissanen) | **real-math** |
 
-**Legend.** **real-math** = the equation genuinely governs the routing decision (decision theory · information theory · optimization · scheduling · algebra). **analogy** = a correct theorem in transport/sampling/IR math borrowed for its *shape*; the source paper proves nothing about agents, so fabius borrows the shape, not a measured result. **direct** (R5) = qualitative discipline taken straight from ReAct with no quantitative object. Four analogy rules: R4 (flow matching), R10 (classifier-free guidance), M8b (Generative-Agents recency), and the agent-transfer half of M2 (Graph of Thoughts numbers).
+| **R11** | Tier cascade as an index policy: adaptivity collapses to a static order (verdict-path lemma); adjacent exchange gives Δ=q·p_i·p_k(ρ_i−ρ_k) with ρ_i=c_i/p_i (Mitten's index; the ordering half of Weitzman's Pandora rule at Bernoulli boxes) ⇒ ρ-sorted cascade optimal in the equal-guarantee class; per-tier gate p_iW>c_i ⇔ W>ρ_i — R3's EVOI gate verbatim, over tiers. | decision theory / sequential search — exchange argument, reservation index | **real-math** |
+| **R12** | Dual exit gate C∧D: false-stop factorization cuts the error vs either gate alone (dependence caveat stated); hard cap N + R8's no-progress stall test ⇒ almost-sure termination with bounded expected cost — optimal stopping with M4's hazard object lifted from attempt scale to cycle scale. | stochastic processes / optimal stopping | **real-math** |
+| **R13** | Studio composition theorem: single-owner assignment (R1's partition + a domain bit) ⇒ conflict-freedom (set-collapse lemma); the layer order D≺P≺E≺F is acyclic ⇒ terminating; downstream refinement confined to own concern-variables preserves the domain goal. Threshold in form (k(t)≥2 gate); structural at heart — stated as such. | order / composition theory — the system's own contract, formalized | **real-math** |
+| **M9** | Externalization as lossless paging: context cost O(i+s) vs O(B) bundled, i+s≪B; dominance gate = explicit recall threshold ρ* (miss-cost-weighted expected utility) — externalize iff index recall ρ>ρ*; one-sided sufficient, silent below ρ* (measurement decides). | information theory / systems — paging bound + EU dominance threshold | **real-math** |
+
+**Legend.** (R11–R13 · M9 rows added 2026-07 — all four **real-math**, proofs in the whitepaper §4.7.) **real-math** = the equation genuinely governs the routing decision (decision theory · information theory · optimization · scheduling · algebra). **analogy** = a correct theorem in transport/sampling/IR math borrowed for its *shape*; the source paper proves nothing about agents, so fabius borrows the shape, not a measured result. **direct** (R5) = qualitative discipline taken straight from ReAct with no quantitative object. Four analogy rules: R4 (flow matching), R10 (classifier-free guidance), M8b (Generative-Agents recency), and the agent-transfer half of M2 (Graph of Thoughts numbers).
 
 
-### Composition — the 18 rules are one pipeline
+### Composition — the 22 rules are one pipeline
 
 They don't merely coexist; they compose in a strict, **acyclic** firing order — each gate consumes the previous decision and emits a strictly narrower commitment, so the pipeline always terminates (at `parcus`-inline when zero axes load, or at a shipped-and-recorded artifact):
 
@@ -166,8 +171,10 @@ parcus  (lean floor — always on, never competes for a task verb)
   ≺ R7 · M2   search topology     (branch only if scorable · tree vs graph)
   ≺ R8 · M3 · M4   refine budget   (signal-typed loop · verify depth · retry-stop)
   ≺ M5 · M6   learning layer        (metric-gated rewrite · skill cache, queried first)
-  ≺ R9* · M7 · M8*   memory substrate (retrieve-under-budget · evict/recall · rank)
+  ≺ R9* · M7 · M8* · M9   memory substrate (retrieve-under-budget · evict/recall · rank · externalize)
 ```
+
+**The 2026-07 extension (18 → 22).** With the four §4.7-style proofs in hand (R11 · R12 · R13 · M9 — all real-math), the coherence audit was re-run over the full set. Placement: `R1 ≺ (R4 if ambiguous) ≺ R13 ≺ R2 ≺ R11 ≺ R3·M1 ≺ … ≺ R9*·M7·M8*·M9`, with R11 re-entering dispatch on a verified miss (≤ K−1 escalations per sub-task) and R12 wrapping the whole chain as the externally capped outer loop (≤ N cycles) when work is multi-cycle. **Verdict: coheres, with exceptions printed in full** in the whitepaper §5 — the honest ones include: R13 fits the threshold family in form only (structural at heart); the "visit each rule once" clause weakens to "once per pass, boundedly many passes" (R11's ≤K−1 escalations, R12's ≤N cycles); R8's verifier verdict becomes a shared read-only single point of trust for three rules; and M9's gate is one-sided sufficient. The frontier layer (R14–R16 · M10–M13, researched 2026-07) stays outside the theorem by construction.
 
 ### Coherence — consistent · complete · composable
 
