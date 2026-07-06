@@ -20,6 +20,7 @@ What we owe to the open community is the **learning**: the on-demand depth under
 | `fabius-decor` (figura / data-viz) | graphify (safishamsi) — chart/graph generation for agents | see repo |
 | `fabius-decor` (generative imagery) | skill-prompt-generator (huangserva) — slot-based image-prompt schema, mandatory-lighting, era/culture cascades, conflict pass | MIT |
 | `fabius-decor` (explanatory diagrams) | Understand-Anything (Yuxiang Lin / Infinite Universe, Egonex-AI) — deterministic-extract-then-LLM, typed-graph schema, topology-driven pedagogical tour | MIT |
+| `fabius-decor` (Israeli / Hebrew localization — *Fabius Yisrael*) | Skills-IL (skills-il / YooTech · [agentskills.co.il](https://agentskills.co.il)) — the Israeli-market Agent Skills set (Hebrew RTL, IS 5568 accessibility, Chok HaSpam, PPA / Amendment-13 privacy, Israeli formats & i18n). Studied for *what an Israel-ready product must handle*, then re-authored original; no files bundled. | **MIT** |
 | `fabius-cohors` (swarm orchestration) | claude-flow / ruflo by ruvnet — coordinator + specialized-worker swarms, anti-drift, worktree isolation ([repo](https://github.com/ruvnet/ruflo)) | see repo |
 | `fabius-cohors` (agent catalog) | wshobson/agents, VoltAgent/awesome-claude-code-subagents, open production-agent corpora (Google ADK samples and similar) | MIT (wshobson) · see repos |
 | `fabius-archivum` (memory, LLM-wiki) | Andrej Karpathy's "the wiki pattern" — incrementally-built personal knowledge bases ([gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)) | — |

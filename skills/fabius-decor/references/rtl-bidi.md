@@ -139,3 +139,5 @@ Before calling an RTL surface done (these are exactly where an LLM-generated or 
 ## Pairs with
 
 `fabius-decor` (the visual laws — direction is one of them), **Fabius Iconarium** (RTL-aware icon sets), **Fabius Materia** (script-covering open fonts), `fabius-mercatus` (RTL copy reads differently — the message is theirs; the direction is here), and `fabius-parcus` (logical-first is also the *smallest* CSS — one stylesheet, both directions).
+
+For the **Israeli market** specifically — the accessibility *law* (IS 5568 / ת"י 5568), anti-spam (Chok HaSpam), privacy (Amendment 13), and Israeli data formats (ת"ז, VAT, ₪, phone) that sit *on top* of RTL mechanics → **Fabius Yisrael** (`references/israel-localization.md`).

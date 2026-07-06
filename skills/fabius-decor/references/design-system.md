@@ -55,3 +55,4 @@ Alongside the token contract, four sourced, license-verified libraries carry the
 - **Fabius Motus** — the motion-library map over the fabius-motion/fabius-frames bundles: the native-first ladder, JS engines, and easing-token recipes → `references/motion-libraries.md`.
 - **Fabius Materia** — design raw materials: illustrations, 3D, textures/gradients/shadows/glass, self-hosted fonts, color tooling, and the HuggingFace generative-imagery pipeline → `references/design-assets.md`.
 - **Fabius Bidi** — right-to-left & bidirectional layout (Hebrew · Arabic · Persian · Urdu …): logical-first CSS, bidi isolation, icon mirroring, `Intl` numerals, per-script fonts → `references/rtl-bidi.md`.
+- **Fabius Yisrael** — the Israeli-market layer on top of Bidi: accessibility *law* (IS 5568), anti-spam (Chok HaSpam), privacy (Amendment 13), Israeli formats (ת"ז · VAT · ₪ · phone) and Hebrew i18n (one/two/other plurals, doc-bidi) → `references/israel-localization.md`.
