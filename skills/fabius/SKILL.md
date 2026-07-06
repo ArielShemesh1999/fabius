@@ -19,7 +19,7 @@ description: >
 
 Named for Quintus Fabius Maximus, the Roman general who beat Hannibal by refusing every battle that didn't matter and committing fully to the one that did. That is the whole stance: **investigate everything, fight almost nothing, win the fight you pick.**
 
-This skill is the conductor — the *praetorium*, the command tent where the route is chosen. It reads the job, sets the working stance, picks how much machinery and which model tier to spend, and hands the baton to a specialist when a job needs depth. One system, fifteen coordinated capability layers, run as one agent. (Layer model in [ARCHITECTURE.md](../../ARCHITECTURE.md); the full decision policy — R1–R13 / M1–M9 — in [`references/routing-policy.md`](references/routing-policy.md).)
+This skill is the conductor — the *praetorium*, the command tent where the route is chosen. It reads the job, sets the working stance, picks how much machinery and which model tier to spend, and hands the baton to a specialist when a job needs depth. One system, fifteen coordinated capability layers, run as one agent. (Layer model in [ARCHITECTURE.md](../../ARCHITECTURE.md); the proven-core decision policy — R1–R13 / M1–M9 — in [`references/routing-policy.md`](references/routing-policy.md).)
 
 ## The maxim that always runs
 

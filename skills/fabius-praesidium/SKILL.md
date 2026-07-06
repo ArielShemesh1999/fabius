@@ -33,9 +33,9 @@ Run the concrete checklist over the top risks. Each is a thing to *verify presen
 - **Broken access control** — authorize *every* request server-side (an authenticated user is not an authorized one); deny by default; no IDOR (object IDs checked against the caller).
 - **Broken authentication** — sessions rotate, expire, and invalidate; no credentials in URLs; rate-limit the login.
 - **SSRF / unsafe fetch** — allowlist outbound targets; never fetch a user-supplied URL raw.
-- **Secrets exposure** — none in code, logs, history, or client bundles (§4).
+- **Secrets exposure** — none in code, logs, history, or client bundles (§3).
 - **Insecure deserialization / unsafe parsing** — don't deserialize untrusted data into live objects.
-- **Vulnerable dependencies** — audited and pinned (§6).
+- **Vulnerable dependencies** — audited and pinned (§5).
 - **Security misconfiguration** — defaults changed, debug off in prod, headers set (CSP, HSTS), errors don't leak stack traces.
 - **XSS / output handling** — encode on output, context-aware; sanitize rich input.
 - **Logging & monitoring gaps** — security events are logged (without logging the secrets themselves).

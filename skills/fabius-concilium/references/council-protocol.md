@@ -8,7 +8,7 @@ The runnable reference is [`council.mjs`](council.mjs) (Node ≥18, zero depende
 ```
 OPENROUTER_API_KEY   one key, every model (the live tier — you configure it)
 COUNCIL_MODELS       comma-separated seats, e.g.
-                     anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro,x-ai/grok-4
+                     anthropic/claude-sonnet-5,openai/gpt-5.1,google/gemini-3-pro,mistralai/mistral-large
 COUNCIL_CHAIRMAN     the synthesizing model, e.g. anthropic/claude-opus-4.8
 ```
 
@@ -106,7 +106,7 @@ The chairman's output is the council's answer. Then — for anything that can be
 ```json
 {
   "question": "...",
-  "seats": ["anthropic/claude-sonnet-4.5", "openai/gpt-5.1", "..."],
+  "seats": ["anthropic/claude-sonnet-5", "openai/gpt-5.1", "..."],
   "chairman": "anthropic/claude-opus-4.8",
   "first_opinions": [{"model": "...", "answer": "..."}, ...],
   "leaderboard": [{"model": "...", "points": 7, "reasons": ["..."]}, ...],
@@ -124,7 +124,7 @@ node references/council.mjs --selftest
 
 # a real council
 export OPENROUTER_API_KEY=sk-or-...
-export COUNCIL_MODELS=anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro,x-ai/grok-4
+export COUNCIL_MODELS=anthropic/claude-sonnet-5,openai/gpt-5.1,google/gemini-3-pro,mistralai/mistral-large
 export COUNCIL_CHAIRMAN=anthropic/claude-opus-4.8
 node references/council.mjs "Should a 3-person startup use a monolith or microservices?"
 
