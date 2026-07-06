@@ -112,7 +112,7 @@ Raw data: written by the harness to `evals/results.portable.json` on each run.
 
 ## Panel D — the FBS run: BASE → FAB → FAB_MEMORY on the versioned suite
 
-The newest panel executes the evaluation contract fixed in [IDENTITY.md](IDENTITY.md): fabius is an *intelligence amplification layer*, so the question is never "is it smarter" — it is **does the exact same model achieve better outcomes with less waste?** The instrument is the **Fabius Benchmark Suite** ([`evals/suite/`](evals/suite/), FBS v1.0): 100 neutral, production-shaped tasks — 20 smoke / 50 core / 30 stress across ten categories A–J, toy problems banned by construction — each with 3–6 objective `automatic_checks` and, where memory matters, a committed prior-session `memory_snapshot`. Three modes per task: **BASE** (bare model) · **FAB** (shipped `AGENTS.md` + routed `SKILL.md`, verbatim) · **FAB_MEMORY** (FAB + the task's committed snapshot as recalled `fabius-archivum` memory). Scored /28 on the suite's seven-dimension 0–4 rubric by **two blind judges** (inter-judge gap 1.05/28 on Sonnet, 0.83/28 on Haiku), plus a strict objective grader over every task's checks. Run 2026-07-05.
+Panel D executes the evaluation contract fixed in [IDENTITY.md](IDENTITY.md): fabius is an *intelligence amplification layer*, so the question is never "is it smarter" — it is **does the exact same model achieve better outcomes with less waste?** The instrument is the **Fabius Benchmark Suite** ([`evals/suite/`](evals/suite/), FBS v1.0): 100 neutral, production-shaped tasks — 20 smoke / 50 core / 30 stress across ten categories A–J, toy problems banned by construction — each with 3–6 objective `automatic_checks` and, where memory matters, a committed prior-session `memory_snapshot`. Three modes per task: **BASE** (bare model) · **FAB** (shipped `AGENTS.md` + routed `SKILL.md`, verbatim) · **FAB_MEMORY** (FAB + the task's committed snapshot as recalled `fabius-archivum` memory). Scored /28 on the suite's seven-dimension 0–4 rubric by **two blind judges** (inter-judge gap 1.05/28 on Sonnet, 0.83/28 on Haiku), plus a strict objective grader over every task's checks. Run 2026-07-05.
 
 **Sonnet 5 — the full 100-task suite:**
 
@@ -219,16 +219,16 @@ The canonical consolidated receipt is [`evals/results.benchmark.json`](evals/res
 
 ---
 
-## Appendix — raw receipts & method history
+## Appendix — raw receipts
 
-The benchmark above is one test; the method that produced it was iterated. This table is the raw data and the iterations *behind* the one benchmark — kept for provenance, not as separate results. Raw files keep their original names.
+The benchmark above is one test. This table is the raw data *behind* it — every receipt, kept for provenance. Raw files keep their original names.
 
 | Date | What was measured | Raw file |
 |---|---|---|
-| — | In-repo three-tier eval, `AGENTS.md` read verbatim, 8 tasks × 3 arms, blind judge — the first version of the arm design that became Panel A | `evals/eval.mjs` → `evals/results.json` (written on run, gitignored) |
+| — | In-repo three-tier eval, `AGENTS.md` read verbatim, 8 tasks × 3 arms, blind judge | `evals/eval.mjs` → `evals/results.json` (written on run, gitignored) |
 | 2026-06-22 | Cross-family three-arm stance test on Grok / Mistral / GPT / Claude, blind cross-family judging — the measurement published as **Panel C** | `evals/portable_eval.py` → `evals/results.portable.json` |
-| — | Live three-build landing-page comparison (stance-only vs none vs full mechanism) — established that the multi-skill mechanism fires unprompted in live Claude Code | no JSON receipt (live builds) |
-| 2026-06-25 | Specialist-domain coverage: 13 tasks across 11 domains × 3 arms × 2 tiers, condensed contract transcriptions, blind Opus judge — the method step that led to injecting the shipped files verbatim | [`evals/results.v3.json`](evals/results.v3.json) |
+| — | Live three-build landing-page comparison (stance-only vs none vs full mechanism) | no JSON receipt (live builds) |
+| 2026-06-25 | Specialist-domain coverage: 13 tasks across 11 domains × 3 arms × 2 tiers, condensed contract transcriptions, blind Opus judge | [`evals/results.v3.json`](evals/results.v3.json) |
 | 2026-06-25 | Extension of the above to the two later verticals (`doctrina` ML-eval, `fortuna` markets), same method | `evals/harness.v3-ext.workflow.js` |
 | 2026-07-01 | All four newest Claude models × 15 tasks × 3 arms, shipped files verbatim, two blind judges — **Panel A raw** | [`evals/results.v5.json`](evals/results.v5.json) |
 | 2026-07-02 | Objective run: generated code executed vs hidden tests + deliverables vs factual checklists, 9 × 4 × 3 — **Panel B raw** | [`evals/results.v6.json`](evals/results.v6.json) |

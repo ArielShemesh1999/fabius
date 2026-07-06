@@ -111,7 +111,7 @@ def main():
     html = html.replace("<!--COHERENCE_EXT-->",
                         '<div class="rulecard"><div class="rulehead">'
                         '<span class="ruleid">Extension</span>'
-                        '<span class="ruletitle">R11–R13 and M9 join the pipeline — the theorem over twenty-two rules</span>'
+                        '<span class="ruletitle">The theorem over twenty-two rules — R11–R13 and M9 in the pipeline</span>'
                         '<span class="badge real">extension</span></div>%s</div>' % coh_ext)
 
     # section 4 + coherence capstone

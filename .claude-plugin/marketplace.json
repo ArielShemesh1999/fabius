@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "fabius — an autonomous AI agent that runs on every major model (code · prose · UI + data-viz · agents · debug · memory · marketing · defensive-security · games · on-chain + sealing · automation · science · ML/AI engineering · markets & finance · cross-model council) under a single Fabian stance: scout wide, strike narrow. Fifteen coordinated capability layers, one console.",
-    "version": "1.3.0"
+    "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "fabius",
       "source": "./",
       "description": "fabius — the autonomous AI agent that runs on every major model under one lean Fabian stance: scout wide, strike narrow. Fifteen coordinated, zero-overlap capability layers (always-on lean core + a router that dispatches by layer + machinery + model-tier + thirteen process/design/agents/memory/marketing/security/game/on-chain/automation/science/ML-engineering/markets/council specialists), one console.",
-      "version": "1.3.0",
+      "version": "1.0.0",
       "author": {
         "name": "Ariel Shemesh",
         "url": "https://github.com/ArielShemesh1999"

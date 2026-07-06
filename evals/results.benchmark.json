@@ -8,7 +8,7 @@
    "fabius (the shipped AGENTS.md + routed SKILL.md, verbatim)"
   ],
   "honest_misses": "Printed, not hidden: on the objective panel every one of the four models gains (+3.5 to +17.4); on the quality panel three of the four tiers gain — Sonnet 5 +0.43, Fable 5 +0.23, Opus 4.8 +0.20 — and the single miss is Haiku dipping -0.33 on trivial one-liners under a full verbatim contract (-4.50 on those three tasks) while gaining +0.71 on its specialist tasks — the empirical case for model-tier routing and the lean gate.",
-  "models": "Panel A/B generated on the four newest Claude models, each via per-agent model override: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (claude-haiku-4-5). The Sonnet tier was re-run on Sonnet 5 on 2026-07-02.",
+  "models": "Panel A/B generated on the four newest Claude models, each via per-agent model override: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (claude-haiku-4-5).",
   "modes_panelD": "Panel D executes the IDENTITY.md evaluation contract on the versioned Fabius Benchmark Suite (evals/suite/, FBS v1.0): BASE (bare model) / FAB (shipped AGENTS.md + routed SKILL.md verbatim) / FAB_MEMORY (FAB + the task's committed memory_snapshot as recalled fabius-archivum memory)."
  },
  "panelA_quality_newest_claude": {
