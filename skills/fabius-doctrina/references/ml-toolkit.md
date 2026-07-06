@@ -1,6 +1,6 @@
 # Fabius Doctrina — the ML/LLM engineering toolkit
 
-Loaded on demand by `fabius-doctrina`. The current **best-in-class stack** (2026) for the model lifecycle — **serve · fine-tune · evaluate · track** — license-verified, with the recently-*declined* tools flagged honestly so fabius doesn't build on a dead dependency. One law across the model half: **the HF *library* is Apache, but the *weights* carry their own license** — many checkpoints (diffusion, Llama-derived, gated) are non-commercial; check the model card, and prefer Apache-weight models (Qwen3) for a shippable product.
+Loaded on demand by `fabius-doctrina`. The current **best-in-class stack** (2026) for the model lifecycle — **serve · fine-tune · evaluate · track · cut cost** — license-verified, with the recently-*declined* tools flagged honestly so fabius doesn't build on a dead dependency. One law across the model half: **the HF *library* is Apache, but the *weights* carry their own license** — many checkpoints (diffusion, Llama-derived, gated) are non-commercial; check the model card, and prefer Apache-weight models (Qwen3) for a shippable product.
 
 ## Serve / infer
 
@@ -50,6 +50,10 @@ The HF training stack — **transformers** + **accelerate** (distributed/mixed-p
 - **Arena** (formerly LMArena / LMSYS Chatbot Arena, now **arena.ai**) — live human-preference Elo. Top-tier CIs overlap → treat the top ~10 as tied and decide on fit/TCO. *(HF's Open LLM Leaderboard was retired 2025.)* Function-calling → BFCL (see `fabius-cohors`).
 - **Model to run end-to-end permissively:** **Qwen/Qwen3-8B** (Apache-2.0) — a genuinely commercial-safe open-weights model through the serve→fine-tune→eval stack, unlike Llama's community license.
 
+## Cut input-token cost
+
+- **pxpipe** (`teamchong/pxpipe`, npm **`pxpipe-proxy`**) · **MIT** · ⭐4k+ · v0.7.1 (Jul 2026) *(TypeScript; verified 2026-07-06)* — a local proxy that **renders bulky, stable context — system prompt, tool docs, older history — as PNG images**, so those blocks are billed on the vision channel's pixel pricing instead of per-text-token. Point a client at it with `ANTHROPIC_BASE_URL=http://127.0.0.1:47821` (`npx pxpipe-proxy`); recent turns stay text, and a built-in **profitability gate** only images a block where the token math actually wins. **Honest caveats — this is a sharp *situational* optimization, not a free lunch:** the saving is **pricing-dependent** (it arbitrages a vision-vs-text token economics the provider can change) and **fidelity-bounded** (the model must read the rendered image as accurately as the text — verify on *your* prompts before trusting it in production, `fabius-disciplina`'s prove rule). Best on token-heavy, mostly-static context; **measure the events log (`~/.pxpipe/events.jsonl`), don't assume.** Aligned with `fabius-parcus`'s fewer-tokens ethos — the lean move applied at the API boundary.
+
 ## Pairs with
 
-`fabius-doctrina` (the lifecycle playbook), `fabius-cohors` (doctrina owns the *model*; cohors owns the *agent* that calls it), `fabius-archivum` (the RAG tier a model serves — Ragas evaluates it), and `fabius-praesidium` (a non-commercial or gated weight shipping in a paid product is a licensing risk to flag).
+`fabius-doctrina` (the lifecycle playbook), `fabius-cohors` (doctrina owns the *model*; cohors owns the *agent* that calls it), `fabius-archivum` (the RAG tier a model serves — Ragas evaluates it), `fabius-parcus` (token-cost reduction is the lean stance at the API boundary — pxpipe above), and `fabius-praesidium` (a non-commercial or gated weight shipping in a paid product is a licensing risk to flag).
