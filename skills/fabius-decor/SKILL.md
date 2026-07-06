@@ -7,17 +7,12 @@ description: >
   screen, an email, a slide, a brand surface, a chart, a graph, a diagram, a data visualization —
   when the user references a brand look, or asks to make something "look good", "more polished",
   "production quality", "chart this", "graph this", or "visualize this data". Also covers
-  generating images (prompt-craft for image models) and explanatory diagrams / concept maps that
-  teach a system: "generate an image", "make a poster", "diagram this", "explain this codebase
-  visually", "map the concepts". Also owns icon-system selection ("which icon library", "add
-  icons"), the motion-library map, design-material sourcing (illustrations, 3D, textures,
-  gradients, fonts, color tooling, HuggingFace design models), and right-to-left / bidirectional
-  layout for Hebrew · Arabic · Persian · Urdu ("RTL", "make it work in Hebrew/Arabic", "bidi",
-  "text direction"). The 69-brand teardown library plus the fabius-design, fabius-motion,
-  fabius-frames, fabius-uiux and uiverse bundles live in references/design/; the icon-system map
-  (references/icons.md), motion-library map (references/motion-libraries.md), design-materials
-  library (references/design-assets.md) and RTL/BiDi discipline (references/rtl-bidi.md) sit in
-  references/; entry doc references/design-system.md.
+  generating images (for image models) and explanatory diagrams that teach a system: "generate an
+  image", "diagram this", "explain this codebase visually". Also owns icon choice, motion
+  libraries, design assets (illustrations · 3D · textures · fonts · color · HuggingFace) and
+  right-to-left / bidirectional layout (RTL, Hebrew/Arabic). The
+  fabius-design/-motion/-frames/-uiux/uiverse bundles live in references/design/; entry doc
+  references/design-system.md.
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -50,21 +45,14 @@ Never inline a raw hex or px. Name a token once, reference it everywhere:
 
 Design and verify the **mobile** layout first — it's the hardest constraint. Desktop tends to fall out right once mobile is right; the reverse fails. Breakpoints that actually matter: ~640 (phone), ~834 (tablet), ~1068 (small desktop), ~1440 (content lock). Touch targets ≥ 44×44px.
 
-## Icons — one family, one stroke
+## Icons · motion · materials · direction
 
-An icon is a token, not a decoration: it inherits `currentColor` (so it rides `ink`/`muted`, and only the *active* one takes `primary`), sizes on a token, and is **static by default**. The one law above all: **one family, one stroke width, per surface** — mixing a 2px line set with a 1.5px one, or a line set with a filled one, is the classic amateur tell. Default to Lucide; the full selection map (line/solid/duotone systems, animated icons, brand marks, emoji, flags — each with license and token integration) → `references/icons.md` (the **Fabius Iconarium**).
+License-verified libraries for what a brand target doesn't — page in the one you need:
 
-## Motion — climb the native ladder, no higher
-
-Restraint (law 6) decides *how much*; this decides *with what*. Reach for the **lowest** mechanism that reaches the compositor: CSS `transition` + `@starting-style` for enter/exit, the View Transitions API for state morphs, scroll-driven CSS for scroll effects, WAAPI for programmatic control — and a JS engine (Motion, Anime.js, GSAP) only when native can't. Springs bake into a native `linear()` token; `prefers-reduced-motion` is default-on, and no library respects it for you. The decision map, engine table, and easing-token recipes → `references/motion-libraries.md` (the **Fabius Motus** map, over the fabius-motion/fabius-frames bundles).
-
-## Design materials — illustration, 3D, texture, type, color, generated imagery
-
-The raw materials bend to the same laws: recolor to the ONE accent token, one style per surface, the asset serves the message (never fills space), static or entrance-only, and license honesty (`CC0`/`MIT` ship freely, `CC BY` needs attribution, `non-commercial` is preview-only). The sourced, license-verified library — illustrations, 3D, textures/patterns/gradients/shadows/glass, self-hosted fonts, color tooling, and the HuggingFace generative-imagery pipeline (generate → layout-lock → cut out → relight → upscale → vectorize → score) → `references/design-assets.md` (the **Fabius Materia** library).
-
-## Right-to-left & bidirectional — Hebrew · Arabic · Persian · Urdu
-
-If the content is in a right-to-left language, direction is a design law, not an afterthought. **Author logical, not physical** (`margin-inline-start`, `text-align:start`, `inset-inline`), set `dir` on the root once, and **isolate every LTR run** (numbers, phones, English, code) with `<bdi>` — the "mixed English in Hebrew scrambles" bug is the #1 failure. Flip directional icons (chevrons/arrows/send), never clocks/checks/logos; load a font that actually renders the script. The full discipline — the logical-property swap table, the bidi/isolation model, icon mirroring, `Intl` numerals, per-script open fonts, framework realities, and the ship checklist → `references/rtl-bidi.md` (the **Fabius Bidi** discipline).
+- **Icons** — one family, one stroke, `currentColor`→token, static by default; systems, animated icons, brand marks, emoji, flags → `references/icons.md`.
+- **Motion** — climb the native ladder (`@starting-style` · View Transitions · scroll-driven · WAAPI) before a JS engine; reduced-motion default-on → `references/motion-libraries.md`.
+- **Materials** — illustration, 3D, texture, gradient, fonts, color tooling, HuggingFace pipeline; recolor to accent, license-honest → `references/design-assets.md`.
+- **Right-to-left / bidirectional** (Hebrew · Arabic · Persian · Urdu) — author *logical* not physical, `dir` on root, isolate every LTR run (`<bdi>`), mirror directional icons only → `references/rtl-bidi.md`.
 
 ## Visualize data — charts, graphs, diagrams
 
@@ -118,8 +106,6 @@ Before calling UI done:
 - [ ] Mobile layout designed first and actually checked at ~375px.
 - [ ] Focus-visible states present; body-text contrast ≥ 4.5:1.
 - [ ] Motion calm, one language, transform/opacity only.
-- [ ] Icons from one family at one stroke width; each is `currentColor` + `aria`-correct.
-- [ ] If the language is right-to-left, the RTL/BiDi discipline (`references/rtl-bidi.md`) is applied — logical properties, `dir` on the root, LTR runs isolated.
 - [ ] Verified **live** in a browser, not just read in the code (`fabius-disciplina`'s prove rule).
 
 When a design is declared final, accessibility work is **ARIA-attribute-only** — don't swap tags (div→table, h4→fieldset), which pulls in UA default styles and breaks the design even with no CSS change.
