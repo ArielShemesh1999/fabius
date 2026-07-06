@@ -85,5 +85,6 @@ Pick the **smallest shippable game that proves the loop** — a jam-sized cut. O
 
 - Core-loop template, the juice checklist, the FSM skeleton, the pixel-art constants, and jam-scoping rules → `references/game-playbook.md`.
 - Engine recipes, feel patterns, and the pixel-art kit → `references/engine-recipes.md`, bundled and indexed by [CORPUS.md](../../CORPUS.md); page in the one slice the task needs (R9 · M9).
+- The verified engine + asset stack — engines (Godot/Phaser/KAPLAY/Bevy), pixel/level/audio tools, CC0 asset sources (Kenney/Quaternius), and game-relevant HF models (with the OpenRAIL / FLUX-dev-base license traps flagged) → `references/game-toolkit.md`.
 
 Boundary: lean code is `fabius-parcus`; plan + prove is `fabius-disciplina`; UI/animation laws are `fabius-decor`; enemy/NPC agents are `fabius-cohors`. This layer owns the loop, the feel, and the balance. The user's design and brand always win; `stop fabius` drops the stance (kill-switch owned by `fabius`).

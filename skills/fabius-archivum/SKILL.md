@@ -58,7 +58,7 @@ Then the pattern is **hybrid**: narrow symbolically by id or metadata first (pro
 ingest (write) → index (catalog/embed) → query (read, cite, file back) → lint (maintain) → ↺
 ```
 
-The agent does all the bookkeeping — summarize, cross-reference, file, consistency-check. The human only curates sources and asks questions. Concrete directory schema, page frontmatter, and the index/log line formats live in `references/memory-schema.md`. When the corpus outgrows grep, the working engine — vector store, the wiki-pattern layout, and a runnable RAG indexer/query pipeline — is in `references/knowledge/`.
+The agent does all the bookkeeping — summarize, cross-reference, file, consistency-check. The human only curates sources and asks questions. Concrete directory schema, page frontmatter, and the index/log line formats live in `references/memory-schema.md`. When the corpus outgrows grep, the working engine — vector store, the wiki-pattern layout, and a runnable RAG indexer/query pipeline — is in `references/knowledge/`. The best-in-class retrieval stack — vector stores, RAG frameworks, and HF embedding/reranker models (Hebrew/multilingual, license-honest) → `references/retrieval-stack.md`.
 
 ## Cross-session memory — autonomous, per project
 

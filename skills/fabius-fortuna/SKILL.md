@@ -73,6 +73,7 @@ A financial fact has a source; produce it (the `fabius-scientia` lookup discipli
 ## References
 
 - The fundamental / technical / quantitative analysis frameworks, the valuation models (DCF · multiples), the backtest-honesty checklist (the bias catalog + the cost model), the data-source map (prices · fundamentals · macro), portfolio construction, and the risk + position-sizing contract → `references/markets-and-quant-playbook.md`.
+- The verified tool + HuggingFace-model stack — data sources, backtesting engines, TA/quant/stats libraries, and time-series/finance foundation models (with the pandas-ta supply-chain flag and non-commercial licenses noted) → `references/markets-toolkit.md`.
 
 **Live tier (optional).** The frameworks, the risk rules, and the backtest discipline are pure knowledge. *Pulling live data* needs the user's own feeds — a market-data API (prices/fundamentals), a macro source (FRED-class), and any broker/exchange API for execution. fabius bundles none — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*). Never put a broker key or account credential in code (`fabius-praesidium`, `fabius-parcus`).
 

@@ -61,6 +61,7 @@ Two standing rules from the research: **boring cryptography only** (collision-re
 - On-chain development — the account-validation checklist (Anchor + Pinocchio + Solidity), money-safe transaction flow, the EVM-vs-Solana fork, the testing pyramid, and the toolchain/error corpus → `references/onchain-playbook.md`.
 - The sealing primitive — hash → sign → anchor → verify, the verification-bundle schema, confidential sealing, and crypto-agile renewal → `references/sealing.md`.
 - On-chain security — the pre-deploy audit gate (Slither static analysis, Echidna / Foundry invariant fuzzing, the static+fuzz-before-deploy rule) and giving an AI agent a money-safe wallet (AgentKit / Solana Agent Kit, guardrails intact) → `references/onchain-security.md`.
+- The verified tool + sealing stack — EVM (Foundry, OpenZeppelin, viem), Solana (Anchor, Kit, LiteSVM), defensive analyzers (Slither/Wake/Echidna/Halmos/Medusa, copyleft flagged), and the sealing primitives (noble-curves, OpenTimestamps, Cosign, in-toto) → `references/onchain-toolkit.md`.
 
 **Live tier (optional).** Writing and reviewing contracts, and sealing's hash → sign → **verify**, run fully local; *running against a chain* needs an RPC endpoint (EVM: Infura / Alchemy / a public RPC; Solana: a cluster + an optional Solana MCP), and the seal's Bitcoin anchor uses OpenTimestamps. fabius bundles none of these — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
 
