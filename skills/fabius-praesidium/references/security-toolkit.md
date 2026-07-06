@@ -67,6 +67,16 @@ The newest surface — model, prompt, and agent, not just code.
 
 ---
 
+## Israeli market — the legal surface a security review must cover
+
+When the product serves the **Israeli market**, three *live, enforceable* obligations sit inside the threat model — a review that skips them is incomplete. The full layer (governing statutes, thresholds, data formats — all config-driven, verify current) is **Fabius Yisrael** (`fabius-decor` → `references/israel-localization.md`); pull only the obligation that bears on the surface you're reviewing:
+
+- **Privacy — חוק הגנת הפרטיות + Amendment 13 (תיקון 13, in force 14 Aug 2025).** GDPR-adjacent and enforceable now: breach-notification duties, a DPO where triggered, administrative fines with a per-data-subject component. Fold it into the data-handling threat-model exactly as you would GDPR/CCPA.
+- **Accessibility is statutory — IS 5568 (ת"י 5568 = WCAG 2.0 AA legal floor).** A missing/non-compliant הצהרת נגישות is grounds for immediate suit with no cure period — treat the accessibility statement + רכז נגישות as a compliance control, not a nicety.
+- **Anti-spam — Chok HaSpam (§30א).** Commercial messaging is opt-in by law; each message labeled **"פרסומת"**, sender identified, free **הסרה** on the same channel. The *message* is `fabius-mercatus`'s; the *legal frame* is Yisrael's.
+
+Defensive framing only — this hardens an Israeli product against its own compliance risk. Reach for it **only when the target is Israeli**.
+
 ## The one gate — authorized offensive testing (red-team / adversary emulation)
 
 > **⚠ Authorization first, always.** These tools attack. Run them **only** against systems you **own** or are **explicitly contracted and scoped** to test (a signed engagement / bug-bounty program). Fabius will not point them at systems the user does not own — that is not defense, it is intrusion, and it is out of scope (see the skill's boundary). Included here because a defender must know what the offense wields, and because authorized red-team of *your own* stack is legitimate security work.
@@ -83,4 +93,4 @@ The newest surface — model, prompt, and agent, not just code.
 ## Notes
 
 - Metrics **verified 2026-07-03** via the GitHub API; treat as point-in-time. Adoption ≠ fit — choose by threat model and license (LGPL/AGPL/`NOASSERTION` licenses carry obligations; read before shipping).
-- Cross-links: audit **method** → [security-playbook.md](security-playbook.md) · deep **how-to** → [hardening-guides.md](hardening-guides.md) · third-party **AI artifacts** → [supply-chain-and-ai-artifacts.md](supply-chain-and-ai-artifacts.md) · smart-contract / on-chain audit gate (Slither / Echidna / Foundry) is `fabius-catena`'s, not here.
+- Cross-links: audit **method** → [security-playbook.md](security-playbook.md) · deep **how-to** → [hardening-guides.md](hardening-guides.md) · third-party **AI artifacts** → [supply-chain-and-ai-artifacts.md](supply-chain-and-ai-artifacts.md) · **Israeli-market** legal obligations (privacy Amendment 13 · IS-5568 · Chok HaSpam) → **Fabius Yisrael** in `fabius-decor` · smart-contract / on-chain audit gate (Slither / Echidna / Foundry) is `fabius-catena`'s, not here.
