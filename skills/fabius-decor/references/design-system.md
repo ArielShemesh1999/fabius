@@ -46,3 +46,12 @@ System/proprietary fonts won't load off-platform. Name the closest open-source m
 ## The full set
 
 For deeper per-brand detail (color, type, spacing, components, do/don'ts, responsive), reference a full brand teardown, pick the closest as a target, lift its discipline, and re-map to the project's identity.
+
+## The material & direction references (page in on demand)
+
+Alongside the token contract, four sourced, license-verified libraries carry the parts a brand target doesn't:
+
+- **Fabius Iconarium** — the icon-system map (line/solid/duotone systems, animated icons, brand marks, emoji, flags), one-family/one-stroke law, token + a11y integration → `references/icons.md`.
+- **Fabius Motus** — the motion-library map over the fabius-motion/fabius-frames bundles: the native-first ladder, JS engines, and easing-token recipes → `references/motion-libraries.md`.
+- **Fabius Materia** — design raw materials: illustrations, 3D, textures/gradients/shadows/glass, self-hosted fonts, color tooling, and the HuggingFace generative-imagery pipeline → `references/design-assets.md`.
+- **Fabius Bidi** — right-to-left & bidirectional layout (Hebrew · Arabic · Persian · Urdu …): logical-first CSS, bidi isolation, icon mirroring, `Intl` numerals, per-script fonts → `references/rtl-bidi.md`.

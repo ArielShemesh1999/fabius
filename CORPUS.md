@@ -10,7 +10,7 @@ One fabius-branded index over **every** capability library in the fifteen-skill 
 | Library | Owner skill | Holds | Index (read first) | Status |
 |---|---|---|---|---|
 | **fabius-agents** | `fabius-cohors` | 200+ production agent shapes across 15 domains + language packs | `references/agent-catalog.md` | shipping |
-| **fabius-design** | `fabius-decor` | 69-brand design teardowns + animation / UI bundles | `references/design-system.md` | shipping |
+| **fabius-design** | `fabius-decor` | 69-brand design teardowns + animation / UI bundles · the icon-system map (**Iconarium**), motion-library map (**Motus**), design-materials library (**Materia** — illustration/3D/texture/font/color/HuggingFace) + RTL/BiDi discipline (**Bidi**) | `references/design-system.md` | shipping |
 | **fabius-knowledge** | `fabius-archivum` | vector engine · the LLM-wiki pattern · the RAG pipeline | `references/memory-schema.md` | shipping |
 | **fabius-figura** | `fabius-decor` | chart recipes · the SVG component kit · brand-matched palettes | `references/visualization.md` | entry + `assets/charts/` |
 | **fabius-disciplina** | `fabius-disciplina` | the craft + discipline process library — brainstorming · TDD · systematic debugging · writing-plans · verification | `references/process-playbook.md` · `references/process/` | shipping (bundled) |
