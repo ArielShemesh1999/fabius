@@ -175,7 +175,7 @@ Each fabius rule counters a *documented* default tendency of current code models
 | Concise models that skip guardrails (validation, a11y, error handling) | The never-trim list — non-negotiable |
 | Builds *too little* when lean-naive is wrong (in-memory limiter, `split(',')`) | "Strike narrow" = the *correct* lean rung, not the smallest |
 
-A good result is **shorter answers that score higher** — brevity *and* the guardrails, not one at the cost of the other. Panel C's under-build column is the behavioral proof, and Panel B is the objective one: a system that only shortens physically cannot also *raise* the parameterized-SQL pass rate from 72.5% to 95% while cutting output.
+A good result is **shorter answers that score higher** — brevity *and* the guardrails, not one at the cost of the other. Panel C's under-build column is the behavioral proof, and Panel B is the objective one: a system that only shortens physically cannot also *raise* the parameterized-SQL pass rate from 67.5% to 100% while cutting output.
 
 ---
 
