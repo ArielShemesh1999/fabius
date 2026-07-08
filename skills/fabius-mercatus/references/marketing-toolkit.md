@@ -26,6 +26,7 @@ Loaded on demand by `fabius-mercatus`. Marketing tooling is *noisy* — this is 
 
 - **textstat** (MIT) — readability metrics (Flesch/SMOG) to enforce a reading-grade target (high-converting web copy ~grade 6–8). A clarity proxy, not persuasion. *(English-centric.)*
 - **KeyBERT** (MIT) + **ml6team/keyphrase-extraction-kbir-inspec** (MIT) — unsupervised + supervised keyword extraction for SEO briefs/titles/meta (no SERP volume data).
+- **humanizer** (`blader/humanizer`, **MIT**) — a **prompt-only** skill (~33 AI-writing tells drawn from Wikipedia's "Signs of AI writing") that audits and strips AI-isms from copy in a two-pass pass, and — fed a writing sample — **rewrites to match your voice** instead of generic "clean" prose. Run it as a **de-tell lint** over any landing/ad/email/post before ship. **Honest limits:** it's a heuristic instruction set, **not a detector-evasion guarantee** — "humanized" text can still trip GPTZero/Originality, so never pitch it as *beating detectors*; the real cure for AI-slop is a genuine voice, and this only nudges toward it (output quality tracks the host model). Overlaps `fabius-parcus`'s strip-the-bloat trim and `fabius-disciplina`'s writing craft.
 
 ## HF models — sentiment & summarization
 

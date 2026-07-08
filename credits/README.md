@@ -36,6 +36,19 @@ What we owe to the open community is the **learning**: the on-demand depth under
 | `fabius-machina` (automation) | n8n-skills (Romuald Członkowski, aiadvisors.pl) — the n8n-mcp tool-per-intent decision tree, silent-failure gotchas, validate-AND-verify-before-activate discipline | MIT · hooks layer **Apache-2.0** |
 | `fabius-scientia` (science · bio) | scientific-agent-skills (K-Dense Inc.) — per-domain single-concern skills, pipeline-as-router, the unified database-lookup contract + cross-ID maps, the hypothesis-generation loop, reproducibility gotchas | MIT (per-skill varies) |
 | `fabius-concilium` (cross-model council) | Andrej Karpathy's **llm-council** — the council pattern: dispatch one question to N models, anonymized cross-review/ranking, a chairman model that synthesizes the field ([repo](https://github.com/karpathy/llm-council)) | see repo |
+| `fabius-archivum` (meeting capture → memory) | Meetily (Zackriya-Solutions) — local mic+system-audio → whisper.cpp/Parakeet transcription → pluggable-LLM summary, studied as a capture→compress→retrieve source | **MIT** |
+| `fabius-archivum` (publish the KB) | docsify (docsifyjs) — no-build, client-side markdown→site with full-text search, as the lean vault viewer | **MIT** |
+| `fabius-cohors` (visual agent authoring) | Flowise (FlowiseAI) — drag-and-drop node canvas for LLM flows/agents; flow-as-REST-endpoint | **Apache-2.0** (core) · ⚠️ enterprise partition **Commercial** |
+| `fabius-cohors` (deep-research harness) | DeerFlow (bytedance/deer-flow) — lead-agent → parallel isolated sub-agents → synthesis; the coordinator→planner→researcher→reporter shape | **MIT** |
+| `fabius-cohors` (agent voice I/O) | Voicebox (jamiepine) — local multi-engine TTS + a FastMCP voice-output server giving an agent a spoken voice | **MIT** (app code; wrapped model weights keep their own terms) |
+| `fabius-decor` (agentic video production) | OpenMontage (calesthio) — plain-language brief → research→script→asset→compose across 12 pipelines; free-local vs paid-cloud provider ladder | ⚠️ **AGPL-3.0** |
+| `fabius-doctrina` (local inference) | llama.cpp (ggml-org) — GGUF on-device inference + OpenAI-compatible `llama-server` (embeddings, multimodal, GBNF grammar) | **MIT** |
+| `fabius-doctrina` (operator dashboard) | Open WebUI (open-webui) — self-hosted chat/RAG/RBAC front-end over a served endpoint | ⚠️ **Open WebUI License** (BSD-3 + branding-protection clause) |
+| `fabius-mercatus` (de-AI-tell copy) | humanizer (blader / Siqi Chen) — a prompt-only skill that strips AI-writing tells + voice-matches, from Wikipedia's "Signs of AI writing" | **MIT** |
+
+### Copyleft & fair-code note (integrated toolkits)
+
+Three of the tools just added are **not plainly permissive**, and fabius flags them where they appear: **OpenMontage** is **AGPL-3.0** (network copyleft), **Open WebUI** carries a **branding-protection clause** (no white-labeling above 50 users without an enterprise license), and **Flowise** is **open-core** (Apache-2.0 community core + a proprietary Commercial enterprise partition). As with every other row here, fabius **re-expresses the pattern in its own words and bundles no upstream files** — so none of these terms are triggered by the fabius install today. If any such file is ever vendored into the corpus, its `LICENSE` travels with it and the constraint is honored in full: the AGPL's source-offer obligation, Open WebUI's branding lock, and Flowise's enterprise boundary each stand. `fabius-praesidium` owns treating a copyleft/branding/gated dependency in a shipped product as a licensing risk to surface.
 
 ### Apache-2.0 note (security corpus)
 

@@ -15,6 +15,19 @@ Loaded on demand by `fabius-cohors`. The skill owns the *definition schema* and 
 | **Google ADK** | Apache-2.0 | **Hierarchical** (manager delegates to sub-agents) with first-class **eval** + A2A delegation. |
 | **Mastra** | Apache-2.0 (core) | The **TypeScript-native** option — agents+tools+memory+workflows in Node/edge (Vercel/Workers). *`ee/` is a proprietary Enterprise license.* |
 | **smolagents** (HF) | Apache-2.0 | The **lean single-agent** shape — "code agents" write actions as executable Python (fewer steps than JSON calls). *Code-as-action = arbitrary execution → MUST sandbox (E2B/Modal/Docker).* |
+| **Flowise** | ⚠️ Apache-2.0 **open-core** | The **visual / low-code** authoring surface — a drag-and-drop node canvas wires LLMs, tools, RAG, and control flow into a flow, then exposes it as a **REST endpoint + exportable JSON + embeddable widget**. Prototype the *shape* of the five patterns visually, then hand-code the production agent in the cohors schema. *Community core is genuinely Apache-2.0; the enterprise partition (SSO/RBAC/workspaces, `packages/server/src/enterprise`) is a proprietary Commercial License — don't activate or redistribute it. Heavyweight self-hosted service (Node+React+DB), not an embeddable library.* |
+
+## The deep-research harness — a worked multi-agent shape
+
+When the job is long-horizon research (decompose → gather in parallel → synthesize), don't invent the orchestration cold — there's a canonical worked shape to route against.
+
+- **DeerFlow** (`bytedance/deer-flow`) · **MIT** · ~76k★ · v2.0.0 rewrite (Feb 2026) — ByteDance's **lead-agent → parallel isolated sub-agents → synthesis** runtime on LangGraph+LangChain, batteries-included: a filesystem abstraction, cross-session memory, a progressively-loaded skill system, sandboxed execution (local/Docker/K8s), MCP tools, and context compaction. The reason to keep it: its v1 **coordinator → planner → researcher → reporter** pipeline is the **reference shape** for cohors's *hierarchical + parallel* patterns, and v2's isolated-sub-agent model mirrors the swarm contract (scoped tools + termination per worker). **Adopt as a pattern reference, not a dependency** — it's a full runtime (a large LangChain tree + a Next web UI + IM gateways), the opposite of a lean fabius install. **Version trap:** v1 was a narrow deep-research pipeline; v2.0.0 rebranded to a general "SuperAgent" harness — most online tutorials describe the *old* architecture, so pin a version before citing.
+
+## Giving an agent a voice (I/O)
+
+An agent's *voice* is a **modality, not a model**: cohors owns the wiring, `fabius-doctrina` owns the speech model behind it.
+
+- **Voicebox** (`jamiepine/voicebox`) · **MIT** *(app code)* · ~38k★ · v0.5.0 (pre-1.0) — a local-first voice studio (7 TTS engines — Qwen3-TTS, Chatterbox, Kokoro… — plus Whisper dictation and zero-shot cloning) that exposes a **local FastMCP-over-HTTP server**, so any MCP-aware agent (Claude Code, Cursor) gets a chosen **spoken voice** with **no audio leaving the machine**. The clean way to add speech-out to an orchestrated agent — the agent calls a local MCP tool, doctrina's model speaks. **Three caveats fabius prints:** (1) the MIT license covers **Voicebox's code only** — the 7 wrapped model **weights** each carry their own license (several restrict commercial use); verify per-model before shipping. (2) It clones a voice from **seconds of audio with no consent lock** — a biometric-impersonation / deepfake vector: gate it behind consent + provenance (`fabius-praesidium`), and consider sealing/watermarking generated audio (`fabius-catena`). (3) Heavy local install (GPU / Apple-Silicon), young. The **TTS/STT model tier** lives in `fabius-doctrina`.
 
 ## Evaluating the tool-caller
 
@@ -35,4 +48,4 @@ Loaded on demand by `fabius-cohors`. The skill owns the *definition schema* and 
 
 ## Pairs with
 
-`fabius-cohors` (the schema + the five patterns), `fabius-doctrina` (serve/fine-tune/eval the model an agent calls — doctrina owns the model, cohors owns the agent), `fabius-machina` (deterministic wiring vs generative orchestration — the line), and `fabius-praesidium` (least-privilege tool permissions; sandbox code-as-action agents).
+`fabius-cohors` (the schema + the five patterns), `fabius-doctrina` (serve/fine-tune/eval the model an agent calls — doctrina owns the model, cohors owns the agent; also the TTS/STT tier behind an agent's voice), `fabius-machina` (deterministic wiring vs generative orchestration — the line; a visual Flowise flow vs a code n8n flow), `fabius-praesidium` (least-privilege tool permissions; sandbox code-as-action agents; the voice-clone consent gate), and `fabius-catena` (seal/watermark an agent's generated audio for provenance).

@@ -68,6 +68,13 @@ The goal is 2–3 named `--ease-*` tokens, not sprinkled beziers. For the fabius
 }
 ```
 
+## Video — the production lane (beyond web motion)
+
+Motion that ships as a **video file** (an explainer, a promo, a social cut) is a different lane from the browser motion above — two open paths, picked by *who's driving*:
+
+- **Code-composition** *(deterministic, re-renderable)* — React/Remotion-class compositions (the **fabius-frames** bundle in `references/design/`) + FFmpeg, driven by tokens and props. Reach for it when the video is data-driven, must re-render on a content change, or is part of a build. *(Fabius's own HyperFrames render work lives in this lane — inline images as data-URIs, drop @font-face Google fonts, `--no-browser-gpu` to avoid black frames.)*
+- **OpenMontage** (`calesthio/OpenMontage`) · ⚠️ **AGPL-3.0** · ~35k★ *(agentic, brief-driven)* — describe a video in plain language and the agent runs **research → script → asset-gen → edit → compose** across **12 pipelines** (explainer, talking-head, screen-demo, trailer, documentary, podcast, localization) and 50+ tools, on a **free-local ladder** (Piper TTS · FFmpeg · Remotion · HyperFrames · open Archive.org/NASA/Wikimedia stock) that upgrades to paid cloud gen (Kling/Runway/Veo/ElevenLabs/Suno) via *your own* keys, gated by a "Backlot" cost/approval UI. The reusable fabius guidance is its **pipeline taxonomy + the free→paid provider ladder + the quality gate** — a ready map for a marketing-video deliverable (`fabius-mercatus`). **The load-bearing caveat is the license: AGPL-3.0 is *network* copyleft** — safe to run as a local tool or study for patterns, but folding its code into a *hosted* fabius surface obliges you to offer the whole combined work's source to every network user. Best fidelity needs paid third-party APIs (your cost); pulled stock carries its own per-asset licensing (yours to clear).
+
 ## Reduced-motion — the non-negotiable
 
 `prefers-reduced-motion` (Media Queries L5, Baseline everywhere) is the single source of truth, backing WCAG **2.3.3** (Animation from Interactions) and **2.2.2** (Pause/Stop/Hide). The discipline:
@@ -78,4 +85,4 @@ The goal is 2–3 named `--ease-*` tokens, not sprinkled beziers. For the fabius
 
 ## Pairs with
 
-**fabius-motion** (the deep GSAP library — timelines, ScrollTrigger, Flip, MotionPath), **fabius-frames** (per-technique recipes: `animejs`, `css-animations`, `waapi`, `lottie`, `three`, `typegpu`, `tailwind`), **Fabius Iconarium** (the motion engines behind animated/Rive/Lottie icons), **Fabius Bidi** (flip `translateX`/transforms under `[dir=rtl]` — motion has a direction too), `fabius-decor` (law 6: restraint in motion), and `fabius-parcus` (native-first is also the *least code* — climb the ladder no higher than you must).
+**fabius-motion** (the deep GSAP library — timelines, ScrollTrigger, Flip, MotionPath), **fabius-frames** (per-technique recipes: `animejs`, `css-animations`, `waapi`, `lottie`, `three`, `typegpu`, `tailwind`), **Fabius Iconarium** (the motion engines behind animated/Rive/Lottie icons), **Fabius Bidi** (flip `translateX`/transforms under `[dir=rtl]` — motion has a direction too), `fabius-decor` (law 6: restraint in motion), `fabius-mercatus` (a produced video is usually a marketing deliverable — the message is its job), and `fabius-parcus` (native-first is also the *least code* — climb the ladder no higher than you must).
