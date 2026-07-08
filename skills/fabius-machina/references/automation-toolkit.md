@@ -4,9 +4,11 @@ Loaded on demand by `fabius-machina`. Best-in-class (2026) platforms for determi
 
 ## Visual / no-code platforms
 
+> **Seam before you pick a canvas — the artifact decides.** A visual/no-code canvas whose **deliverable is a deterministic workflow** (fixed steps wiring SaaS/APIs, even if one step calls an LLM) is machina's — below. A visual/no-code canvas whose **deliverable is *the agent itself*** (a generative LLM agent) is **`fabius-cohors` → Flowise** (`references/agent-frameworks.md`), not here. n8n's "AI-agent nodes" embed a generative step *inside* a deterministic flow; they don't make n8n the place to *build an agent*. If the user says "build an agent" → cohors, every time.
+
 | Platform | License | Note |
 |---|---|---|
-| **n8n** | ⚠️ **fair-code** (Sustainable Use) | The reference visual canvas — 1500+ integrations, AI-agent nodes, workflows as **plain JSON** (sealable/diffable/dry-runnable). *Self-host free, but can't resell as a hosted service.* |
+| **n8n** | ⚠️ **fair-code** (Sustainable Use) | The reference visual canvas — 1500+ integrations, AI-agent nodes, workflows as **plain JSON** (sealable/diffable/dry-runnable). *Self-host free, but can't resell as a hosted service.* **The deliverable is a deterministic workflow; if it's the agent itself → `fabius-cohors`/Flowise.** |
 | **Node-RED** | Apache-2.0 | The truly-open (Apache) counterpart — flows as JSON, run locally; strongest in IoT/edge/protocol glue. When license purity matters. |
 | **Activepieces** | MIT (core) | MIT self-hostable Zapier-alt where ~280+ "pieces" are also **MCP servers** — design the flow *and* drive the connectors. *(Enterprise pieces separately licensed.)* |
 | **Make** · **Zapier** | proprietary SaaS | Breadth (3k / 9k+ connectors) + hosted MCP endpoints, but **nothing sealable/ownable** — flag the lock-in vs n8n. Zapier MCP keeps credentials with Zapier, not the model. |
