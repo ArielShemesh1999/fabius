@@ -85,6 +85,8 @@ The OWASP pass is the audit; STRIDE is what scoped the audit. Run STRIDE to find
 [ ] rotation path exists — a leaked secret can be revoked + reissued without a redeploy of trust
 ```
 
+**The last hard boundary lives *below* the model — never in a prompt.** Once an agent can touch tools, a rule that says "don't exfiltrate" is *vibes-based egress control*: the model is not a control plane, and one bad outbound call undoes a hundred clever tool rules. Put the real boundary where the model can't argue past it — an outbound **allowlist** (hosts/schemes), network/DNS egress filtering, a filesystem sandbox, a scoped token that only reaches what the job calls. A denylist of "bad" commands is not that boundary: the shell is unbounded, so gate by **allowlist, deny-by-default**. Every capability handed to an agent — repo write, a shell, an external send — is a privilege grant priced at its **worst case, not its average** (`fabius-cohors` owns the same least-privilege rule at the agent-tool layer).
+
 Concrete grep starting points (defensive scan of your *own* repo):
 ```bash
 git log -p | grep -nEi '(api[_-]?key|secret|token|password|bearer|AKIA[0-9A-Z]{16})'

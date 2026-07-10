@@ -93,7 +93,10 @@ The caller doesn't read the agent's reasoning — it consumes the return value. 
 - A classifier returns one of a fixed enum, nothing else.
 - A structured extractor returns JSON matching a named schema (and the harness validates it, so the agent retries on a mismatch instead of returning malformed data).
 
-A vague contract ("summarize your findings") forces the caller to parse free text — that's where multi-agent pipelines break.
+A vague contract ("summarize your findings") forces the caller to parse free text — that's where multi-agent pipelines break. Two failure modes hide in the handoff, and both are contract bugs:
+
+- **The consensus illusion.** Two agents "agree" in natural language ("you take the data, I'll wait for the results") and mean different things — the handshake succeeds, the work fails. The fix is the contract: a handoff is **concrete state — a schema, an id, a file path, a typed value — never a natural-language agreement.** If it can be misread, it isn't a contract.
+- **Reject at the worker boundary.** A fan-out turns negative the moment one worker emits an invalid value (a `NaN`, a null, a malformed row) and the reducer keeps it — retries multiply the poison while the traces show a busy fleet producing arithmetic graffiti. Validate each worker's output **at the boundary it leaves**, before it enters the merge (the coordinator *verifies before integrating*, above) — and a schema'd contract makes the reject automatic, since the harness retries on a mismatch instead of passing malformed data downstream.
 
 ## When NOT to add an agent
 

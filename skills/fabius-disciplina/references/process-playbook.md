@@ -24,6 +24,12 @@ Note what a symptom-patch would have been: "clear the cache on logout." It would
 - **One mega-test.** A test that exercises ten things tells you "something broke," not what. One behavior per test.
 - **Test written after, to pass.** A test you wrote to match the code you already wrote confirms the code does what it does — not what it should. That's why red-comes-first: the failing run proves the test can fail.
 
+## Proving: the result, not the return code
+
+"Prove before done" has a specific trap for a tool-using agent: **the tool succeeds and the state is still wrong.** The API returns `201`, the shell exits `0`, the write "worked" — and the actual result is empty, malformed, or the wrong record. A terminal success is not a task success. So the proof asserts the **result state**, not the call's return code: read back what you wrote, confirm the row exists with the value you meant, look at the rendered page — never infer completion from the mere absence of an error.
+
+And distrust your own confidence when the request is urgent. Prompts that carry urgency markers — "asap", "urgent", "broken", "already should be done" — pull an agent toward acting before it verifies. Urgency is the moment to **keep** the verify step, not skip it; that is exactly when a silent wrong-state ships unnoticed.
+
 ## Reviewing a brainstorm before you build
 
 - Is the **problem** stated, separate from the solution?

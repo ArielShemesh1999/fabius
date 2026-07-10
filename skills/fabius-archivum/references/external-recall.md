@@ -44,6 +44,16 @@ The one trap: **never compress inside the `PostToolUse` hook.** Summarizing inli
 
 > The wiring is illustrative. The **pattern** is what ships. Do not stand up a daemon, a worker queue, or a vector DB before the corpus demands one (`fabius-parcus`: *does it need to exist yet?*). A flat `MEMORY.md` + `log.md` re-read on start covers a small project.
 
+### The never-drop floor
+
+Compression is not housekeeping — it is a **write path that silently mutates state**. The failure is specific: six tool-calls after a summary trims *the one constraint that made the earlier decision safe*, the agent acts on the gap and nothing throws. So memory carries the same *never-trim floor* `fabius-parcus` holds for code — a class of records that compression may reorder or shorten but **never drop**:
+
+- a safety / permission **constraint** ("prod only after the migration", "never touch the private key"),
+- a **decision** and the reason for it (so it isn't silently re-opened next session),
+- an **agreement** with the human (a preference, a scope line, a "don't do X").
+
+Mark these `[pin]` at capture; a compress step that would drop a pinned record fails loud instead of quietly forgetting. And fire **capture *before* the compaction, not after** — a pre-compaction *lifeboat* (current goal · open threads · next action, ≤5 lines written to the top of the working record) is the cheapest insurance against waking up amnesiac. Everything else is free to decay on its TTL: *record only what is non-inferable and will be reused*, and re-read the **index, not the transcript**.
+
 ### Retrieval discipline — progressive disclosure
 
 Working memory and archive are **separate stores**:

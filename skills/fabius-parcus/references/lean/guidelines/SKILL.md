@@ -28,6 +28,7 @@ Before implementing:
 - No abstractions for single-use code.
 - No "flexibility" or "configurability" that wasn't requested.
 - No error handling for impossible scenarios.
+- No work on reflex — before an expensive step (a model call, a full re-plan, a repeated tool call), confirm state actually changed since last time. Re-asking the big model after every trivial diff burns budget on a scheduling bug, not thinking.
 - If you write 200 lines and it could be 50, rewrite it.
 
 Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
