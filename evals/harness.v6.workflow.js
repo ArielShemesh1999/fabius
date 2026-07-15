@@ -1,3 +1,6 @@
+import { execSync } from 'node:child_process'
+import { tmpdir } from 'node:os'
+
 export const meta = {
   name: 'fabius-eval-v6',
   description: 'Objective deliverable tests: EXECUTE generated code against hidden test suites + grade research/domain deliverables against a factual checklist, across all four internal models',
@@ -8,8 +11,8 @@ export const meta = {
   ],
 }
 
-const REPO = '/Users/arielshemesh/Desktop/Workspace/03-Personal/fabius'
-const SCRATCH = '/private/tmp/claude-501/-Users-arielshemesh/d83172a5-93a9-444f-84e4-62b75f45b583/scratchpad/run6'
+const REPO = process.env.FABIUS_REPO || execSync('git rev-parse --show-toplevel', { encoding: 'utf8' }).trim()
+const SCRATCH = process.env.FABIUS_SCRATCH || `${tmpdir()}/fabius-eval-run6`
 
 const TERSE = 'Be concise. Write minimal code. Skip unnecessary explanation.'
 const NO_TOOLS = "Do NOT use any tools. Do NOT read files or explore the repository. Produce your complete answer directly as text in the 'answer' field."

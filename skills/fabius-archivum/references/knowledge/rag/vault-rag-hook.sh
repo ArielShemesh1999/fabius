@@ -2,7 +2,9 @@
 # UserPromptSubmit hook: retrieve relevant Obsidian-vault context and inject it.
 # Disable anytime:  touch ~/.claude/.vault-rag-off
 [ -f "$HOME/.claude/.vault-rag-off" ] && exit 0
-RAG="/Users/arielshemesh/Desktop/Workspace/03-Personal/architecture-skills/rag"
+# Point FABIUS_RAG at your architecture-skills/rag checkout.
+# Example: export FABIUS_RAG="$HOME/Desktop/Workspace/03-Personal/architecture-skills/rag"
+RAG="${FABIUS_RAG:-$HOME/Desktop/Workspace/03-Personal/architecture-skills/rag}"
 [ -x "$RAG/.venv/bin/python" ] || exit 0
 PROMPT="$(python3 -c 'import sys,json
 try: print(json.load(sys.stdin).get("prompt",""))

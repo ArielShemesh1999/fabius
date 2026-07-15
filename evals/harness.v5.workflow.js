@@ -1,3 +1,5 @@
+import { execSync } from 'node:child_process'
+
 export const meta = {
   name: 'fabius-eval-v5',
   description: 'Blind 3-arm eval across ALL FOUR internal models (haiku/sonnet/opus/fable); the fabius arm injects the SHIPPED repo files verbatim (AGENTS.md + the routed specialist SKILL.md), 2 blind judges',
@@ -48,7 +50,7 @@ const JUDGE_SYS = "You are a strict, BLIND code/answer-quality judge. You are NO
 
 // ---------------------------------------------------------------- Load phase
 phase('Load')
-const REPO = '/Users/arielshemesh/Desktop/Workspace/03-Personal/fabius'
+const REPO = process.env.FABIUS_REPO || execSync('git rev-parse --show-toplevel', { encoding: 'utf8' }).trim()
 const skillSet = [...new Set(TASKS.map(t => t.skill).filter(Boolean))]
 const toLoad = [{ key:'__stance__', path:`${REPO}/AGENTS.md` }, ...skillSet.map(s => ({ key:s, path:`${REPO}/skills/${s}/SKILL.md` }))]
 log(`loading ${toLoad.length} shipped files verbatim (AGENTS.md + ${skillSet.length} specialist contracts)`)

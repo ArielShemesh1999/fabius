@@ -1,3 +1,5 @@
+import { execSync } from 'node:child_process'
+
 export const meta = {
   name: 'fabius-eval-v7-fbs',
   description: 'FBS v1.0 run — BASE vs FAB vs FAB_MEMORY on the committed suite; 7-dimension 0–4 rubric by two blind judges + objective automatic-check graders',
@@ -15,7 +17,7 @@ export const meta = {
 //                      model: 'sonnet',            // generation model: haiku|sonnet|opus|fable
 //                      run: 'FBS-1.0 run 7 …' } })
 
-const REPO = '/Users/arielshemesh/Desktop/Workspace/03-Personal/fabius'
+const REPO = process.env.FABIUS_REPO || execSync('git rev-parse --show-toplevel', { encoding: 'utf8' }).trim()
 const A = (typeof args === 'string') ? JSON.parse(args) : (args || {})
 const TASKS = Array.isArray(A.tasks) ? A.tasks : []
 const GEN_MODEL = A.model || 'sonnet'
