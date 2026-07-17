@@ -30,6 +30,19 @@ Note what a symptom-patch would have been: "clear the cache on logout." It would
 
 And distrust your own confidence when the request is urgent. Prompts that carry urgency markers — "asap", "urgent", "broken", "already should be done" — pull an agent toward acting before it verifies. Urgency is the moment to **keep** the verify step, not skip it; that is exactly when a silent wrong-state ships unnoticed.
 
+## Pair every instruction with a machine check
+
+**If you tell an agent to implement X, ship the executable oracle that proves it did.** An instruction is a hope; a check is a verdict. Codegen without a conformance check produces **plausible-but-wrong** work — code shaped exactly like the thing you asked for that doesn't do it — and plausible-but-wrong is the single failure a human reviewer is worst at catching, because review reads for shape and the shape is right. The instruction and its oracle are one deliverable, not a nice-to-have pair.
+
+Two shapes carry most of the weight:
+
+- **A validator that hard-fails the artifact.** The prose says "the upgrade guide must include a real diff." The check parses the upgrade section and **fails the build** when it holds no unified diff — parsed, not eyeballed. Note where the check lands: on the *artifact*, so the instruction cannot be satisfied by a heading that says "Diff" over a paragraph describing one.
+- **One contract test, consumed by every implementation.** The prose says "all five adapters honor the same contract." The check is a single contract-test suite that all five adapters import and run — so the contract is **executed five times** instead of **described once**. This is the shape that stops an instruction from rotting in one implementation silently: divergence turns a suite red on the commit that caused it, rather than becoming a bug report three months later from someone using adapter four.
+
+**fabius already lives this law** — this section only *names* it so it's reusable. `evals/structural.mjs` is **19 machine checks over 15 markdown instruction files**: naming, frontmatter, per-file size budgets, reference integrity, manifest-vs-filesystem agreement, the seal's file hashes and Merkle root, and the coherence of the stated skill count. The skills are prose, and the prose is *tested* — a claim in a contract that drifts from the filesystem fails a run, it doesn't wait for a reader to notice. Nothing there is novel to the repo; what's worth carrying out of it is the rule: when fabius writes an instruction for someone else's agent, it ships the oracle too.
+
+The check comes **first**, for the same reason red-comes-first above: an oracle that has never failed hasn't been shown capable of failing. And it inherits the anti-patterns above — assert the **behavior the instruction names**, not its decoration. A check that pins the exact wording of a guide isn't an oracle for "include a real diff"; it's a tripwire on prose, and it will fail on a rewrite that improved the guide while passing one that gutted it.
+
 ## Reviewing a brainstorm before you build
 
 - Is the **problem** stated, separate from the solution?

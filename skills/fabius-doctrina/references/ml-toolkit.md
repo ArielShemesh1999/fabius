@@ -38,6 +38,12 @@ The HF training stack — **transformers** + **accelerate** (distributed/mixed-p
 | **Ragas** | Apache-2.0 | RAG-specific metrics (faithfulness, context precision/recall). Org is now **`vibrantlabsai`** (old URL redirects); LLM-judge metrics need a capable judge. |
 | **Langfuse** | MIT (core) | Open **LLM observability / tracing** + prompt management, self-hostable — the per-call agent-trace layer MLflow/W&B don't natively cover. |
 
+**Assert on the tool trajectory, not the answer text.** For an agent, the first thing that regresses is the **tool path**, and text scoring is blind to it: an agent that quietly stops calling `recall` and starts answering from parametric memory still emits a fluent, plausible, largely-correct paragraph — the score barely moves while the grounding is gone. So make the tool sequence an assertion of its own: declare `expected_tools` per case with **all-of** (every named tool must appear in the trajectory) and **any-of** (at least one of a set must) semantics, and fail the case on the path independent of the prose. That is the eval that catches confabulation the day it starts, rather than the week the complaints arrive. The path is checkable; "is this answer grounded" is a judgment call you'd otherwise pay a judge model to get wrong.
+
+**Run it against the REAL entrypoint, inside a transaction that rolls back.** An eval that calls a reimplementation of the production path tests the reimplementation. Call the **shipped** entrypoint — the same function the app calls — and buy the cleanup from the database instead of from fixture code: open an **outer transaction**, `begin_nested()` for the savepoint, attach a listener that **restarts the savepoint** whenever the code under test commits (its `COMMIT` lands on the savepoint; the outer transaction never sees it, so production code that manages its own transactions runs unmodified), and **roll back unconditionally** in teardown. The agent writes real rows and takes real state transitions; nothing survives the test. Production fidelity at zero cleanup cost — and no `if TESTING:` branch in the product, which is the fixture pattern's real bill.
+
+**Ship a real control arm** — the same task set with the skill/tool/prompt under test removed — or the number means nothing: "94% pass" describes the task set's difficulty until a baseline says what the treatment bought. **The caveat that voids the arm:** the treatment must exercise the **production** path. A cautionary case from the wild — GitNexus's eval enriches the grep **results**, while its shipped hook enriches the **pattern** *pre-call*. The arm billed as "mirroring production" tests a different mechanism than the one that ships, so its delta measures the harness, not the product, and the A/B is clean, well-run, and about nothing. Before trusting a control arm, verify the treatment arm calls what the *user* calls.
+
 ## Track (MLOps)
 
 - **MLflow** (Apache-2.0) — self-hostable experiment tracking + model registry + (v3) GenAI eval/tracing. The OSS default.
@@ -59,6 +65,20 @@ The HF training stack — **transformers** + **accelerate** (distributed/mixed-p
 doctrina owns the speech *models* two other skills consume: `fabius-archivum`'s meeting capture (Meetily) and `fabius-cohors`'s agent voice (Voicebox). doctrina owns the *model*; those skills own the *use*.
 
 - **ASR (speech→text):** **whisper.cpp** (`ggml-org/whisper.cpp`, **MIT**) — the GGUF/ggml sibling of llama.cpp: on-device Whisper for CPU/Apple-Silicon (what Meetily runs); **faster-whisper** (MIT, CTranslate2) for GPU throughput; NVIDIA **Parakeet** (via NeMo) for the fastest live tier — check the NeMo model card's terms before shipping.
+- **ASR, the hosted-edge rung:** **`@cf/openai/whisper-large-v3-turbo`** on **Workers AI** — base64 audio in, transcript out, one binding, no GPU, no install, no weight download. Two properties earn it the rung between on-device whisper.cpp and a hosted ASR SaaS: it **auto-detects the language** (no hint to pass — the whole game for mixed Hebrew/English speech, where the hint is exactly what the caller can't know), and it prices at **$0.00051 per audio-minute** *(listed price — re-check before quoting it in a plan)*. Keep the two licenses apart: the **model is MIT** (OpenAI's Whisper weights), the **delivery is Cloudflare's metered platform**. Permissive weights don't make the endpoint free — that's the same weights-vs-service split as this file's opening law, one layer out.
+
+**The decision rule, plainly:**
+
+| | **Web Speech** (`SpeechRecognition`) | **Whisper** (hosted or local) |
+|---|---|---|
+| Cost | **free** | **metered** ($0.00051/min on Workers AI) |
+| Latency | **instant, live-interim** — partial text while the user is still talking | needs the finished clip |
+| Text quality | **unpunctuated**, lowercase run-on | **punctuated**, cased |
+| Language | must be declared up front | **auto-detected** |
+| Reach | **Chrome in practice** (Firefox doesn't ship it; Safari's is partial) | **everywhere** — it's an HTTP call |
+
+Live-feel dictation in Chrome → **Web Speech + a polish pass** (`fabius-cohors` owns that wiring and the never-lose-words fallback; doctrina owns the fast-tier model behind the pass). Must work on Safari/Firefox, or must handle a language the caller can't predict → **Whisper**, and pay for it.
+
 - **TTS (text→speech):** permissive-weight open engines — **Kokoro** (Apache-2.0, tiny/fast), **Piper** (MIT, the local default OpenMontage uses), **Chatterbox** (MIT, Resemble AI) — but **verify each weight's license** (many voice models are non-commercial or research-only), and treat voice-cloning as a **consent/impersonation risk** to gate (`fabius-praesidium`), sealable for provenance (`fabius-catena`).
 
 ## Cut input-token cost

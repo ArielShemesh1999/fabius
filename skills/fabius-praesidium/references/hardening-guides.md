@@ -1,6 +1,6 @@
 # Fabius Praesidium — hardening & audit guides
 
-The deep, bundled library for `fabius-praesidium`: HTTP headers, auth & session patterns, input-validation cookbook, output-encoding by sink, dependency/supply-chain audits, secrets & cloud least-privilege, and per-stack quick-harden checklists. The [security-playbook.md](security-playbook.md) is the operating procedure (STRIDE → OWASP pass → finding format); this file is the *how-to-harden* depth it routes into. Page **one §** at a time (routing-policy R9 · M9). **Defensive only — every item is "verify present / harden / prove closed", never an attack.** Copy the skeletons; fill the `<…>`.
+The deep, bundled library for `fabius-praesidium`: HTTP headers, auth & session patterns, input-validation cookbook, output-encoding by sink, dependency/supply-chain audits, secrets & cloud least-privilege, per-stack quick-harden checklists, and the egress boundary around an agent that runs code. The [security-playbook.md](security-playbook.md) is the operating procedure (STRIDE → OWASP pass → finding format); this file is the *how-to-harden* depth it routes into. Page **one §** at a time (routing-policy R9 · M9). **Defensive only — every item is "verify present / harden / prove closed", never an attack.** Copy the skeletons; fill the `<…>`.
 
 ---
 
@@ -241,6 +241,38 @@ Copy the block for the stack you're shipping. Each item is *verify present*.
 [ ] rate-limit / turnstile on abuse-prone routes; fail closed on a verify error
 [ ] no stack-trace / internal detail in the error Response body
 ```
+
+---
+
+## §9 — An agent that runs code cannot be contained at the tool layer
+
+**The law: tool-layer permission is a control over what the agent *asks for*, not over what the code *does once it runs*.** `bash: ask`, an allow-listed command set, a tool that must be requested by name — these govern the model's requests, and they hold exactly until one step executes model-authored or attacker-influenced code. After that the process has the sandbox's whole reach, and every command allow-list is a suggestion to something that can `curl`, `python -c`, or write a file and exec it. The agent doesn't have to defeat the tool layer; it walks around it, in one hop, using the capability you granted on purpose. (`fabius-cohors`'s least-privilege defaults are the **definition-time** control — real, and a different control. This § is what holds at **run** time.)
+
+**So move the boundary to the network.** The one rule a sandboxed process cannot argue with is that its packets have nowhere to go.
+
+- **Egress lockdown IS the boundary.** Default-deny outbound at the network layer, allow-list the destinations the job actually needs, route everything through a proxy the sandbox has no way around — **DNS included**, or the resolver becomes the exfil channel. This is *enforcement*: not a rule the code is asked to respect, a rule it cannot reach past.
+- **A request classifier is a HEURISTIC ON TOP — say which is which.** Inspecting outbound requests for exfiltration shape (a secret-shaped blob in a POST body, an unexpected host, a burst of DNS labels) is worth shipping and is **not** a boundary: it is pattern-matching on adversary-controlled bytes, and pattern-matching has a false-negative rate the adversary is free to search for. Name the two roles explicitly in any design doc — the network rule is the **control**, the classifier is **defense-in-depth** that shrinks the blast radius *inside* an allow-list you already accepted. The failure to avoid is architectural, not technical: a classifier cited as the reason the allow-list can stay loose has converted the only real control into a formality.
+- **Secrets are injected by the proxy — never present in the sandbox.** The credential lives in the proxy; the sandboxed process holds a placeholder or nothing. On the way out to an allow-listed host, the proxy attaches the real `Authorization` header. Then a **total** compromise of the sandbox — arbitrary code, arbitrary reads, the whole environment — yields no key, because the key was never inside the blast radius. Note what this replaces: a secret in the sandbox's env is a secret you have already handed over, since the agent's own code can read its own env by design. There is no permission to set that changes that.
+- **Approval is a MID-FLIGHT RENDEZVOUS, not a pre-flight prompt.** A pre-flight "may I?" is answered against the agent's *narration* of what it intends — and the agent can rephrase, re-scope, or reach the same effect by a path that never triggered the prompt. Put the gate **in the request path**: the proxy **parks** the outbound request, raises the decision to a human with the **actual bytes**, and blocks until answered — approve and the parked request resumes, deny and it fails at the boundary. The agent isn't asked; it's **stopped**. And the thing approved is the thing sent, which a pre-flight prompt can never guarantee.
+
+**Why this § is in fabius's own file:** fabius ships `cap:'exec'` in the synapse console, routed to `CODE_SANDBOX_URL` — an agent that runs code, in production, today. And fabius **packages skill directories**, where a stray `.env` would ship. Both concretes below are its own attack surface, not an illustration.
+
+**(a) The packaging deny-list — hard-FAIL, never warn.** A packaging step that can ship a secret eventually does:
+
+```
+[ ] .env*                      → any suffix: .env.local, .env.production… (the wildcard IS the rule)
+[ ] .ssh/  .aws/  .gnupg/      → whole directories, not just the files you thought of
+[ ] .netrc / _netrc / .npmrc / .pypirc / credentials.json
+[ ] /\.(key|pem|p12|pfx)$/i    → private-key material by extension, case-insensitive
+[ ] /^secrets?(?:\.|$)/i       → secrets, secret.json, secrets.yaml, secret/…
+[ ] SYMLINKS                   → REFUSE outright; a link escapes the directory you audited
+```
+
+**Hard-fail, not warn**, because a warning in a packaging step's output is a line of scrollback nobody reads on a green run — and the failure it guards is **unrecoverable by the time anyone notices**: a credential published to a registry is rotated, never deleted. A warning is a control that depends on attention at the exact moment attention is lowest.
+
+**The symlink rule is not paranoia**, it's a category difference: every other line above checks a path *inside* the tree, and a symlink is precisely the thing that makes an inside path resolve outside it. `./config → ~/.aws/credentials` passes every filename check on that list. Refuse the link — do not follow-and-re-check, since the resolved target is a TOCTOU race and a second chance to get the check wrong.
+
+**(b) The supply-chain trap — "unknown" is not "allowed".** **GitHub reports PolyForm Noncommercial 1.0.0 as `NOASSERTION`.** So the obvious policy gate — *block AGPL, allow the rest* — waves a **noncommercial** license straight into a commercial product and **reports green while doing it**. The bug is the gate's shape, not its list: no list of known-bad licenses ever catches the one the scanner couldn't classify. **Default-deny on the classification** — an allow-list of **known, named** licenses, where `NOASSERTION` / unrecognized / unasserted is a **stop-and-review**, never a pass. *A license you could not identify is a license you could not comply with.* (Same default-deny law as §4's input validation and §7's IAM; the finding belongs in §6's dependency audit, where the gate lives.)
 
 ---
 

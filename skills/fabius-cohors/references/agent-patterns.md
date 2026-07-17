@@ -79,11 +79,41 @@ Output contract: <the exact shape — a diff, a review table, a design doc, a fi
 
 The coordinator never writes code; the workers never replan. That split — plus the tight count and the shared memory — is what keeps a swarm coordinated instead of drifting.
 
+**A self-critique lane, as a HARD GATE.** Give one lane the job of attacking the swarm's own draft — and make it a gate, not an opinion. The critic returns a **required-corrections** section, and **the swarm does not emit while that section is non-empty**: revise, re-run the critic, repeat until it comes back empty. The word "gate" is load-bearing. An advisory critic gets read, agreed with, and shipped past — the coordinator has a draft in hand and a critique is a reason to do more work, which is exactly the pressure the gate exists to remove. Bound the loop (N passes, then escalate the residue as a named gap) so it cannot spin.
+
+**Declare the lane DAG.** Lanes are not peers by default. Write down which lane consumes which lane's output, run each level of the graph in parallel, and join at the barrier. Without the DAG you are guessing which lanes are independent — and a wrong guess is either a serialized swarm (slow) or a lane reading a sibling's half-written result (wrong).
+
+**Tier the model per lane.** The model is a per-lane decision, not a swarm-wide one. Mechanical lanes — collecting, formatting, checking a list against a rule — run on the fast tier; the adversarial lane and the synthesis lane get the strong one. A single tier across the swarm either overpays for the mechanical work or underpowers the lane whose judgment the output actually rests on.
+
+**The boundary with `fabius-concilium`:** a persona swarm splits **the work** across specialized lanes of one model; a council aggregates **one answer** across whole models. If the lanes differ by *role*, it's a swarm — cohors. If they differ only by *which model answered*, it's a council — concilium. Personas are a division of labor, not a source of independence: N personas on one model share that model's blind spots, which is why the critic lane is a gate on the work and not a substitute for a second opinion.
+
+## Durability — resuming an interrupted run
+
+A process dies between the model emitting a tool call and the tool returning. On restart you hold a transcript whose last assistant turn has tool calls and no results. **You can never prove a tool never started** — the crash is evidence about your process, not about the side effect. The charge may have posted. The email may have sent. The row may be written.
+
+So the law is: **on resume, repair the partial batch — never re-execute it.** Synthesize one tool result per orphaned call carrying an honest *unknown outcome* marker — "this tool was interrupted; it may or may not have run; verify the state before calling it again" — and let the model proceed from there. The repair does two jobs at once: it makes the transcript well-formed (most APIs reject an assistant turn whose tool calls have no answering results, so an unrepaired batch doesn't resume at all — it 400s), and it hands the model the true fact instead of a convenient one.
+
+**Re-execution of a side-effecting tool is a correctness bug, not a retry.** "Retry" is a word for a call that provably didn't happen; applying it here smuggles in an assumption you cannot check (`fabius-parcus`: assume less). A resumed agent that re-sends is not resilient — it is duplicating, and the traces look identical to a healthy run. What the model does with the unknown marker is what a careful operator does: read the state back before acting (`fabius-disciplina`: assert the *result state*, never the return code), then decide. That is the only correct move, and it's only available to a model that was told the truth about the interruption.
+
+**Where this bites in practice:** any scheduler that re-picks stale tasks on a fixed interval — the synapse console's cron sweeps stale tasks every 10 minutes — is running this law's live surface on every sweep. Each stale task it picks up is a partially-executed batch by definition; a resume path that re-issues the batch turns a routine sweep into a duplicate-side-effect engine.
+
+Two more properties belong to the same runtime concern:
+
+- **Terminate with a report.** Arm a **wall-clock deadline** at dispatch. When it fires, stop admitting new tool calls and force one final turn whose only job is to deliver what the agent has. An agent with no deadline has no failure mode that *produces output* — it doesn't fail, it just never returns, and the caller learns nothing. A partial report at the deadline beats a complete one that never arrives.
+- **Cap the tool-call step's output tokens.** A step whose entire job is to emit a tool call has no reason to be long. Uncapped, a step that degenerates — repeating a token, restating the plan, talking itself in a circle — burns the whole budget and produces no call. Cap it at the size of the largest legitimate call the agent can make; the cap costs nothing on a healthy step and converts a silent budget fire into a fast, visible failure.
+
 ## Least-privilege defaults
 
 - **Read-only agent** (locator, reviewer, researcher): `read: allow`, `edit: deny`, `bash: deny`.
 - **Builder agent**: `edit: allow` scoped to its files, `bash: ask` unless it must run commands.
 - **Anything touching money, production, or an external send**: a human gate, or `ask`. Never `allow` a destructive `bash` by default.
+
+**Inheritance is not a default — it's a decision, and it splits by field class.** When a parent agent spawns a child, every field in the child's definition is one of two kinds, and they inherit in opposite directions:
+
+- **Capability and identity fields NEVER inherit** — `tools`, `skills`, `instructions`, `subagents`. **Omitted means NONE**, not "whatever the parent had." These fields answer *what may this agent touch, and who is it* — and a privilege the definition doesn't name is a privilege nobody reviewed. A child that silently receives the parent's tool list is a privilege escalation with no diff behind it: the child's definition reads as harmless, and the running agent isn't.
+- **Environment fields DO inherit** — `model`, thinking level, compaction. These answer *how is this run executed*, not *what may it touch*. Inheriting them carries no privilege consequence and saves the caller from restating the obvious; a child that quietly drops to a different model is a surprise with no security content.
+
+**Construct the child from an explicit allow-list of copied fields — never `{...parent, ...overrides}`.** The spread reads as convenience and is actually a standing decision about code that doesn't exist yet: *every capability field added in the future inherits by default*. The day someone adds one, every child agent in the system silently gains it, no child definition changes, and no review sees anything. An allow-list fails the other way — a new field is invisible to children until someone names it, and the symptom is a child that can't do its job, discovered in the first run. Both shapes have a failure mode; only one of them announces itself. Pick the direction the bug runs.
 
 ## The output contract is the interface
 
@@ -97,6 +127,11 @@ A vague contract ("summarize your findings") forces the caller to parse free tex
 
 - **The consensus illusion.** Two agents "agree" in natural language ("you take the data, I'll wait for the results") and mean different things — the handshake succeeds, the work fails. The fix is the contract: a handoff is **concrete state — a schema, an id, a file path, a typed value — never a natural-language agreement.** If it can be misread, it isn't a contract.
 - **Reject at the worker boundary.** A fan-out turns negative the moment one worker emits an invalid value (a `NaN`, a null, a malformed row) and the reducer keeps it — retries multiply the poison while the traces show a busy fleet producing arithmetic graffiti. Validate each worker's output **at the boundary it leaves**, before it enters the merge (the coordinator *verifies before integrating*, above) — and a schema'd contract makes the reject automatic, since the harness retries on a mismatch instead of passing malformed data downstream.
+
+For a fan-out of reviewers or critics, two specifics turn N outputs into one aggregatable result instead of N essays:
+
+- **A closed verdict set.** The top-level judgment is one member of a fixed enum — `APPROVE` · `APPROVE-WITH-COMMENTS` · `REQUEST-CHANGES` · `BLOCK` — and nothing else. A closed set is **countable**: the coordinator tallies it, gates on it, and routes on it without reading a word. An open verdict ("looks mostly fine, though I'd note…") is a sentence that a human must adjudicate — times N lanes, every run. The enum is also what makes the critic lane's gate mechanical: *non-empty required-corrections* is a check, not a judgment call.
+- **A mandated finding schema.** Every finding, from every lane, carries the same fields — **Risk** (what breaks) · **Evidence** (the `path:line` or trace that proves it) · **Fix** (the concrete change) · **Blocks-merge** (boolean). Same fields → findings from different lanes sort, dedupe, and merge into one ranked list mechanically. Without the schema each lane returns its own prose and merging means re-reading everything: the aggregation cost lands on the coordinator, which is the one place in a swarm that must stay cheap. **Evidence** carries a second job — it's the anti-confabulation lever. A finding that cannot name the line it lives on isn't a finding, and requiring the field is what makes that rejectable at the boundary rather than arguable in review.
 
 ## When NOT to add an agent
 
