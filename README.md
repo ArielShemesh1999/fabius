@@ -219,7 +219,7 @@ The agent's operating stance is plain markdown, so it travels. The portable brid
 | Gemini CLI | `GEMINI.md` at the repo root |
 | Any model / raw prompt | paste `AGENTS.md` (or a single `SKILL.md`) into the system prompt |
 
-Verified 2026-07-19: loaded in Claude Code; installed and enabled in Codex via its plugin marketplace; grok-build reads this exact format natively (end-to-end install run pending). The repo is private — remote installs need repo access; a local-path install works without auth.
+Verified 2026-07-19: loaded in Claude Code; installed and enabled in Codex via its plugin marketplace; installed and enabled in grok-build (0.2.103) with all fifteen skills discovered (in-session activation pending auth). The repo is private — remote installs need repo access; a local-path install works without auth.
 
 ---
 
