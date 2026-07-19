@@ -12,6 +12,12 @@ description: >
   fabius-mercatus, fabius-praesidium, fabius-ludus, fabius-catena, fabius-machina,
   fabius-scientia, fabius-doctrina, fabius-fortuna, and fabius-concilium. Use when the user
   says "fabius", wants the agent, or wants end-to-end capability from one place.
+when_to_use: >
+  "how should we approach this", "set up the way of working", "which layer handles this", or at
+  the start of any multi-step build before a specialist fires.
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -59,7 +65,8 @@ UI · landing page · component · brand look · → fabius-decor
   generate an image · imagery
 chart · graph · diagram · visualize data     → fabius-decor       (the figura visualization concern)
 "build an agent" · subagent · swarm ·        → fabius-cohors
-  orchestration · multi-agent
+  orchestration · multi-agent · evaluate
+  an agent · agent benchmark · durability
 "remember this" · a growing knowledge base · → fabius-archivum
   "stop re-deriving this"
 copy · launch · positioning · ads · funnel   → fabius-mercatus

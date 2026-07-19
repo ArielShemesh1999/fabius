@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "plugins": {
+    "fabius": {
+      "components": {
+        "skills": [
+          {
+            "name": "fabius",
+            "description": "Router and stance-setter — loads first on any non-trivial task, sets scout wide, strike narrow, then dispatches to fourteen layers."
+          },
+          {
+            "name": "fabius-archivum",
+            "description": "Persistent memory: write learnings into an interlinked markdown knowledge base, retrieve cheaply, keep it healthy — knowledge compounds."
+          },
+          {
+            "name": "fabius-catena",
+            "description": "On-chain: money-safe EVM and Solana code, plus cryptographic sealing — hash, signature, Bitcoin-anchored timestamp, verifiable offline."
+          },
+          {
+            "name": "fabius-cohors",
+            "description": "Agent engineering: definition schema, permission model, single-vs-multi decision, five orchestration patterns, a 200+ agent catalog."
+          },
+          {
+            "name": "fabius-concilium",
+            "description": "Cross-model council: heterogeneous models answer independently, rank each other blind, a chairman synthesizes one better answer."
+          },
+          {
+            "name": "fabius-decor",
+            "description": "Ship-grade design: token vocabulary, the laws separating amateur UI from shipped UI, data-viz, diagrams, images, icons, motion, RTL."
+          },
+          {
+            "name": "fabius-disciplina",
+            "description": "Engineering discipline: brainstorm, plan, test-first, prove — plus grilling ambiguity and root-cause debugging on any non-trivial change."
+          },
+          {
+            "name": "fabius-doctrina",
+            "description": "ML/LLM engineering: train, fine-tune, serve, and evaluate models as production software — inference, MLOps tracking, rigorous eval gates."
+          },
+          {
+            "name": "fabius-fortuna",
+            "description": "Markets and economics: fundamental, technical, and quant analysis, honest backtesting, risk-first sizing — falsifiable, never a prophecy."
+          },
+          {
+            "name": "fabius-ludus",
+            "description": "Game craft: find the core loop first, add juice deliberately, explicit state machines, pixel-art discipline, jam-sized scope that ships."
+          },
+          {
+            "name": "fabius-machina",
+            "description": "Deterministic automation: n8n-class workflows, triggers, webhooks, crons, API-to-API glue — the wiring proven before it runs live."
+          },
+          {
+            "name": "fabius-mercatus",
+            "description": "Go-to-market: positioning, awareness-matched messaging, proof over adjectives, one-action funnels, converting copy, channel fit, SEO."
+          },
+          {
+            "name": "fabius-parcus",
+            "description": "Always-on lean core: say less, build less, change less, assume less — terse output, a YAGNI code ladder, surgical assumption-checked edits."
+          },
+          {
+            "name": "fabius-praesidium",
+            "description": "Defensive security: threat-model first, OWASP pass, secrets and least-privilege hygiene, supply-chain checks — every finding ships a fix."
+          },
+          {
+            "name": "fabius-scientia",
+            "description": "Scientific research: a real hypothesis loop, database-grounded claims, bioinformatics pipelines as routers, reproducibility enforced."
+          }
+        ]
+      }
+    }
+  }
+}

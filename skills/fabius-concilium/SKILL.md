@@ -10,6 +10,12 @@ description: >
   "panel of models", or when a question is high-stakes or genuinely contested and one model's miss
   is costly enough to pay N+N+1 calls. Distinct from fabius-cohors (which splits the WORK across
   task-specialist agents); concilium aggregates one ANSWER across whole models.
+when_to_use: >
+  "get a second opinion from other models", "cross-check this answer", "have the models vote",
+  one contested high-stakes question worth N model calls.
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 

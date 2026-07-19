@@ -68,6 +68,7 @@ Each rule has exactly one owning layer; every other layer references it instead 
 | The automation build-and-verify discipline + the silent-failure catalog | `fabius-machina` |
 | The scientific method, the database-lookup contract, the reproducibility checklist | `fabius-scientia` |
 | The model lifecycle — serving, MLOps/experiment-tracking, model/LLM evaluation | `fabius-doctrina` |
+| Agent-system evaluation — ground-truth benchmarks, long-run durability (the *model* an agent calls is evaluated one row up) | `fabius-cohors` |
 | Market & economic analysis, valuation, honest backtesting, risk/position sizing | `fabius-fortuna` |
 | Cross-model council — first opinions, blind peer-review, chairman synthesis | `fabius-concilium` |
 | Agent-shape catalog, wiki schema (the deep references) | `fabius-cohors` / `fabius-archivum` `references/` |

@@ -10,6 +10,12 @@ description: >
   or "show up in AI answers" (organic search and discoverability route here). The positioning canvas, the awareness-level
   table, and the high-converting copy structures live in references/marketing-playbook.md; the
   channel playbooks and swipe library live in references/channel-swipe-library.md, bundled and indexed by CORPUS.md, paged in on demand.
+when_to_use: >
+  "launch post", "headline for this", "pitch it", "get more signups", "make the value obvious",
+  pricing-page or announcement copy.
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 

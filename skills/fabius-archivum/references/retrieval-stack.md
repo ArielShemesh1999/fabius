@@ -29,6 +29,9 @@ Dense embeddings blur exact terms, code identifiers, and **Hebrew proper names**
 - **bm25s** (MIT) — ultra-fast pure-Python BM25 (~500× `rank_bm25`); fuse with dense via **Reciprocal Rank Fusion (RRF)**.
 - **PyLate + RAGatouille** (MIT / Apache) — train/index/retrieve with **ColBERT late-interaction** (token-level), which generalizes better to niche domains and **low-resource languages like Hebrew** than single-vector recall.
 - Pattern: retrieve top-k (dense ⊕ BM25) → **rerank** the top ~50–100 with a cross-encoder → precision@k jumps.
+- **Fusion parameterization.** RRF fuses by rank alone; when both legs emit normalized scores, the tunable alternative is a **weighted sum** — `0.7·dense + 0.3·BM25` — with a **min-score floor of ~0.35** (below it, return *nothing* rather than noise) and a **cap of ~6 results** per query: recall that overflows the context budget isn't recall.
+- **Temporal decay — raw captures decay, curated knowledge doesn't.** Score decay with a **half-life of ~7 days** applies **only to raw session-log chunks**; curated pages are exempt — promoting a fact to a page is a claim of continued validity, and decaying it punishes exactly the memory worth keeping. Old session hits carry a **staleness annotation proportional to age** ("from a session ~3 weeks ago") so the model weighs them honestly; curated pages never get one.
+- **MMR diversity re-rank** — opt-in, **λ ~0.7**. When top-k collapses into near-duplicates of one memory (common once session logs pile up), a maximal-marginal-relevance pass trades a sliver of relevance for coverage. Off by default: on a deduped corpus it only costs precision.
 
 ## Embedding models — the default must speak Hebrew
 

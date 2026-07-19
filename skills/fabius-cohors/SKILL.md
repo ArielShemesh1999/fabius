@@ -8,7 +8,14 @@ description: >
   orchestration workflow. A copy-from schema and proven agent shapes live in
   references/agent-patterns.md; the full production agent catalog (200+ agents across 17 domains
   + Python/Go/Java/Kotlin/Android/TypeScript packs, with a fabius-vec.db memory index) lives in
-  references/agents/, indexed by references/agent-catalog.md.
+  references/agents/, indexed by references/agent-catalog.md. (Deterministic service-to-service
+  wiring — n8n/Zapier-class "build a workflow" — is fabius-machina, not here.)
+when_to_use: >
+  "tool-calling assistant", "agent team", "hand this off between agents", "what permissions
+  should the agent get", "evaluate my agent", "agent benchmark".
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 

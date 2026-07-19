@@ -11,6 +11,12 @@ description: >
   (systematic-debugging, writing-plans, verification-before-completion, parallel agents) — lives in
   references/process/. The on-device prove loop for a UI app — build + assert state on a simulator,
   semantic-tree-first and token-cheap — lives in references/simulator-verify.md.
+when_to_use: >
+  "where do we start", "write the tests first", "it keeps regressing", "why does it still fail",
+  "walk me through the fix before coding".
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 

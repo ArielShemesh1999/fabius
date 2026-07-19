@@ -15,11 +15,17 @@ permission:
   edit: ask             # allow | ask | deny
   bash: deny
 tools: [read, grep, glob]   # the minimum the job needs
+inputs:                     # declared I/O — what the caller must supply
+  - { name: target_file, io_type: file_path, required: true, description: the file to work on }
+outputs:                    # what the agent returns, by name and type
+  - { name: findings, io_type: json, required: true, description: findings list in the contract shape }
 ---
 You are <role>.
 Operating rules: <the 3–5 that actually matter>.
 Output contract: <exactly what you return — a schema, a table, a diff, a verdict>.
 ```
+
+The `inputs`/`outputs` blocks are the output-contract rule made checkable: each entry carries `name`, `io_type`, `required`, `description`, so the harness can reject a dispatch missing a required input and a return missing a declared output — before any prose is read. They also make pipelines contract-chained: agent A's declared `output_file` is agent B's declared `input_file`, so the wiring between stages is a typed graph the harness can validate, not an agreement in prose.
 
 A Claude Code subagent uses the same idea in its own format: a `description` (how the dispatcher picks it), a tool allowlist, and a system prompt that ends in an output contract. The frontmatter keys differ by harness; the four reliability properties don't.
 
@@ -41,7 +47,7 @@ A Claude Code subagent uses the same idea in its own format: a `description` (ho
 
 ## Swarm — coordinator + worker templates
 
-A swarm is the hierarchical shape at scale: one coordinator, 6–8 specialized workers, shared memory, worktree isolation for parallel writers. Built from native tools (the Workflow tool drives it, the Agent/Task tool spawns workers) — no external runtime.
+A swarm is the hierarchical shape at scale: one coordinator, 6–8 specialized workers, shared memory, worktree isolation for parallel writers — and a worktree merges back explicitly: nothing a worker writes lands in the main tree until the coordinator merges it. Built from native tools (the Workflow tool drives it, the Agent/Task tool spawns workers) — no external runtime.
 
 **Coordinator** (owns the plan, writes no code):
 ```yaml
@@ -67,7 +73,7 @@ description: Implement exactly one assigned slice of the swarm's task list and r
 mode: subagent
 permission: { read: allow, edit: allow, bash: ask }   # edit scoped to its worktree
 tools: [read, edit, grep, glob, bash]
-isolation: worktree           # only when writing in parallel with siblings
+isolation: worktree           # only when writing in parallel with siblings; merge back explicitly
 ---
 You are the <architect | coder | reviewer | researcher> worker.
 Rules:
@@ -78,6 +84,8 @@ Output contract: <the exact shape — a diff, a review table, a design doc, a fi
 ```
 
 The coordinator never writes code; the workers never replan. That split — plus the tight count and the shared memory — is what keeps a swarm coordinated instead of drifting.
+
+**Depth-1 spawn cap:** workers never spawn workers — one coordinator, one layer of children, and a need for more capability climbs the router's ladder one rung instead (`skills/fabius/references/routing-policy.md`, R2).
 
 **A self-critique lane, as a HARD GATE.** Give one lane the job of attacking the swarm's own draft — and make it a gate, not an opinion. The critic returns a **required-corrections** section, and **the swarm does not emit while that section is non-empty**: revise, re-run the critic, repeat until it comes back empty. The word "gate" is load-bearing. An advisory critic gets read, agreed with, and shipped past — the coordinator has a draft in hand and a critique is a reason to do more work, which is exactly the pressure the gate exists to remove. Bound the loop (N passes, then escalate the residue as a named gap) so it cannot spin.
 
@@ -97,12 +105,16 @@ So the law is: **on resume, repair the partial batch — never re-execute it.** 
 
 **Where this bites in practice:** any scheduler that re-picks stale tasks on a fixed interval — the synapse console's cron sweeps stale tasks every 10 minutes — is running this law's live surface on every sweep. Each stale task it picks up is a partially-executed batch by definition; a resume path that re-issues the batch turns a routine sweep into a duplicate-side-effect engine.
 
+**RESUME_FROM context inheritance — a different mechanism from crash-resume.** The law above repairs an *interrupted* run; RESUME_FROM continues a *completed* one: a second agent starts from the first agent's full transcript and tool state instead of a fresh context. Three constraints make it safe — the source agent completed (so there is no partial batch to repair), same session, same agent type (the inherited transcript was produced under the same instructions and tool contract the successor runs with). Within those bounds it is the cheap path for staged work: the successor sees everything the predecessor saw, versus summarize-and-respawn, which pays an extra summarization call and loses whatever the summary dropped.
+
 Two more properties belong to the same runtime concern:
 
 - **Terminate with a report.** Arm a **wall-clock deadline** at dispatch. When it fires, stop admitting new tool calls and force one final turn whose only job is to deliver what the agent has. An agent with no deadline has no failure mode that *produces output* — it doesn't fail, it just never returns, and the caller learns nothing. A partial report at the deadline beats a complete one that never arrives.
 - **Cap the tool-call step's output tokens.** A step whose entire job is to emit a tool call has no reason to be long. Uncapped, a step that degenerates — repeating a token, restating the plan, talking itself in a circle — burns the whole budget and produces no call. Cap it at the size of the largest legitimate call the agent can make; the cap costs nothing on a healthy step and converts a silent budget fire into a fast, visible failure.
 
 ## Least-privilege defaults
+
+**Coarse capability modes are the first cut.** Before any per-tool grant, pick one of four modes: **read-only** (analyze, never mutate) · **read-write-no-shell** (edit files, no command execution) · **execute-no-edits** (run commands — a test-runner, a prober — but mutate no files) · **all**. The mode states the blast radius in one word a reviewer can check at a glance; per-tool grants then narrow within the mode, never widen past it.
 
 - **Read-only agent** (locator, reviewer, researcher): `read: allow`, `edit: deny`, `bash: deny`.
 - **Builder agent**: `edit: allow` scoped to its files, `bash: ask` unless it must run commands.
@@ -114,6 +126,17 @@ Two more properties belong to the same runtime concern:
 - **Environment fields DO inherit** — `model`, thinking level, compaction. These answer *how is this run executed*, not *what may it touch*. Inheriting them carries no privilege consequence and saves the caller from restating the obvious; a child that quietly drops to a different model is a surprise with no security content.
 
 **Construct the child from an explicit allow-list of copied fields — never `{...parent, ...overrides}`.** The spread reads as convenience and is actually a standing decision about code that doesn't exist yet: *every capability field added in the future inherits by default*. The day someone adds one, every child agent in the system silently gains it, no child definition changes, and no review sees anything. An allow-list fails the other way — a new field is invisible to children until someone names it, and the symptom is a child that can't do its job, discovered in the first run. Both shapes have a failure mode; only one of them announces itself. Pick the direction the bug runs.
+
+### Permission-rule gotchas
+
+Four ways a rule set that reads correct evaluates wrong:
+
+1. **Chained-command asymmetry.** Deny and ask rules are checked against each segment of a chained command AND against the whole string; allow rules match the whole string only. So an allow like `Bash(git *)` auto-approves `git status && rm -rf /` — the chain starts with `git`, the allow matches, and no segment is ever re-examined. Narrow allows must pair with explicit denies for the dangerous segments, and a matcher must split chains itself and fall back to a prompt on command substitution, backgrounding, and subshells it cannot inspect.
+2. **Severity merge.** Rules from every scope merge into one set, and deny > ask > allow regardless of which scope a rule came from — a global deny is unoverridable by any local allow. The corollary: deny-by-default needs a *mode*, not a catch-all deny rule, because a `deny *` outranks every allow you would add under it.
+3. **Dangerous-command re-prompt.** A fixed list — `rm`, `chmod`/`chown`, `kill*`, `git push` — re-prompts above implicit and remembered grants. But an explicit allow rule still approves them: the re-prompt tier sits above convenience grants, not above the rule set. A true never-tier needs deny rules; there is no third state.
+4. **Wrapper peeling.** Deny and ask rules peel env-prefixes, `timeout`, and `nice` to check the inner command, and are also checked inside `bash -c` scripts; `sudo`, `xargs`, and `nohup` are not peeled and need their own explicit rules. Allow rules get NO peeling — a wrapped command falls through to a prompt, which is the fail-safe direction. And prefix matching has no word boundary: an allow for `git` also matches `gitleaks`.
+
+Hardening beyond the rule set — sandboxing, secrets hygiene, injection screening — is `fabius-praesidium`'s layer.
 
 ## The output contract is the interface
 

@@ -42,6 +42,8 @@ That single prepend is what turns memory from opt-in to automatic. Everything el
 
 The one trap: **never compress inside the `PostToolUse` hook.** Summarizing inline stalls the agent on *every* tool call. Capture writes the raw fact and returns immediately; a background worker compresses.
 
+Two gates ride the `Stop`/`SessionEnd` finalize step. **Trivial-session skip:** a session with fewer than ~3 substantive user prompts or under ~50 bytes of user text saves *nothing* — a "hi, never mind" session written to memory is pure noise. **Consolidation:** once a topic has accumulated real signal — at least ~4 hours *and* ~3 sessions since the last pass — run consolidation at session end: dedup-merge the raw session logs into curated topic pages, so repeated fragments become one page and the raw logs are free to decay. The gates matter as much as the merge: consolidating every session churns pages; never consolidating leaves the store a pile of logs.
+
 > The wiring is illustrative. The **pattern** is what ships. Do not stand up a daemon, a worker queue, or a vector DB before the corpus demands one (`fabius-parcus`: *does it need to exist yet?*). A flat `MEMORY.md` + `log.md` re-read on start covers a small project.
 
 ### The never-drop floor
@@ -52,7 +54,7 @@ Compression is not housekeeping — it is a **write path that silently mutates s
 - a **decision** and the reason for it (so it isn't silently re-opened next session),
 - an **agreement** with the human (a preference, a scope line, a "don't do X").
 
-Mark these `[pin]` at capture; a compress step that would drop a pinned record fails loud instead of quietly forgetting. And fire **capture *before* the compaction, not after** — a pre-compaction *lifeboat* (current goal · open threads · next action, ≤5 lines written to the top of the working record) is the cheapest insurance against waking up amnesiac. Everything else is free to decay on its TTL: *record only what is non-inferable and will be reused*, and re-read the **index, not the transcript**.
+Mark these `[pin]` at capture; a compress step that would drop a pinned record fails loud instead of quietly forgetting. And fire **capture *before* the compaction, not after** — a pre-compaction *lifeboat* (current goal · open threads · next action, ≤5 lines written to the top of the working record) is the cheapest insurance against waking up amnesiac. Don't wait for the compaction event to fire it: flush an **LLM summary** of the session so far when context headroom falls to **~4k tokens** — by the time the harness compacts, the lifeboat is already written. Two guards keep the flush from polluting the store: **semantic dedup** (skip any record whose embedding sits within ~**0.92 cosine** of an existing one — near-duplicates rot retrieval) and a **write cap** per flush (a handful of records, never a dump — a runaway session must not flood the archive). Recovery after compaction is symmetric: **re-inject the recall block on the first post-compaction turn** and **re-search memory** for the current task, because compaction just deleted the context the earlier injection lived in. Everything else is free to decay on its TTL — the capture-side mechanism of the single decay story whose retrieval-side scoring, and the principle behind it, live in [`retrieval-stack.md`](retrieval-stack.md): *record only what is non-inferable and will be reused*, and re-read the **index, not the transcript**.
 
 ### Retrieval discipline — progressive disclosure
 

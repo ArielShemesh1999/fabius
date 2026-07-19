@@ -8,7 +8,7 @@ The measurement behind **the fabius benchmark** ([`../BENCHMARKS.md`](../BENCHMA
 | [`suite/`](suite/) | **The Fabius Benchmark Suite (FBS v1.0)** — the versioned evaluation framework from [`../IDENTITY.md`](../IDENTITY.md): 100 neutral tasks in three tiers (20 smoke / 50 core / 30 stress) across ten categories A–J, a fixed 7-dimension 0–4 rubric, three modes **BASE / FAB / FAB_MEMORY**, plus its own deterministic validator (`node evals/suite/validate.mjs`, 9/9). |
 | `harness.v7.workflow.js` | **Panel D harness — the FBS run**: the committed suite × 3 modes; the FAB mode carries the shipped files verbatim, the FAB_MEMORY mode adds the task's committed memory snapshot as recalled `fabius-archivum` memory; **two blind judges** (Opus + Fable) on the 7-dim rubric + a strict objective grader per answer over the task's `automatic_checks`. |
 | `results.v7.json` | **Panel D raw** — per-task 7-dimension scores per mode, automatic-check pass rates, per-tier and per-category aggregates, BASE→FAB→FAB_MEMORY deltas. Committed. |
-| `structural.mjs` | The benchmark's **deterministic structural suite** — no model, no key, no network. Proves the *system* is well-formed: fifteen single-owner contracts, every `SKILL.md` under budget, every flattened `description` ≤ 1024 chars, every reference live (markdown links **and** backtick-quoted mentions), no sealed-set drift (manifest file list == on-disk set), the content-bound seal verifiable. 19/19 must pass (the seal hash-match goes red mid-edit, green on re-seal). `node evals/structural.mjs` |
+| `structural.mjs` | The benchmark's **deterministic structural suite** — no model, no key, no network. Proves the *system* is well-formed: fifteen single-owner contracts, every `SKILL.md` under budget, every flattened `description` ≤ 1024 chars, frontmatter keys canonical (`description` + `when_to_use` ≤ 1536 chars flattened; `license` / `metadata.author` coherent when declared), every reference live (markdown links **and** backtick-quoted mentions), no sealed-set drift (manifest file list == on-disk set), the content-bound seal verifiable. 23/23 must pass (the seal hash-match goes red mid-edit, green on re-seal). `node evals/structural.mjs` |
 | `harness.v5.workflow.js` | **Panel A harness** — quality, blind, the four newest Claude models: 15 tasks × 4 models × 3 arms with the shipped skill files injected **verbatim**, **two blind judges** (Opus + Fable, inter-judge gap 0.72/15). |
 | `results.v5.json` | **Panel A raw** — per-cell scores from both judges, lengths, per-model and per-domain deltas. Committed. |
 | `harness.v6.workflow.js` | **Panel B harness** — objective, no judge taste: generated code **executed against hidden test suites** + domain deliverables graded against a **factual checklist** by two strict graders. 9 deliverables × 4 models × 3 arms. |
@@ -24,7 +24,7 @@ The measurement behind **the fabius benchmark** ([`../BENCHMARKS.md`](../BENCHMA
 ## Structural suite (no key, no network)
 
 ```bash
-node evals/structural.mjs            # 19/19 invariants — exits non-zero on any FAIL
+node evals/structural.mjs            # 23/23 invariants — exits non-zero on any FAIL
 node evals/structural.mjs --json     # also writes evals/structural.json
 ```
 
@@ -34,6 +34,7 @@ Behavioral runs ask *does fabius act better*; this asks *is fabius built right* 
 
 ```bash
 export OPENAI_API_KEY=...      # GPT/Codex family
+export XAI_API_KEY=...         # grok family
 export MISTRAL_API_KEY=...     # mistral-large-latest
 export ANTHROPIC_API_KEY=...   # claude models
 python3 evals/portable_eval.py            # runs every vendor whose key is set

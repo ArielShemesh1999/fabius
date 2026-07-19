@@ -1,6 +1,6 @@
 # AGENTS.md — the fabius stance (tool-agnostic)
 
-This file is the portable operating stance of **fabius — the autonomous AI agent that runs on every major model**. It is plain markdown, so it works in any agent that reads a standing-instructions file — Codex / OpenAI, Cursor, Windsurf, Cline, GitHub Copilot, OpenCode, Gemini CLI, or a raw system prompt. Copy it into your repo (or paste it into your tool's rules) and that tool runs end-to-end under the fabius stance.
+This file is the portable operating stance of **fabius — the autonomous AI agent that runs on every major model**. It is plain markdown, so it works in any agent that reads a standing-instructions file — Codex / OpenAI, grok-build / xAI, Cursor, Windsurf, Cline, GitHub Copilot, OpenCode, Gemini CLI, or a raw system prompt. Copy it into your repo (or paste it into your tool's rules) and that tool runs end-to-end under the fabius stance.
 
 > Internally, the owner runs fabius as a private Claude Code plugin whose fifteen coordinated layers (router `fabius` + always-on `fabius-parcus` + 13 specialists) load with progressive disclosure. This file is the lite, universal bridge to that same stance. To use the fabius agent as a product, open the synapse console (synapse-vert-one.vercel.app).
 
@@ -67,3 +67,9 @@ Input validation at trust boundaries, error handling that prevents data loss, se
 **Live tiers are optional.** fabius bundles no runtime or MCP server. A few capabilities have an optional, user-configured live tier — on-chain (an RPC endpoint + an optional Solana MCP; sealing anchors via OpenTimestamps), automation (the `n8n-mcp` MCP server + an instance API), external memory (a NotebookLM/connector + lifecycle hooks), science (external DB REST APIs + keys), ML engineering (your own GPU/compute + an MLflow-class tracking server + a model registry/inference API), markets & finance (a market-data API + a macro source + an optional broker/exchange API — yfinance / OpenBB / FRED / CCXT / Alpaca), and cross-model council (LLM access for several seats — one OpenRouter key, or the synapse console's own multi-provider runtime + key vault). The patterns work without them; wire the service only when you need to run live.
 
 **Boundary:** fabius governs HOW you work, not WHAT the user wants. The user's instruction always wins. "stop fabius" reverts the stance.
+
+## Skill frontmatter contract (the plugin format)
+
+Every fabius skill contract (`skills/*/SKILL.md`) carries exactly five frontmatter keys — `name`, `description`, `when_to_use`, `license`, `metadata.author` — enforced mechanically by the structural gate (`evals/structural.mjs`). Budgets: `description` ≤ 1024 chars; `description` + `when_to_use` flattened ≤ 1536. `when_to_use` is complementary trigger phrasing, never a restatement of `description`; the spelling is snake_case `when_to_use` everywhere.
+
+These are interop facts: Claude Code reads all five keys; grok-build reads the same set (and matches `when_to_use` for auto-invocation); Codex ingests the full plugin through its git plugin marketplace; Cursor reads `.claude/skills` directly. A harness that knows none of these keys ignores them safely — the contract degrades to plain `name` + `description`. The per-harness field matrix lives in `skills/fabius/references/skill-frontmatter.md`.

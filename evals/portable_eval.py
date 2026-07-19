@@ -12,6 +12,7 @@ This is how you get REAL Codex / Mistral / Gemini numbers: set the keys and run 
     export MISTRAL_API_KEY=...       # mistral-large-latest
     export ANTHROPIC_API_KEY=...     # claude-sonnet-4-6 etc.
     export GEMINI_API_KEY=...        # gemini-2.5-pro (Google AI Studio key)
+    export XAI_API_KEY=...           # grok-4 (xAI)
     python3 evals/portable_eval.py
 
 Pick which models to run with --models (default: every vendor whose key is set).
@@ -76,7 +77,15 @@ def call_gemini(model, prompt, key):
               {"model": model, "messages": [{"role": "user", "content": prompt}], "temperature": 0.2})
     return d["choices"][0]["message"]["content"]
 
+def call_xai(model, prompt, key):
+    # xAI's OpenAI-compatible endpoint — same request/response shape as call_openai.
+    d = _post("https://api.x.ai/v1/chat/completions",
+              {"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+              {"model": model, "messages": [{"role": "user", "content": prompt}], "temperature": 0.2})
+    return d["choices"][0]["message"]["content"]
+
 VENDORS = {
+    "xai":       {"env": "XAI_API_KEY",       "model": "grok-4",               "call": call_xai},  # added 2026-07-19, unmeasured — Panel C pins below are as-measured 2026-06-22
     "openai":    {"env": "OPENAI_API_KEY",    "model": "gpt-4o",               "call": call_openai},
     "mistral":   {"env": "MISTRAL_API_KEY",   "model": "mistral-large-latest", "call": call_mistral},
     "anthropic": {"env": "ANTHROPIC_API_KEY", "model": "claude-sonnet-4-6",    "call": call_anthropic},
@@ -99,11 +108,14 @@ def judge(task, answer, jv, jkey, jmodel):
 def run(models):
     avail = {v: c for v, c in VENDORS.items() if os.environ.get(c["env"])}
     if not avail:
-        sys.exit("No API keys set. Export OPENAI_API_KEY / MISTRAL_API_KEY / ANTHROPIC_API_KEY / GEMINI_API_KEY and retry.")
+        sys.exit("No API keys set. Export OPENAI_API_KEY / MISTRAL_API_KEY / ANTHROPIC_API_KEY / GEMINI_API_KEY / XAI_API_KEY and retry.")
     use = {v: avail[v] for v in models if v in avail} if models else avail
     if not use:
         sys.exit(f"None of {models} have a key set. Available: {list(avail)}")
-    jv = next(iter(avail)); jkey = os.environ[avail[jv]["env"]]; jmodel = avail[jv]["model"]
+    # Judge preference skips the unmeasured xai pin (added 2026-07-19) so a set
+    # XAI_API_KEY never silently becomes the blind judge for every arm.
+    jv = next((v for v in avail if v != "xai"), next(iter(avail)))
+    jkey = os.environ[avail[jv]["env"]]; jmodel = avail[jv]["model"]
     print(f"models={list(use)}  judge={jv}/{jmodel}\n")
 
     rows = {}
@@ -150,7 +162,7 @@ def _selftest():
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--models", nargs="*", default=None, help="subset of: openai mistral anthropic gemini")
+    ap.add_argument("--models", nargs="*", default=None, help="subset of: openai mistral anthropic gemini xai")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
     _selftest() if a.selftest else run(a.models)

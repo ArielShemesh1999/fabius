@@ -11,6 +11,12 @@ description: >
   working RAG pipeline — lives in references/knowledge/. Cross-session auto-recall (capture → compress →
   re-inject without being asked) and source-grounded external-corpus connectors live in
   references/external-recall.md.
+when_to_use: >
+  "what did we decide last time", "save this for later", "set up project memory", "index the
+  vault", or before redoing research a past session covered.
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 

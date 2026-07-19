@@ -8,6 +8,12 @@ description: >
   touches auth, user input, secrets, payments, file upload, external requests, or dependencies — or
   when the user says "is this secure?", "threat-model this", "audit this", "harden this", "review
   for vulnerabilities", or "security review". Defensive only — it hardens, never weaponizes.
+when_to_use: >
+  "can this be hacked", "check the dependencies", "we leaked a key", "lock this down", reviewing
+  an AI-generated diff or a third-party skill/plugin before adoption.
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 

@@ -9,6 +9,12 @@ description: >
   game", "the loop isn't fun", "add juice", "balance this", or "make it feel good to play". The
   core-loop template, the juice checklist, the state-machine skeleton, and the pixel-art constants
   live in references/game-playbook.md; the engine recipes and feel patterns live in references/engine-recipes.md, bundled and indexed by CORPUS.md, paged in on demand.
+when_to_use: >
+  "playable prototype", "arcade feel", "high-score loop", "screen shake", "why isn't it fun
+  yet".
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 

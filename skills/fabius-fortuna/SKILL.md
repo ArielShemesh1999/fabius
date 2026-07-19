@@ -10,7 +10,14 @@ description: >
   a trading or investment strategy, a backtest, valuation, a portfolio, risk/volatility, or when
   the user says "analyze this stock", "is this a buy", "what's the market doing", "backtest this",
   "value this company", or "model the economy". Defensive and honest — it analyzes and manages
-  risk, never manipulates a market and never gives personalized financial advice.
+  risk, never manipulates a market and never gives personalized financial advice. (Go-to-market
+  copy → fabius-mercatus; the chart render → fabius-decor.)
+when_to_use: >
+  "DCF this", "position size", "max drawdown", "Sharpe ratio", "read this earnings report",
+  portfolio allocation questions.
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 

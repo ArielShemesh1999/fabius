@@ -9,6 +9,12 @@ description: >
   says "automate X", "build a workflow", "connect A to B", "when X happens do Y", "set up a webhook /
   a cron / an integration", or names n8n / Zapier / Make. The build discipline, the tool-per-intent
   map, the silent-failure gotcha catalog, and the deployment gate live in references/automation-playbook.md.
+when_to_use: >
+  "sync these two apps", "nightly job", "when a form is submitted send an email", "glue these
+  APIs together", scheduled or event-driven pipelines.
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 

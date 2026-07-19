@@ -11,6 +11,12 @@ description: >
   prompt, track ML experiments, set up an inference endpoint, build a RAG/LLM-app's model tier, or
   when the user says "serve this model", "fine-tune", "eval my prompts", "track these runs",
   "MLOps", "why is inference slow", or names vLLM / MLflow / an eval harness.
+when_to_use: >
+  "quantize this model", "LoRA it", "GPU serving is slow or expensive", "compare model
+  versions", "gate releases on eval scores".
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 

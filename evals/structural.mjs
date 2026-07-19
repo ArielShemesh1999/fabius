@@ -27,12 +27,12 @@ const ok = (name, pass, detail) => checks.push({ name, pass: !!pass, detail });
 // ---- load every skill contract --------------------------------------------------
 const skillDir = join(ROOT, "skills");
 const skillNames = readdirSync(skillDir).filter((d) => existsSync(join(skillDir, d, "SKILL.md")));
-// flatten a YAML frontmatter description (block scalar or inline) to a single-line string
-const flattenDescription = (fmText) => {
+// flatten a YAML frontmatter scalar (block scalar or inline) to a single-line string
+const flattenKey = (fmText, key) => {
   const lines = (fmText || "").split("\n");
-  const i = lines.findIndex((l) => /^description:/.test(l));
+  const i = lines.findIndex((l) => new RegExp(`^${key}:`).test(l));
   if (i === -1) return "";
-  const first = lines[i].replace(/^description:\s*/, "");
+  const first = lines[i].replace(new RegExp(`^${key}:\\s*`), "");
   const parts = [];
   if (first && !/^[|>][-+]?\s*$/.test(first)) parts.push(first); // inline value, not a block indicator
   for (let j = i + 1; j < lines.length; j++) {
@@ -41,6 +41,7 @@ const flattenDescription = (fmText) => {
   }
   return parts.join(" ").replace(/\s+/g, " ").trim();
 };
+const flattenDescription = (fmText) => flattenKey(fmText, "description");
 
 const skills = skillNames.map((d) => {
   const path = join(skillDir, d, "SKILL.md");
@@ -49,7 +50,7 @@ const skills = skillNames.map((d) => {
   const name = (fm?.[1].match(/^name:\s*(.+)$/m)?.[1] || "").trim();
   const hasDesc = /^description:\s*>/m.test(fm?.[1] || "");
   const descFlat = flattenDescription(fm?.[1] || "");
-  return { dir: d, path, raw, bytes: Buffer.byteLength(raw), name, hasDesc, descFlat };
+  return { dir: d, path, raw, fm: fm?.[1] || "", bytes: Buffer.byteLength(raw), name, hasDesc, descFlat };
 });
 
 // ---- 1. shape: 15 skills, one router, one always-on core, names unique ----------
@@ -70,6 +71,58 @@ const descOver = skills.filter((s) => s.descFlat.length > DESC_BUDGET);
 const maxDesc = Math.max(...skills.map((s) => s.descFlat.length));
 ok(`frontmatter: every flattened description ≤ ${DESC_BUDGET} chars`, descOver.length === 0,
    `max ${maxDesc} chars (${skills.find((s) => s.descFlat.length === maxDesc).name}); ${descOver.length} over`);
+
+// every top-level frontmatter key is canonical. Repo policy is snake_case `when_to_use` —
+// Claude Code documents it and grok-build reads it as its documented fallback alias; the
+// kebab-case `when-to-use` is an explicit FAIL. Other legal Claude keys (allowed-tools,
+// model, …) are deliberately banned — adding one later is an intentional whitelist edit.
+const CANONICAL_KEYS = new Set(["name", "description", "when_to_use", "license", "metadata"]);
+const topKeys = (fmText) => (fmText || "").split("\n")
+  .filter((l) => /^[A-Za-z0-9_-]+:/.test(l)).map((l) => l.match(/^([A-Za-z0-9_-]+):/)[1]);
+const keyViolations = [];
+for (const s of skills) {
+  for (const k of topKeys(s.fm)) {
+    if (k === "when-to-use") keyViolations.push(`${s.dir} → when-to-use (kebab-case; policy is when_to_use)`);
+    else if (!CANONICAL_KEYS.has(k)) keyViolations.push(`${s.dir} → ${k}`);
+  }
+}
+ok("frontmatter: keys canonical (name · description · when_to_use · license · metadata)",
+   keyViolations.length === 0, keyViolations.length ? `banned: ${keyViolations.join(", ")}` : "all canonical");
+
+// description + optional when_to_use share one combined discovery budget, both flattened
+const COMBINED_BUDGET = 1536;
+const combLen = (s) => s.descFlat.length + flattenKey(s.fm, "when_to_use").length;
+const combOver = skills.filter((s) => combLen(s) > COMBINED_BUDGET);
+const maxComb = Math.max(...skills.map(combLen));
+ok(`frontmatter: description + when_to_use ≤ ${COMBINED_BUDGET} chars flattened`, combOver.length === 0,
+   `max ${maxComb} chars (${skills.find((s) => combLen(s) === maxComb).name}); ${combOver.length} over`);
+
+// license, when a contract declares one, must match the plugin manifest's license
+const pluginLicense = JSON.parse(readFileSync(join(ROOT, ".claude-plugin", "plugin.json"), "utf8")).license;
+const licenseOf = (fmText) => (fmText.match(/^license:\s*(.+)$/m)?.[1] || "").trim().replace(/^["']|["']$/g, "");
+const licDeclared = skills.filter((s) => /^license:/m.test(s.fm));
+const licMismatch = licDeclared.filter((s) => licenseOf(s.fm) !== pluginLicense);
+ok("frontmatter: license matches plugin.json license (when declared)", licMismatch.length === 0,
+   licMismatch.length ? `mismatch: ${licMismatch.map((s) => `${s.dir} → ${licenseOf(s.fm)}`).join(", ")}`
+                      : `plugin license ${pluginLicense}; ${licDeclared.length}/${skills.length} declare it`);
+
+// metadata, when a contract declares one, must carry a non-empty author
+const metaAuthor = (fmText) => {
+  const lines = (fmText || "").split("\n");
+  const i = lines.findIndex((l) => /^metadata:/.test(l));
+  if (i === -1) return null; // no metadata key — check passes vacuously
+  for (let j = i + 1; j < lines.length; j++) {
+    if (/^\S/.test(lines[j])) break; // next top-level key ends the block
+    const m = lines[j].match(/^\s+author:\s*(.*)$/);
+    if (m) return m[1].trim().replace(/^["']|["']$/g, "");
+  }
+  return ""; // metadata present, author missing
+};
+const metaDeclared = skills.filter((s) => metaAuthor(s.fm) !== null);
+const metaBad = metaDeclared.filter((s) => !metaAuthor(s.fm));
+ok("frontmatter: metadata carries non-empty author (when present)", metaBad.length === 0,
+   metaBad.length ? `missing author: ${metaBad.map((s) => s.dir).join(", ")}`
+                  : `${metaDeclared.length}/${skills.length} declare metadata`);
 
 // ---- 2. progressive disclosure: every lean contract under budget -----------------
 const BUDGET = 12000; // bytes; depth lives in references/, not in SKILL.md
@@ -113,7 +166,7 @@ const onDisk = skills.map((s) => s.name).sort();
 ok("manifest: plugin.json skill list == skills on disk",
    JSON.stringify(declared) === JSON.stringify(onDisk),
    declared.length === onDisk.length ? `${declared.length} skills, sets equal` : `declared ${declared.length} vs disk ${onDisk.length}`);
-ok("manifest: version is 2.0.0", plugin.version === "2.0.0", plugin.version);
+ok("manifest: version is 2.1.0", plugin.version === "2.1.0", plugin.version);
 
 // ---- 6. content-bound seal: file hashes + Merkle root recompute & match ----------
 const manifest = JSON.parse(readFileSync(join(ROOT, "provenance", "seal-manifest.json"), "utf8"));

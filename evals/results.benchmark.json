@@ -316,7 +316,7 @@
   },
   "note": "Every family gains. Gemini wired in the harness (Google OpenAI-compatible endpoint) — no number committed without a key. Re-run any family: OPENAI_API_KEY/GEMINI_API_KEY/MISTRAL_API_KEY=... python evals/portable_eval.py"
  },
- "structural": "19/19 — node evals/structural.mjs (deterministic, no key)",
+ "structural": "23/23 — node evals/structural.mjs (deterministic, no key)",
  "panelD_fbs_run": {
   "method": "100 neutral production-shaped tasks (20 smoke / 50 core / 30 stress, categories A-J, toy problems banned, 3-6 objective automatic_checks per task) x 3 modes; scored /28 on a 7-dimension 0-4 rubric by TWO blind judges (opus+fable; inter-judge gap 1.05/28 sonnet, 0.83/28 haiku) + a strict objective grader per answer. Run 2026-07-05.",
   "suite": "evals/suite/ (FBS v1.0, committed; validator node evals/suite/validate.mjs = 9/9)",

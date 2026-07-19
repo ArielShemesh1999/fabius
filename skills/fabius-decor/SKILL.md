@@ -13,6 +13,12 @@ description: >
   right-to-left / bidirectional layout (RTL, Hebrew/Arabic). The
   fabius-design/-motion/-frames/-uiux/uiverse bundles live in references/design/; entry doc
   references/design-system.md.
+when_to_use: >
+  "make it beautiful", "it looks amateur", "match the brand", spacing/typography/color calls,
+  dashboards, hero sections, dark mode.
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
@@ -68,13 +74,9 @@ Depth — chart-type decision table, the data-ink checklist, accessible color ra
 
 ## Explanatory diagrams — teach the system, don't just draw it
 
-A diagram that *explains* (a codebase, a domain, a flow) is a pedagogy problem, not a drawing one — and the method is repeatable:
+A diagram that *explains* (a codebase, a domain, a flow) is a pedagogy problem, not a drawing one — and the method is repeatable in three moves: **extract deterministically, then add meaning** (a parser produces the reproducible facts; the model adds only semantic judgment, never re-deriving structure); **make the artifact a typed graph** (a small fixed vocabulary of node/edge types, stable ids, weighted edges); **order by topology, teach by narrative** (fan-in ranks importance, the entry point starts the tour, BFS depth maps to step order — a guided tour, not a node dump).
 
-- **Extract deterministically, then add meaning.** Run a parser/structural pass first to get reproducible facts (the parts and their connections); have the model add *only* the semantic judgment on top (summaries, grouping, layering) — and forbid it from re-deriving facts the parser already produced. Cheaper, and it kills invented structure.
-- **Make the artifact a typed graph.** Enumerate a *small* set of node and edge types up front, give each a stable id convention, and weight the edges — a fixed vocabulary is what lets parts compose and stay consistent. (Keep the set small and domain-fit; don't import a 13-node/26-edge code-analysis taxonomy into a general concept map.)
-- **Order by topology, teach by narrative.** Rank importance by fan-in (widely-depended-upon → teach early), scope by fan-out, find the entry point, then walk outward (BFS) and map depth to step order — depth 0 is the overview, depth 1 the direct dependencies. The result is a guided tour that *tells the story the README tells, through the lens of the actual code*, not a flat node dump.
-
-Concept-map structuring method, the typed-graph schema pattern, and the topology-to-tour algorithm → `references/explanatory-diagrams.md`.
+The full method — concept-map structuring, the typed-graph schema pattern, and the topology-to-tour algorithm → `references/explanatory-diagrams.md`.
 
 ## Generative imagery — prompt the image, don't wish for it
 

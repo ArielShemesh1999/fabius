@@ -17,7 +17,7 @@
 [![Runs on every model](https://img.shields.io/badge/runs_on-every_model-7a3dff?style=for-the-badge)](#what-it-is)
 [![Open the console](https://img.shields.io/badge/console-synapse-6322e8?style=for-the-badge)](https://synapse-vert-one.vercel.app)
 [![Benchmark](https://img.shields.io/badge/benchmark-blind,_reproducible-2ea44f?style=for-the-badge)](#what-it-does)
-[![Structural tests](https://img.shields.io/badge/structural_tests-19%2F19-2ea44f?style=for-the-badge)](BENCHMARKS.md)
+[![Structural tests](https://img.shields.io/badge/structural_tests-23%2F23-2ea44f?style=for-the-badge)](BENCHMARKS.md)
 [![Research-grounded](https://img.shields.io/badge/research--grounded-routing_policy-7a3dff?style=for-the-badge)](RESEARCH.md)
 [![Whitepaper](https://img.shields.io/badge/whitepaper-proofs_+_coherence-7a3dff?style=for-the-badge)](paper/fabius-as-a-system.pdf)
 
@@ -87,7 +87,7 @@ Executed algorithm code had no headroom — every bare model already ~100%; fabi
 
 **Panel D — The FBS run: BASE → FAB → FAB_MEMORY.** The evaluation contract of [IDENTITY.md](IDENTITY.md), executed on the versioned **Fabius Benchmark Suite** (`evals/suite/`, FBS v1.0 — 100 neutral production-shaped tasks, 3 tiers, categories A–J, objective checks per task) with **two blind judges** on a seven-dimension 0–4 rubric (run 2026-07-05). On **Haiku 4.5** the layers stack monotonically: 25.27 → 26.00 → **26.73**/28 (**+1.46**) on 11–14% less output. On **Sonnet 5** (full 100 tasks) outcome-per-token rises — quality held at **93%** while output fell **10–12%**, the stress tier's objective check-rate up 89.9 → 93.7 — and the first behavioral measurement of memory: recalled snapshots lift design **+4.91** and *cost* security −1.57, the measured case for verify-gated recall. The one catastrophic FAB cell (a stub answer, 1.5/28) is printed in the receipt, not hidden.
 
-Honest miss, printed: Haiku dips on trivial one-liners under the full contract (while gaining on its specialist tasks) — exactly what the router's model-tier dispatch and the lean gate exist to catch; every other model gains on both panels. **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — fifteen single-owner contracts, every reference live, the content-bound seal verifiable — **19/19**. The canonical receipt is **`evals/results.benchmark.json`**; full method, per-task numbers, and the raw receipts: **[BENCHMARKS.md](BENCHMARKS.md)**.
+Honest miss, printed: Haiku dips on trivial one-liners under the full contract (while gaining on its specialist tasks) — exactly what the router's model-tier dispatch and the lean gate exist to catch; every other model gains on both panels. **Built right, too:** a deterministic suite (`node evals/structural.mjs`) proves the system is well-formed — fifteen single-owner contracts, every reference live, the content-bound seal verifiable — **23/23**. The canonical receipt is **`evals/results.benchmark.json`**; full method, per-task numbers, and the raw receipts: **[BENCHMARKS.md](BENCHMARKS.md)**.
 
 > The claim the data supports: **structure beats brevity, and the advantage grows as the model's default discipline drops.** Not "smarter," not "10× on everything" — a scope-control system that knows when to compress and when to expand. Method, mechanism, and caveats: **[BENCHMARKS.md](BENCHMARKS.md)**.
 
@@ -209,7 +209,8 @@ The agent's operating stance is plain markdown, so it travels. The portable brid
 | Tool | Carry the stance in via |
 |---|---|
 | Claude Code | the private plugin — `/plugin install fabius` (all fifteen layers, progressive disclosure) |
-| Codex / OpenAI | [`AGENTS.md`](AGENTS.md) at the repo root (read automatically) |
+| grok-build (xAI) | native — discovers the Claude Code plugin (`.claude/plugins` + `skills/`) and reads `AGENTS.md` automatically; no file conversion — enable the plugin once (`grok plugin install <path> --trust`, then enable) |
+| Codex / OpenAI | the full plugin via Codex's git plugin marketplace (`[marketplaces]` in `~/.codex/config.toml`) — all fifteen skills + [`AGENTS.md`](AGENTS.md) |
 | OpenCode | `AGENTS.md` at the repo root, or copy `skills/` into `.opencode/` |
 | Cursor | `AGENTS.md` → `.cursor/rules/fabius.mdc` |
 | Windsurf | `.windsurf/rules/fabius.md` |
@@ -217,6 +218,8 @@ The agent's operating stance is plain markdown, so it travels. The portable brid
 | GitHub Copilot | `.github/copilot-instructions.md` |
 | Gemini CLI | `GEMINI.md` at the repo root |
 | Any model / raw prompt | paste `AGENTS.md` (or a single `SKILL.md`) into the system prompt |
+
+Verified 2026-07-19: loaded in Claude Code; installed and enabled in Codex via its plugin marketplace; grok-build reads this exact format natively (end-to-end install run pending). The repo is private — remote installs need repo access; a local-path install works without auth.
 
 ---
 
@@ -241,7 +244,7 @@ fabius/
 │   ├── fabius-doctrina/    AI/ML engineering    · references: serving · MLOps · evaluation playbook
 │   ├── fabius-fortuna/     markets & finance    · references: analysis · valuation · honest backtesting · risk
 │   └── fabius-concilium/   cross-model council  · references: council protocol · council.mjs (runnable)
-├── evals/                  the benchmark — three panels + receipts (results.benchmark.json canonical) · structural.mjs (19/19) · portable_eval.py
+├── evals/                  the benchmark — three panels + receipts (results.benchmark.json canonical) · structural.mjs (23/23) · portable_eval.py
 ├── provenance/             content-bound seal — verify.sh · seal manifest · OTS Bitcoin proof · signed tag
 ├── PROVENANCE.md           how authorship is proven, not asserted (with the limits up front)
 ├── AGENTS.md               tool-agnostic bridge (Codex / Cursor / Gemini / …)

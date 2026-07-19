@@ -11,6 +11,12 @@ description: >
   "prove provenance", "anchor it", or "verify authenticity". Boring-cryptography only; defensive — it
   hardens and proves, never weaponizes: no exploit tooling, no wallet-draining, no rug mechanics,
   no market-manipulation code — hardening and verification only.
+when_to_use: >
+  "smart contract review", "deploy a token", "timestamp this work", "notarize this artifact",
+  wallet flows, reading state from a chain.
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 

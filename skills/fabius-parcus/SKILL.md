@@ -8,6 +8,12 @@ description: >
   response and every code change, whenever output drifts verbose, and when the user asks for
   "lean", "minimal", "simplest", "yagni", "be brief", "fewer tokens", or complains about
   over-engineering or bloat. Two intensities: full (default), ultra.
+when_to_use: >
+  "cut this down", "too wordy", "strip it back", "don't overbuild", or when a diff or answer
+  grows past what the task needs.
+license: UNLICENSED
+metadata:
+  author: Ariel Shemesh
 ---
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 
