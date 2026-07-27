@@ -181,7 +181,7 @@ node runtime/fabius.mjs listen --owner npub1…      # reachable by encrypted me
 
 No install, no dependencies, no build — Node 22+ and this repo. Same router, same rules, same contracts (read off disk and handed to the model, verbatim from the sealed files), with hands only a local process can have: your files, your shell, your toolchain.
 
-Capability is gated, not configured. Read-only by default; `--act` lets it write and run, asking each time; `--yes` makes it autonomous — and still holds `git push`, `--prod`, `rm -rf`, `sudo` and `DROP TABLE` for a human. The working directory is a symlink-resolved jail, secrets are on a deny-list no flag overrides, and when the artifact is code the runtime **runs it** and lets a non-zero exit overrule the reviewer's score. `npm test` in `runtime/` is **67 checks with no key and no network** — including the BIP-340 and NIP-44 specification vectors behind the channel.
+Capability is gated, not configured. Read-only by default; `--act` lets it write and run, asking each time; `--yes` makes it autonomous — and still holds `git push`, `--prod`, `rm -rf`, `sudo` and `DROP TABLE` for a human. The working directory is a symlink-resolved jail, secrets are on a deny-list no flag overrides, and when the artifact is code the runtime **runs it** and lets a non-zero exit overrule the reviewer's score. `npm test` in `runtime/` is **68 checks that spend nothing** (61 fully offline; 7 specification-vector tests skip until `npm run vectors`) — including the BIP-340 and NIP-44 specification vectors behind the channel.
 
 <details>
 <summary>Owner-only — the brain is also a private Claude Code plugin</summary>

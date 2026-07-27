@@ -10,7 +10,10 @@ node runtime/fabius.mjs run "read this repo and write the README it is missing"
 ```
 
 No install step, no dependency tree, no build. Node 22 or newer and the repo you are
-already holding. `npm test` runs 67 checks with no key and no network.
+already holding. `npm test` runs **68 checks and spends nothing** — 61 of them offline, and
+the 7 specification-vector tests skip until `npm run vectors` fetches the vectors once.
+They skip loudly rather than passing quietly, because a crypto test that silently does
+nothing is worse than no test.
 
 ## Why local at all
 
@@ -183,9 +186,12 @@ so rather than pretending a 7B model is one.
 ## Testing
 
 ```bash
-npm test                        # 67 checks, no key, no network
-npm run vectors && npm test     # adds the BIP-340 and NIP-44 specification vectors
+npm test                        # 68 checks — 61 run offline, 7 skip without the vectors
+npm run vectors && npm test     # fetch the BIP-340 and NIP-44 vectors once → 68/68
 ```
+
+The vectors are never vendored: they belong to their upstream projects, and a stale copy
+would quietly stop testing what it claims to test.
 
 The model call is injectable, so the whole loop — routing, tools, the gate, every rule,
 the oracle, the memory decision — is exercised by a scripted model. A loop that can only
