@@ -50,6 +50,35 @@ The deepest commitment, drawn from the cryptographic-failure record (BCTV14's un
 
 Re-seal after changing skills: `bash provenance/seal-skills.sh` (rebuilds the manifest), then re-tag and re-stamp per PROVENANCE.md §6.
 
+### Verify MEMBERSHIP, not only content — the hole every manifest checker starts with
+
+The natural way to write a verifier is to walk the manifest and re-hash each file it lists.
+That proves nothing **listed** has changed, and it is blind by construction to a file that
+was **added** after sealing, because the loop never visits it. A dropped-in contract
+carrying a copied fingerprint comment therefore passes a fingerprint check, passes every
+hash in the manifest, and still reaches whatever consumes the sealed set.
+
+So the verifier needs two independent legs, and they answer different questions:
+
+```python
+on_disk = set(glob("skills/*/SKILL.md")) | {"ARCHITECTURE.md", "CORPUS.md", "AGENTS.md"}
+listed  = set(manifest["files"])
+for p in on_disk - listed: fail("UNSEALED file present:", p)   # ← the added-file leg
+for p in listed - on_disk: fail("sealed file missing:",   p)   # ← the removed-file leg
+for p, h in manifest["files"].items(): check_hash(p, h)        # ← the content leg
+```
+
+The general rule, and it outlives this repo: **a seal defines a SET, not just a list of
+hashes.** Any verifier that cannot say "these files and no others" is answering a weaker
+question than the one people think it answered. State the set membership rule explicitly
+somewhere machine-readable, so the verifier derives the expected set rather than trusting
+the manifest to describe itself.
+
+The same asymmetry applies wherever a sealed artifact is *consumed*, not just checked: a
+loader that reads a sealed set should be able to refuse anything outside it. fabius's local
+runtime takes `--sealed-only` for exactly this — the seal becomes a gate instead of a
+report (→ `../../fabius-cohors/references/local-agent-runtime.md`).
+
 ## The honest limits
 
 A public git repo **cannot be made uncloneable** — that is how git works, and no seal changes it. Sealing defends ownership by **provenance and enforcement, not by a lock**: priority you can anchor to Bitcoin, authorship you can sign, copying you can detect. It does not protect *ideas* — only the expression, the date, and the authorship. Claim exactly that and no more.

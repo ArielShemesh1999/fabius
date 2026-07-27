@@ -74,9 +74,20 @@ if [ -f provenance/seal-manifest.json ]; then
   count=$(grep -o '"count": [0-9]*' provenance/seal-manifest.json | grep -o '[0-9]*' | head -1)
   if command -v python3 >/dev/null 2>&1; then
     if python3 - <<'PY'
-import hashlib, json, sys
+import glob, hashlib, json, sys
 m = json.load(open("provenance/seal-manifest.json"))
 bad = 0
+# MEMBERSHIP FIRST. Hashing only the files the manifest lists proves that nothing
+# LISTED changed — it cannot notice a contract that was ADDED after sealing, because
+# the loop never visits it. An added skill carrying a copied fingerprint would
+# otherwise pass every other leg of this script while reaching the model unsealed.
+# The sealed set is exactly: every skills/*/SKILL.md plus the three canonical docs.
+on_disk = set(glob.glob("skills/*/SKILL.md")) | {"ARCHITECTURE.md", "CORPUS.md", "AGENTS.md"}
+listed = set(m["files"])
+for p in sorted(on_disk - listed):
+    print("    UNSEALED file present:", p); bad += 1
+for p in sorted(listed - on_disk):
+    print("    sealed file no longer on disk:", p); bad += 1
 for p, h in m["files"].items():
     try:
         d = hashlib.sha256(open(p, "rb").read()).hexdigest()

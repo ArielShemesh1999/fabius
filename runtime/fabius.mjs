@@ -55,6 +55,7 @@ ${paint('violet', 'fabius')} ${paint('dim', VERSION)} — the agent, on your mac
       --tier frontier|mid|fast  override the router's choice
       --budget <usd>           stop rather than spend more (default 2.00)
       --offline                no network tools
+      --sealed-only            refuse any contract the seal does not cover
       --no-memory              do not compound anything from this run
       --json                   machine-readable result
 
@@ -122,6 +123,7 @@ function runOptions(flags) {
     budgetUsd: flags.budget ? Number(flags.budget) : undefined,
     offline: !!flags.offline,
     remember: !flags['no-memory'],
+    sealedOnly: !!flags['sealed-only'],
     maxSteps: flags.steps ? Number(flags.steps) : undefined,
   };
 }
@@ -215,8 +217,13 @@ function cmdDoctor() {
   say(`   ${skills.size} skill contract(s) loaded`);
   const seal = verifySeal();
   if (!seal.available) say(paint('dim', `   seal: ${seal.reason}`));
-  else if (seal.drift.length) say(paint('red', `   seal: ${seal.matched}/${seal.total} match — DRIFT in ${seal.drift.join(', ')}`));
-  else say(paint('green', `   seal: ${seal.matched}/${seal.total} files match the sealed manifest`));
+  else {
+    if (seal.drift.length) say(paint('red', `   seal: ${seal.matched}/${seal.total} match — DRIFT in ${seal.drift.join(', ')}`));
+    else say(paint('green', `   seal: ${seal.matched}/${seal.total} files match the sealed manifest`));
+    // A contract the manifest never listed is invisible to a hash check — it has to be
+    // looked for separately, or a dropped-in skill reaches the model unsealed.
+    if (seal.unsealed.length) say(paint('red', `   seal: ${seal.unsealed.length} UNSEALED contract(s) present — ${seal.unsealed.join(', ')}  (run with --sealed-only to refuse them)`));
+  }
 
   say('');
   say(paint('bold', '  state'));

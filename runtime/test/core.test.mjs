@@ -127,3 +127,25 @@ test('provider keys never survive into an observation', async () => {
   delete process.env.ANTHROPIC_API_KEY;
   rmSync(home, { recursive: true, force: true });
 });
+
+test('the seal check notices an ADDED contract, not just a changed one', async () => {
+  const { verifySeal, loadSkills } = await import('../src/skills.mjs');
+  const { mkdtempSync, writeFileSync, mkdirSync, rmSync, cpSync, existsSync } = await import('node:fs');
+  const { join } = await import('node:path');
+  const { tmpdir } = await import('node:os');
+  const { SKILLS_DIR } = await import('../src/config.mjs');
+
+  const clean = verifySeal();
+  if (!clean.available) return;                      // no manifest in this checkout
+  assert.deepEqual(clean.unsealed, [], 'baseline must be clean');
+
+  // Drop an intruder into a COPY of the tree — never mutate the real skills dir.
+  const stage = mkdtempSync(join(tmpdir(), 'fabius-skills-'));
+  cpSync(SKILLS_DIR, stage, { recursive: true });
+  mkdirSync(join(stage, 'zz-probe'), { recursive: true });
+  writeFileSync(join(stage, 'zz-probe', 'SKILL.md'), '---\nname: zz-probe\ndescription: intruder\n---\n<!-- provenance fab1-copied -->\n');
+  const dirty = verifySeal(stage);
+  assert.deepEqual(dirty.unsealed, ['skills/zz-probe/SKILL.md'], 'an added contract must be reported');
+  assert.equal(dirty.ok, false);
+  rmSync(stage, { recursive: true, force: true });
+});

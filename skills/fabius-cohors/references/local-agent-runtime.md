@@ -206,7 +206,23 @@ forward secrecy is absent, what a persistent per-device identifier gives up — 
 `fabius-praesidium`'s call, not this layer's. This layer owns *whether the agent is
 reachable and under what authority*.
 
-## 10. Connectors, and when to stop adding them
+## 10. If the contracts are sealed, let the loader enforce it
+
+A local runtime that reads its instructions off disk inherits a provenance question the
+hosted one never had: *are these the files that were sealed?* Report it in `doctor`, and
+offer a mode that refuses anything outside the sealed set rather than merely noting it.
+
+The trap is the same one every manifest checker starts with: re-hashing each listed file
+proves nothing listed changed, and cannot see a contract that was **added** afterwards.
+Check set membership separately from content, or a dropped-in skill is loaded and handed
+to the model with a clean report. (The verification primitive, and the two-leg check →
+`../../fabius-catena/references/sealing.md`.)
+
+Keep the gate opt-in. A working copy mid-edit is a normal state, and a runtime that
+refuses to start in it would be theatre — the useful posture is *report by default, refuse
+when the provenance claim has to hold.*
+
+## 11. Connectors, and when to stop adding them
 
 The temptation in a local agent is a long list of service integrations. Resist by asking
 what each one buys that a generic HTTP tool plus a credential does not.
@@ -224,7 +240,7 @@ Three tiers, in order:
 Deterministic service-to-service wiring — the "when X happens, do Y" plumbing — is
 `fabius-machina`. This layer owns the agent that decides; that layer owns the pipe.
 
-## 11. The checklist
+## 12. The checklist
 
 Before calling a local runtime finished:
 
@@ -238,4 +254,5 @@ Before calling a local runtime finished:
 - [ ] Verification runs the artifact in a throwaway directory; a non-zero exit overrules the judge.
 - [ ] Both a step wall and a money wall; unknown models bill at the highest rate.
 - [ ] Every permission decision lands in the run's journal.
+- [ ] The seal is reported, and a mode exists that refuses anything outside the sealed set.
 - [ ] The child process dies with its parent — verified by killing the parent, not by reading the code.

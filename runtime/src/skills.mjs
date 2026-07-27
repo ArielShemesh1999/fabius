@@ -67,11 +67,21 @@ export function verifySeal(dir = SKILLS_DIR) {
     const got = existsSync(abs) ? createHash('sha256').update(readFileSync(abs)).digest('hex') : 'MISSING';
     results.push({ file: rel, ok: got === want });
   }
+  // Hashing only what the manifest LISTS proves nothing listed changed — it cannot
+  // notice a contract that was ADDED after sealing, because the loop never visits it.
+  // A dropped-in skill is exactly what this runtime would otherwise load and hand to
+  // the model, so membership is checked separately from content.
+  const listed = new Set(Object.keys(manifest.files || {}));
+  const unsealed = [...loadSkills(dir).skills.values()]
+    .map((s) => `skills/${s.name}/SKILL.md`)
+    .filter((rel) => !listed.has(rel));
   return {
     available: true,
     total: results.length,
     matched: results.filter((r) => r.ok).length,
     drift: results.filter((r) => !r.ok).map((r) => r.file),
+    unsealed,
+    ok: results.every((r) => r.ok) && unsealed.length === 0,
     merkleRoot: manifest.merkle_root,
   };
 }
@@ -80,8 +90,19 @@ export function verifySeal(dir = SKILLS_DIR) {
 // every run; the routed specialist comes next; a second domain is included only if it
 // still fits. Contracts are ≤12KB each by construction (progressive disclosure) — the
 // budget here bounds the WORST case, it is not expected to bite on a normal route.
-export function contractsFor(routeResult, { budget = 24000, dir = SKILLS_DIR } = {}) {
+export function contractsFor(routeResult, { budget = 24000, dir = SKILLS_DIR, sealedOnly = false } = {}) {
   const { skills } = loadSkills(dir);
+  // `--sealed-only` turns the seal from a report into a gate: a contract that is not in
+  // the manifest, or whose bytes drifted from it, is refused rather than handed to the
+  // model. Off by default, because a working copy mid-edit is a normal state and
+  // refusing to run in it would be theatre; on when the provenance claim has to hold.
+  let refused = [];
+  if (sealedOnly) {
+    const seal = verifySeal(dir);
+    if (!seal.available) throw new Error(`--sealed-only: no seal manifest to check against (${seal.reason})`);
+    refused = [...new Set([...(seal.unsealed || []), ...(seal.drift || [])])]
+      .map((rel) => rel.split('/')[1]).filter(Boolean);
+  }
   const wanted = [];
   const push = (n) => { if (skills.has(n) && !wanted.includes(n)) wanted.push(n); };
   push('fabius-parcus');
@@ -91,13 +112,15 @@ export function contractsFor(routeResult, { budget = 24000, dir = SKILLS_DIR } =
   const parts = [];
   let used = 0;
   const included = [];
+  const excluded = [];
   for (const n of wanted) {
+    if (refused.includes(n)) { excluded.push(n); continue; }
     const s = skills.get(n);
     const block = `<<<CONTRACT ${s.name}>>>\n${s.body.trim()}\n<<<END CONTRACT ${s.name}>>>`;
     if (used + block.length > budget && parts.length) break;
     parts.push(block); used += block.length; included.push(s.name);
   }
-  return { text: parts.join('\n\n'), included, bytes: used };
+  return { text: parts.join('\n\n'), included, excluded, bytes: used };
 }
 
 // A one-line inventory for `fabius doctor`.

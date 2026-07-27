@@ -51,8 +51,11 @@ export async function run(task, options = {}) {
   }
 
   // The brain: the routed contracts, verbatim from the sealed files.
-  const contracts = contractsFor(r);
-  emit('contracts', { included: contracts.included, bytes: contracts.bytes });
+  const contracts = contractsFor(r, { sealedOnly: !!options.sealedOnly });
+  emit('contracts', { included: contracts.included, excluded: contracts.excluded, bytes: contracts.bytes });
+  if (contracts.excluded?.length) {
+    emit('rule', { rule: 'seal', note: `refused unsealed or drifted contract(s): ${contracts.excluded.join(', ')}` });
+  }
 
   // SENSE.
   let memory = '';
