@@ -168,6 +168,21 @@ The full treatment — the fifteen-skill architecture, the proven core of twenty
 
 fabius runs from **one console — [synapse-vert-one.vercel.app](https://synapse-vert-one.vercel.app)** — across every major model (Anthropic · OpenAI · Google · Mistral · Groq): pick a model, give it the goal, and watch the Scout → Plan → Strike → Prove → Record loop run with an independent verifier and verify-gated memory. Reach the agent on Telegram [@fabiusagent_bot](https://t.me/fabiusagent_bot) or WhatsApp. Read the paper → **[paper/fabius-as-a-system.pdf](paper/fabius-as-a-system.pdf)**.
 
+### …and on your own machine
+
+The console is the right place for a long-running operator — it survives the laptop closing and holds the compounding memory. What it cannot be is *here*: it has no filesystem, so it cannot read the repository you are working in, and the task leaves the building. **[`runtime/`](runtime/)** is the other half.
+
+```bash
+node runtime/fabius.mjs doctor                     # what is configured, and whether the seal still matches
+node runtime/fabius.mjs run "read this repo and write the README it is missing"
+node runtime/fabius.mjs recon areta.co.il          # external audit — no API key, no account
+node runtime/fabius.mjs listen --owner npub1…      # reachable by encrypted message, no server in between
+```
+
+No install, no dependencies, no build — Node 22+ and this repo. Same router, same rules, same contracts (read off disk and handed to the model, verbatim from the sealed files), with hands only a local process can have: your files, your shell, your toolchain.
+
+Capability is gated, not configured. Read-only by default; `--act` lets it write and run, asking each time; `--yes` makes it autonomous — and still holds `git push`, `--prod`, `rm -rf`, `sudo` and `DROP TABLE` for a human. The working directory is a symlink-resolved jail, secrets are on a deny-list no flag overrides, and when the artifact is code the runtime **runs it** and lets a non-zero exit overrule the reviewer's score. `npm test` in `runtime/` is **67 checks with no key and no network** — including the BIP-340 and NIP-44 specification vectors behind the channel.
+
 <details>
 <summary>Owner-only — the brain is also a private Claude Code plugin</summary>
 
@@ -244,6 +259,7 @@ fabius/
 │   ├── fabius-doctrina/    AI/ML engineering    · references: serving · MLOps · evaluation playbook
 │   ├── fabius-fortuna/     markets & finance    · references: analysis · valuation · honest backtesting · risk
 │   └── fabius-concilium/   cross-model council  · references: council protocol · council.mjs (runnable)
+├── runtime/                the local body — zero-dependency Node CLI: run · chat · recon · listen · doctor (67 tests, no key)
 ├── evals/                  the benchmark — three panels + receipts (results.benchmark.json canonical) · structural.mjs (23/23) · portable_eval.py
 ├── provenance/             content-bound seal — verify.sh · seal manifest · OTS Bitcoin proof · signed tag
 ├── PROVENANCE.md           how authorship is proven, not asserted (with the limits up front)

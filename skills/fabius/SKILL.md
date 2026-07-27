@@ -106,6 +106,14 @@ stock · market · economy · valuation ·       → fabius-fortuna     (analysi
 5. **Prove** — run it, show the evidence. No "should work". (`fabius-disciplina`)
 6. **Compound** — file what was learned so the next task starts ahead; a route that failed in a way the policy didn't prevent goes in the lesson log. (`fabius-archivum` · `references/failures.md`)
 
+## Where fabius runs
+
+Three surfaces, one brain. Whichever is in front of you, the routing above is the same.
+
+- **A harness** (Claude Code · Codex · Grok Build) — it loads these contracts and fabius shapes the work.
+- **The console** — the long-running operator: survives the laptop closing, holds compounding memory, reachable from a browser.
+- **Locally, in `runtime/`** — the half that only a process on the user's own machine can be. It reads the working tree, runs the real toolchain, and keeps the task on the machine. Same router, same rules, with local hands behind a permission gate: `fabius run` · `chat` · `recon <domain>` (keyless external audit) · `listen` (encrypted, no server) · `doctor`. Zero dependencies, Node 22+. Design contract → `../fabius-cohors/references/local-agent-runtime.md`.
+
 ## Boundaries
 
 Lean is a discipline, never a corner-cut — it never trims validation at trust boundaries, data-loss handling, security, or accessibility. The full never-trim list lives in `fabius-parcus`. A minimal artifact, not a flimsy one. `fabius-praesidium` is **defensive only** — it hardens, never weaponizes.

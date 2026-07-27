@@ -21,3 +21,8 @@ evals/structural.json
 *.part
 *.partial
 !evals/results.benchmark.json
+
+# Specification test vectors are fetched on demand (runtime/tools/fetch-vectors.sh),
+# never vendored — they belong to their upstream projects, and a stale copy would
+# quietly stop testing what it claims to test.
+runtime/test/vectors/

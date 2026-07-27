@@ -55,6 +55,38 @@ Phase 4 is the iron law: no production code for non-trivial logic until a test f
 
 **Decision rule:** wire the gate when correctness is load-bearing and the cost of a silent regression is high. Don't gate throwaway prototypes, generated code, or pure config — the same narrow exceptions phase 4 already names, each with the human's sign-off.
 
+## 6. Prove an agent loop without a key — inject the model call
+
+Agent code has a testing problem the rest of the codebase does not: the interesting logic
+sits *around* a paid, non-deterministic, network-bound call. So it goes untested, and the
+bugs that ship are the ones nobody could afford to reproduce.
+
+The fix is one line at the seam:
+
+```js
+const llm = options.callLLM || callLLM;
+```
+
+Now a scripted model drives the whole loop with no key, no network and no spend — and the
+things you can finally assert are exactly the ones that break in production:
+
+- a failed review earns **exactly one** rework, not a loop (assert the call count, not just the outcome);
+- a denied write feeds its refusal back into the transcript and the run still delivers;
+- the budget wall stops the run *before* the next call rather than after it;
+- a repeated probe triggers its nudge once;
+- an unverified deliverable does **not** compound into memory.
+
+Two rules keep this honest. The scripted model must **run past its script** — anything
+after the last scripted turn delivers, so a loop that runs long fails loudly instead of
+hanging. And the fake must be the *only* fake: real files in a real temp directory, the
+real permission gate, the real tool executor. Stub the model, never the machinery — a test
+that stubs the gate proves the gate compiles.
+
+Where the artifact is code, keep the hard oracle in the loop too: run the delivered block
+in a throwaway directory and let a non-zero exit overrule the judge's score. A generous
+reviewer can be talked past — including by an instruction hidden inside the deliverable it
+is grading. A failing process cannot. (Runtime design → `../../fabius-cohors/references/local-agent-runtime.md`.)
+
 ---
 
 The never-trim floor still holds underneath all of this: validation, security, and a11y are not candidates for the YAGNI ladder (→ `fabius-parcus`). These tools change *how you scout and prove*; they never license skipping the floor.

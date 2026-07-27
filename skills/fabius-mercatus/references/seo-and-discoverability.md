@@ -87,6 +87,8 @@ This is the never-trim floor of the channel: a page engines can't crawl, can't r
 
 Speed and CLS are *built*, not configured — the implementation (responsive images, no font-swap jank, no immutable-cache staleness) routes to **→ `fabius-decor`**. Verify the live page, not the local build (`fabius-disciplina`): a clean Lighthouse score on localhost can hide a production CSP or cache regression.
 
+**Read the floor off the live host in one pass.** `fabius recon <domain>` (in `runtime/`, no key, no account) returns the discoverability half of this table alongside the security half: `<title>`, meta description, `canonical`, `og:image`, the `viewport` tag, `lang` on `<html>`, whether a sitemap exists, and what `robots.txt` actually says — each as a finding with the fix. Two of those are ranking-relevant in a way that is easy to miss: **no `viewport`** means the page is judged as its mobile self and fails, and **no `lang`** breaks both screen readers and right-to-left rendering. The security findings from the same scan are `fabius-praesidium`'s to action (→ `../../fabius-praesidium/references/external-recon.md`); this layer owns the discoverability reading of them.
+
 ## 7 · AI-answer visibility — be the cited source (the 2026 layer)
 
 Increasingly the click is replaced by an AI answer that cites a source. The new game is not "rank #1" — it's *be the thing the answer quotes and attributes*. Same discipline, sharper:
