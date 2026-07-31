@@ -78,7 +78,11 @@ const INLINE_CODE = /(^|\s)-{1,2}(e|c|p|eval|exec|command|print)(\s|=|$)/;
 const AUTO_EXEC_ALLOW = [
   /^(npm|pnpm|yarn|bun)\s+(test|run\s+[\w:.-]+|ls|list|why|outdated|audit)\b/,
   /^(npx\s+)?(jest|vitest|mocha|ava|pytest|tsc|eslint|prettier|ruff|black|mypy|go\s+test|cargo\s+(test|check|build|clippy))\b/,
-  /^(node|python3?|deno|bun)\s+[\w./@+-]+(\s+[\w./@=:+-]*)*$/,
+  // Each argument group must start with whitespace and its body may not contain any, so
+  // a run of spaces has exactly one valid split. The earlier `(\s+[…]*)*` — a nestable
+  // quantifier over a body that can match empty — had 2^(n-1) of them, and a command of
+  // the form `node x` + 30 spaces + `#` froze this gate for minutes on the way in.
+  /^(node|python3?|deno|bun)(\s+[\w./@=:+-]+)+$/,
   /^git\s+(status|diff|log|show|branch|remote|rev-parse|describe|ls-files|blame)\b/,
   /^(ls|pwd|whoami|date|echo|which|uname|wc|head|tail|cat|file|stat|du|df|tree|sort|uniq|cut|basename|dirname|realpath)\b/,
   /^(grep|rg|jq|diff|md5|shasum|sha256sum)\b/,
@@ -185,10 +189,30 @@ export function classify({ posture = 'ask', cap, target, jail, dangerous = false
       if (dangerous) return { decision: 'allow', reason: `irreversible (${why}) — released by --dangerously-approve-everything` };
       return { decision: 'ask', reason: `irreversible: ${why}` };
     }
+    // The verification oracle runs a whole program the model wrote. No allowlist can
+    // vouch for a program the way it can vouch for `npm test`, so `--yes` does not get
+    // to skip the human here: autonomous mode approves recognised commands, not
+    // authored code. A run with no terminal simply skips the oracle and falls back to
+    // the reviewer's verdict — the deliverable still ships, unverified by execution.
+    if (oracle && posture !== 'ask') {
+      if (dangerous) return { decision: 'allow', reason: 'model-authored code — released by --dangerously-approve-everything' };
+      return { decision: 'ask', reason: 'model-authored code — a human reads the body before it runs on this machine' };
+    }
+    // The jail applies to commands too, not only to the read and write tools: under
+    // `--yes` a bare `cat /etc/passwd` or `node /tmp/x.js` is on the allowlist above and
+    // would otherwise run unprompted. A command naming a path outside the working
+    // directory goes to a human instead. Same caveat as the secret screen — arbitrary
+    // shell can spell a path other ways, so this raises the bar, it is not a seal.
+    if (jail && posture === 'auto' && !dangerous) {
+      for (const p of commandPaths(target)) {
+        const j = insideJail(p, jail);
+        if (!j.ok) return { decision: 'ask', reason: `the command reaches outside the working directory (${j.resolved}) — a human decides` };
+      }
+    }
     // Autonomous mode approves what it recognises and can inspect; anything else — an
     // unknown binary, a pipeline, a substitution, an interpreter given inline code —
     // is held for a human, and a non-interactive run refuses it rather than guessing.
-    if (posture === 'auto' && !dangerous && !oracle && !autoApprovable(target)) {
+    if (posture === 'auto' && !dangerous && !autoApprovable(target)) {
       return { decision: 'ask', reason: 'autonomous mode approves only recognised, inspectable commands — this one is not on that list' };
     }
   }

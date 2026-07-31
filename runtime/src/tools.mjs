@@ -21,7 +21,7 @@ import { isSecretPath } from './approve.mjs';
 import { clamp } from './util.mjs';
 import { memoryContext } from './memory.mjs';
 import { route } from './route.mjs';
-import { recon, formatReport } from './recon.mjs';
+import { recon, formatReport, normalizeTarget } from './recon.mjs';
 
 const MAX_OBS = 8000;      // an observation longer than this teaches nothing extra
 const MAX_READ = 200000;
@@ -57,8 +57,14 @@ const LOCAL_NAME = /(^|\.)(localhost|local|internal|intranet|home\.arpa)$/i;
 
 // Resolve before fetching and refuse the whole answer set: a hostname that resolves to
 // even one private address is refused, so a split-horizon name cannot smuggle a request in.
-async function assertPublicHost(u) {
-  const host = u.hostname.replace(/^\[|\]$/g, '');
+//
+// Be honest about the residual: this resolves the name, and then the request resolves it
+// again independently, so a hostile name on a short TTL can answer public here and
+// 169.254.169.254 on the request itself. Closing that needs pinning the checked address
+// into the connection (a custom agent/lookup), which node:fetch does not expose. What is
+// here defeats a static private target and a redirect to one — treat it as one layer.
+export async function assertPublicHostname(hostname) {
+  const host = String(hostname || '').replace(/^\[|\]$/g, '');
   if (isIP(host)) return isBlockedAddress(host) ? `(refused: ${host} is a loopback, private or link-local address)` : null;
   if (LOCAL_NAME.test(host)) return `(refused: ${host} is a local name)`;
   let addrs;
@@ -67,6 +73,8 @@ async function assertPublicHost(u) {
   for (const a of addrs) if (isBlockedAddress(a.address)) return `(refused: ${host} resolves to a loopback, private or link-local address)`;
   return null;
 }
+
+const assertPublicHost = (u) => assertPublicHostname(u.hostname);
 
 async function httpGetText(url, { timeoutMs = 15000, maxBytes = 120000, userAgent = 'fabius/1.0', maxHops = 5 } = {}) {
   let u;
@@ -84,7 +92,10 @@ async function httpGetText(url, { timeoutMs = 15000, maxBytes = 120000, userAgen
       res = await fetch(target, { signal: ac.signal, redirect: 'manual', headers: { 'user-agent': userAgent, accept: 'text/html,text/plain,application/json;q=0.9,*/*;q=0.8' } });
       if (![301, 302, 303, 307, 308].includes(res.status)) break;
       const loc = res.headers.get('location');
-      if (!loc) break;
+      // Nothing reads a redirect's body, and the socket stays held until it is consumed
+      // or cancelled — release it before moving to the next hop.
+      await res.body?.cancel().catch(() => {});
+      if (!loc) return `(${res.status} redirect with no location)`;
       if (++hops > maxHops) return '(too many redirects)';
       let next;
       try { next = new URL(loc, target); } catch { return '(bad redirect target)'; }
@@ -278,8 +289,16 @@ export const TOOLS = {
     run: async (input, ctx) => {
       const gate = await ctx.gate.check('net', input);
       if (!gate.approved) return `(denied: ${gate.why})`;
+      // recon opens TLS, HTTP and (with ports) TCP connections to whatever host it is
+      // handed, so it needs the same public-internet check `fetch` applies: `127.0.0.1`,
+      // `169.254.169.254`, `192.168.1.1` and `router.local` all satisfy its hostname
+      // syntax, and "audit a domain you own" would otherwise scan the operator's LAN.
+      let host;
+      try { host = normalizeTarget(String(input || '').trim()); } catch (e) { return `(recon failed: ${e.message})`; }
+      const bad = await assertPublicHostname(host);
+      if (bad) return bad;
       try {
-        const r = await recon(String(input || '').trim());
+        const r = await recon(host);
         return formatReport(r, { color: false });
       } catch (e) { return `(recon failed: ${e.message})`; }
     },

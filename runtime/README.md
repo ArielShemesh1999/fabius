@@ -72,12 +72,20 @@ has looked, so it is never auto-approved. Everything else — `rm -rf` however i
 human, and a non-interactive run refuses it rather than guessing. Releasing the irreversible
 list needs `--dangerously-approve-everything`, and taking that step is written into the run's
 audit log. The delivered artifact that the execution oracle runs goes through the same gate,
-printed in full, counted against the same command budget.
+printed in full, counted against the same command budget — and because no allowlist can
+vouch for a whole program the way it can vouch for `npm test`, `--yes` does **not** release
+it: the oracle asks even in autonomous mode, and an unattended run skips the execution check
+rather than running authored code unread. `--dangerously-approve-everything` is what runs it
+unattended.
 
 Two boundaries hold regardless of posture:
 
 - **The working directory is a jail.** Paths are resolved through symlinks before the
-  check, so a link pointing outward is refused rather than followed.
+  check, so a link pointing outward is refused rather than followed. For `read` and
+  `write` that is absolute. For `exec` it is one layer, not a seal — the path-looking
+  arguments of a command are held to the same jail, so `cat /etc/passwd` and
+  `node /tmp/x.js` are never auto-approved and go to a human, but arbitrary shell can
+  always spell a path some other way.
 - **Secrets are on a deny-list that no flag overrides.** `.ssh`, `.aws`, `.env`, `*.pem`,
   `.npmrc`, keychains — the agent cannot read them, `grep` and `list` skip them file by
   file rather than only at the directory, a command that names one is refused, and anything
@@ -87,9 +95,11 @@ Two boundaries hold regardless of posture:
   boundary you can rely on is the allowlist above, and the fact that `exec` is not offered
   at all without `--act`.
 
-`fetch` reaches the public internet only: loopback, RFC1918, link-local (including cloud
-instance metadata at `169.254.169.254`), CGNAT and multicast are refused, hostnames are
-resolved and checked before the request, and every redirect hop is re-checked.
+`fetch` and `recon` reach the public internet only: loopback, RFC1918, link-local (including
+cloud instance metadata at `169.254.169.254`), CGNAT and multicast are refused, hostnames are
+resolved and checked before the request, and every redirect hop is re-checked. One residual,
+stated rather than hidden: the name is resolved for the check and again for the connection,
+so a hostile name on a very short TTL can answer differently the second time.
 
 Every decision, allowed or denied, lands in the run's journal under `~/.fabius/runs/`.
 
@@ -121,8 +131,9 @@ The rules that were measured, and fire here too:
   rather than summarised. A summary loses exactly the detail a dispute turns on.
 
 **The oracle runs here.** When the deliverable contains a runnable block and you are
-acting, the runtime executes it in a throwaway directory. A non-zero exit overrules the
-reviewer's score — a judge can be talked past, a failing process cannot.
+acting, the runtime executes it in a throwaway directory, with credential-shaped
+environment variables stripped, once you approve the body it prints. A non-zero exit
+overrules the reviewer's score — a judge can be talked past, a failing process cannot.
 
 **Two walls.** Steps, and money. The run stops at its budget rather than through it,
 counting an unknown model at its provider's highest published rate so the error is

@@ -73,6 +73,29 @@ test('autonomous mode approves ordinary work but still holds the irreversible', 
   assert.equal(classify({ posture: 'auto', cap: 'exec', target: 'git push', jail, dangerous: true }).decision, 'allow');
 });
 
+test('the jail holds for commands too — a recognised command reaching outside still asks', () => {
+  for (const c of ['cat /etc/passwd', 'cat ../../../../etc/hosts', 'grep -r password /Users',
+                   'head -50 ~/Documents/notes.txt', 'node /tmp/evil.js']) {
+    assert.equal(classify({ posture: 'auto', cap: 'exec', target: c, jail }).decision, 'ask', `${c} should not auto-approve`);
+  }
+  for (const c of ['npm test', 'node ./build.mjs', 'grep -rn foo src', 'git status']) {
+    assert.equal(classify({ posture: 'auto', cap: 'exec', target: c, jail }).decision, 'allow', `${c} should still run`);
+  }
+});
+
+test('the oracle is not an exemption — authored code is not auto-approved by --yes', () => {
+  const body = 'run the delivered bash artifact:\nfind "$HOME/work" -delete';
+  assert.equal(classify({ posture: 'auto', cap: 'exec', target: body, jail, oracle: true }).decision, 'ask');
+  assert.equal(classify({ posture: 'never', cap: 'exec', target: body, jail, oracle: true }).decision, 'deny');
+  assert.equal(classify({ posture: 'auto', cap: 'exec', target: body, jail, oracle: true, dangerous: true }).decision, 'allow');
+});
+
+test('the allowlist decides in linear time — no catastrophic backtracking on the way in', () => {
+  const t = Date.now();
+  assert.equal(classify({ posture: 'auto', cap: 'exec', target: 'node a' + ' '.repeat(60) + '#', jail }).decision, 'ask');
+  assert.ok(Date.now() - t < 250, 'the gate must not hang on a crafted command');
+});
+
 test('read-only posture denies every change', () => {
   assert.equal(classify({ posture: 'never', cap: 'write', target: 'src/b.txt', jail }).decision, 'deny');
   assert.equal(classify({ posture: 'never', cap: 'exec', target: 'ls', jail }).decision, 'deny');

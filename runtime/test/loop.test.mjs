@@ -201,7 +201,9 @@ test('the local execution oracle overrules a generous reviewer', async () => {
     '```python\nprint("ok")\n```\n' + 'x'.repeat(400),
     verdictOf(95),
   ]);
-  const res = await run('write a python script', { cfg: CFG, jail, callLLM: llm, act: true, approve: 'auto', remember: false });
+  // `--yes` alone no longer runs model-authored code unattended — the oracle asks, and a
+  // test has no terminal to answer. The explicit escape hatch is what releases it.
+  const res = await run('write a python script', { cfg: CFG, jail, callLLM: llm, act: true, approve: 'auto', dangerous: true, remember: false });
   // The first artifact exits 3 → the run must not have accepted it at 95.
   assert.ok(res.fired.includes('R8'), 'a failing oracle forces the rework');
   assert.equal(res.verdict.execVerified, true);
