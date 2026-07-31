@@ -49,7 +49,9 @@ A cloud agent's blast radius is a container. A local agent's blast radius is you
 So capability is not a setting here — it is a gate every tool passes through.
 
 Four capabilities. `read` and `net` never prompt: they observe, they do not change
-anything. `write` and `exec` do, and they are not even offered unless you pass `--act`.
+anything — and `net` is refused outright under `--read-only` (posture `never`), because a
+run that cannot touch anything cannot reach out either. `write` and `exec` prompt, and are
+not even offered unless you pass `--act`.
 
 Three postures:
 
@@ -60,18 +62,34 @@ fabius run "…" --act           # it may ask. Each write and each command, once
 fabius run "…" --act --yes     # autonomous — except for what cannot be undone.
 ```
 
-That last exception is the point. Under `--yes`, `npm test` runs and `rm -rf`, `git push`,
-`vercel --prod`, `sudo`, `DROP TABLE` and `curl … | sh` still stop and wait for a human.
-Releasing those needs `--dangerously-approve-everything`, and taking that step is written
-into the run's audit log.
+That last exception is the point, and it is an ALLOWLIST, not a list of banned words.
+Autonomous mode approves only commands it recognises and can actually inspect — `npm test`,
+`node build.mjs`, `pytest`, `git status`, `ls`, `grep` and their neighbours. A command line
+carrying a pipe, a `;`, a `$(…)`, a backtick, a redirect, or an interpreter handed inline
+code (`node -e`) cannot be inspected honestly, because the shell re-reads it after the gate
+has looked, so it is never auto-approved. Everything else — `rm -rf` however it is spelled,
+`git push`, `vercel --prod`, `sudo`, `DROP TABLE`, `curl … | sh` — stops and waits for a
+human, and a non-interactive run refuses it rather than guessing. Releasing the irreversible
+list needs `--dangerously-approve-everything`, and taking that step is written into the run's
+audit log. The delivered artifact that the execution oracle runs goes through the same gate,
+printed in full, counted against the same command budget.
 
 Two boundaries hold regardless of posture:
 
 - **The working directory is a jail.** Paths are resolved through symlinks before the
   check, so a link pointing outward is refused rather than followed.
 - **Secrets are on a deny-list that no flag overrides.** `.ssh`, `.aws`, `.env`, `*.pem`,
-  `.npmrc`, keychains — the agent cannot read them, and anything key-shaped that reaches
-  an observation by another route is redacted before the model sees it.
+  `.npmrc`, keychains — the agent cannot read them, `grep` and `list` skip them file by
+  file rather than only at the directory, a command that names one is refused, and anything
+  key-shaped that reaches an observation by another route is redacted before the model sees
+  it. Be honest about the last part: screening a shell string for secret paths raises the
+  bar, it does not seal it — arbitrary shell can always spell a path some other way. The
+  boundary you can rely on is the allowlist above, and the fact that `exec` is not offered
+  at all without `--act`.
+
+`fetch` reaches the public internet only: loopback, RFC1918, link-local (including cloud
+instance metadata at `169.254.169.254`), CGNAT and multicast are refused, hostnames are
+resolved and checked before the request, and every redirect hop is re-checked.
 
 Every decision, allowed or denied, lands in the run's journal under `~/.fabius/runs/`.
 

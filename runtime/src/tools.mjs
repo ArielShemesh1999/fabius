@@ -14,7 +14,10 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync } from 'node:fs';
 import { join, resolve, relative, dirname } from 'node:path';
 import { spawn } from 'node:child_process';
+import { lookup } from 'node:dns/promises';
+import { isIP } from 'node:net';
 import { redact } from './config.mjs';
+import { isSecretPath } from './approve.mjs';
 import { clamp } from './util.mjs';
 import { memoryContext } from './memory.mjs';
 import { route } from './route.mjs';
@@ -25,14 +28,69 @@ const MAX_READ = 200000;
 
 const rel = (p, jail) => relative(jail, resolve(jail, p)) || '.';
 
-async function httpGetText(url, { timeoutMs = 15000, maxBytes = 120000, userAgent = 'fabius/1.0' } = {}) {
+// The network the agent may reach is the PUBLIC internet. Loopback, RFC1918, link-local
+// (which is where cloud instance metadata lives), CGNAT and multicast are not "a URL" —
+// they are the inside of the machine and of the network it sits on, and a fetch tool that
+// can reach them is a hole in every firewall the operator owns.
+export function isBlockedAddress(ip) {
+  const v = isIP(String(ip || ''));
+  if (!v) return false;
+  if (v === 4) {
+    const [a, b] = String(ip).split('.').map(Number);
+    if (a === 0 || a === 127 || a === 10 || a >= 224) return true;      // this-host, loopback, private, multicast/reserved
+    if (a === 172 && b >= 16 && b <= 31) return true;                   // 172.16/12
+    if (a === 192 && b === 168) return true;                            // 192.168/16
+    if (a === 169 && b === 254) return true;                            // link-local — cloud IMDS
+    if (a === 100 && b >= 64 && b <= 127) return true;                  // CGNAT 100.64/10
+    if (a === 192 && b === 0) return true;                              // 192.0.0/24, 192.0.2/24
+    if (a === 198 && (b === 18 || b === 19)) return true;               // benchmarking 198.18/15
+    return false;
+  }
+  const s = String(ip).toLowerCase().split('%')[0];
+  const m4 = s.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);
+  if (m4) return isBlockedAddress(m4[1]);
+  if (s === '::' || s === '::1') return true;
+  return /^(f[cd]|fe[89ab]|ff)/.test(s);                                // ULA, link-local, multicast
+}
+
+const LOCAL_NAME = /(^|\.)(localhost|local|internal|intranet|home\.arpa)$/i;
+
+// Resolve before fetching and refuse the whole answer set: a hostname that resolves to
+// even one private address is refused, so a split-horizon name cannot smuggle a request in.
+async function assertPublicHost(u) {
+  const host = u.hostname.replace(/^\[|\]$/g, '');
+  if (isIP(host)) return isBlockedAddress(host) ? `(refused: ${host} is a loopback, private or link-local address)` : null;
+  if (LOCAL_NAME.test(host)) return `(refused: ${host} is a local name)`;
+  let addrs;
+  try { addrs = await lookup(host, { all: true }); } catch { return `(refused: ${host} does not resolve)`; }
+  if (!addrs.length) return `(refused: ${host} does not resolve)`;
+  for (const a of addrs) if (isBlockedAddress(a.address)) return `(refused: ${host} resolves to a loopback, private or link-local address)`;
+  return null;
+}
+
+async function httpGetText(url, { timeoutMs = 15000, maxBytes = 120000, userAgent = 'fabius/1.0', maxHops = 5 } = {}) {
   let u;
   try { u = new URL(String(url).trim()); } catch { return '(not a URL)'; }
   if (!['http:', 'https:'].includes(u.protocol)) return '(only http and https are fetchable)';
   const ac = new AbortController();
   const t = setTimeout(() => ac.abort(), timeoutMs);
   try {
-    const res = await fetch(u, { signal: ac.signal, headers: { 'user-agent': userAgent, accept: 'text/html,text/plain,application/json;q=0.9,*/*;q=0.8' } });
+    let target = u, hops = 0, res;
+    // Redirects are followed by hand so every hop is re-validated: an allowlist that is
+    // only checked on the first URL is bypassed by a 302 to 169.254.169.254.
+    for (;;) {
+      const bad = await assertPublicHost(target);
+      if (bad) return bad;
+      res = await fetch(target, { signal: ac.signal, redirect: 'manual', headers: { 'user-agent': userAgent, accept: 'text/html,text/plain,application/json;q=0.9,*/*;q=0.8' } });
+      if (![301, 302, 303, 307, 308].includes(res.status)) break;
+      const loc = res.headers.get('location');
+      if (!loc) break;
+      if (++hops > maxHops) return '(too many redirects)';
+      let next;
+      try { next = new URL(loc, target); } catch { return '(bad redirect target)'; }
+      if (!['http:', 'https:'].includes(next.protocol)) return '(only http and https are fetchable)';
+      target = next;
+    }
     const ct = res.headers.get('content-type') || '';
     if (!/text|json|xml|javascript/.test(ct)) return `(${res.status} ${ct || 'unknown type'} — not text, nothing to read)`;
     const body = (await res.text()).slice(0, maxBytes);
@@ -75,9 +133,9 @@ export function walk(dir, { maxFiles = 400, maxDepth = 6 } = {}) {
   return out;
 }
 
-function runCommand(cmd, { cwd, timeoutMs = 120000, maxBytes = 40000 }) {
+function runCommand(cmd, { cwd, timeoutMs = 120000, maxBytes = 40000, env = process.env }) {
   return new Promise((res) => {
-    const child = spawn(cmd, { cwd, shell: true, env: { ...process.env, FABIUS_RUNTIME: '1' } });
+    const child = spawn(cmd, { cwd, shell: true, env: { ...env, FABIUS_RUNTIME: '1' } });
     let out = '', err = '', killed = false;
     const t = setTimeout(() => { killed = true; child.kill('SIGKILL'); }, timeoutMs);
     child.stdout.on('data', (d) => { if (out.length < maxBytes) out += d.toString(); });
@@ -97,7 +155,9 @@ export const TOOLS = {
       if (!gate.approved) return `(denied: ${gate.why})`;
       if (!existsSync(target)) return `(no such path: ${rel(target, ctx.jail)})`;
       if (!statSync(target).isDirectory()) return `(${rel(target, ctx.jail)} is a file, not a directory)`;
-      const files = walk(target).map((f) => rel(f, ctx.jail));
+      // The directory-level approval is not a licence to enumerate deny-listed files: a
+      // name like `deploy.key` or `credentials.json` is itself a finding for an attacker.
+      const files = walk(target).filter((f) => !isSecretPath(f)).map((f) => rel(f, ctx.jail));
       return files.length ? files.join('\n') : '(empty)';
     },
   },
@@ -130,6 +190,10 @@ export const TOOLS = {
       const hits = [];
       for (const f of walk(ctx.jail, { maxFiles: 1500 })) {
         if (hits.length >= 80) break;
+        // One gate on the directory is not enough: grep opens every file, so the same
+        // per-file deny-list `read` enforces has to be applied here or `grep "PRIVATE
+        // KEY"` becomes the way around it.
+        if (isSecretPath(f)) continue;
         let text;
         try { if (statSync(f).size > MAX_READ) continue; text = readFileSync(f, 'utf8'); } catch { continue; }
         text.split('\n').forEach((line, i) => {

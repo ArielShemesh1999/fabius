@@ -60,6 +60,59 @@ export function isIrreversible(command) {
   return null;
 }
 
+// Metacharacters that let one command line become several, or that hide what will really
+// run (`$(…)`, backticks, a pipe, a redirect, an escaped quote). A string carrying them
+// cannot be inspected honestly — the shell re-reads it after we have looked — so it is
+// never auto-approved; it goes to a human.
+const SHELL_META = /[|;&`$><\n\\]/;
+
+// Interpreter flags that smuggle a program in as an argument: `node -e`, `python -c`,
+// `perl -e`. Inspecting the command name tells you nothing about what these run.
+const INLINE_CODE = /(^|\s)-{1,2}(e|c|p|eval|exec|command|print)(\s|=|$)/;
+
+// What autonomous mode may run WITHOUT asking. This is deliberately an allowlist: the old
+// policy — "auto-approve anything that does not match the irreversible denylist" — is
+// fail-open, because a regex denylist over a raw shell string is trivially evaded
+// (`rm --recursive --force`, `find . -delete`, `s''udo`, base64 | sh). The denylist is
+// kept below as a warn-layer, not as the boundary.
+const AUTO_EXEC_ALLOW = [
+  /^(npm|pnpm|yarn|bun)\s+(test|run\s+[\w:.-]+|ls|list|why|outdated|audit)\b/,
+  /^(npx\s+)?(jest|vitest|mocha|ava|pytest|tsc|eslint|prettier|ruff|black|mypy|go\s+test|cargo\s+(test|check|build|clippy))\b/,
+  /^(node|python3?|deno|bun)\s+[\w./@+-]+(\s+[\w./@=:+-]*)*$/,
+  /^git\s+(status|diff|log|show|branch|remote|rev-parse|describe|ls-files|blame)\b/,
+  /^(ls|pwd|whoami|date|echo|which|uname|wc|head|tail|cat|file|stat|du|df|tree|sort|uniq|cut|basename|dirname|realpath)\b/,
+  /^(grep|rg|jq|diff|md5|shasum|sha256sum)\b/,
+  /^(make)\s+(test|check|lint|build)\b/,
+];
+
+export function autoApprovable(command) {
+  const c = String(command || '').trim();
+  if (!c || SHELL_META.test(c)) return false;
+  if (INLINE_CODE.test(c)) return false;
+  return AUTO_EXEC_ALLOW.some((re) => re.test(c));
+}
+
+// Path-looking tokens inside a command line, `~`/`$HOME`-expanded and unquoted, so the
+// secret deny-list can be applied to `exec` and not only to `read`/`write`. Arbitrary
+// shell is not statically decidable — `c""at $H""OME/.ssh/id_rsa` defeats this — so treat
+// it as defense in depth that raises the bar, never as a boundary.
+export function commandPaths(command) {
+  const c = String(command || '');
+  const home = homedir();
+  const out = [];
+  const re = /"([^"]*)"|'([^']*)'|([^\s"'=]+)/g;
+  let m;
+  while ((m = re.exec(c))) {
+    let t = (m[1] ?? m[2] ?? m[3] ?? '').replace(/^[@<>]+/, '');
+    if (!t) continue;
+    if (t === '~' || t.startsWith('~/')) t = home + t.slice(1);
+    else if (t.startsWith('$HOME')) t = home + t.slice(5);
+    else if (t.startsWith('${HOME}')) t = home + t.slice(7);
+    if (/[/\\.]/.test(t)) out.push(t);
+  }
+  return out;
+}
+
 // Is `p` inside the jail, after symlinks are resolved? A symlink that points out of the
 // working directory is the classic escape, so the check runs on the REAL path — and on
 // the nearest existing ancestor when the file itself does not exist yet (a create).
@@ -94,7 +147,9 @@ export function isSecretPath(p) {
 //   posture   'ask' | 'auto' | 'never'
 //   cap       'read' | 'net' | 'write' | 'exec'
 //   target    a path (write/read) or a command line (exec)
-export function classify({ posture = 'ask', cap, target, jail, dangerous = false }) {
+//   oracle    true when the target is the delivered artifact the verification oracle wants
+//             to run, rather than a command the model composed
+export function classify({ posture = 'ask', cap, target, jail, dangerous = false, oracle = false }) {
   if (!CAPS.includes(cap)) return { decision: 'deny', reason: `unknown capability "${cap}"` };
 
   if (cap === 'read' || cap === 'write') {
@@ -105,7 +160,22 @@ export function classify({ posture = 'ask', cap, target, jail, dangerous = false
     }
   }
 
-  if (cap === 'read' || cap === 'net') return { decision: 'allow', reason: 'read-only capability' };
+  // The deny-list is documented as absolute, so it screens commands too — not only the
+  // read and write tools. A command may not name a secret-bearing path.
+  if (cap === 'exec') {
+    for (const p of commandPaths(target)) {
+      if (isSecretPath(p)) return { decision: 'deny', reason: `secret-bearing path in the command (${p}) — the deny-list is not negotiable` };
+    }
+  }
+
+  if (cap === 'read') return { decision: 'allow', reason: 'read-only capability' };
+
+  // `net` observes rather than changes, so it never prompts — but a read-only run means
+  // read-only: no outbound request either.
+  if (cap === 'net') {
+    if (posture === 'never') return { decision: 'deny', reason: 'read-only run (--approve never) — no outbound request' };
+    return { decision: 'allow', reason: 'read-only capability' };
+  }
 
   if (posture === 'never') return { decision: 'deny', reason: 'read-only run (--approve never)' };
 
@@ -114,6 +184,12 @@ export function classify({ posture = 'ask', cap, target, jail, dangerous = false
     if (why) {
       if (dangerous) return { decision: 'allow', reason: `irreversible (${why}) — released by --dangerously-approve-everything` };
       return { decision: 'ask', reason: `irreversible: ${why}` };
+    }
+    // Autonomous mode approves what it recognises and can inspect; anything else — an
+    // unknown binary, a pipeline, a substitution, an interpreter given inline code —
+    // is held for a human, and a non-interactive run refuses it rather than guessing.
+    if (posture === 'auto' && !dangerous && !oracle && !autoApprovable(target)) {
+      return { decision: 'ask', reason: 'autonomous mode approves only recognised, inspectable commands — this one is not on that list' };
     }
   }
 
@@ -148,8 +224,8 @@ export function makeGate({ posture = 'ask', jail = process.cwd(), dangerous = fa
   return {
     log,
     get posture() { return approveAll ? 'auto' : posture; },
-    async check(cap, target) {
-      const d = classify({ posture: approveAll ? 'auto' : posture, cap, target, jail, dangerous });
+    async check(cap, target, { oracle = false } = {}) {
+      const d = classify({ posture: approveAll ? 'auto' : posture, cap, target, jail, dangerous, oracle });
       let approved = d.decision === 'allow';
       let why = d.reason;
       if (d.decision === 'ask') {
