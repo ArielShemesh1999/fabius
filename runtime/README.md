@@ -10,7 +10,7 @@ node runtime/fabius.mjs run "read this repo and write the README it is missing"
 ```
 
 No install step, no dependency tree, no build. Node 22 or newer and the repo you are
-already holding. `npm test` runs **68 checks and spends nothing** — 61 of them offline, and
+already holding. `npm test` runs **71 checks and spends nothing** — 64 of them offline, and
 the 7 specification-vector tests skip until `npm run vectors` fetches the vectors once.
 They skip loudly rather than passing quietly, because a crypto test that silently does
 nothing is worse than no test.
@@ -215,8 +215,8 @@ so rather than pretending a 7B model is one.
 ## Testing
 
 ```bash
-npm test                        # 68 checks — 61 run offline, 7 skip without the vectors
-npm run vectors && npm test     # fetch the BIP-340 and NIP-44 vectors once → 68/68
+npm test                        # 71 checks — 64 run offline, 7 skip without the vectors
+npm run vectors && npm test     # fetch the BIP-340 and NIP-44 vectors once → 71/71
 ```
 
 The vectors are never vendored: they belong to their upstream projects, and a stale copy

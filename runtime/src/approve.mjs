@@ -110,6 +110,13 @@ export function commandPaths(command) {
     let t = (m[1] ?? m[2] ?? m[3] ?? '').replace(/^[@<>]+/, '');
     if (!t) continue;
     if (t === '~' || t.startsWith('~/')) t = home + t.slice(1);
+    // `~root/...` and `~someone/...` are ANOTHER account's home. Resolving them needs the
+    // password database, which is not worth reaching for — but the one thing that matters
+    // is already known: the answer is absolute, and it is not inside the working
+    // directory. Left as-is the token looks relative and `~root/Documents/x.txt` resolves
+    // *inside* the jail, so the gate auto-approves it under --yes while the shell reads
+    // root's home. Mark it absolute so the jail check refuses and a human is asked.
+    else if (t.startsWith('~')) t = '/' + t;
     else if (t.startsWith('$HOME')) t = home + t.slice(5);
     else if (t.startsWith('${HOME}')) t = home + t.slice(7);
     if (/[/\\.]/.test(t)) out.push(t);

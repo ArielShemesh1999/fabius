@@ -18,6 +18,7 @@
 import { Resolver } from 'node:dns/promises';
 import { connect as tlsConnect } from 'node:tls';
 import { connect as netConnect } from 'node:net';
+import { assertPublicHostname } from './tools.mjs';
 
 export const SEVERITY = ['critical', 'high', 'medium', 'low', 'info'];
 const sevRank = (s) => SEVERITY.indexOf(s);
@@ -178,23 +179,50 @@ async function checkTls(host, ctx) {
   return { id: 'tls', title: 'TLS certificate', data: { ...hs, daysLeft }, findings };
 }
 
+// Redirects are followed BY HAND so every hop is re-checked, not just the entry host.
+// Platform fetch follows a cross-host redirect itself, silently, so a public domain that
+// answers `302 -> http://169.254.169.254/latest/meta-data/` would otherwise turn this
+// passive audit into a request against cloud metadata — with the status, the headers and
+// the final URL landing in the report. Same assertion `fetch` applies in tools.mjs,
+// applied in the same place: inside the loop.
+//
+// A refusal stops the chain rather than failing the scan: what was already read from the
+// public hops is still a real answer, and `refused` says plainly why it went no further.
+async function fetchHops(url, ctx, maxHops = 10) {
+  const headers = { 'user-agent': ctx.userAgent };
+  const chain = [];
+  let current = String(url), res = null, refused = null;
+  for (let hop = 0; hop < maxHops; hop++) {
+    const bad = await assertPublicHostname(new URL(current).hostname);
+    if (bad) { refused = `${current} ${bad}`; break; }
+    res = await withTimeout(fetch(current, { redirect: 'manual', headers }), ctx.timeoutMs, 'HTTP');
+    const loc = res.headers.get('location');
+    chain.push({ url: current, status: res.status, location: loc || null });
+    if (![301, 302, 303, 307, 308].includes(res.status) || !loc) return { res, chain, finalUrl: current, refused: null };
+    let next;
+    try { next = new URL(loc, current); }
+    catch { return { res, chain, finalUrl: current, refused: `(refused: ${loc} is not a URL)` }; }
+    if (!['http:', 'https:'].includes(next.protocol)) { refused = `(refused: ${next.protocol}// is not http or https)`; break; }
+    if (hop === maxHops - 1) { refused = '(refused: too many redirects)'; break; }
+    // Nothing reads a redirect's body, and the socket stays held until it is consumed
+    // or cancelled — release it before moving to the next hop. Only ever on the way to a
+    // next hop: every `break` above hands this response back, and the caller still reads it.
+    await res.body?.cancel().catch(() => {});
+    current = next.toString();
+  }
+  if (!res) throw new Error(`refused to fetch ${refused}`);
+  return { res, chain, finalUrl: chain[chain.length - 1].url, refused };
+}
+
 // One fetch, reused by every response-surface check.
 async function fetchSurface(host, ctx) {
   const url = `https://${host}/`;
-  const chain = [];
-  let current = url, res = null, hops = 0;
-  while (hops++ < 10) {
-    res = await withTimeout(fetch(current, { redirect: 'manual', headers: { 'user-agent': ctx.userAgent } }), ctx.timeoutMs, 'HTTP');
-    const loc = res.headers.get('location');
-    chain.push({ url: current, status: res.status, location: loc || null });
-    if (![301, 302, 303, 307, 308].includes(res.status) || !loc) break;
-    current = new URL(loc, current).toString();
-  }
+  const { res, chain, finalUrl, refused } = await fetchHops(url, ctx);
   const headers = {};
   for (const [k, v] of res.headers) headers[k.toLowerCase()] = v;
   const ct = headers['content-type'] || '';
   const body = /text|html|json|xml/.test(ct) ? (await res.text()).slice(0, 400000) : '';
-  return { url, finalUrl: current, status: res.status, headers, body, chain,
+  return { url, finalUrl, status: res.status, headers, body, chain, refused,
            setCookie: res.headers.getSetCookie ? res.headers.getSetCookie() : [] };
 }
 
@@ -203,6 +231,9 @@ async function checkHttp(host, ctx, surface) {
   const h = surface.headers;
   // Plain HTTP must be redirected, not merely available.
   const plain = await safe(async () => {
+    // Same rule as every hop above: never probe a host that is not on the public internet.
+    const bad = await assertPublicHostname(host);
+    if (bad) throw new Error(bad);
     const r = await withTimeout(fetch(`http://${host}/`, { redirect: 'manual', headers: { 'user-agent': ctx.userAgent } }), ctx.timeoutMs, 'HTTP');
     return { status: r.status, location: r.headers.get('location') };
   }, null);
@@ -220,7 +251,10 @@ async function checkHttp(host, ctx, surface) {
   for (const leak of ['x-powered-by', 'x-aspnet-version', 'x-generator']) {
     if (h[leak]) findings.push({ severity: 'low', title: `${leak} leaks the stack`, detail: `${leak}: ${h[leak]}`, fix: `Remove the ${leak} header.` });
   }
-  return { id: 'http', title: 'HTTP response', data: { status: surface.status, finalUrl: surface.finalUrl, redirects: surface.chain, server: h['server'] || null, alt_svc: h['alt-svc'] || null, plainHttp: plain }, findings };
+  if (surface.refused) {
+    findings.push({ severity: 'medium', title: 'the redirect chain leaves the public internet', detail: `The chain was not followed past ${surface.refused}`, fix: 'Redirect to a public address. A public hostname that hands clients an internal one is either a misconfiguration or an SSRF lure.' });
+  }
+  return { id: 'http', title: 'HTTP response', data: { status: surface.status, finalUrl: surface.finalUrl, redirects: surface.chain, refused: surface.refused || null, server: h['server'] || null, alt_svc: h['alt-svc'] || null, plainHttp: plain }, findings };
 }
 
 // The header set that actually changes an attacker's options, graded the way a reviewer
@@ -365,8 +399,11 @@ async function checkMail(host, ctx, dnsData) {
   return { id: 'mail', title: 'mail authentication', data: { spf, dmarc, bimi, dkimSelectors: dkim, mx: mx.map((m) => `${m.priority} ${m.exchange}`) }, findings };
 }
 
+// Through the same hop-checking loop: robots.txt and security.txt legitimately redirect
+// (apex to www, http to https), and letting the platform follow those hops unchecked is
+// the same SSRF as the one above — worse, in fact, because this one reads the body.
 async function fetchText(url, ctx) {
-  const res = await withTimeout(fetch(url, { headers: { 'user-agent': ctx.userAgent } }), ctx.timeoutMs, 'HTTP');
+  const { res } = await fetchHops(url, ctx, 5);
   if (!res.ok) return { ok: false, status: res.status, text: '' };
   const ct = res.headers.get('content-type') || '';
   return { ok: true, status: res.status, contentType: ct, text: (await res.text()).slice(0, 200000) };
