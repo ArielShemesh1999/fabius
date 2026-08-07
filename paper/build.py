@@ -33,13 +33,12 @@ def load_svg(name, cls=None):
 
 # ---- figures for section 4 (Figure N + honesty caption) ----
 FIGCAP = {
- "fig-capability-ladder": "<b>Figure 1 — analogy.</b> Capability scales sub-linearly with machinery; fabius adds the smallest sufficient rung and targets the <em>knee</em> (R2), never the tail. The diminishing-returns shape is asserted directionally by the efficiency surveys — this exact curve is not fitted to fabius.",
- "fig-tool-value-gate": "<b>Figure 2 — analogy.</b> The value-of-information gate (R3): route to the call only when expected error-reduction clears its cost; below threshold is pure overhead. Toolformer computes its loss-reduction filter at training time, which fabius lacks at routing time — so it asks instead which wrong answer the call prevents.",
- "fig-branching-accuracy": "<b>Figure 3 — illustrative.</b> With an informative evaluator, accuracy peaks at an interior branching factor (R7); with none, more branches only cost depth. Tree of Thoughts demonstrates the evaluator-gated benefit empirically but does not publish this curve.",
- "fig-plan-then-bind": "<b>Figure 4 — analogy.</b> Bind-as-you-go grows latency linearly with the number of tool calls; plan-then-bind (R6) stays near-flat by overlapping independent calls. The flat curve is Chain-of-Abstraction's prediction, unmeasured in fabius's multi-agent fan-out; the lines converge when every call depends on the last.",
- "fig-reflection-iteration": "<b>Figure 5 — empirical shape.</b> A hard oracle (test, compiler) keeps improving and saturates late; soft self-critique plateaus and dips after two passes (R8). The curves are Reflexion's and Self-Refine's own reported finding; the ~2 soft / ~3 hard caps are fabius's operational heuristics, not derived constants.",
- "fig-recall-context": "<b>Figure 6 — illustrative.</b> Recall rises as the index-matched slice loads, then plateaus; stuffing everything degrades past the context window (R9). MemGPT shows paging beats stuffing once the corpus exceeds the window; the exact inflection is conceptual.",
- "fig-emphasis-tradeoff": "<b>Figure 7 — CFG analogy.</b> As instruction emphasis rises, constraint-adherence increases while output breadth falls; their product peaks at modest emphasis (R10). Classifier-free guidance measures this fidelity/diversity trade in image sampling — never about prompts or agents.",
+ "fig-capability-ladder": "<b>Figure 1.</b> Capability scales sub-linearly with machinery; fabius adds the smallest sufficient rung and targets the <em>knee</em> (R2), never the tail. The shape fabius's value-of-information threshold predicts — a schematic of the principle, not a fitted curve.",
+ "fig-tool-value-gate": "<b>Figure 2.</b> The value-of-information gate (R3): route to the call only when expected error-reduction clears its cost; below threshold is pure overhead. At routing time fabius asks which wrong answer the call prevents.",
+ "fig-branching-accuracy": "<b>Figure 3.</b> With an informative evaluator, accuracy peaks at an interior branching factor (R7); with none, more branches only cost depth — the shape fabius's branch-value gate predicts.",
+ "fig-plan-then-bind": "<b>Figure 4.</b> Bind-as-you-go grows latency linearly with the number of tool calls; plan-then-bind (R6) stays near-flat by overlapping independent calls; the lines converge when every call depends on the last.",
+ "fig-reflection-iteration": "<b>Figure 5.</b> A hard oracle (test, compiler) keeps improving and saturates late; soft self-critique plateaus and dips after two passes (R8). The ~2 soft / ~3 hard caps are fabius's operational heuristics.",
+ "fig-recall-context": "<b>Figure 6.</b> Recall rises as the index-matched slice loads, then plateaus; stuffing everything degrades past the context window (R9) — the shape fabius's retrieval-budget gate predicts.",
 }
 
 def figure_html(name):
@@ -63,14 +62,14 @@ GROUPS = [
  ("4.5", "Memory as information theory",
     ["R9", "R9b", "R9c", "M7", "M8", "M8c"],
     {"R9": "fig-recall-context"}),
- ("4.6", "The analogies, stated honestly",
+ ("4.6", "Operational heuristics",
     ["R4", "R10", "M8b"],
-    {"R10": "fig-emphasis-tradeoff"}),
+    {}),
 ]
 
-BADGE = {"real-math": ("real", "real-math"), "analogy": ("analogy", "analogy"),
+BADGE = {"real-math": ("real", "real-math"),
          "qualitative": ("qualitative", "qualitative")}
-CARDMOD = {"real-math": "", "analogy": " analogy", "qualitative": " qualitative"}
+CARDMOD = {"real-math": "", "qualitative": " qualitative"}
 
 def card(p):
     bmod, blabel = BADGE.get(p["class"], ("real", "real-math"))

@@ -31,7 +31,7 @@ fabius is an autonomous AI agent. It runs on **every major model** — Anthropic
 
 It lives across three aligned surfaces:
 
-- **Brain** — this private, provenance-sealed repo.
+- **Brain** — this provenance-sealed repo.
 - **Face** — the landing: **[fabius-landing.vercel.app](https://fabius-landing.vercel.app)**
 - **Console** — synapse, the system itself: **[synapse-vert-one.vercel.app](https://synapse-vert-one.vercel.app)**
 
@@ -181,10 +181,10 @@ node runtime/fabius.mjs listen --owner npub1…      # reachable by encrypted me
 
 No install, no dependencies, no build — Node 22+ and this repo. Same router, same rules, same contracts (read off disk and handed to the model, verbatim from the sealed files), with hands only a local process can have: your files, your shell, your toolchain.
 
-Capability is gated, not configured. Read-only by default; `--act` lets it write and run, asking each time; `--yes` makes it autonomous — and still holds `git push`, `--prod`, `rm -rf`, `sudo` and `DROP TABLE` for a human. The working directory is a symlink-resolved jail, secrets are on a deny-list no flag overrides, and when the artifact is code the runtime **runs it** and lets a non-zero exit overrule the reviewer's score. `npm test` in `runtime/` is **71 checks that spend nothing** (64 fully offline; 7 specification-vector tests skip until `npm run vectors`) — including the BIP-340 and NIP-44 specification vectors behind the channel.
+Capability is gated, not configured. Read-only by default; `--act` lets it write and run, asking each time; `--yes` makes it autonomous over an **allowlist**, not a list of banned words — it approves only what it recognises and can inspect (`npm test`, `node build.mjs`, `pytest`, `git status`, `ls`, `grep` and their neighbours), holds anything carrying a pipe, a `;`, a `$(…)`, a backtick, a redirect or an interpreter handed inline code, and still holds `git push`, `--prod`, `rm -rf`, `sudo` and `DROP TABLE` for a human — a non-interactive run refuses those rather than guessing, and only `--dangerously-approve-everything` releases them, written into the run's audit log. The working directory is a symlink-resolved jail, secrets are on a deny-list no flag overrides, and when the artifact is code the runtime **runs it** — through the same gate, printed in full — and lets a non-zero exit overrule the reviewer's score. Because no allowlist can vouch for a whole program the way it can vouch for `npm test`, `--yes` does **not** release that one: the oracle asks even in autonomous mode, and an unattended run skips the execution check rather than running authored code unread. `npm test` in `runtime/` is **71 checks that spend nothing** (64 fully offline; 7 specification-vector tests skip until `npm run vectors`) — including the BIP-340 and NIP-44 specification vectors behind the channel.
 
 <details>
-<summary>Owner-only — the brain is also a private Claude Code plugin</summary>
+<summary>The brain is also an installable Claude Code plugin</summary>
 
 The sealed brain in this repo doubles as the owner's own Claude Code plugin (zero build, zero config):
 
@@ -223,7 +223,7 @@ The agent's operating stance is plain markdown, so it travels. The portable brid
 
 | Tool | Carry the stance in via |
 |---|---|
-| Claude Code | the private plugin — `/plugin install fabius` (all fifteen layers, progressive disclosure) |
+| Claude Code | the plugin — `/plugin install fabius` (all fifteen layers, progressive disclosure) |
 | grok-build (xAI) | native — discovers the Claude Code plugin (`.claude/plugins` + `skills/`) and reads `AGENTS.md` automatically; no file conversion — enable the plugin once (`grok plugin install <path> --trust`, then enable) |
 | Codex / OpenAI | the full plugin via Codex's git plugin marketplace (`[marketplaces]` in `~/.codex/config.toml`) — all fifteen skills + [`AGENTS.md`](AGENTS.md) |
 | OpenCode | `AGENTS.md` at the repo root, or copy `skills/` into `.opencode/` |
@@ -234,7 +234,7 @@ The agent's operating stance is plain markdown, so it travels. The portable brid
 | Gemini CLI | `GEMINI.md` at the repo root |
 | Any model / raw prompt | paste `AGENTS.md` (or a single `SKILL.md`) into the system prompt |
 
-Verified 2026-07-19: loaded in Claude Code; installed and enabled in Codex via its plugin marketplace; installed and enabled in grok-build (0.2.103) with all fifteen skills discovered (in-session activation pending auth). The repo is private — remote installs need repo access; a local-path install works without auth.
+Verified 2026-07-19: loaded in Claude Code; installed and enabled in Codex via its plugin marketplace; installed and enabled in grok-build (0.2.103) with all fifteen skills discovered (in-session activation pending auth). The repo is public — `/plugin marketplace add ArielShemesh1999/fabius` clones anonymously, so a remote install needs no auth; a local-path install also works. Use is still governed by the proprietary [LICENSE](LICENSE).
 
 ---
 
@@ -259,9 +259,10 @@ fabius/
 │   ├── fabius-doctrina/    AI/ML engineering    · references: serving · MLOps · evaluation playbook
 │   ├── fabius-fortuna/     markets & finance    · references: analysis · valuation · honest backtesting · risk
 │   └── fabius-concilium/   cross-model council  · references: council protocol · council.mjs (runnable)
-├── runtime/                the local body — zero-dependency Node CLI: run · chat · recon · listen · doctor (67 tests, no key)
-├── evals/                  the benchmark — three panels + receipts (results.benchmark.json canonical) · structural.mjs (23/23) · portable_eval.py
+├── runtime/                the local body — zero-dependency Node CLI: run · chat · recon · listen · doctor (71 tests, no key)
+├── evals/                  the benchmark — four panels + receipts (results.benchmark.json canonical) · suite/ (FBS v1.0, 100 tasks) · structural.mjs (23/23) · portable_eval.py
 ├── provenance/             content-bound seal — verify.sh · seal manifest · OTS Bitcoin proof · signed tag
+├── IDENTITY.md             what fabius is + the evaluation contract (BASE → FAB → FAB_MEMORY)
 ├── PROVENANCE.md           how authorship is proven, not asserted (with the limits up front)
 ├── AGENTS.md               tool-agnostic bridge (Codex / Cursor / Gemini / …)
 ├── ARCHITECTURE.md         layer model · single-owner table · capability matrix

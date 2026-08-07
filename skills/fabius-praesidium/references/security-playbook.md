@@ -36,6 +36,14 @@ Each filled cell ends in *mitigation present?* → ✅ yes / ❌ no / N-A. The *
 
 ## 2. The OWASP pass — runnable checklist (each item says HOW to verify)
 
+**First settle *which* pass — it's set by what the target IS, not by what it's written in.** There are three, and a surface can need more than one:
+
+- **A web / API surface** → the runnable checklist below.
+- **A surface where a model reads text it didn't author** → add the **OWASP Top 10 for LLM Applications** (GenAI Security Project, 2026 edition, published 2026-08-04): LLM01 Prompt Injection · LLM02 Sensitive Information Disclosure · LLM03 Excessive Agency · LLM04 Supply Chain · LLM05 Data & Model Poisoning · LLM06 Unbounded Consumption · LLM07 Misinformation · LLM08 Hidden Context Exposure (formerly System Prompt Leakage) · LLM09 Vector & Embedding Weaknesses · LLM10 Improper Output Handling.
+- **A surface where the model *acts*** — holds tools, carries memory across sessions, sets downstream consequences running — adds the **OWASP Top 10 for Agentic Applications** (published 2025-12-09): ASI01 Agent Goal Hijack · ASI02 Tool Misuse · ASI03 Identity & Privilege Abuse · ASI04 Agentic Supply Chain Vulnerabilities · ASI05 Unexpected Code Execution · ASI06 Memory & Context Poisoning · ASI07 Insecure Inter-Agent Communication · ASI08 Cascading Failures · ASI09 Human-Agent Trust Exploitation · ASI10 Rogue Agents.
+
+**The line that scopes the audit: a model that *answers* is an LLM risk; a model that *acts* is an agent risk.** The two lists share a language rather than replacing each other — an agent that also reads untrusted text needs both passes. **Auditing an agent with only the web checklist audits the wrong system.** Category ids and ordering are point-in-time; re-check the current edition before quoting an id.
+
 Run this over the top risks. Each line is a thing to **verify present**, with the concrete check — not a name to nod at. Tick only after you've looked.
 
 ```
@@ -71,6 +79,8 @@ Run this over the top risks. Each line is a thing to **verify present**, with th
 ```
 
 The OWASP pass is the audit; STRIDE is what scoped the audit. Run STRIDE to find *which* boundaries matter, then run this list against each.
+
+**Where the AI categories already have depth here — run them from the reference, don't re-derive.** ASI02/ASI05 and the egress boundary around an agent that runs code → [hardening-guides.md](hardening-guides.md) §9 (with the delete-a-leg triage that decides whether you need the containment at all). LLM01/LLM08 against a stateless chat transcript the client owns both sides of → §10. LLM04/ASI04 for third-party skills, plugins and MCP servers, including the spec's own normative MUSTs → [supply-chain-and-ai-artifacts.md](supply-chain-and-ai-artifacts.md) §2–4. Probing your own model for LLM01-class weakness → [security-toolkit.md](security-toolkit.md) §7. **The categories with no coverage yet are the work list** — and ASI06 is the sharp one wherever an agent carries persistent memory, because anything that can write into that store is an input to every later session.
 
 ---
 

@@ -32,7 +32,20 @@ At SessionStart, prepend one compact block — session summaries + observation t
 
 That single prepend is what turns memory from opt-in to automatic. Everything else is bookkeeping.
 
-### Wiring to Claude Code lifecycle hooks
+### The harness may already own this loop
+
+Check what the harness gives you before wiring anything. Claude Code keeps a **per-repo auto memory, on by default**, at `~/.claude/projects/<project>/memory/`: a `MEMORY.md` index loaded at the start of every conversation, plus topic files beside it that are *not* loaded at startup and get read on demand. That is archivum's own shape — index first, detail on request — so **adopt the native store instead of standing up a parallel one beside it**. Four rules ride with it:
+
+- **The index has a hard ceiling.** Only the first **200 lines or 25 KB** of `MEMORY.md`, whichever comes first, load at session start; everything past it is silently dropped. One line per entry, detail in a topic file.
+- **Frontmatter and block HTML comments are free.** They're stripped before the index loads, so they don't count against the ceiling — and a write to a file that already has frontmatter stamps a `modified` ISO-8601 timestamp, which is how a later reader tells a live fact from a stale one.
+- **A subagent does not inherit the parent's auto memory.** Give it its own (the subagent `memory` field) or it starts blind — the one exception is a fork, which inherits the parent conversation.
+- **It is machine-local.** Shared across worktrees of one repo and nothing else — never across machines, never with the team. So the committed `wiki/` keeps what the *team* must read and auto memory keeps machine-local learnings. A fact written into both is a fact that will eventually disagree with itself.
+
+**Hand-wire the loop only where the harness has no store of its own** — a bare agent runtime, another vendor's harness, a service you built. That is exactly why the three stages are named separately above: the *pattern* is what ports across harnesses, and it is the reason this page outlives any one product. On Claude Code the hooks below are the extension and the fallback, not the default.
+
+### Hand-wiring the loop — lifecycle hooks
+
+Claude Code's hook names below are the worked example; read them as the shape any harness's lifecycle has to expose.
 
 | Hook | Stage | Rule |
 |---|---|---|
@@ -55,6 +68,17 @@ Compression is not housekeeping — it is a **write path that silently mutates s
 - an **agreement** with the human (a preference, a scope line, a "don't do X").
 
 Mark these `[pin]` at capture; a compress step that would drop a pinned record fails loud instead of quietly forgetting. And fire **capture *before* the compaction, not after** — a pre-compaction *lifeboat* (current goal · open threads · next action, ≤5 lines written to the top of the working record) is the cheapest insurance against waking up amnesiac. Don't wait for the compaction event to fire it: flush an **LLM summary** of the session so far when context headroom falls to **~4k tokens** — by the time the harness compacts, the lifeboat is already written. Two guards keep the flush from polluting the store: **semantic dedup** (skip any record whose embedding sits within ~**0.92 cosine** of an existing one — near-duplicates rot retrieval) and a **write cap** per flush (a handful of records, never a dump — a runaway session must not flood the archive). Recovery after compaction is symmetric: **re-inject the recall block on the first post-compaction turn** and **re-search memory** for the current task, because compaction just deleted the context the earlier injection lived in. Everything else is free to decay on its TTL — the capture-side mechanism of the single decay story whose retrieval-side scoring, and the principle behind it, live in [`retrieval-stack.md`](retrieval-stack.md): *record only what is non-inferable and will be reused*, and re-read the **index, not the transcript**.
+
+**Where compaction is a dial, stop racing it.** On the Messages API the summarization is yours to configure, not an ambush to outrun: server-side compaction (`compact_20260112`, beta header `compact-2026-01-12`) fires at a trigger *you* set — 150,000 input tokens by default, 50,000 minimum — emits a `compaction` block and drops everything before it, with `pause_after_compaction` to let you step in and `instructions` to replace the default summarization prompt outright. **Put the never-drop floor into `instructions`**, so pinned constraints, decisions and agreements are carried into the summary by contract rather than by luck. Context editing is the lighter sibling — `clear_tool_uses_20250919` and `clear_thinking_20251015` (beta header `context-management-2025-06-27`) drop stale tool results and thinking blocks on the server while your client keeps the full unmodified history, so that content is unsent, not lost. Neither is a memory: compaction keeps the window small, the store is what survives the summary. Keep the lifeboat for the harnesses where compaction still arrives as an event you don't control — and there, know exactly what the harness re-injects afterwards: Claude Code re-reads the project-root `CLAUDE.md` after `/compact` but does **not** re-inject nested `CLAUDE.md` files or `paths:`-scoped rules, so a constraint that lives only in a subdirectory is gone until something touches that subdirectory again.
+
+### When memory must be a tool, use the standard one
+
+Hooks capture around the turn; a *tool* lets the model read and write memory inside it. Don't invent that tool — the Messages API ships one, and it is generally available: `{"type": "memory_20250818", "name": "memory"}` is the entire configuration, no beta header, every Claude 4-and-later model. The model gets six file verbs — `view · create · str_replace · insert · delete · rename` — over a `/memories` prefix, and the API injects the check-memory-before-anything-else protocol into the system prompt, so the read-on-start habit is enforced for you rather than prompted for.
+
+`/memories` is a **prefix, not a directory**: your handler maps it onto storage you own — a per-user directory, rows in a database, an object store — which is precisely the provider-agnostic contract archivum insists on, minus the bespoke plumbing. Two obligations come with taking it:
+
+- **Your handler is the security boundary.** Every path is model-controlled input. Canonicalize it and assert it resolves *inside* the memory root; reject `../`, `..\`, and percent-encoded traversal (`%2e%2e%2f`). A handler that trusts the path is an arbitrary-file-read wearing a memory hat. Cap file size, and cap what `view` returns — page the rest with a range instead of streaming a whole file into context.
+- **A durable store replays whatever it is given.** A credential written to memory once is re-read into every later session that mounts it. Secrets never enter the archive (`fabius-praesidium`); if one already did, delete the record rather than editing around it.
 
 ### Retrieval discipline — progressive disclosure
 

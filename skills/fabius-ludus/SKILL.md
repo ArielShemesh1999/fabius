@@ -55,7 +55,7 @@ For a pixel game, the discipline *is* the look:
 
 - **One fixed palette** — lock the project's own brand palette and identity up front, then don't drift. One palette, one identity, applied consistently.
 - **Integer scaling only** — 2×, 3×, 4× — never fractional, or it shimmers.
-- **Snap to the pixel grid** — positions round to whole device-pixels; sub-pixel motion blurs the crispness that *is* the aesthetic.
+- **Snap to the pixel grid — but only what's axis-aligned and unscaled** — positions round to whole device-pixels; sub-pixel motion blurs the crispness that *is* the aesthetic. Rounding a *rotating or scaling* sprite trades that blur for vertex wobble, so let those render smooth (engines now ship a smooth-pixel-art mode for exactly this) instead of forcing them to the grid.
 - **One unit size** — a consistent base tile/sprite size; the grid is the rhythm.
 
 (On RTL surfaces — Hebrew, Arabic — the UI keeps its own reading direction: left-pointing arrows are correct for "back/next" in that layout; don't flip them.)

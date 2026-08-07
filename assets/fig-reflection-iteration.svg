@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 410" width="660" height="410" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
 <rect x="1" y="1" width="658" height="408" rx="12" fill="#ffffff" stroke="#d0d7de"/>
-<text x="330.0" y="27" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2328">Reflection quality vs iteration  (empirical)</text>
+<text x="330.0" y="27" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2328">Reflection quality vs iteration</text>
 <line x1="74" y1="48" x2="74" y2="350" stroke="#57606a" stroke-width="1.5"/>
 <line x1="74" y1="350" x2="634" y2="350" stroke="#57606a" stroke-width="1.5"/>
 <line x1="74.0" y1="350" x2="74.0" y2="355" stroke="#57606a"/>
@@ -28,9 +28,9 @@
 <polyline points="74.0,214.1 186.0,150.7 298.0,108.4 410.0,87.3 522.0,78.2 634.0,72.2" fill="none" stroke="#7a3dff" stroke-width="2.6"/>
 <polyline points="74.0,229.2 186.0,168.8 298.0,171.8 410.0,177.9 522.0,180.9 634.0,183.9" fill="none" stroke="#2ea44f" stroke-width="2.6"/>
 <line x1="88" y1="58" x2="112" y2="58" stroke="#7a3dff" stroke-width="3"/>
-<text x="118" y="62" font-size="11.5" fill="#1f2328">hard oracle (test/compiler) — Reflexion</text>
+<text x="118" y="62" font-size="11.5" fill="#1f2328">hard oracle (test/compiler)</text>
 <line x1="88" y1="77" x2="112" y2="77" stroke="#2ea44f" stroke-width="3"/>
-<text x="118" y="81" font-size="11.5" fill="#1f2328">soft self-critique — Self-Refine</text>
+<text x="118" y="81" font-size="11.5" fill="#1f2328">soft self-critique</text>
 <text x="354.0" y="392" text-anchor="middle" font-size="12.5" fill="#1f2328">iteration / retry  k</text>
 <text transform="translate(20,199.0) rotate(-90)" text-anchor="middle" font-size="12.5" fill="#1f2328">cumulative success</text>
 </svg>

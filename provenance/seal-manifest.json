@@ -6,23 +6,23 @@
   "count": 18,
   "files": {
     "AGENTS.md": "46f88ba3ff0428241702bbbb4feca0ef1bf6b306819b3055124e46690a02712f",
-    "ARCHITECTURE.md": "464e18f75b8a89f42bc345f3622ce78c87e44a00cc41686bfd31f56e8fe66ebd",
-    "CORPUS.md": "812bc940addeec486cff1385d6b285d03eacb9d48ccd401feaec4012458bce3c",
-    "skills/fabius-archivum/SKILL.md": "c9c2523f73399bbd90ce21c688fb111ac53cbdd83b077732df6e2680033c3d42",
+    "ARCHITECTURE.md": "a860dbab68a9e10a8a091cc2766c5c4e372df8775257bfd5f9b20c16cc44b058",
+    "CORPUS.md": "031e4a3317115230d530439e83189269c364daf3dee99486fbd87bee310d0e5e",
+    "skills/fabius-archivum/SKILL.md": "591adac677c8dbbeee28e628ed8336049feab1a1b5543c1584f20cde36a2a377",
     "skills/fabius-catena/SKILL.md": "2561c636d359863cf67dcc6b7c7e66e4566ba53862690d3c5370c987634b46bd",
     "skills/fabius-cohors/SKILL.md": "80df77e33bf27d7fd1395f3e41c1890fa09f28d28320f7d7639105973dbcefde",
-    "skills/fabius-concilium/SKILL.md": "fa3e12286815c3ca4fada324a4801fbd619965ee33025946e24dfd082398c431",
-    "skills/fabius-decor/SKILL.md": "3a789057f2e91b37bd5f4c79afa86caaca1c7a95481792e0285e91c9096269e3",
-    "skills/fabius-disciplina/SKILL.md": "a6ec3721c80a4bdf0e2348455ac1f3397e5b536086bf812182226d0d1b269df2",
-    "skills/fabius-doctrina/SKILL.md": "1c19001685316b5e324f11342228d5523242de40afa3025623471f305d14478c",
-    "skills/fabius-fortuna/SKILL.md": "d0d5fb06906c7b056568154a65a109c77b34a711eafe614eaaba6b911b1b5990",
-    "skills/fabius-ludus/SKILL.md": "5c92372c001bb6ccbf05e8bc8d9d6411ac916858b02807d3e78649f74169a0fe",
-    "skills/fabius-machina/SKILL.md": "cfe3b6ab5cfc8433c99a69677e7215be3b93da5dd4b46bdaa7b3a92c44b89e8c",
-    "skills/fabius-mercatus/SKILL.md": "55199ba07bee72b200542e2ad8ca7fc15e7c33131e96aeca07a06789e56bcc9b",
-    "skills/fabius-parcus/SKILL.md": "36e9267e02e61806ace77916d04253149ce5f24e94b1b6057de28b899f73d0d4",
+    "skills/fabius-concilium/SKILL.md": "53131ae8831364295ede7f668b916e3b076dd81ad5534286aecc5fe51734f905",
+    "skills/fabius-decor/SKILL.md": "c1e96109b157e9daa7044f4eae0dea0021e794b1d3b3c47d2a80c1b158e0895c",
+    "skills/fabius-disciplina/SKILL.md": "9a1633c208a1a0070d35ab0188d8020000698b309bdc0365b4662f1936f9390b",
+    "skills/fabius-doctrina/SKILL.md": "bbdc3a11191fa00694b75fe8ebaa3f9f422b6ae35ce8be07b36088401f79308a",
+    "skills/fabius-fortuna/SKILL.md": "a38e2b660241626447e6d23096c10137c1d95d8eb7e7f2f7917b51f40b0792a2",
+    "skills/fabius-ludus/SKILL.md": "a78f7a8114c6125643c23abc60aa244fd574efe2a9d5a640ce2141d0d3a9b342",
+    "skills/fabius-machina/SKILL.md": "6fa4d49bbec31c276bc61afcaa399450bd9a12d2d1e7aedbae87eb42d4030651",
+    "skills/fabius-mercatus/SKILL.md": "72b825a8b65c53c39ca8db458a907f8798acb646c023b493576df4df3def0499",
+    "skills/fabius-parcus/SKILL.md": "b7fe088ef793ec4d028e1145abbfcac61178f130f7ba98843cb1d03dab564816",
     "skills/fabius-praesidium/SKILL.md": "d1a307f31774d16d2738de000315977da57e3f65c221f1c935082b50d9ec658f",
-    "skills/fabius-scientia/SKILL.md": "3238c20c9fa1f0614d633a0dbb711a5065c55663c94814084219428488a6bd23",
-    "skills/fabius/SKILL.md": "5e8223b96b8789f754db7f9bc3a6edb924fdc001eee2b4e72fd79ee10741bd52"
+    "skills/fabius-scientia/SKILL.md": "9fb8b6e5153613d8271c4d8224cec7bd6e02e60fb62320005306f0e4f9e2f4f8",
+    "skills/fabius/SKILL.md": "565c2d1fcf510ccd50294909b6842fa2f2fb118c77ea36bb6ba17b09e70e7353"
   },
-  "merkle_root": "f9c5b6d3ae29b989fabc4921726823febb5b650c60817dc5f596685df1ff41a1"
+  "merkle_root": "e86ef9298d904b57278af793f46d24ca1b83cec242f4284ddaf357cb5c720820"
 }

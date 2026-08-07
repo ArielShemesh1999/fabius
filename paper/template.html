@@ -66,18 +66,15 @@ window.MathJax = {
 
   /* ---- proof cards ---- */
   .rulecard{ break-inside:avoid; page-break-inside:avoid; border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:7px; padding:11px 15px 6px; margin:0 0 13px; background:#fcfdff; }
-  .rulecard.analogy{ border-left-color:var(--amber); background:#fffdf8; }
   .rulecard.qualitative{ border-left-color:var(--grey); background:#fafbfc; }
   .rulehead{ display:flex; align-items:baseline; gap:9px; margin-bottom:.3em; flex-wrap:wrap; }
   .ruleid{ font-family:"Helvetica Neue",Arial,sans-serif; font-weight:800; font-size:10.5pt; color:var(--ink); }
   .ruletitle{ font-family:"Helvetica Neue",Arial,sans-serif; font-weight:600; font-size:10.4pt; color:var(--soft); }
   .badge{ margin-left:auto; font-family:"Helvetica Neue",Arial,sans-serif; font-size:7.2pt; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:2px 7px; border-radius:20px; white-space:nowrap; }
   .badge.real{ background:#e7f6ec; color:var(--green); }
-  .badge.analogy{ background:#fdf0dd; color:var(--amber); }
   .badge.qualitative{ background:#eef1f4; color:var(--grey); }
   .rulecard p{ font-size:9.8pt; margin:.3em 0 .5em; }
   .rulecard p strong:first-child{ color:var(--accent-d); }
-  .rulecard.analogy p strong:first-child{ color:var(--amber); }
   mjx-container{ overflow-x:visible; }
   mjx-container[display="true"]{ margin:.55em 0 !important; }
 
@@ -115,7 +112,7 @@ window.MathJax = {
 <!-- ================= TITLE ================= -->
 <div class="title-page">
   <!--FIG:fabius-pixel-->
-  <div class="kicker" style="text-align:center;margin-bottom:8px">Whitepaper · v1.0.0</div>
+  <div class="kicker" style="text-align:center;margin-bottom:8px">Whitepaper · v2.2.0</div>
   <div class="title">Fabius</div>
   <div class="subtitle">The autonomous AI agent that runs on every major model — fifteen coordinated skills, a research-grounded decision policy, and the mathematics of knowing when to stop.</div>
   <hr class="rule-hr" />
@@ -125,9 +122,9 @@ window.MathJax = {
   <div class="abstract">
     <h4>Abstract</h4>
     <p>Large language models, used as coding and reasoning agents, fail in two opposite directions: they over-explain and over-engineer, or — when told merely to "be concise" — they cut the validation, security, and accessibility that make an artifact correct. <strong>Fabius</strong> is a single operating stance, realized as an autonomous AI agent — fifteen coordinated skills under one router — that resolves this tension along one axis: <em>scout wide in what you investigate, strike narrow in what you ship.</em></p>
-    <p>This whitepaper presents fabius as a system. It gives the architecture (a router — the <em>praetorium</em> — that dispatches on three axes over an always-on lean core, four engineering specialists, and nine domain verticals), the decision policy (a proven core of <strong>twenty-two</strong> routing rules — eighteen drawn from the agent-research canon and four governing what the router itself adds: model-tier dispatch, long-horizon loops, vertical composition, and corpus externalization — plus a researched frontier layer at the working edge), and — the centre of the document — the <strong>mathematics</strong> beneath each core rule: every gate reduced to a formal statement, proved, and adversarially checked. We then prove the core <em>coheres</em>: all twenty-two rules are one expected-loss / value-of-information threshold applied to disjoint variables, composed in an acyclic pipeline that routes every task and terminates — every gate adversarially checked, the composition’s exceptions printed in full. A strict honesty ledger separates what the source papers <em>measured</em> from what fabius <em>borrows by analogy</em> — and marks the researched frontier layer (R14–R16 · M10–M13) as the working edge, outside the proof by construction. We close with the <strong>fabius benchmark</strong> — one reproducible test read out on four panels: blind-judged quality on the four newest Claude models, objective deliverable tests that execute generated code against hidden suites and grade domain work against factual checklists, blind external-model demos across families, and the <strong>FBS run</strong> — a versioned 100-task suite executing the system's own identity contract (<code>IDENTITY.md</code>: an intelligence amplification layer, judged on outcomes-per-token) as <code>BASE → FAB → FAB_MEMORY</code>, with persistent memory measured behaviorally for the first time. Structure beats brevity, and the advantage grows as the model's default discipline drops — on 20–35% less output.</p>
+    <p>This whitepaper presents fabius as a system. It gives the architecture (a router — the <em>praetorium</em> — that dispatches on three axes over an always-on lean core, four engineering specialists, and nine domain verticals), the decision policy (a proven core of <strong>twenty-two</strong> routing rules — eighteen forming the mathematical core and four governing what the router itself adds: model-tier dispatch, long-horizon loops, vertical composition, and corpus externalization — plus a researched frontier layer at the working edge), and — the centre of the document — the <strong>mathematics</strong> beneath each core rule: every gate reduced to a formal statement, proved, and adversarially checked. We then prove the core <em>coheres</em>: all twenty-two rules are one expected-loss / value-of-information threshold applied to disjoint variables, composed in an acyclic pipeline that routes every task and terminates — every gate adversarially checked, the composition’s exceptions printed in full. A strict boundary separates fabius's proven mathematical gates from the few operational heuristics it states as such — and marks the researched frontier layer (R14–R16 · M10–M13) as the working edge, outside the proof by construction. Every rule here is fabius's own. We close with the <strong>fabius benchmark</strong> — one reproducible test read out on four panels: blind-judged quality on the four newest Claude models, objective deliverable tests that execute generated code against hidden suites and grade domain work against factual checklists, blind external-model demos across families, and the <strong>FBS run</strong> — a versioned 100-task suite executing the system's own identity contract (<code>IDENTITY.md</code>: an intelligence amplification layer, judged on outcomes-per-token) as <code>BASE → FAB → FAB_MEMORY</code>, with persistent memory measured behaviorally for the first time. Structure beats brevity, and the advantage grows as the model's default discipline drops — on 20–35% less output.</p>
     <p>Fabius is realized as an <strong>autonomous agent</strong>: it runs on every major model (Anthropic, OpenAI, Google, Mistral, Groq), executes the loop — <em>Scout → Plan → Strike → Prove → Record</em> — with an independent, execution-grounded verifier, and is operated from the <strong>synapse console</strong>. Three surfaces, one identity: a public face, a private provenance-sealed brain, and the console that runs it. This paper formalizes the decision policy — the router — at the agent's core.</p>
-    <div class="meta-row">Version 1.0.0 · July 2026 · figures computed (numpy → SVG), reproducible</div>
+    <div class="meta-row">Version 2.2.0 · July 2026 · figures computed (numpy → SVG), reproducible</div>
   </div>
 </div>
 
@@ -142,7 +139,7 @@ window.MathJax = {
 
 <p>Fan out to understand and to verify; deliver the smallest correct artifact; explain it in the fewest exact words. These never conflict, because they live on different axes — process and memory make you wide, lean makes you narrow. Fabius realizes this as one agent of fifteen coordinated skills: a router, an always-on lean core, four engineering specialists (process, design, agent-engineering, memory), and nine domain verticals (go-to-market, defensive security, game craft, on-chain + sealing, automation, science, AI/ML engineering, markets &amp; finance, cross-model council).</p>
 
-<p>The contribution of this whitepaper is to show that the stance is not a vibe. Section 2 gives the system architecture and the single-owner coordination contract that keeps fifteen skills from contradicting one another. Section 3 states the decision policy: a proven core of twenty-two operational rules, each drawn from a specific result in the agent-research literature or from the system’s own structure, and a researched frontier layer at the working edge. Section 4 — the heart of the document — supplies the <strong>mathematics</strong> under each core rule, every theorem proved and adversarially verified, with a hard line between results that <em>govern</em> a routing decision and theorems borrowed only for their <em>shape</em>. Section 5 proves the twenty-two core rules <strong>compose into one coherent decision system</strong>. Section 6 reports the fabius benchmark — one reproducible test in four panels: blind-judged quality, objective deliverable tests, cross-family demos, and the FBS run on the versioned suite. The discipline of the whole is in Section 7: <strong>measured, not claimed</strong>.</p>
+<p>The contribution of this whitepaper is to show that the stance is not a vibe. Section 2 gives the system architecture and the single-owner coordination contract that keeps fifteen skills from contradicting one another. Section 3 states the decision policy: a proven core of twenty-two operational rules, each derived from fabius's own decision-theoretic core, and a researched frontier layer at the working edge. Section 4 — the heart of the document — supplies the <strong>mathematics</strong> under each core rule, every theorem proved and adversarially verified, with a hard line between the mathematical gates that <em>govern</em> a routing decision and the few operational heuristics stated as such. Section 5 proves the twenty-two core rules <strong>compose into one coherent decision system</strong>. Section 6 reports the fabius benchmark — one reproducible test in four panels: blind-judged quality, objective deliverable tests, cross-family demos, and the FBS run on the versioned suite. The discipline of the whole is in Section 7: <strong>measured, not claimed</strong>.</p>
 </section>
 
 <!-- ================= 2. THE SYSTEM ================= -->
@@ -189,47 +186,47 @@ window.MathJax = {
 <!-- ================= 3. THE POLICY ================= -->
 <section class="sec">
 <h2>3 · The decision policy</h2>
-<p>A stance is only as good as the decisions it makes: <em>which</em> layer to route to, <em>when</em> to spend a tool call or a second agent, <em>how long</em> to keep refining, <em>what</em> to load from memory. Fabius’s router carries an explicit policy of twenty-two proven rules — thirteen routing rules (R1–R13) and nine orchestration / memory rules (M1–M9) — each drawn from a specific result in the agent-research canon (or, for R13, the system’s own single-owner contract) and tagged for honesty, plus a researched frontier layer (R14–R16 · M10–M13) documented in the routing policy.</p>
+<p>A stance is only as good as the decisions it makes: <em>which</em> layer to route to, <em>when</em> to spend a tool call or a second agent, <em>how long</em> to keep refining, <em>what</em> to load from memory. Fabius’s router carries an explicit policy of twenty-two proven rules — thirteen routing rules (R1–R13) and nine orchestration / memory rules (M1–M9) — each derived from fabius's own decision-theoretic core (R13 from its single-owner contract), plus a researched frontier layer (R14–R16 · M10–M13) documented in the routing policy.</p>
 
 <h3>3.1 · Route by classification, then climb one rung</h3>
-<p>Specialist selection is reproducible, not vibes. Fabius opens every non-trivial task by naming its load on three axes — <strong>Memory, Tools/Action, Planning</strong> — the universal capability axes from Wang et al.'s survey of autonomous agents <strong>(R1)</strong>. Memory routes to <code>archivum</code>, Tools to <code>cohors</code>, Planning to <code>disciplina</code>; zero axes loaded stays in the lean <code>parcus</code> core. A task in a named vertical also routes on a <strong>Domain</strong> axis to its owner — UI/data-viz to <code>decor</code>, go-to-market to <code>mercatus</code>, defensive security to <code>praesidium</code>, games to <code>ludus</code>, on-chain/provenance to <code>catena</code>, automation to <code>machina</code>, science to <code>scientia</code> — where <em>domain picks what</em> while the three load axes pick <em>how</em>, and the vertical runs as a studio (R13). The classification <em>is</em> the routing rationale.</p>
-<p>Then it climbs a capability ladder one rung at a time — <span class="mono">inline → one tool → retrieval → plan → single subagent → swarm</span> — adding the smallest rung the classification demands and stopping <strong>(R2)</strong>. The efficiency surveys describe a cost–capability frontier with steep diminishing returns; fabius operates at the <em>knee</em>, not the tail. The formal version of "stop at the knee" is proved in §4.1.</p>
+<p>Specialist selection is reproducible, not vibes. Fabius opens every non-trivial task by naming its load on three axes — <strong>Memory, Tools/Action, Planning</strong> — the universal capability axes fabius routes on <strong>(R1)</strong>. Memory routes to <code>archivum</code>, Tools to <code>cohors</code>, Planning to <code>disciplina</code>; zero axes loaded stays in the lean <code>parcus</code> core. A task in a named vertical also routes on a <strong>Domain</strong> axis to its owner — UI/data-viz to <code>decor</code>, go-to-market to <code>mercatus</code>, defensive security to <code>praesidium</code>, games to <code>ludus</code>, on-chain/provenance to <code>catena</code>, automation to <code>machina</code>, science to <code>scientia</code> — where <em>domain picks what</em> while the three load axes pick <em>how</em>, and the vertical runs as a studio (R13). The classification <em>is</em> the routing rationale.</p>
+<p>Then it climbs a capability ladder one rung at a time — <span class="mono">inline → one tool → retrieval → plan → single subagent → swarm</span> — adding the smallest rung the classification demands and stopping <strong>(R2)</strong>. Capability scales sub-linearly with machinery — a cost–capability frontier with steep diminishing returns; fabius operates at the <em>knee</em>, not the tail. The formal version of "stop at the knee" is proved in §4.1.</p>
 
-<h3>3.2 · The eighteen canon-sourced rules at a glance</h3>
+<h3>3.2 · The eighteen core rules at a glance</h3>
 <table>
-  <thead><tr><th>Rule</th><th>The decision it makes</th><th>Source paper</th><th class="num">grounding</th></tr></thead>
+  <thead><tr><th>Rule</th><th>The decision it makes</th></tr></thead>
   <tbody>
-    <tr><td><b>R1</b></td><td>classify a task on {Memory, Tools, Planning}, route each loaded axis</td><td>Wang survey</td><td class="num">direct</td></tr>
-    <tr><td><b>R2</b></td><td>climb the capability ladder one rung; stop at the knee</td><td>efficiency surveys</td><td class="num">analogy</td></tr>
-    <tr><td><b>R3</b></td><td>call a tool only when you can name the wrong answer it prevents</td><td>Toolformer</td><td class="num">analogy</td></tr>
-    <tr><td><b>R4</b></td><td>on an ambiguous task, keep 2–3 routes alive; collapse as signal sharpens</td><td>Flow Matching</td><td class="num">analogy</td></tr>
-    <tr><td><b>R5</b></td><td>reason → act → observe; never act on an assumed result</td><td>ReAct</td><td class="num">direct</td></tr>
-    <tr><td><b>R6</b></td><td>plan in placeholders; bind tool calls only after the plan is fixed</td><td>Chain of Abstraction</td><td class="num">analogy</td></tr>
-    <tr><td><b>R7</b></td><td>branch only when a cheap evaluator can rank unfinished candidates</td><td>Tree of Thoughts</td><td class="num">direct</td></tr>
-    <tr><td><b>R8</b></td><td>refine only on a verifiable signal; signal type sets the budget</td><td>Reflexion · Self-Refine</td><td class="num">direct</td></tr>
-    <tr><td><b>R9</b></td><td>retrieve on demand; read the index, page in only the matching slice</td><td>MemGPT</td><td class="num">direct</td></tr>
-    <tr><td><b>R10</b></td><td>state breadth tasks once; hard-steer only narrow contracts</td><td>Classifier-Free Guidance</td><td class="num">analogy</td></tr>
-    <tr><td><b>M1</b></td><td>spawn a second agent only to prevent a named error</td><td>Toolformer-spirit</td><td class="num">analogy</td></tr>
-    <tr><td><b>M2</b></td><td>add a reducer only when partial results merge (associativity)</td><td>Graph of Thoughts</td><td class="num">analogy</td></tr>
-    <tr><td><b>M3</b></td><td>scale verification depth to measured per-route failure</td><td>Consistency Models</td><td class="num">analogy</td></tr>
-    <tr><td><b>M4</b></td><td>reflect-then-retry; escalate when hypotheses run out</td><td>Reflexion</td><td class="num">direct</td></tr>
-    <tr><td><b>M5</b></td><td>accept a prompt rewrite only on a held-out metric delta</td><td>DSPy</td><td class="num">direct</td></tr>
-    <tr><td><b>M6</b></td><td>promote verified solutions to a reusable skill; query before planning</td><td>Voyager</td><td class="num">direct</td></tr>
-    <tr><td><b>M7</b></td><td>page memory explicitly; write only decision-changing facts</td><td>MemGPT</td><td class="num">direct</td></tr>
-    <tr><td><b>M8</b></td><td>rank index ties by relevance, then recency and load-bearingness</td><td>Generative Agents</td><td class="num">analogy</td></tr>
+    <tr><td><b>R1</b></td><td>classify a task on {Memory, Tools, Planning}, route each loaded axis</td></tr>
+    <tr><td><b>R2</b></td><td>climb the capability ladder one rung; stop at the knee</td></tr>
+    <tr><td><b>R3</b></td><td>call a tool only when you can name the wrong answer it prevents</td></tr>
+    <tr><td><b>R4</b></td><td>on an ambiguous task, keep 2–3 routes alive; collapse as signal sharpens</td></tr>
+    <tr><td><b>R5</b></td><td>reason → act → observe; never act on an assumed result</td></tr>
+    <tr><td><b>R6</b></td><td>plan in placeholders; bind tool calls only after the plan is fixed</td></tr>
+    <tr><td><b>R7</b></td><td>branch only when a cheap evaluator can rank unfinished candidates</td></tr>
+    <tr><td><b>R8</b></td><td>refine only on a verifiable signal; signal type sets the budget</td></tr>
+    <tr><td><b>R9</b></td><td>retrieve on demand; read the index, page in only the matching slice</td></tr>
+    <tr><td><b>R10</b></td><td>state breadth tasks once; hard-steer only narrow contracts</td></tr>
+    <tr><td><b>M1</b></td><td>spawn a second agent only to prevent a named error</td></tr>
+    <tr><td><b>M2</b></td><td>add a reducer only when partial results merge (associativity)</td></tr>
+    <tr><td><b>M3</b></td><td>scale verification depth to measured per-route failure</td></tr>
+    <tr><td><b>M4</b></td><td>reflect-then-retry; escalate when hypotheses run out</td></tr>
+    <tr><td><b>M5</b></td><td>accept a prompt rewrite only on a held-out metric delta</td></tr>
+    <tr><td><b>M6</b></td><td>promote verified solutions to a reusable skill; query before planning</td></tr>
+    <tr><td><b>M7</b></td><td>page memory explicitly; write only decision-changing facts</td></tr>
+    <tr><td><b>M8</b></td><td>rank index ties by relevance, then recency and load-bearingness</td></tr>
   </tbody>
 </table>
-<p>The reading list behind each rule is the agent-research canon — ReAct, Toolformer, Tree and Graph of Thoughts, Reflexion, Self-Refine, MemGPT, DSPy, Voyager, the Wang and efficiency surveys, and (for the analogies) the sampling mathematics of generative models. Section 4 turns each rule into a theorem.</p>
+<p>Every rule is derived in full in Section 4 — turned from a routing decision into a theorem, proved, and adversarially checked. They are fabius's own.</p>
 
 <h3>3.3 · The four system rules — R11–R13, M9</h3>
-<p>Beyond the canon-sourced eighteen, four rules govern what the <em>praetorium</em> itself adds: model-tier dispatch, the long-horizon loop, vertical composition, and corpus packaging. Each carries a full formal proof in §4.7 — statement · lemmas · theorem · proof · boundary, each adversarially verified twice — and §5’s coherence theorem is established over the full twenty-two-rule set, with its exceptions printed. The table below is the operational summary. The working edge beyond the proof is the researched <strong>frontier layer</strong> — R14–R16 · M10–M13, distilled from a deep-research pass over the 2025–26 agent canon and held in the routing policy with per-source honesty tags.</p>
+<p>Beyond the eighteen core rules, four govern what the <em>praetorium</em> itself adds: model-tier dispatch, the long-horizon loop, vertical composition, and corpus packaging. Each carries a full formal proof in §4.7 — statement · lemmas · theorem · proof · boundary, each adversarially verified twice — and §5’s coherence theorem is established over the full twenty-two-rule set, with its exceptions printed. The table below is the operational summary. The working edge beyond the proof is the researched <strong>frontier layer</strong> — R14–R16 · M10–M13, distilled from fabius's own deep-research pass and held in the routing policy.</p>
 <table>
-  <thead><tr><th>Rule</th><th>The decision it makes</th><th>Source</th></tr></thead>
+  <thead><tr><th>Rule</th><th>The decision it makes</th></tr></thead>
   <tbody>
-    <tr><td><b>R11</b></td><td>spend the cheapest model tier that holds; escalate on a <em>verifiable</em> miss, not a guess — re-tier per sub-task, not per session</td><td>efficiency survey · FrugalGPT cascades</td></tr>
-    <tr><td><b>R12</b></td><td>long-horizon work runs <code>step → verify</code> on a loop with a dual exit gate (completion <em>and</em> done-signal) and a hard cycle cap — autonomous, never infinite</td><td>Ralph loop · Reflexion stop-condition</td></tr>
-    <tr><td><b>R13</b></td><td>a vertical runs a studio — the domain skill leads the WHAT, process plans, execution follows, lean underneath</td><td>fabius's own composition rule</td></tr>
-    <tr><td><b>M9</b></td><td>externalize the corpus — the brain holds the index, not the library; adding a capability is an index row, not a megabyte</td><td>MemGPT paging · memory survey</td></tr>
+    <tr><td><b>R11</b></td><td>spend the cheapest model tier that holds; escalate on a <em>verifiable</em> miss, not a guess — re-tier per sub-task, not per session</td></tr>
+    <tr><td><b>R12</b></td><td>long-horizon work runs <code>step → verify</code> on a loop with a dual exit gate (completion <em>and</em> done-signal) and a hard cycle cap — autonomous, never infinite</td></tr>
+    <tr><td><b>R13</b></td><td>a vertical runs a studio — the domain skill leads the WHAT, process plans, execution follows, lean underneath</td></tr>
+    <tr><td><b>M9</b></td><td>externalize the corpus — the brain holds the index, not the library; adding a capability is an index row, not a megabyte</td></tr>
   </tbody>
 </table>
 <p>R11–R13 and M9 are stated in full in §4.7, after the core proofs — with the boundary kept explicit: they are sound and useful, but they have not earned a place inside the theorem yet, and this document does not pretend otherwise.</p>
@@ -238,20 +235,20 @@ window.MathJax = {
 <!-- ================= 4. THE MATHEMATICS ================= -->
 <section class="sec">
 <h2>4 · The mathematics of the policy</h2>
-<p>Each rule below is reduced to a formal statement and proved. Every proof was written and then <strong>adversarially verified by an independent reviewer</strong> whose only job was to find an error — a process that, in development, caught a sign error in the value-of-information gate, a missing completeness hypothesis in the contraction argument, an over-stated submodular-knapsack bound, and an attribution slip on the ranking principle, all corrected before publication.</p>
-<p>Two tags run through the section. <strong>Real-math</strong> means the equation genuinely <em>governs</em> the routing decision — decision theory, information theory, optimization, scheduling, algebra. <strong>Analogy</strong> means a correct theorem from another field (generative-model sampling, transport, IR kernels) borrowed for its <em>shape</em>; the source paper proves nothing about agents, so fabius takes the shape, not a measured result. One rule (R5) is <strong>qualitative</strong> — a control-flow invariant with no objective function. The honesty boundary is stated inside every analogy proof.</p>
+<p>Each rule below is reduced to a formal statement and proved. Every proof was written and then <strong>adversarially verified by an independent reviewer</strong> whose only job was to find an error — a process that, in development, caught a sign error in the value-of-information gate, a missing completeness hypothesis in the contraction argument, an over-stated submodular-knapsack bound, and a normalization slip on the ranking principle, all corrected before publication.</p>
+<p>Two kinds of rule run through the section. Most are <strong>mathematical gates</strong>: the equation genuinely <em>governs</em> the routing decision — decision theory, information theory, optimization, scheduling, algebra. A few are <strong>operational heuristics</strong> (R4, R5, R10, M8b) — control-flow choices stated as such, with no objective function to optimize. Every rule is fabius's own, and the boundary between a proved gate and a heuristic is stated inside each one.</p>
 
 <!--MATH_SECTION-->
 
 <h3>4.7 · The operational edge, proven — R11–R13, M9</h3>
-<p>These four rules dispatch model tiers, run long-horizon loops, compose verticals, and package the corpus. Each carries a full proof in the house style below — R11 as an index-policy theorem (the tier cascade at cost-per-success, Mitten’s exchange index / the ordering half of Weitzman’s Pandora rule, collapsing to R3’s gate verbatim), R12 as optimal stopping with a dual exit gate and an almost-sure termination bound (M4’s objects lifted to cycle scale), R13 as a conflict-freedom / termination / goal-preservation theorem over the single-owner composition, and M9 as a lossless-paging dominance bound with an explicit recall threshold. Every entry was adversarially verified by two independent skeptic passes; the corrections are recorded in the receipt (<code>paper/proofs.json</code>), per the house discipline.</p>
+<p>These four rules dispatch model tiers, run long-horizon loops, compose verticals, and package the corpus. Each carries a full proof in the house style below — R11 as an index-policy theorem (the tier cascade at cost-per-success, a reservation-value ordering collapsing to R3’s gate verbatim), R12 as optimal stopping with a dual exit gate and an almost-sure termination bound (M4’s objects lifted to cycle scale), R13 as a conflict-freedom / termination / goal-preservation theorem over the single-owner composition, and M9 as a lossless-paging dominance bound with an explicit recall threshold. Every entry was adversarially verified by two independent skeptic passes; the corrections are recorded in the receipt (<code>paper/proofs.json</code>), per the house discipline.</p>
 <!--MATH_EXT-->
 </section>
 
 <!-- ================= 5. COHERENCE ================= -->
 <section class="sec">
 <h2>5 · Coherence — the rules are one system</h2>
-<p>Twenty-two rules drawn from across the agent-research canon could easily contradict one another. They do not. The capstone result of this paper is that they compose into a single decision system that is <strong>consistent, complete, and composable</strong>.</p>
+<p>Twenty-two independently derived rules could easily contradict one another. They do not. The capstone result of this paper is that they compose into a single decision system that is <strong>consistent, complete, and composable</strong>.</p>
 
 <pre class="flow"><span class="c">parcus</span>  (lean floor — always on, never competes for a task verb)
   <span class="k">≺ R1</span>   classify the 3 axes {Memory, Tools, Planning}
@@ -267,7 +264,7 @@ window.MathJax = {
 
 <!--COHERENCE-->
 
-<p style="margin-top:1em"><strong>Scope, and the completion.</strong> The capstone above is stated over the canon-sourced eighteen (R1–R10, M1–M8); with the four §4.7 proofs, the audit below establishes the coherence check over the full <em>twenty-two-rule</em> set — threshold form, variable-disjointness, pipeline placement, and contradiction checks per rule. The verdict is <strong>coheres, with exceptions</strong> — and in keeping with the honesty bar, the exceptions are printed in full rather than smoothed away. The frontier layer (R14–R16 · M10–M13) stays outside this theorem by construction.</p>
+<p style="margin-top:1em"><strong>Scope, and the completion.</strong> The capstone above is stated over the eighteen core rules (R1–R10, M1–M8); with the four §4.7 proofs, the audit below establishes the coherence check over the full <em>twenty-two-rule</em> set — threshold form, variable-disjointness, pipeline placement, and contradiction checks per rule. The verdict is <strong>coheres, with exceptions</strong> — and in keeping with the honesty bar, the exceptions are printed in full rather than smoothed away. The frontier layer (R14–R16 · M10–M13) stays outside this theorem by construction.</p>
 <!--COHERENCE_EXT-->
 </section>
 
@@ -278,7 +275,7 @@ window.MathJax = {
 
 <h3>6.1 · The method</h3>
 <p>One test, three arms. Each task is answered three ways: <code>baseline</code> (the task only), <code>terse</code> (the task plus a generic <em>"be concise, write minimal code"</em> line), and <code>fabius</code> (the task plus the shipped stance — the shipped <code>AGENTS.md</code> plus the routed <code>SKILL.md</code>, read verbatim). The <code>terse</code> arm is the real control: beating <code>baseline</code> is easy; <strong>beating <code>terse</code> isolates structure from mere brevity.</strong></p>
-<p>The benchmark reads out on three panels. The <strong>quality panel</strong> is blind-judged: <strong>two</strong> judge models that are never told which arm produced which answer score each answer 0–5 on correctness, minimality, and best-practice, plus an objective character count; the judges disagree by only 0.72/15. The <strong>objective panel</strong> removes the judge entirely: generated code is <em>executed</em> against hidden test suites, and domain deliverables are graded against factual checklists by two strict graders. The <strong>external panel</strong> carries the same three arms cross-family through a portable harness (<code>evals/portable_eval.py</code>). A deterministic structural suite (19/19, no key, no cost) proves the skill system itself is well-formed — fifteen single-owner contracts, every reference live, the content-bound seal recomputable; the canonical receipt is <code>evals/results.benchmark.json</code>, and each panel's raw data lives in the raw receipt files under <code>evals/</code>.</p>
+<p>Three of the benchmark's four panels read out on this three-arm design. The <strong>quality panel</strong> is blind-judged: <strong>two</strong> judge models that are never told which arm produced which answer score each answer 0–5 on correctness, minimality, and best-practice, plus an objective character count; the judges disagree by only 0.72/15. The <strong>objective panel</strong> removes the judge entirely: generated code is <em>executed</em> against hidden test suites, and domain deliverables are graded against factual checklists by two strict graders. The <strong>external panel</strong> carries the same three arms cross-family through a portable harness (<code>evals/portable_eval.py</code>). The fourth — the <strong>FBS panel</strong> (§6.5) — keeps the one-test discipline and swaps the arms for <code>BASE</code> / <code>FAB</code> / <code>FAB_MEMORY</code> over a versioned 100-task suite, scored /28 by two blind judges plus a strict objective grader. A deterministic structural suite (23/23, no key, no cost) proves the skill system itself is well-formed — fifteen single-owner contracts, every reference live, the content-bound seal recomputable; the canonical receipt is <code>evals/results.benchmark.json</code>, and each panel's raw data lives in the raw receipt files under <code>evals/</code>.</p>
 
 <h3>6.2 · Panel A — quality, blind</h3>
 <table>
@@ -341,21 +338,11 @@ window.MathJax = {
 <!-- ================= 7. HONESTY ================= -->
 <section class="sec">
 <h2>7 · The honesty ledger</h2>
-<p>The quality bar of the whole project is one phrase: <strong>measured, not claimed.</strong> The sharpest decision heuristics in the policy are borrowed from a different field — the sampling mathematics of generative models. Those results are proved about numerical sampling of learned vector fields and image fidelity, <em>never</em> about agents. Where fabius uses one, it takes the shape of the idea, not a measured agent result, and says so.</p>
+<p>The quality bar of the whole project is one phrase: <strong>measured, not claimed.</strong> It runs in two places. In the mathematics, a rule earns a place in the theorem only with a proof that survived adversarial checking; the few operational heuristics (R4, R5, R10, M8b) are labelled as heuristics, carry no proof claim, and never govern a route the way the mathematical gates do. In the benchmark, every number is reported with its method, its controls, and its misses — the losses printed in the receipt, not smoothed away.</p>
 
-<div class="note honesty">
-  <span class="lbl">Direct mappings</span>
-  <p>The source paper makes a claim about LLM agents that fabius applies almost verbatim: ReAct's reason→act→observe grounding contract (R5); Tree of Thoughts' branch-only-when-partials-are-judgeable gate (R7); Reflexion and Self-Refine's verifiable-signal reflection loop with diminishing returns (R8, M4); Voyager's verify-then-store skill library (M6); DSPy's contract-first metric-delta gate (M5); MemGPT's explicit paging and retrieve-over-stuff (R9, M7); and the Wang Profile/Memory/Planning/Action taxonomy anchoring the three-axis router (R1).</p>
-</div>
+<p>Most of the twenty-two rules reduce to one value-of-information threshold that genuinely governs the decision; the remaining few are operational heuristics that advise without ever overriding a measured gate. Every rule is fabius's own — derived, proved where a proof is claimed, and stated as a heuristic where it is not.</p>
 
-<div class="note honesty">
-  <span class="lbl">Analogy mappings</span>
-  <p>The source proves something about a different domain and fabius transfers the shape, not a measured agent result: Toolformer's loss-reduction filter is a training-time criterion against the gold continuation, uncomputable at routing time, so R3/M1 borrow only its spirit; the efficiency surveys assert diminishing returns directionally but fit no curve, so R2's knee is qualitative; Chain of Abstraction measured ~1.4× on single-tool tasks, not agent fan-out, so R6's parallel benefit is unmeasured here; Graph of Thoughts' numbers are intra-LLM, transplanted to agent topology (M2); and the three generative-model rules — Flow Matching (R4), Classifier-Free Guidance (R10), Consistency Models (M3) — together with Generative Agents' recency kernel (M8b), are <strong>all</strong> analogies, because those papers prove their claims about sampling and image fidelity and say nothing about agents, routing, or verification budgets.</p>
-</div>
-
-<p>The bar held throughout: <strong>measured where a paper measured it in-domain; analogy everywhere the transfer crosses domains — labelled, so no claim is overstated.</strong> Of the eighteen canon-sourced rules, nine map directly from in-domain agent results and nine borrow their source only by analogy — the table of §3.2, row by row. The four system rules (R11–R13, M9) rest on real mathematics proved in §4.7 and keep their source tags: the efficiency survey and cascade literature for R11, the loop-plus-gate shape for R12, the system’s own contract for R13, MemGPT paging for M9. At the level of the governing equation the ledger is stricter still: fifteen rest on mathematics that genuinely governs the decision, one (R5) is an explicit qualitative invariant, and two (R4, R10) are pure analogies — joined at the sub-rule level by M8b's recency kernel and M2's transplanted Graph-of-Thoughts numbers — that carry their caveat inline and never govern a route the way the real-math gates do.</p>
-
-<p>The same discipline draws the line between the <em>proven core</em> and the <em>working edge</em>: a rule belongs to the theorem only with a proof that survived adversarial checking — and the composition’s verdict ships with its exceptions printed in full. The researched frontier layer (R14–R16 · M10–M13) sits at that edge — sound, sourced, honesty-tagged, and outside the proof until its own debt is paid. The boundary is the honest thing, and it is drawn in ink, not pencil.</p>
+<p>The same discipline draws the line between the <em>proven core</em> and the <em>working edge</em>: a rule belongs to the theorem only with a proof that survived adversarial checking — and the composition’s verdict ships with its exceptions printed in full. The researched frontier layer (R14–R16 · M10–M13) sits at that edge — sound, honesty-tagged, and outside the proof until its own debt is paid. The boundary is the honest thing, and it is drawn in ink, not pencil.</p>
 </section>
 
 <!-- ================= 8. REPRODUCE & USE ================= -->
@@ -376,51 +363,14 @@ GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini</pre>
 <!-- ================= 9. CONCLUSION ================= -->
 <section class="sec">
 <h2>9 · Conclusion</h2>
-<p>Fabius is a small idea carried all the way down. The idea is a single axis — scout wide, strike narrow — that lets an agent be thorough and minimal at once because the two live on different axes. The system is fifteen coordinated skills with a single-owner contract. The policy is twenty-two proven rules — each sourced to a real result — and a researched frontier layer held honestly at the edge. And the mathematics is not decoration: every gate is the same value-of-information threshold applied to a different capability, composed in an acyclic pipeline that routes every task and terminates — proved here, and adversarially checked.</p>
-<p>What makes it trustworthy is the line it refuses to cross. Where a paper measured a thing in its own domain, fabius uses the result; where the transfer would cross domains, it borrows only the shape and labels it. The benchmark says the same thing in data: a consistent, cross-model lift that grows as the model's default discipline drops — shorter answers a blind judge scores higher, and, when the judge is removed, more hidden tests and factual checks objectively passed — and nothing more than that. <strong>Measured, not claimed.</strong></p>
+<p>Fabius is a small idea carried all the way down. The idea is a single axis — scout wide, strike narrow — that lets an agent be thorough and minimal at once because the two live on different axes. The system is fifteen coordinated skills with a single-owner contract. The policy is twenty-two proven rules — each derived from fabius's own decision-theoretic core — and a researched frontier layer held honestly at the edge. And the mathematics is not decoration: every gate is the same value-of-information threshold applied to a different capability, composed in an acyclic pipeline that routes every task and terminates — proved here, and adversarially checked.</p>
+<p>What makes it trustworthy is the line it refuses to cross: a rule earns the theorem only with a proof that survives adversarial checking, and the few operational heuristics are labelled as such, never overstated. The benchmark says the same thing in data: a consistent, cross-model lift that grows as the model's default discipline drops — shorter answers a blind judge scores higher, and, when the judge is removed, more hidden tests and factual checks objectively passed — and nothing more than that. <strong>Measured, not claimed.</strong></p>
 <div class="maxim" style="margin-top:1.2em">Scout wide, strike narrow.</div>
 </section>
 
-<!-- ================= REFERENCES ================= -->
+<!-- ================= FOOTER ================= -->
 <section class="sec">
-<h2>References</h2>
-<h4>Agent research</h4>
-<div class="refs">
-<p>Yao, S. et al. <em>ReAct: Synergizing Reasoning and Acting in Language Models.</em> 2022.</p>
-<p>Schick, T. et al. <em>Toolformer: Language Models Can Teach Themselves to Use Tools.</em> 2023.</p>
-<p>Shinn, N. et al. <em>Reflexion: Language Agents with Verbal Reinforcement Learning.</em> 2023.</p>
-<p>Madaan, A. et al. <em>Self-Refine: Iterative Refinement with Self-Feedback.</em> 2023.</p>
-<p>Yao, S. et al. <em>Tree of Thoughts: Deliberate Problem Solving with Large Language Models.</em> 2023.</p>
-<p>Besta, M. et al. <em>Graph of Thoughts: Solving Elaborate Problems with Large Language Models.</em> 2023.</p>
-<p>Gao, S. et al. <em>Efficient Tool Use with Chain-of-Abstraction Reasoning.</em> 2024.</p>
-<p>Packer, C. et al. <em>MemGPT: Towards LLMs as Operating Systems.</em> 2023.</p>
-<p>Park, J. S. et al. <em>Generative Agents: Interactive Simulacra of Human Behavior.</em> 2023.</p>
-<p>Wang, L. et al. <em>A Survey on Large Language Model based Autonomous Agents.</em> 2023.</p>
-<p>Khattab, O. et al. <em>DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines.</em> 2023.</p>
-<p>Wang, G. et al. <em>Voyager: An Open-Ended Embodied Agent with Large Language Models.</em> 2023.</p>
-<p>Lipman, Y. et al. <em>Flow Matching for Generative Modeling.</em> 2023.</p>
-<p>Ho, J. &amp; Salimans, T. <em>Classifier-Free Diffusion Guidance.</em> 2022.</p>
-<p>Song, Y. et al. <em>Consistency Models.</em> 2023.</p>
-<p>Hao, S. et al. <em>Reasoning with Language Model is Planning with World Model (RAP).</em> 2023.</p>
-<p><em>Toward Efficient Agents</em> — efficiency / cost-effectiveness survey. arXiv:2601.14192, 2026.</p>
-<p><em>A Survey on Memory for LLM Agents.</em> arXiv:2603.07670, 2026.</p>
-</div>
-<h4>Mathematical foundations</h4>
-<div class="refs">
-<p>Howard, R. A. <em>Information Value Theory.</em> IEEE Trans. SSC, 1966.</p>
-<p>Raiffa, H. &amp; Schlaifer, R. <em>Applied Statistical Decision Theory.</em> 1961.</p>
-<p>Banach, S. <em>Sur les opérations dans les ensembles abstraits.</em> Fund. Math., 1922.</p>
-<p>Nemhauser, G., Wolsey, L. &amp; Fisher, M. <em>An analysis of approximations for maximizing submodular set functions.</em> 1978.</p>
-<p>Khuller, S., Moss, A. &amp; Naor, J. <em>The budgeted maximum coverage problem.</em> 1999. · Sviridenko, M. 2004.</p>
-<p>Kraft, L. G. 1949 · McMillan, B. <em>Two inequalities implied by unique decipherability.</em> 1956.</p>
-<p>Shannon, C. E. <em>Coding theorems for a discrete source with a fidelity criterion.</em> 1959.</p>
-<p>Robertson, S. E. <em>The Probability Ranking Principle in IR.</em> 1977.</p>
-<p>Vapnik, V. <em>The Nature of Statistical Learning Theory.</em> 1995. · Hoeffding, W. 1963.</p>
-<p>Bellman, R. <em>Dynamic Programming.</em> 1957. · Michie, D. <em>"Memo" functions.</em> 1968.</p>
-<p>Rissanen, J. <em>Modeling by shortest data description (MDL).</em> 1978.</p>
-<p>Brent, R. P. <em>The parallel evaluation of general arithmetic expressions.</em> 1974.</p>
-</div>
-<div class="footer-tag">Fabius v1.0.0 · scout wide, strike narrow · fabius-landing.vercel.app · private · provenance-sealed</div>
+<div class="footer-tag">Fabius v2.2.0 · scout wide, strike narrow · fabius-landing.vercel.app · private · provenance-sealed</div>
 </section>
 
 </div>

@@ -39,6 +39,7 @@ The browser runs the **Unicode Bidirectional Algorithm** (UBA) automatically, cl
 - `<bdo dir="ltr">` **overrides** direction (rare — use only to force, e.g. displaying raw bidi-control demos).
 - In CSS, `unicode-bidi: isolate` (paired with `direction`) does the same for a styled span; `isolate-override` forces order within the isolate.
 - When you build strings in JS (not the DOM), wrap runs in the isolate control characters: `⁦` (LRI) / `⁧` (RLI) / `⁨` (FSI, first-strong auto) … closed by `⁩` (PDI). `Intl` formatters can emit these for you (below).
+- **Never put `unicode-bidi: plaintext` on page content.** It does not mean "handle bidi well": it sets each *line's* base direction from that line's **first strong character** (UAX#9 P2/P3), ignoring the element's `dir`. One card title opening on a Latin token (`CRM והטמעה`) becomes an LTR paragraph, and `text-align: start` flush-**lefts** it while every Hebrew-first sibling stays right. Worse, the engines disagree: characters between an isolate initiator and its PDI — including anything you wrapped in `<bdi>` — are *skipped* when resolving paragraph direction, so Chromium lands on the Hebrew (looks fine) and WebKit lands on the Latin (broken). The defect is therefore invisible in desktop Chrome and shows only on iPhone. Let the root `dir="rtl"` own base direction; keep the LTR run isolated for the neutrals — that is still correct — just never rely on the isolate to *set* direction. Reserve `plaintext` for a block of genuinely per-line-unknown user text.
 
 Rule of thumb: **any value whose direction you didn't author is a bidi hazard — isolate it.**
 
@@ -66,6 +67,7 @@ Flexbox and grid are **already logical**: `flex-direction: row` follows `dir`, s
 - **`transform: translateX()`**, and any `transform` with a horizontal component (slide-in menus, carousels) — negate `x` in RTL.
 - **`background-position`** (`left`/`right` keywords), **linear-gradient** angles / directional `to right`.
 - **directional icons** (see mirroring) and background SVGs baked with a direction.
+- **`letter-spacing` inherited into inline `<text>`** — WebKit/Safari lays SVG text out glyph-by-glyph in logical order whenever `letter-spacing` is not `normal`, skipping bidi reordering entirely, so every Hebrew/Arabic label renders mirrored (`קוראים יחד` → `דחי םיארוק`). Chromium is unaffected, so it ships unseen. Any inline SVG under a tracked ancestor inherits it — including the negative tracking this layer puts on display type. Guard globally on RTL surfaces: `svg { letter-spacing: normal; }` — chart text is placed by `x` / `text-anchor`, so tracking buys nothing there anyway. (A standalone `.svg` loaded through `<img>` is a separate document and does not inherit; this is an inline-SVG-only trap.)
 - Scroll math (`scrollLeft` is negative or reversed in RTL across engines — use `scrollIntoView` or logical scroll APIs; test).
 
 Pattern for the exceptions — target with the **`:dir(rtl)`** pseudo-class (baseline, cleaner) or `[dir="rtl"]`, and override only the physical axis:
@@ -75,6 +77,8 @@ Pattern for the exceptions — target with the **`:dir(rtl)`** pseudo-class (bas
 .card:dir(rtl) { box-shadow: -8px 8px 24px rgba(0,0,0,.12); }  /* flip X only */
 /* older-engine fallback: [dir="rtl"] .card { ... } */
 ```
+
+**The one carve-out: clearance from a physically-pinned foreign overlay.** Logical properties describe *your* flow. A third-party fixed element — an accessibility launcher, a chat bubble, a cookie bar — is usually pinned with **physical** `left`/`right` in both directions and does not move when your `dir` flips. Read its *computed* position first (some widgets do respect `dir` or expose a side config — a blanket "foreign overlays are physical" is just a new wrong absolute). If it stays put under RTL, reserve its space with **physical** `padding-left`/`padding-right` at the **same value in both directions** — this is the one place the `:dir(rtl)` flip pattern above is *wrong*, because the overlay never flipped. Comment why, or the next pass "modernises" it to `padding-inline-start`, which under `dir="rtl"` resolves to the opposite edge and leaves the collision untouched. Prove the clearance with a **hit-test, never a screenshot**: `document.elementsFromPoint(cx, cy)[0]` must be the control itself (or its descendant) for every interactive element — a mobile screenshot silently misses an occluder sitting at `z-index: 2147483100`. And clear the corner on *your* side: never relocate an accessibility control to make room for a marketing feature.
 
 ## Icon & asset mirroring — flip meaning, not identity
 
@@ -127,14 +131,16 @@ Most Latin webfonts have **no Hebrew/Arabic glyphs**; the browser silently falls
 Before calling an RTL surface done (these are exactly where an LLM-generated or ported UI breaks):
 
 - [ ] `dir` set on the **root** (`<html>`), and `lang` set to the real language.
-- [ ] **No** `margin-left/right`, `padding-left/right`, `left/right`, `text-align:left/right` in components — logical properties only.
+- [ ] **No** `margin-left/right`, `padding-left/right`, `left/right`, `text-align:left/right` in components — logical properties only. *(One exception: clearance for a physically-pinned third-party overlay — physical, same value both directions, commented, hit-tested.)*
 - [ ] Flex/grid rows are **not** hand-reversed (`row-reverse`); they mirror from `dir`.
 - [ ] Every opposite-direction / user-supplied run (names, phones, prices, URLs, code, `@handles`) is **isolated** (`<bdi>` or `Intl` marks) — the "mixed English/number in RTL" bug is gone.
 - [ ] Directional icons mirror; clocks/checkmarks/media/logos do **not**.
 - [ ] Shadows, `translateX`, gradient/background directions flipped under `[dir="rtl"]`.
 - [ ] A font that actually **renders the script** is loaded and verified for glyph coverage (test on WebKit/iOS, not only Chrome).
 - [ ] Numbers/dates/currency via `Intl` with the real locale; numerals read LTR and don't invert.
-- [ ] Verified **live** with real RTL content (not lorem-ipsum, not one Hebrew word) — mixed sentences, long paragraphs, forms, tables — in a browser (`fabius-disciplina`'s prove rule).
+- [ ] Inline SVG text: `svg{letter-spacing:normal}` set, and glyph order asserted in **WebKit**, not only Chromium — Range-rect the first and last **Hebrew/Arabic letter** in each `<text>` node and assert `first.x >= last.x`. Measure letters only: invisible isolate controls (U+2066…U+2069) report engine-dependent rects and false-flag clean runs.
+- [ ] No `unicode-bidi: plaintext` on headings, card titles, list items or any authored copy; base direction proved by measuring — Range the first non-space glyph and assert `box.right − glyph.right ≈ 0` in RTL — in **both** Chromium and WebKit, not by eye.
+- [ ] Verified **live** with real RTL content (not lorem-ipsum, not one Hebrew word) — mixed sentences, long paragraphs, forms, tables — in a browser (`fabius-disciplina`'s prove rule), and every interactive control **hit-tested** with `document.elementsFromPoint(cx, cy)[0]`, not judged by eye.
 
 ## Pairs with
 

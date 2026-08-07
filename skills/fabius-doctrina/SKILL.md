@@ -39,7 +39,7 @@ All of it stands on `fabius-parcus`'s never-trim floor and YAGNI ladder: the sma
 Run it in order, and never skip the hinge: **data → train / fine-tune → EVALUATE → serve → monitor → (back to data).**
 
 - **Reach for the smallest rung first** (the YAGNI ladder for models): a prompt to an existing model → retrieval (RAG) over a prompt → a fine-tune → training from scratch. Most "we need a model" tasks are a prompt or a retrieval step, not a training run. Don't spin a GPU cluster for what a system prompt solves.
-- **Fine-tune only when the cheaper rung provably fails** — you have the labeled data, the eval shows the gap, and the gap is *behavioral* (format, domain, style), not *knowledge* (which RAG fixes cheaper).
+- **Fine-tune only when the cheaper rung provably fails** — the eval shows the gap, and the gap is *behavioral* (format, domain, style), not *knowledge* (which RAG fixes cheaper). Then name the asset you actually hold: labeled outputs → supervised fine-tuning; no labels but a programmatic checker (a test, a parser, a grader) → RL against that checker. "No labels" is not the same as "can't train".
 
 ## 3. Evaluation is the load-bearing step — eval before you ship, eval to compare
 
@@ -48,16 +48,17 @@ A model claim without an eval is a vibe. The discipline is fabius's own benchmar
 - **A held-out, representative eval set** the model never trained on — the only thing that predicts production. Leakage from train into eval is the cardinal sin; it manufactures a number that doesn't survive contact with a user.
 - **The metric matches the job**: classification → precision/recall/F1 at the operating threshold (accuracy lies on imbalance); generation/LLM → a task rubric scored by a **blind judge** (never told which system produced the answer) plus an objective signal (length, exact-match, latency) that can't be flattered.
 - **Compare against a control, not just a baseline** — a cheaper model, last week's prompt, the previous checkpoint. "Better than nothing" is easy; "better than the thing it replaces" is the real test.
-- **Make it a regression gate**: the eval runs in CI; a prompt or model change that drops the score fails the change. An eval you run once is a measurement; an eval that gates is a guarantee.
+- **A score without an interval isn't a comparison** — quote the standard error across questions, compare on paired per-question differences, and check the eval is powered to resolve the effect before you run it.
+- **Make it a regression gate**: the eval runs in CI; a prompt or model change that drops the score fails the change. An eval you run once is a measurement; an eval that gates is a guarantee. Gate on the interval, not the point estimate — a check that fires on noise gets muted, and then nothing is gated.
 
-(LLM-as-judge is directional — its scores carry model-family priors; keep the objective signals as the hard floor and read the outputs. Same honest posture as fabius's own benchmarks.)
+(LLM-as-judge is directional — its scores carry model-family priors; keep the objective signals as the hard floor and read the outputs. And a judge is a measurement with its own error rate: hold back a human-labeled calibration slice and correct the number *per comparison* — an uncorrected judge gap can come out confidently wrong-signed. The estimator and the statistics are in `references/ml-engineering-playbook.md` §2. Same honest posture as fabius's own benchmarks.)
 
 ## 4. Serve lean — the smallest stack that meets the SLA
 
 Inference is where the cost and the latency live. Match the serving to the load, don't over-build it:
 
 - **A few calls** → the model's hosted API or a one-process load. **Real throughput** → a purpose-built server (vLLM-class): **PagedAttention** kills the memory fragmentation that caps batch size, continuous batching keeps the GPU full, and an **OpenAI-compatible** endpoint is a drop-in (no client rewrite).
-- **Right-size before you scale out**: quantization (INT8/FP8/4-bit) and the smallest model that passes §3's eval beat a bigger GPU. Measure tokens/sec and tail latency (p95/p99), not just the average.
+- **Right-size before you scale out**: quantization (INT8/FP8/4-bit) and the smallest model that passes §3's eval beat a bigger GPU. Measure tokens/sec and tail latency (p95/p99), not just the average. Name the *format*, not "4-bit", and check it against the accelerator's compute capability — below that floor a low-bit format is a memory win, not a compute win — then re-run §3's eval on the *quantized* weights, because quantization is a model change (the producing toolchain and the per-format floor: `references/ml-toolkit.md` → *Quantize*).
 - **Match the hardware tier first** (§6) — picking the serving engine before knowing the GPU is how a deploy OOMs under load.
 
 ## 5. MLOps — track it or it didn't happen

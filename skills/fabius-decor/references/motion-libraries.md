@@ -18,13 +18,26 @@ Reach for the lowest rung that does the job. A JS engine is the *last* resort, n
 
 | Rung | Mechanism | Use for | Support (2026) |
 |---|---|---|---|
-| 1 | **CSS `transition` + `@starting-style` + `transition-behavior: allow-discrete`** | enter **and** exit of dialogs/popovers/toasts/inserted nodes — no JS, replaces the old double-rAF/`setTimeout` hack | Baseline (Chrome/Edge 117+, Safari 17.5+, Firefox 129+); non-support = instant show/hide |
-| 2 | **View Transitions API** (`document.startViewTransition`, `@view-transition`) | route/state morphs & shared-element crossfades without hand-wiring FLIP | Same-doc ~Baseline (Chrome 111+, Safari 18+, Firefox 144+); cross-doc MPA not in Firefox yet — degrades to a cut |
-| 3 | **CSS scroll-driven animations** (`animation-timeline: scroll()`/`view()`) | scroll progress bars, parallax, reveal-on-enter — pure CSS, compositor-thread, zero scroll listeners | Chromium 115+, Safari 26; Firefox behind a flag → **progressively enhance** (rest state = final/visible) |
+| 1 | **CSS `transition` + `@starting-style` + `transition-behavior: allow-discrete`** | enter **and** exit of dialogs/popovers/toasts/inserted nodes — no JS, replaces the old double-rAF/`setTimeout` hack | Baseline **newly** (2024-08-06 · Chrome/Edge 117+, Safari 17.5+, Firefox 129+); non-support = instant show/hide |
+| 2 | **View Transitions API** (`document.startViewTransition`, `@view-transition`) | route/state morphs & shared-element crossfades without hand-wiring FLIP | Same-doc Baseline **newly** (2025-10-14 · Chrome 111+, Safari 18+, Firefox 144+); cross-doc MPA not in Firefox yet — degrades to a cut |
+| 3 | **CSS scroll-driven animations** (`animation-timeline: scroll()`/`view()`) | scroll progress bars, parallax, reveal-on-enter — pure CSS, compositor-thread, zero scroll listeners | Baseline **limited** — Chromium 115+, Safari 26+, no Firefox → **progressively enhance** (rest state = final/visible) |
 | 4 | **Web Animations API** (`element.animate`) | programmatic, cancelable, promise-aware (`.finished`) sequences; the substrate Motion compiles to | Baseline, all engines |
 | 5 | **A JS engine** (below) | spring physics, complex orchestration, gesture/drag, timeline scrubbing that native can't express | per-library |
 
 Rungs 1–4 are `@supports`/`matchMedia`-detectable and fail safe. Learn the recipes for rungs 1–4 in the **fabius-frames** bundle (`css-animations`, `waapi`).
+
+## Pick the element before you animate it
+
+Rung 1 says how to animate an overlay; it does not say what to build one *from*. Build it from the platform primitive, or you re-implement — worse — what the browser already ships.
+
+| Overlay | Build it from | Support | What you get free |
+|---|---|---|---|
+| Modal (blocking) | `<dialog>` + `.showModal()` | Baseline **widely** (2024-09-14) | Top layer, `::backdrop`, focus moved in and kept in, ESC to close, the rest of the page inert |
+| Menu · tooltip · toast · disclosure (non-modal) | `popover` attribute + `popovertarget` | Baseline **newly** (2025-01-27) | Top layer, light-dismiss, ESC — and **zero JavaScript** for the open/close wiring (`popover="manual"` when you want to own dismissal) |
+
+- A `position: fixed` div with a hand-rolled focus trap is the amateur tell here: it loses the top layer (so it fights `z-index` forever), light-dismiss, ESC and inertness — and it is the code most likely to leak focus in WebKit.
+- Both then animate on **rung 1**: `@starting-style` for the enter, `transition-behavior: allow-discrete` so `display` transitions on the exit instead of snapping. Nothing about the primitive costs you the motion. Adding `overlay` to that transition — which holds the element in the **top layer** for the length of its exit — is polish, not the mechanism: the `overlay` property is Baseline *limited*, Chromium-only, so everywhere else the exit is simply cut. Correct fail-safe; don't build the animation around it.
+- **Placement** is a separate layer: CSS anchor positioning (`anchor-name` · `position-area` · `@position-try`) tethers the popover to its trigger with no JS measuring. The core properties turned Baseline **newly** available in January 2026 — but the layer ships unevenly: MDN still marks `position-anchor` itself *Limited availability*, and webstatus.dev rates the anchor-positioning feature as a whole *Limited*. So: progressive enhancement over a positioned fallback, checked against your own support floor — never the load-bearing path.
 
 ## The JS engines — reach up only when native can't
 

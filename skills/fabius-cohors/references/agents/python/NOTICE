@@ -1,0 +1,35 @@
+Apache-2.0 material bundled in fabius
+=====================================
+
+This directory contains sample agent projects derived from Google's Agent
+Development Kit (ADK) sample corpus — principally github.com/google/adk-samples
+and related Google ADK sample material.
+
+    Copyright Google LLC
+    Licensed under the Apache License, Version 2.0
+
+A full copy of the Apache License, Version 2.0 sits beside this file as
+`LICENSE`, and at http://www.apache.org/licenses/LICENSE-2.0. The upstream
+project ships no NOTICE file, so none is reproduced here.
+
+STATEMENT OF CHANGES (Apache-2.0 §4(b))
+---------------------------------------
+
+These files have been MODIFIED from their upstream form. fabius bundles them as
+a reference corpus, not as a redistribution of the upstream projects, and the
+changes are naming-level rather than functional:
+
+  * Directory names, file names and documentation prose were rewritten to
+    fabius's own naming, so text and paths here will not match upstream.
+  * Some in-code identifiers and repository URLs were rewritten by the same
+    pass. A consequence worth stating plainly: some rewritten URLs and package
+    names no longer resolve upstream — treat every link and install command in
+    this corpus as unverified, and prefer the upstream project for anything you
+    intend to run.
+  * Upstream copyright notices and Apache-2.0 license headers are retained in
+    the source files wherever they were present; none were deliberately removed.
+
+Nothing here is relicensed. This material keeps its upstream Apache-2.0 terms in
+both directions — fabius's own license does not extend to it, and its license
+does not extend to fabius. For anything you intend to USE rather than read, go
+to the upstream project.

@@ -8,9 +8,11 @@ The runnable reference is [`council.mjs`](council.mjs) (Node ≥18, zero depende
 ```
 OPENROUTER_API_KEY   one key, every model (the live tier — you configure it)
 COUNCIL_MODELS       comma-separated seats, e.g.
-                     anthropic/claude-sonnet-5,openai/gpt-5.1,google/gemini-3-pro,mistralai/mistral-large
-COUNCIL_CHAIRMAN     the synthesizing model, e.g. anthropic/claude-opus-4.8
+                     anthropic/claude-sonnet-5,openai/gpt-5.1,google/gemini-3.1-pro-preview,mistralai/mistral-large
+COUNCIL_CHAIRMAN     the synthesizing model, e.g. anthropic/claude-opus-5
 ```
+
+**Resolve every seat id against the gateway's live model list before the run** (`GET /api/v1/models`). A seat whose id no longer exists does not fail the run — it errors, drops out, and Borda recomputes K from the survivors, so the council completes looking healthy while the answer came from a narrower field than you paid for. This is the failure mode that hides: a dead seat costs you diversity silently, and a three-seat council that quietly ran on two has lost the tie-break the odd count was for. Model ids churn faster than this document — treat the roster above as an example, not a guarantee, and re-check it whenever a run's seat count surprises you.
 
 OpenRouter is the reference gateway for the same reason karpathy's *llm-council* uses it: one key, one request shape, every provider — so seat diversity costs no extra plumbing. The protocol is provider-agnostic; in the **synapse** console the same three stages run over fabius's native 5-provider runtime (`/api/fabius/run` + the `X-LLM-Key` vault) instead of OpenRouter — the stages and prompts are identical, only the transport changes. Keys live in env / the vault, **never** in the repo (`fabius-praesidium`: secrets-in-env).
 
@@ -51,6 +53,8 @@ USER:    Original question:
          {"ranking":[<best label>, ...,<worst label>],
           "reasons":{"<label>":"<one line>", ...}}
 ```
+
+**Constrain the ballot at the API, not at the parser.** The ballot is a fixed, trivially-schematizable shape (`{ranking: [labels], reasons: {label: string}}`), which is exactly the case enforced structured output solves — so declare it instead of hoping for clean prose. On the reference gateway that is `response_format: {type:"json_schema", json_schema:{name, strict:true, schema}}`, with the label set declared as a closed enumeration, **plus** `provider: {require_parameters: true}` in the provider preferences. Both halves are load-bearing: without the second flag the call can route to an endpoint that translates your schema into its own format or treats it as a strong hint, and you are back to parsing prose without knowing it. Enforcement is the first line; the parser below is what you fall back to on a gateway that can't.
 
 Parse the JSON (retry once on malformed output — `fabius-disciplina`). Map each label back to its model via that reviewer's shuffle map. **Exclude self-votes**: when tallying, skip the rank a model gave to its own (now de-shuffled) answer — its slot simply scores nothing — so no seat can lift itself. (Skip-in-place: the other seats keep their position points; only relative order matters for the leaderboard, and self can never score itself.)
 
@@ -107,7 +111,7 @@ The chairman's output is the council's answer. Then — for anything that can be
 {
   "question": "...",
   "seats": ["anthropic/claude-sonnet-5", "openai/gpt-5.1", "..."],
-  "chairman": "anthropic/claude-opus-4.8",
+  "chairman": "anthropic/claude-opus-5",
   "first_opinions": [{"model": "...", "answer": "..."}, ...],
   "leaderboard": [{"model": "...", "points": 7, "reasons": ["..."]}, ...],
   "final": "the chairman's synthesized answer"
@@ -124,8 +128,8 @@ node references/council.mjs --selftest
 
 # a real council
 export OPENROUTER_API_KEY=sk-or-...
-export COUNCIL_MODELS=anthropic/claude-sonnet-5,openai/gpt-5.1,google/gemini-3-pro,mistralai/mistral-large
-export COUNCIL_CHAIRMAN=anthropic/claude-opus-4.8
+export COUNCIL_MODELS=anthropic/claude-sonnet-5,openai/gpt-5.1,google/gemini-3.1-pro-preview,mistralai/mistral-large
+export COUNCIL_CHAIRMAN=anthropic/claude-opus-5
 node references/council.mjs "Should a 3-person startup use a monolith or microservices?"
 
 # JSON out (pipe the full record)
@@ -136,7 +140,7 @@ Cost is the gate, not an afterthought: a run is `len(COUNCIL_MODELS) × 2 + 1` m
 
 ## Gotchas
 
-- **Malformed ranking JSON** — models sometimes wrap JSON in prose. Extract the first balanced `{…}`; retry once with a "JSON only" reminder; if still bad, give that reviewer a neutral (all-equal) ballot rather than crashing the run.
+- **Malformed ranking JSON** — models wrap JSON in prose whenever nothing stops them, so enforce the schema at the API first (stage 2); extracting the first balanced `{…}` and retrying once with a "JSON only" reminder is the fallback for gateways that can't enforce, not the first line. If a ballot still can't be recovered, **drop it and log the drop** — never synthesize one to keep the arithmetic tidy. Filling the missing labels in whatever order they currently sit is a full-strength *random* vote, and an all-equal ballot is not neutral either: with self-exclusion it hands every other seat the same points and the reviewer none. K is the number of **responses** being ranked and does not move when a reviewer drops out — only the number of ballots summed does.
 - **Odd seat dropped mid-run** — recompute K from the *survivors*, not the configured count, or the Borda scores skew.
 - **Self-leak via writing style** — anonymization strips the name, not the voice; a model may still recognize its own prose. Self-vote exclusion on the back end is the backstop, so never skip it.
 - **Latency** — stages 1 and 2 are each a full fan-out; run them concurrently within a stage, but stage 2 needs all of stage 1 first (a real barrier). Stage 3 is a single call. Budget for the slowest seat twice plus the chair.

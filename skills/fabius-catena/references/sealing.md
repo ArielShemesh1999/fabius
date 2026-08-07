@@ -32,13 +32,25 @@ The deepest commitment, drawn from the cryptographic-failure record (BCTV14's un
 2. **Detectability by construction.** Every claim a seal makes is recomputable from public data; a forgery requires a hash collision (a public event), so a forged seal cannot exist unobserved.
 3. **Additivity.** Frontier components (zkVM proofs, on-chain anchoring) may *add* capability — but each can fail to zero, and the seal degrades exactly to the core guarantee and not one inch below.
 4. **Diversity.** No single codebase is ever the sole witness to a registry's correctness — independent implementations and recomputation are the antidote to a monoculture bug.
-5. **Scheduled mortality.** Every algorithm in use today eventually falls. Make renewal a **calendar event, not an emergency** (next rule).
+5. **Scheduled mortality.** Every algorithm in use today eventually falls. Make renewal a **calendar event, not an emergency** — and the calendar has published dates on it now (next rule).
 
 ## Aggregate, renew, and (optionally) conceal
 
 - **Merkle-aggregate a release.** Hash many files into a Merkle tree and seal the **root** once — one timestamp commits every file, and any single file proves membership with an inclusion proof. This is exactly how `fabius` seals all its skills at once (below).
-- **Crypto-agile renewal.** Carry algorithm identifiers in the bundle and **re-anchor under fresh algorithms on a schedule** (ERS-style epochal renewal) so a seal made under today's cryptography stays provably "anchored before the break" decades from now. An optional post-quantum dual-signature (e.g. ML-DSA) hedges the archival horizon.
+- **Crypto-agile renewal, on a dated calendar.** Carry algorithm identifiers in the bundle and **re-anchor under fresh algorithms on a schedule** (ERS-style epochal renewal) so a seal made under today's cryptography stays provably "anchored before the break" decades from now. A post-quantum dual-signature (e.g. ML-DSA) hedges the archival horizon — and it is now a **dated project, not an open-ended intention** (below).
 - **Confidential sealing (optional).** Seal a **salted commitment** so the on-chain record leaks nothing about the content (defeats dictionary / confirmation oracles), and use chunked Merkle commitments to release and prove a fragment later (selective disclosure). Only reach for this when the content is secret — `fabius-parcus`: does this need to exist yet?
+
+### The renewal calendar — what is published, what is a projection
+
+**Published, but still a draft.** NIST IR 8547 Table 2 puts every classical signature family a seal would use — ECDSA, EdDSA, RSA — at **deprecated after 2030** at the 112-bit level and **disallowed after 2035** at every level, including the ≥128-bit tier where Ed25519 and secp256k1 both sit. (SP 800-186 App. H allows secp256k1 explicitly, for blockchain use; being *allowed* is not an exemption from its family's date.) IR 8547 has been an **initial public draft since November 2024** — comments closed January 2025, no final version — so cite it as a published schedule, never as a ratified deadline.
+
+**Those are policy dates, not a break forecast.** They bind *NIST-approved* use; nothing about them predicts a quantum computer arriving in 2030 or 2035, and the schedule has already moved once — SP 800-57 Part 1 had projected disallowing 112-bit public-key on 1 January 2031, and IR 8547 softens that to deprecation. Plan to the published date; treat the break itself as **undated**. A seal that survives a date change is one whose renewal is a calendar event.
+
+**Only the signature half is on the clock.** IR 8547 attaches no post-quantum end-date to SHA-256 (128-bit collision, 256-bit preimage strength); only the 112-bit symmetric standards are disallowed in 2030. So the content hash and its Bitcoin anchor keep their force, and what expires is the right to **mint** new signatures under a retired algorithm. Whether *verifying* an old one stays approved is unsettled: NIST's vocabulary carries a verify-only **"legacy use"** tier, but Table 2 never grants these families one. Do not bank on an amnesty you cannot cite — keep the bundle self-contained so a verifier needs no ruling.
+
+**Dual-signing is an AND, not a fallback.** NIST accommodates a dual signature provided at least one component algorithm is NIST-approved, and requires **all** components to verify. So an ML-DSA (FIPS 204) + Ed25519 seal only counts if the verifier checks both — a verifier that passes on one half has weakened the seal, not hedged it. Write the AND into the verifier before you write the second signature into the bundle.
+
+**So:** target the dual-signature migration at **2030**, treat **2035** as the published stop, and record the algorithm identifiers in every bundle now — so a later verifier can place each seal on that timeline instead of guessing.
 
 ## How fabius seals its own skills (the dogfood)
 

@@ -94,7 +94,7 @@ ctx.imageSmoothingEnabled = false;              // crisp source draws
 ```
 
 - **Render small, scale big with `Math.floor`** — fractional scale shimmers; integer scale stays sharp. Letterbox the remainder.
-- **Snap world coords to whole pixels at draw time**: `ctx.drawImage(spr, Math.round(x - cam.x), Math.round(y - cam.y))`. Sub-pixel positions blur.
+- **Snap world coords to whole pixels at draw time**: `ctx.drawImage(spr, Math.round(x - cam.x), Math.round(y - cam.y))`. Sub-pixel positions blur. Snap only while the sprite is **axis-aligned and unscaled** — round a rotating or scaling one and you trade blur for wobble; draw those unrounded (or through the engine's smooth-pixel-art path).
 - **Camera** — translate everything by the camera, with dead-zone follow so it doesn't jitter on every step:
   ```js
   const cam = { x: 0, y: 0 };

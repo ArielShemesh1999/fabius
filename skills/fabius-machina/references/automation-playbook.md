@@ -32,6 +32,10 @@ Two prefix formats coexist — **wrong prefix = node-not-found**:
 | search / validate | short | `nodes-base.slack` |
 | create / CRUD | full | `n8n-nodes-base.slack` |
 
+### Discovery reads the present; the changelog reads the near future
+
+A platform publishes what it is about to take away, and reading that list is the other half of discovery — ship onto a doomed node and you have inherited someone else's migration. n8n's v3.0 cut (targeted October 2026) removes the legacy **Function**, **Function Item** and **Item Lists** nodes — migrate to the Code node, and to Split Out / Aggregate / Sort / Limit / Remove Duplicates / Summarize respectively — and drops the `$getPairedItem` expression helper in favour of standard item linking. Self-hosted installs become **Docker-only**: `npm` / `npx n8n` stops being supported, so a runbook that installs n8n from npm has an expiry date. Workflow-import-from-URL leaves the editor (file and CLI import stay). If a template you are about to deploy still carries a doomed node, replace it at build time.
+
 ## 2. Build incrementally — patch, don't regenerate
 
 A surgical partial update beats regenerating the whole workflow: smaller blast radius, far higher success rate (the project's testing log reports ~99% success on partial updates vs frequent failure on full regenerates — *reported by the project*, not fabius-measured).
@@ -84,13 +88,22 @@ Tests **execute**: writes write, messages send, emails leave. Run on safe sample
 | discovery | `search_nodes` / `get_node(includeExamples:true)` | no |
 | node check | `validate_node` | no |
 | workflow check | `validate_workflow` | no |
-| templates | `search_templates` / `n8n_deploy_template` | no |
+| templates | `search_templates` / `get_template` / `n8n_deploy_template` | no |
 | docs | `get_node` docs | no |
 | **build** | `n8n_create_workflow` | **yes** |
 | **edit** | `n8n_update_partial_workflow` | **yes** |
-| credentials / audit | credential + audit ops | **yes** |
+| **repair before verify** | `n8n_autofix_workflow` (preview first) | **yes** |
+| **test gate** | `n8n_test_workflow` | **yes** |
+| **eval gate (AI nodes)** | `n8n_evaluations` (read 2.30+, run/cancel 2.32+) | **yes** |
+| **undo a bad edit** | `n8n_workflow_versions` | **yes** |
+| state / dedupe store | `n8n_manage_datatable` | **yes** |
+| credentials / audit | `n8n_manage_credentials` / `n8n_audit_instance` | **yes** |
 
 Split by configuration: **search / validate / template / docs need no API.** CRUD / credential / audit ops need `N8N_API_URL` + `N8N_API_KEY` set. Discover and validate fully without an instance; you only need the live instance to write.
+
+Run autofix in **preview** (`applyFixes: false`) *before* the verify pass, never after: it rewrites expression formats, typeVersions, error outputs, webhook paths and node types, and you want to read that diff rather than inherit it. `n8n_test_workflow` makes gate four mechanical — it auto-detects the trigger kind (webhook / form / chat) — so a first real run in production is no longer an excuse, and `n8n_workflow_versions` is the rollback that makes a bad surgical edit cheap.
+
+**The first-party bridge covers the same gates under different names.** n8n's built-in instance-level MCP server maps: discovery → `search_nodes` / `get_node_types` / `explore_node_resources`; checking → `validate_node_config` / `validate_workflow`; build → `create_workflow_from_code`; edit → `update_workflow`; test → `test_workflow` + `prepare_test_pin_data`; activate → `publish_workflow` / `unpublish_workflow`; forensics → `get_execution` / `search_executions`; state → the data-table tools. It ships in every edition and authenticates by OAuth or a personal MCP access token rather than the public API key; each workflow must be opted into MCP individually, and self-hosted can shut the whole surface off with `N8N_DISABLED_MODULES=mcp`. Take it when the instance is current; take `n8n-mcp` when you need community-node coverage, autofix, or discovery with no instance at all.
 
 ## The silent-failure catalog (n8n) — fail with NO error, just wrong data
 
@@ -104,7 +117,7 @@ These are learned by getting burned. Check against them before activating.
 | **Node IDs** | non-UUIDv4 ids cause subtle UI binding failures | generate real UUIDv4 ids |
 | **SplitInBatches ports** | `main[1]` = loop body (per batch), `main[0]` = done — easy to swap | wire deliberately; add a Limit-1 after `main[0]` |
 | **responseCode** | defaults to `200` even on error paths | set the code explicitly on error branches |
-| **Python Code node** | stdlib only — **no external libraries** | use JS, or stay in stdlib |
+| **Python Code node** | the runtime split is the trap, not the library list: Pyodide is gone in v2, and what native Python may import depends on the **deployment** — on Cloud it imports *nothing*, stdlib included; self-hosted imports only what the `n8nio/runners` image ships **and** allowlists | settle the deployment before you write the `import`; on Cloud, do it in JS. A Pyodide script is not a native script — native exposes only `_items` / `_item` and bracket access (`item["json"]["x"]`, never `item.json.x`), so a port is a rewrite |
 | **Two prefix formats** | short for search/validate, full for CRUD (see §1) | match prefix to operation |
 
 Prefer **smart parameters** over fragile index math: `branch: "true"` for an IF node, `case: 0` for a Switch — not raw output-index arithmetic that breaks when ports reorder.
@@ -113,10 +126,11 @@ Prefer **smart parameters** over fragile index math: `branch: "true"` for an IF 
 
 ## Day-2 — make it survive re-firing
 
-- **Idempotency** — a re-fired trigger must not double-act. Dedupe on a stable key; upsert, don't blind-insert.
+- **Idempotency** — a re-fired trigger must not double-act. Dedupe on a stable key; upsert, don't blind-insert. Don't hand-roll it where the platform ships it: on n8n that is a **data table** (instance-native rows, no external DB) driven by the Data table node's **Upsert** / **If Row Exists** / **If Row Does Not Exist** operations, or the **Remove Duplicates** node's *Remove Items Processed in Previous Executions* mode for poll-style triggers. Scope that history to the **workflow** rather than the default **node** when several nodes must share one view, and watermark on a monotonic value (*value is higher than any previous*, *date later than any previous*) instead of an unbounded seen-set when the source is a growing feed — the seen-set holds 10,000 items by default, and past that it forgets. Forgetting is a double-send.
 - **Explicit error responses** — set real status codes on error paths (don't let `200` lie); make the caller able to tell it failed.
 - **Retries with backoff** — for transient upstream failures; bounded, not infinite.
 - **Secrets in env / a manager** — never in the workflow JSON (`fabius-praesidium`, `fabius-parcus`). A workflow you can't safely re-run is a liability.
+- **Isolate the code executor** — the Code node runs user-supplied code, and in n8n's default `internal` task-runner mode it runs as a child process of n8n sharing its `uid`/`gid`. That makes *edit a workflow* and *execute on the host* the same permission, which is why n8n's own docs rule internal mode out for production. Production shape: `N8N_RUNNERS_MODE=external` with the `n8nio/runners` sidecar (image version matched to the `n8nio/n8n` image) and a shared `N8N_RUNNERS_AUTH_TOKEN`; in queue mode every worker needs its own sidecar. Harden it — the `-distroless` tag, the unprivileged `nobody` user (uid/gid `65532`), a read-only root filesystem with a small writable `/tmp`, and an AppArmor profile that keeps the runner out of `/proc/*/environ`. If you can't run a sidecar, remove the capability instead — but note the var is typed as a JSON array and **replaces** the default rather than extending it, so re-list what shipped there or you re-enable Execute Command while hardening the Code node: `NODES_EXCLUDE='["n8n-nodes-base.code","n8n-nodes-base.executeCommand","n8n-nodes-base.localFileTrigger"]'`. The import allowlists are part of the boundary, not a convenience — `NODE_FUNCTION_ALLOW_BUILTIN` / `NODE_FUNCTION_ALLOW_EXTERNAL` for JS and `N8N_RUNNERS_STDLIB_ALLOW` / `N8N_RUNNERS_EXTERNAL_ALLOW` for Python, set in the launcher's `n8n-task-runners.json`, which ships locked down on purpose. Widen it one package at a time (→ `fabius-praesidium`).
 
 ## Boundary — where machina stops
 

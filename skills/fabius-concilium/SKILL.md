@@ -7,12 +7,13 @@ description: >
   (anonymized peer-review) → a chairman model synthesizes the ranked field into the final answer.
   This is ensemble epistemics — it spends model diversity to cut the single-model error and bias a
   lone answer carries. Use when the user says "council" / "llm-council" / "ask several models" /
-  "panel of models", or when a question is high-stakes or genuinely contested and one model's miss
-  is costly enough to pay N+N+1 calls. Distinct from fabius-cohors (which splits the WORK across
+  "panel of models", or when a high-stakes question has already survived N samples of the single
+  strongest model and they failed the SAME way — correlated error, not mere disagreement, is what
+  earns the N+N+1 calls (M10). Distinct from fabius-cohors (which splits the WORK across
   task-specialist agents); concilium aggregates one ANSWER across whole models.
 when_to_use: >
   "get a second opinion from other models", "cross-check this answer", "have the models vote",
-  one contested high-stakes question worth N model calls.
+  a high-stakes question where repeated samples of one strong model fail the same way.
 license: UNLICENSED
 metadata:
   author: Ariel Shemesh
@@ -27,10 +28,10 @@ metadata:
 
 A council is the **heaviest** thing in this whole system on cost and latency: **N + N + 1** model calls (N first opinions, N reviews, one chairman) where a single strike is one call. So the question comes before the council does:
 
-- **Convene when** the answer is high-stakes and a wrong one is expensive (a design/architecture call, a medical/legal/financial *analysis*, a contested factual claim, a research synthesis), **or** the question is genuinely open and you want disagreement surfaced rather than one model's house style, **or** the user explicitly asks for a panel.
+- **Convene when** the answer is high-stakes and a wrong one is expensive (a design/architecture call, a medical/legal/financial *analysis*, a contested factual claim, a research synthesis) **and** rung one below has already failed the *same* way, **or** the user explicitly asks for a panel.
 - **Don't convene when** the task is mechanical, has one correct answer a single model reliably gets (arithmetic, a rename, boilerplate), is latency-sensitive, or when *one strong model + an independent verifier* (`fabius-disciplina`) already covers the risk. A council is not a substitute for running the code.
 
-The value of a council is **disagreement**. If the seats won't disagree, you paid N× for one opinion. Seat diversity, not seat count.
+Rung one is **self-samples of the strongest seat**, not a panel: N samples of one strong model, reduced by vote or judge. Convene the heterogeneous council only when those samples fail the **same** way — correlated error, not mere disagreement (`fabius` M10; `fabius-parcus` owns the gate). Once seated, the council earns its cost through disagreement: if the seats won't disagree, you paid N× for one opinion. Seat diversity, not seat count — and never diversity bought *below* the bar (*Seating the council*, next).
 
 ## The three stages
 
@@ -40,9 +41,10 @@ The value of a council is **disagreement**. If the seats won't disagree, you pai
 
 ## Seating the council
 
-- **Pull diversity across providers**, not three checkpoints of one family — Anthropic · OpenAI · Google · Mistral · Groq, the same roster the `fabius` router already speaks to. Cross-provider disagreement is the signal; same-family seats correlate and waste the spend.
+- **Set the admission bar before the seating chart.** A council's accuracy tracks the **average quality of its seats** far harder than it tracks their variety, and a seat admitted for provider spread alone drags the aggregate down faster than its disagreement lifts it. The bar: every seat must be a model you would have been willing to ask *alone* for this question. Mixing pays only among near-equals, and there by fractions of a point — buying diversity below the bar measurably loses (M10). If only one model clears the bar, don't pad the table: that *is* rung one — sample that model N times and aggregate its own answers.
+- **Then pull diversity across providers**, not three checkpoints of one family — Anthropic · OpenAI · Google · Mistral · Groq, the same roster the `fabius` router already speaks to. Cross-provider disagreement is what the panel is buying — but only from seats that already cleared the bar; same-family seats correlate and waste the spend.
 - **3–5 seats** is the working band. Two can't break a tie; past five, cost climbs and rankings flatten. Odd counts ease tie-breaks.
-- **The chairman is a strong-tier model** (it does the hardest reasoning — the merge) and **may be a seat** or a separate model; `fabius` (R11) picks the tier. Seats can run a cheaper tier than the chair.
+- **The chairman is a strong-tier model** (it does the hardest reasoning — the merge) and **may be a seat** or a separate model; `fabius` (R11) picks the tier. Seats all sit at **one** tier and only the chair may sit above it — never mix capability tiers inside the pool, and never seat a weaker model for *diversity* (M10).
 - **Surface the seats and the chair** to the user — a council whose membership is hidden can't be trusted or reproduced.
 
 ## Aggregation — how rankings become an order
@@ -53,7 +55,8 @@ The value of a council is **disagreement**. If the seats won't disagree, you pai
 
 ## Anti-patterns — how a council goes wrong
 
-- **Correlated seats** — all one provider/family → false consensus, no real review. Diversify or don't bother.
+- **Correlated seats in a convened council** — once you've paid for a panel, all-one-family seats give false consensus and no real review. Diversify or don't bother. (Deliberate self-samples of one model are the opposite case — that's rung one under M10, not this anti-pattern.)
+- **A charity seat** — a cheaper or weaker model let in *because* it's different. It doesn't add a perspective, it lowers the pool's average quality, and the Borda tally can't tell those two apart. Diversity is a tiebreaker among equals, never a substitute for capability.
 - **Leaked identities** — any "as Claude, I…" or unshuffled order in stage 2 reintroduces brand bias and voids the blind. Strip hard, shuffle per reviewer.
 - **Chairman as parrot** — if the chair just restates the #1 answer, the synthesis added nothing; require it to *merge and resolve*, citing what it took from where.
 - **Council as verifier** — N models agreeing that code is correct is not the same as running the code. Proof still comes from `fabius-disciplina` (run it, show the evidence).

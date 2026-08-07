@@ -1,6 +1,6 @@
 # Fabius Cohors — evaluate, endure, equip, sandbox
 
-Loaded on demand by `fabius-cohors`. The skill defines and orchestrates agents; this file is the operational tier — how to *score* an agent, *survive* a run that outlives one context, *give* it tools, and *contain* the code it writes. These are capabilities fabius **applies**, drawn from named ecosystem tools — not runtime fabius bundles. The optional live tier (MCP, sandboxes) is in [ARCHITECTURE.md](../ARCHITECTURE.md). Tool names and versions below are an early-2026 snapshot — encode the decision, re-verify the version before you wire it.
+Loaded on demand by `fabius-cohors`. The skill defines and orchestrates agents; this file is the operational tier — how to *score* an agent, *survive* a run that outlives one context, *give* it tools, and *contain* the code it writes. These are capabilities fabius **applies**, drawn from named ecosystem tools — not runtime fabius bundles. The optional live tier (MCP, sandboxes) is in [ARCHITECTURE.md](../../../ARCHITECTURE.md). Tool names, protocol revisions and versions below are a mid-2026 snapshot — encode the decision, re-verify the version before you wire it.
 
 ## 1. Evaluate agents — don't trust vibes
 
@@ -23,7 +23,10 @@ A loop that exceeds one context window is a different machine. **A long autonomo
 - **Log rotation** — bound the log so a multi-hour run doesn't drown its own context or disk.
 - **Dry-run mode** — a no-write rehearsal that proves the plan before the loop touches anything real.
 - **Dual exit gate** — stop on **done OR no-progress**. A loop that can only exit on "done" never exits when it's stuck. Cap retries (~3), then escalate to a human (M4, `fabius-disciplina`).
+- **Resume must not re-run a completed side effect.** Restarting is the moment a run duplicates the email it already sent, the row it already inserted, the release it already cut. Checkpoint the *effect*, not just the plan.
 - **Ecosystem to copy from**: ralph-claude-code (resume, checkpoint, git-backup, log-rotation, dry-run, the done-or-no-progress gate). Take the durability scaffolding; keep your own agent definition.
+
+**Or attach an engine instead of hand-rolling the scaffolding.** Durable execution is a tier you bolt onto an agent now. The engine journals each completed step and replays the journal on restart, so a resumed run *replays* the tool calls it already made instead of re-issuing them — the rule above, enforced by the runtime rather than by the operator's memory. **Temporal, DBOS and Prefect attach directly to a Pydantic-AI agent** (Restate integrates through its own SDK); **DBOS wraps an OpenAI-Agents runner** with `@DBOS.workflow` / `@DBOS.step` and needs only Postgres — SQLite in development — so there is no new infrastructure to stand up; **LangGraph** has the property natively through checkpointers plus an explicit durability setting. Reach for the engine when the run is long, asynchronous, or human-gated. Keep the hand-built checkpoint only when adding a database is genuinely the heavier cost.
 
 For the swarm's own durability — shared task list as source of truth, coordinator reassigning stalled work — see SKILL.md and `references/agent-patterns.md`.
 
@@ -34,6 +37,14 @@ Agents get capabilities through **MCP servers** — the standard for tool acquis
 - **Official reference servers** — filesystem, git, fetch, memory. The smallest trusted surface; start here.
 - **Managed OAuth catalogs** — Composio (~1000+ tools, OAuth-managed). Reach for it when the agent needs SaaS reach (calendars, issue trackers, email) you don't want to credential by hand.
 - **A bridge** — langchain-mcp-adapters wires stdio/HTTP MCP servers into an agent framework. Use when your harness isn't natively MCP.
+
+**MCP went stateless — that is a wiring decision, not a vocabulary change:**
+
+- **No handshake, no session header.** The `initialize` exchange and `Mcp-Session-Id` are gone; every request carries its own protocol version and client capabilities in `_meta`, and `server/discover` — which servers MUST implement — advertises what a server speaks.
+- **Cross-call state is a server-minted handle passed as an ordinary tool argument.** Which puts a new attack in scope: **possession of a handle is not authentication.** Bind each handle to the caller it was minted for, or a leaked one is a session somebody else drives.
+- **Streams are not resumable.** Streamable HTTP is the live transport (HTTP+SSE is formally deprecated) and `Last-Event-ID` redelivery went with it: a broken response stream loses the in-flight request and the client **re-issues it as a new request**. That is a re-execution hazard aimed straight at §2 — give every side-effecting tool an idempotency key, or the transport duplicates the effect for you.
+- **Don't build on the deprecated surface:** Roots, Sampling and Logging (pass paths as tool parameters; call the provider API directly; log to stderr or OpenTelemetry), and OAuth Dynamic Client Registration (use Client ID Metadata Documents). Long-running work moved out of core into the official `io.modelcontextprotocol/tasks` extension, polled rather than blocking.
+- **Pin the protocol revision you target and re-read the changelog before you wire.** A twelve-month deprecation window is policy now, not courtesy — long enough that a server you adopted still works while everything written about it goes stale.
 
 **Least-privilege still rules** (same floor as `references/agent-patterns.md`):
 

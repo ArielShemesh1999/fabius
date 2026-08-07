@@ -12,7 +12,7 @@ This is how you get REAL Codex / Mistral / Gemini numbers: set the keys and run 
     export MISTRAL_API_KEY=...       # mistral-large-latest
     export ANTHROPIC_API_KEY=...     # claude-sonnet-4-6 etc.
     export GEMINI_API_KEY=...        # gemini-2.5-pro (Google AI Studio key)
-    export XAI_API_KEY=...           # grok-4 (xAI)
+    export XAI_API_KEY=...           # grok-4.5 (xAI)
     python3 evals/portable_eval.py
 
 Pick which models to run with --models (default: every vendor whose key is set).
@@ -85,7 +85,11 @@ def call_xai(model, prompt, key):
     return d["choices"][0]["message"]["content"]
 
 VENDORS = {
-    "xai":       {"env": "XAI_API_KEY",       "model": "grok-4",               "call": call_xai},  # added 2026-07-19, unmeasured — Panel C pins below are as-measured 2026-06-22
+    # A retired id that REDIRECTS is worse than one that 404s: the run succeeds, the table prints,
+    # and the number is attributed to a model that never answered. `grok-4` / `grok-4-0709` retired
+    # 2026-05-15 and now resolve to grok-4.3 at grok-4.3 rates, so the seat is pinned to the current
+    # flagship and re-measured rather than left to a gateway alias.
+    "xai":       {"env": "XAI_API_KEY",       "model": "grok-4.5",             "call": call_xai},  # seat added 2026-07-19, repinned 2026-08-06, unmeasured — Panel C pins below are as-measured 2026-06-22
     "openai":    {"env": "OPENAI_API_KEY",    "model": "gpt-4o",               "call": call_openai},
     "mistral":   {"env": "MISTRAL_API_KEY",   "model": "mistral-large-latest", "call": call_mistral},
     "anthropic": {"env": "ANTHROPIC_API_KEY", "model": "claude-sonnet-4-6",    "call": call_anthropic},

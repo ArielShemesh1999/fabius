@@ -6,12 +6,13 @@ description: >
   (Anthropic · OpenAI · Google · Mistral · Groq), managed from one console. One stance, end to
   end: code, prose, agents, UI, data visualization, debugging, marketing, defensive security,
   games, on-chain work and artifact sealing, automations, scientific research, ML/LLM
-  engineering, market analysis, and memory. Scout wide, strike narrow — talk lean, build lean,
-  run a disciplined process, design at ship quality — then route to the specialist layers
-  fabius-parcus, fabius-disciplina, fabius-decor, fabius-cohors, fabius-archivum,
-  fabius-mercatus, fabius-praesidium, fabius-ludus, fabius-catena, fabius-machina,
-  fabius-scientia, fabius-doctrina, fabius-fortuna, and fabius-concilium. Use when the user
-  says "fabius", wants the agent, or wants end-to-end capability from one place.
+  engineering, market analysis, cross-model deliberation, and memory. Scout wide, strike
+  narrow — talk lean, build lean, run a disciplined process, design at ship quality — then
+  route to the specialist layers fabius-parcus, fabius-disciplina, fabius-decor,
+  fabius-cohors, fabius-archivum, fabius-mercatus, fabius-praesidium, fabius-ludus,
+  fabius-catena, fabius-machina, fabius-scientia, fabius-doctrina, fabius-fortuna, and
+  fabius-concilium. Use when the user says "fabius", wants the agent, or wants end-to-end
+  capability from one place.
 when_to_use: >
   "how should we approach this", "set up the way of working", "which layer handles this", or at
   the start of any multi-step build before a specialist fires.
@@ -85,8 +86,8 @@ serve a model · fine-tune · eval prompts ·   → fabius-doctrina    (the mode
 stock · market · economy · valuation ·       → fabius-fortuna     (analysis, not advice)
   backtest · portfolio · risk · indicator ·
   analyze market data
-"council" · "ask several models" · panel ·   → fabius-concilium   (ensemble; expensive — gate first)
-  cross-model deliberation · llm-council
+"council" · "ask several models" · panel ·   → fabius-concilium   (ensemble; expensive — self-samples
+  cross-model deliberation · llm-council                          first, council only on correlated error · M10)
 ```
 
 **Process picks HOW, domain picks WHAT — load process first.** "Build a landing page" = `fabius-disciplina` (brainstorm the spec) → `fabius-decor` (execute at quality), all under `fabius-parcus`. The router composes layers; it doesn't make you choose one.

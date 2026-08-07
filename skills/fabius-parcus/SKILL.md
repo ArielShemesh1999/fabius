@@ -41,11 +41,12 @@ One sentence, one move: name the thing, the action, the reason — then what's n
 Climb only as high as you must. The first rung that holds is the answer — don't climb past it to look busy.
 
 1. **Delete the requirement.** Is this speculative — a need nobody actually has yet? Then it isn't built. Name the cut in one line and move on. (YAGNI)
-2. **Reach for the standard library.** If the language already ships it, that's the implementation.
-3. **Reach for the platform.** A native control, a CSS rule, a database constraint beats hand-rolled app code — `<input type="date">`, not a date-picker dependency.
-4. **Reach for what's already installed.** An existing dependency covers it → use it. Don't add a package for a few lines of glue.
-5. **Reach for one line.** If the whole thing collapses to a single expression, write that.
-6. **Only then write the code** — the least that makes the test pass, nothing past it.
+2. **Reach for what this repo already has.** Grep before you write — this is the rung a model skips. Left alone it re-derives per task instead of calling what's there: measured against the human files beside them, AI-written files run longer, nest deeper, and reuse *less* across files. One search for the helper you're about to invent costs less than the second copy costs forever.
+3. **Reach for the standard library.** If the language already ships it, that's the implementation.
+4. **Reach for the platform.** A native control, a CSS rule, a database constraint beats hand-rolled app code — `<input type="date">`, not a date-picker dependency.
+5. **Reach for what's already installed.** An existing dependency covers it → use it. Don't add a package for a few lines of glue.
+6. **Reach for one line.** If the whole thing collapses to a single expression, write that.
+7. **Only then write the code** — the least that makes the test pass, nothing past it.
 
 The ladder is a reflex, not a research project: two rungs both work → take the higher one and move on.
 
@@ -62,6 +63,8 @@ Mark a deliberate shortcut with a `fabius:` comment that names the ceiling and t
 
 Touch only what the request requires. Don't improve adjacent code, don't refactor what isn't broken, match the existing style even where you'd write it differently. Spot unrelated dead code → mention it, don't delete it. Remove only the orphans *your* change created (a now-unused import you orphaned). The test: every changed line traces to the user's request.
 
+Read this rule the narrow way. *Don't refactor what isn't broken* forbids the drive-by rewrite; it never licenses a second copy of something that already exists. Calling the function next door is the smaller diff, not the larger one — writing your own is the change that touched more.
+
 ## 4. Lean scope — think first
 
 State assumptions out loud before coding. Two readings of the request both fit → present both, don't silently pick one. A simpler approach exists → say so, push back when it's warranted. Something is unclear → stop and name it. (The interactive clarifying-question procedure belongs to `fabius-disciplina`; this layer just refuses to guess.)
@@ -77,6 +80,8 @@ Lean means writing less code, never cutting what protects the user. Never trim:
 - security measures,
 - accessibility basics,
 - anything the user explicitly asked for.
+
+And one inversion, because it's the failure this stance invites: **a swallowed error is not lean code, it's a hidden bug wearing lean's clothes.** A bare `catch`/`rescue` that logs nothing, an `?.` chain that turns a broken invariant into a `null`, a default that quietly stands in for a failed fetch — each one shortens the diff and lengthens the outage, and the density of these constructs climbs sharply as more of a codebase is machine-written. Handle the error where you can name what it means, or let it propagate to something that can; never absorb it to make the happy path look shorter — that is exactly how a run reports success on a wrong state (→ `fabius-disciplina` phase 6). The line: deleting a handler for a state that *can't* happen is lean (§4); muting one for a state that can is not.
 
 Two stdlib options the same size → take the one that's correct on the edge cases. Lean is fewer lines, not a flimsier algorithm.
 

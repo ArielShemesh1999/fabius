@@ -7,13 +7,13 @@ description: >
   task bigger than a one-line edit. Also use when the user says "plan this", "grill me",
   "debug this", "find the root cause", or "is this actually done?". Worked debug walkthrough and
   test anti-patterns live in references/process-playbook.md; the full process library — the craft
-  skills (brainstorm, prototype, TDD, grill, handoff, writing) and the discipline skills
-  (systematic-debugging, writing-plans, verification-before-completion, parallel agents) — lives in
+  skills (prototype, TDD, grill, handoff, writing) and the discipline skills (brainstorming,
+  systematic-debugging, writing-plans, verification-before-completion, parallel agents) — lives in
   references/process/. The on-device prove loop for a UI app — build + assert state on a simulator,
   semantic-tree-first and token-cheap — lives in references/simulator-verify.md.
 when_to_use: >
-  "where do we start", "write the tests first", "it keeps regressing", "why does it still fail",
-  "walk me through the fix before coding".
+  "where do we start", "write the tests first", "it keeps regressing", "why is it slow",
+  "why does it still fail", "walk me through the fix before coding".
 license: UNLICENSED
 metadata:
   author: Ariel Shemesh
@@ -49,6 +49,8 @@ Write the plan as `step → verify` lines:
 3. [step] → verify: [the check that proves it]
 ```
 
+Two rules keep a plan working past the first few steps. **Re-state the remaining steps on a short cycle** — a plan written once at the top decays as the run gets long and the agent drifts into sub-goals nobody asked for; periodic re-injection measurably recovers the ground that drift costs. And **a plan with a phase missing is worse than no plan at all** — an incomplete skeleton actively steers the run wrong, where no plan at least leaves the model's own judgment intact. The phase that is never optional is *reproduce* (§5). The corollary is the lean one: don't pad the plan with phases this task doesn't need — a step bolted on early degrades the run instead of insuring it.
+
 Strong, checkable criteria are what let you run the loop without a human in it. Keep each unit small and single-purpose — you reason better about code you can hold in your head at once, and a file growing fat is the signal it's doing too much.
 
 ## 4. Build test-first — the iron law
@@ -76,6 +78,8 @@ When something breaks, before proposing any fix:
 
 After roughly three failed fixes, stop patching: the bug is probably architectural. Question the coupling and the design — don't reach for fix number four.
 
+A **performance** regression runs the same six steps with a different instrument, because "slow" has no stack trace. Baseline on a fixed throttled profile, then **isolate by blocking one dependency at a time** and read the delta — never rank suspects by file size. **Compare medians of repeated runs, never a single sample** (identical runs swing wide enough to invent a regression), and **A/B the obvious optimization** before shipping it — a preload or a re-encode that measures as a no-op is a change, not an improvement. (Worked loop → `references/process-playbook.md`.)
+
 ## 6. Prove before "done"
 
 A claim of success needs evidence. Before reporting complete:
@@ -93,7 +97,7 @@ For a **UI app**, "hit the real path" means **run it on a device/simulator and a
 - **The loop:** health-check the environment → build + test → boot/launch → assert state via the tree → screenshot only for visual confirmation → capture the full state (screenshot + hierarchy + logs) on failure.
 - **Prove with a number where you can.** A before/after task-success rate beats "it built." (iOS `simctl`/`xcodebuild` workflow, the troubleshooting table, and the test recipes → `references/simulator-verify.md`.)
 
-The full process library — craft skills (brainstorm, prototype, TDD, grill, handoff, writing) and discipline skills (systematic-debugging, writing-plans, verification-before-completion, parallel agents) — is in `references/process/`; the worked debug walkthrough and test anti-patterns in `references/process-playbook.md`. The on-demand depth for the *scout* and *prove* steps when the unknown is a large codebase, a current-world fact, or a UI in a browser — a local code graph for surgical context, live-web fact-checking, plan-as-files, real-browser (Playwright) verification, and a TDD-enforcement gate — is in `references/codebase-and-proof.md`. The verified tool stack — test frameworks, property/mutation testing, coverage, debuggers/profilers, and correctness linters → `references/testing-toolkit.md`.
+The full process library — craft skills (prototype, TDD, grill, handoff, writing) and discipline skills (brainstorming, systematic-debugging, writing-plans, verification-before-completion, parallel agents) — is in `references/process/`; the worked debug walkthrough, the performance-regression loop, and the test anti-patterns in `references/process-playbook.md`. The on-demand depth for the *scout* and *prove* steps when the unknown is a large codebase, a current-world fact, or a UI in a browser — a local code graph for surgical context, live-web fact-checking, plan-as-files, real-browser (Playwright) verification, and a TDD-enforcement gate — is in `references/codebase-and-proof.md`. The verified tool stack — test frameworks, property/mutation testing, coverage, debuggers/profilers, and correctness linters → `references/testing-toolkit.md`.
 
 ## Routing the reasoning — when to branch, when to reflect
 

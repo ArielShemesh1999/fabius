@@ -85,9 +85,16 @@ FastQC + trim  →  STAR / Salmon  →  counts matrix  →  pydeseq2  →  pathw
 The gene-level **counts matrix** is the convergence artifact: everything upstream produces it, everything downstream consumes it. Field-standard first:
 
 ```bash
-# Preferred: one audited command (reproducible, peer-reviewed)
-nextflow run nf-core/rnaseq --input samplesheet.csv --genome GRCh38 -profile docker
+# Preferred: one audited pipeline (reproducible, peer-reviewed)
+# --input AND --outdir are both REQUIRED; pin the revision; pass references explicitly.
+nextflow run nf-core/rnaseq -r 3.26.0 \
+  --input samplesheet.csv --outdir results \
+  --fasta /refs/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa.gz \
+  --gtf   /refs/Homo_sapiens.GRCh38.116.gtf.gz \
+  -profile docker
 ```
+
+`--outdir` is not a nicety: the pipeline schema marks `input` and `outdir` as the two required parameters, so a command missing it dies at validation before a single read is processed. And **don't reach for `--genome GRCh38` as a convenience** — that key resolves through the AWS iGenomes catalogue, whose GRCh38 entry is the NCBI build and whose annotation uses **gene symbols as the primary identifier** — which collides head-on with the one-namespace, stable-ID rule two checkboxes up, because symbols are renamed between releases and are not unique. (The neighbouring `GRCh37` key is worse still: its annotation is the decade-old **Ensembl release 75**.) That is an unpinned, symbol-keyed annotation silently baked into a run you will later call reproducible, in direct violation of §7's *pin tool + database versions*. Either pass `--fasta` / `--gtf` from a versioned Ensembl download, or define your own `params.genomes` catalogue so `--genome <key>` points at references **you** pinned. Pin the pipeline itself with `-r <version>` for the same reason — "latest" is not a version.
 
 Reserve the manual STAR-by-hand recipe for learning or a constrained environment.
 
@@ -113,6 +120,12 @@ RNA-seq / DESeq2:
 - [ ] No **batch ↔ condition confounding** — if batch tracks condition, the effect is unattributable
 - [ ] **Consistent gene IDs** across differential-expression and enrichment (one namespace, e.g. Ensembl)
 - [ ] **Species is case-sensitive** — `PAX7` (human) ≠ `Pax7` (mouse)
+
+Single-cell (scRNA-seq) — comparing *conditions*:
+- [ ] **Pseudobulk before you test.** Sum counts per (sample × cell type), then run the bulk machinery — PyDESeq2 / edgeR / limma — on that matrix. `decoupler` does the aggregation and the low-count filtering.
+- [ ] **The replicate is the SAMPLE, never the cell.** A per-cell Wilcoxon across conditions treats thousands of cells from one donor as independent: that is pseudoreplication, it inflates the FDR, and single-cell-specific tests are especially prone to wrongly calling highly expressed genes differential. `rank_genes_groups` finds cluster **markers**; it does not test a condition.
+- [ ] **≥3 biological samples per condition** — the same rule as bulk, applied at the donor level. Two mice is `n=2` however many cells you sequenced.
+- [ ] If you genuinely cannot pseudobulk, use a mixed model with a per-sample random effect — and say so in the report.
 
 Every pipeline:
 - [ ] **Pin tool + database versions** — schemas and annotations drift upstream

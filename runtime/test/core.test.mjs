@@ -40,6 +40,39 @@ test('an explicit tier overrides the heuristic', () => {
   assert.equal(route('reformat this list', { cfg: FAKE, tier: 'frontier' }).tier, 'frontier');
 });
 
+test('a keyword does not fire inside a longer word, or inside a phrase another layer owns', () => {
+  const d = (t) => route(t, { cfg: FAKE }).domains;
+  assert.deepEqual(d('add a unique constraint to the users table'), []);      // not 'train'
+  assert.deepEqual(d('hold the Apple restraint in the hero'), ['fabius-decor']);
+  assert.deepEqual(d('read the file and summarize it'), []);                  // not 'ad '
+  assert.deepEqual(d('what is the market doing for NVDA this quarter'), ['fabius-fortuna']);
+  assert.deepEqual(d('write the launch copy for our new product'), ['fabius-mercatus']);
+  assert.deepEqual(d('train a classifier on this data'), ['fabius-doctrina']); // no false negative
+});
+
+test('a conjunction does not buy the frontier tier, but a real fork still does', () => {
+  assert.equal(route('rename the button label to Save or Cancel', { cfg: FAKE }).tier, 'fast');
+  // Long enough that the short-question rule cannot carry it — this asserts the or-clause itself.
+  assert.equal(route('do we ship the modal now or later for checkout?', { cfg: FAKE }).tier, 'frontier');
+  // A modal decision keeps the tier without needing a question mark.
+  assert.equal(route('should the public API be versioned before we ship it', { cfg: FAKE }).tier, 'frontier');
+  assert.equal(route('which caching layer do we pick for the session store', { cfg: FAKE }).tier, 'frontier');
+  // Indifference is not a fork — it must not reach the frontier tier.
+  assert.equal(route('either way works for the button label', { cfg: FAKE }).tier, 'mid');
+});
+
+test('a layer keeps its own evidence when it also fires outside a longer phrase', () => {
+  const d = (t) => route(t, { cfg: FAKE }).domains;
+  assert.deepEqual(d('improve the design; also fix the level design').sort(), ['fabius-decor', 'fabius-ludus']);
+  assert.deepEqual(d('market this product to the market we identified').sort(), ['fabius-fortuna', 'fabius-mercatus']);
+  // ...but a lone occupant of a longer phrase still yields to its owner.
+  assert.deepEqual(d('tune the level design pacing'), ['fabius-ludus']);
+});
+
+test('oauth still buys the strong tier', () => {
+  assert.equal(route('add oauth to the login flow', { cfg: FAKE }).tier, 'frontier');
+});
+
 test('no key means nothing fires — and the router says so instead of pretending', () => {
   const r = route('anything', { cfg: { keys: {} } });
   assert.equal(r.fireable, false);

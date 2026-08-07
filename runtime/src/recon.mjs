@@ -25,6 +25,11 @@ const sevRank = (s) => SEVERITY.indexOf(s);
 
 const DEFAULT_TIMEOUT = 8000;
 
+// The redirect set, written once. Two hand-kept copies drifted before — the plain-HTTP check
+// was missing 303, so a host that legitimately answered `303 → https://…` was reported HIGH
+// for "no redirect", which is the false positive that teaches an operator to stop reading.
+const REDIRECT_STATUS = [301, 302, 303, 307, 308];
+
 // ── tiny helpers ────────────────────────────────────────────────────────────────
 const withTimeout = (p, ms, label) => Promise.race([
   p,
@@ -198,7 +203,7 @@ async function fetchHops(url, ctx, maxHops = 10) {
     res = await withTimeout(fetch(current, { redirect: 'manual', headers }), ctx.timeoutMs, 'HTTP');
     const loc = res.headers.get('location');
     chain.push({ url: current, status: res.status, location: loc || null });
-    if (![301, 302, 303, 307, 308].includes(res.status) || !loc) return { res, chain, finalUrl: current, refused: null };
+    if (!REDIRECT_STATUS.includes(res.status) || !loc) return { res, chain, finalUrl: current, refused: null };
     let next;
     try { next = new URL(loc, current); }
     catch { return { res, chain, finalUrl: current, refused: `(refused: ${loc} is not a URL)` }; }
@@ -237,8 +242,9 @@ async function checkHttp(host, ctx, surface) {
     const r = await withTimeout(fetch(`http://${host}/`, { redirect: 'manual', headers: { 'user-agent': ctx.userAgent } }), ctx.timeoutMs, 'HTTP');
     return { status: r.status, location: r.headers.get('location') };
   }, null);
-  if (plain && ![301, 302, 307, 308].includes(plain.status)) {
-    findings.push({ severity: 'high', title: 'plain HTTP is served without a redirect', detail: `http://${host}/ answered ${plain.status} instead of redirecting to HTTPS.`, fix: 'Return a 301 to the https:// URL for every plain-HTTP request.' });
+  // Same test fetchHops applies to a hop: a redirect status AND a Location to go to.
+  if (plain && (!REDIRECT_STATUS.includes(plain.status) || !plain.location)) {
+    findings.push({ severity: 'high', title: 'plain HTTP is served without a redirect', detail: `http://${host}/ answered ${plain.status}${plain.location ? '' : ' with no Location header'} instead of redirecting to HTTPS.`, fix: 'Return a 301 to the https:// URL for every plain-HTTP request.' });
   } else if (plain?.location && !/^https:/i.test(plain.location)) {
     findings.push({ severity: 'medium', title: 'the HTTP redirect does not go to HTTPS', detail: `Redirects to ${plain.location}.`, fix: 'Point the redirect at the https:// origin directly — an extra hop is an extra chance to be intercepted.' });
   }

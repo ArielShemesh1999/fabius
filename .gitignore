@@ -26,3 +26,6 @@ evals/structural.json
 # never vendored — they belong to their upstream projects, and a stale copy would
 # quietly stop testing what it claims to test.
 runtime/test/vectors/
+
+# ots upgrade writes a .bak beside the proof — an artifact, not a record
+*.ots.bak

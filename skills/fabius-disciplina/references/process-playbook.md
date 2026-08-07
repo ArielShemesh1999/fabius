@@ -1,6 +1,6 @@
 # Fabius Disciplina — process playbook
 
-Loaded on demand by `fabius-disciplina`. The skill has the six phases; this file has the worked detail: a debug walkthrough, the test anti-patterns to avoid, and the review checklists for a brainstorm and a plan.
+Loaded on demand by `fabius-disciplina`. The skill has the six phases; this file has the worked detail: a debug walkthrough, the same loop turned on a performance regression, the test anti-patterns to avoid, and the review checklists for a brainstorm and a plan.
 
 ## A debug, worked end to end
 
@@ -15,6 +15,18 @@ Loaded on demand by `fabius-disciplina`. The skill has the six phases; this file
 7. **Regression-test.** The minimized two-cookie loop becomes a permanent test that fails on the old key and passes on the new one.
 
 Note what a symptom-patch would have been: "clear the cache on logout." It would have *reduced* the rate and shipped — and the bug would have returned under load. Root cause means the explanation survives a second look.
+
+## A performance regression — the same loop, a different instrument
+
+"It's slow" has no stack trace, so the hypothesize step quietly degrades into ranking suspects by file size. **File size is a bad proxy for cost.** Run the same six steps with measurement as the instrument:
+
+1. **Baseline before you touch anything.** Fix the profile and keep it fixed for every later run: CPU throttled (`Emulation.setCPUThrottlingRate: 4`), a pinned network profile (Fast-3G via `Network.emulateNetworkConditions`), LCP/FCP/long-tasks read off a `PerformanceObserver`. An unbaselined fix is a change, not an improvement.
+2. **Isolate by blocking — one dependency at a time.** Abort exactly one origin per variant (`page.route(url => re.test(url), r => r.abort())`) and read the delta against the baseline. That attributes cost to a *cause*, which bytes never do: on one page the fonts cost 1375ms of long tasks, the accessibility widget 1005ms, GSAP 879ms and the chat 338ms — the top cost was not the biggest file, and nothing in the byte list said so.
+3. **Take a median, never a single sample.** LCP on one unchanged page swung 1212 / 1856 / 2240 ms across three identical runs. One sample of that spread reads as an ~80% regression that does not exist. Three runs minimum, compare medians, and treat a delta inside the run-to-run spread as no delta.
+4. **A/B the obvious optimization too.** Preloading the LCP image and re-encoding the videos both measured as no-ops on that same page, so neither shipped. The convincing fix is a hypothesis like any other — it earns its place from a measured delta, not from being the thing everyone does.
+5. **Re-measure live, and compare medians.** A local build hides the production CSP, the cache header and the real network. Same profile, same run count, before and after (`fabius-decor` owns the implementation of the fix; this layer owns the measurement that chooses it).
+
+Loop: baseline → isolate by blocking → fix the top cost → re-measure live and compare medians.
 
 ## Test anti-patterns (these tests lie)
 

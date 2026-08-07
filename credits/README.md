@@ -4,7 +4,13 @@ The fabius **system** — the fifteen skills, the router/dispatch policy, `AGENT
 
 What we owe to the open community is the **learning**: the on-demand depth under each skill's `references/` was **informed by and adapted from** the open work below. We studied these projects and wrote our own version; credit where it's due. Two honest rules govern this file:
 
-1. **Inspiration vs. bundling.** Most rows below are *informed-by* — concepts re-expressed in fabius's own words, no upstream files copied. Where actual upstream **files are bundled** under a `references/` tree, that project's original `LICENSE` travels with them (e.g. `skills/fabius-cohors/references/agents/orchestration/LICENSE`), and for Apache-2.0 sources the `NOTICE` is retained too.
+1. **Inspiration vs. bundling.** Most rows below are *informed-by* — concepts re-expressed in fabius's own words, no upstream files copied. Where actual upstream **files are bundled** under a `references/` tree, that project's original `LICENSE` travels with them, and for Apache-2.0 sources a `NOTICE` stating our changes travels with them too. Three trees are genuinely bundled rather than merely studied, and each is scoped by its own licence file:
+
+   | bundled tree | upstream | terms |
+   |---|---|---|
+   | `fabius-cohors/references/agents/{android,go,java,kotlin,python,typescript}/` | Google ADK sample agents | **Apache-2.0** — `LICENSE` + `NOTICE` per tree |
+   | `fabius-cohors/references/agents/fabius-agency/` | AgentLand Contributors | **MIT** — `LICENSE` |
+   | `fabius-cohors/references/agents/orchestration/` | ruvnet | **MIT** — `LICENSE` |
 2. **No silent relicensing.** fabius itself is **proprietary — all rights reserved** (see [LICENSE](../LICENSE)); that covers fabius's own code and prose. Bundled third-party work is **not** relicensed in either direction — each keeps its upstream terms.
 
 ## Inspired / adapted from — by layer
@@ -22,7 +28,8 @@ What we owe to the open community is the **learning**: the on-demand depth under
 | `fabius-decor` (explanatory diagrams) | Understand-Anything (Yuxiang Lin / Infinite Universe, Egonex-AI) — deterministic-extract-then-LLM, typed-graph schema, topology-driven pedagogical tour | MIT |
 | `fabius-decor` (Israeli / Hebrew localization — *Fabius Yisrael*) | Skills-IL (skills-il / YooTech · [agentskills.co.il](https://agentskills.co.il)) — the Israeli-market Agent Skills set (Hebrew RTL, IS 5568 accessibility, Chok HaSpam, PPA / Amendment-13 privacy, Israeli formats & i18n). Studied for *what an Israel-ready product must handle*, then re-authored original; no files bundled. | **MIT** |
 | `fabius-cohors` (swarm orchestration) | claude-flow / ruflo by ruvnet — coordinator + specialized-worker swarms, anti-drift, worktree isolation ([repo](https://github.com/ruvnet/ruflo)) | see repo |
-| `fabius-cohors` (agent catalog) | wshobson/agents, VoltAgent/awesome-claude-code-subagents, open production-agent corpora (Google ADK samples and similar) | MIT (wshobson) · see repos |
+| `fabius-cohors` (agent catalog) | wshobson/agents, VoltAgent/awesome-claude-code-subagents — studied, re-expressed | MIT (wshobson) · see repos |
+| `fabius-cohors` (agent corpus — **files bundled, not just studied**) | **Google ADK sample agents** (google/adk-samples and related Google ADK sample material) — ~104 sample projects carried under `references/agents/`, with upstream copyright notices and licence headers retained and our changes stated in each tree's `NOTICE` | **Apache-2.0** |
 | `fabius-archivum` (memory, LLM-wiki) | Andrej Karpathy's "the wiki pattern" — incrementally-built personal knowledge bases ([gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)) | — |
 | `fabius-archivum` (vector engine) | the `fabius-vec` knowledge engine, after open vector-search work (turbovec / ruvector) | see repos |
 | `fabius-archivum` (auto-recall · re-injection) | claude-mem (thedotmack) — the capture → compress → re-inject loop wired to session lifecycle; oh-my-claudecode (Yeachan-Heo) | **Apache-2.0** (claude-mem) · see repos |
@@ -64,7 +71,7 @@ It also carries a **supply-chain trap** worth naming once, because it is the rea
 
 The cybersecurity skills corpus (mukul975/Anthropic-Cybersecurity-Skills) is **Apache-2.0**. `fabius-praesidium` currently re-expresses its **defensive** concepts (STRIDE, the OWASP pass, the finding contract) in fabius's own voice — inspiration, no files carried, and nothing offensive imported. If any Apache-2.0 file is later bundled into the corpus, its `LICENSE` and `NOTICE` ship alongside it, with changes stated, per the license.
 
-Two more sources carry **Apache-2.0** terms: **claude-mem** (thedotmack), which informed `fabius-archivum`'s auto-recall loop, and the **hooks layer of n8n-skills**, which informed `fabius-machina`. In both cases fabius re-expresses the *pattern* in its own words — **no upstream code or prose is bundled** — so no NOTICE travels with the install today. If any Apache-2.0 file is later vendored, its `LICENSE`/`NOTICE` and a statement of changes ship with it.
+Two more sources carry **Apache-2.0** terms: **claude-mem** (thedotmack), which informed `fabius-archivum`'s auto-recall loop, and the **hooks layer of n8n-skills**, which informed `fabius-machina`. In both cases fabius re-expresses the *pattern* in its own words — **no upstream code or prose is bundled from either** — so neither contributes a NOTICE. The one Apache-2.0 source that *is* genuinely vendored is the Google ADK agent corpus; it carries a `LICENSE` and a changes-stated `NOTICE` in each of its six trees, as the rule above requires.
 
 ## Research grounding — the agent-research canon
 
@@ -79,4 +86,4 @@ fabius's routing policy is sourced to the literature, with a direct-vs-analogy h
 
 ## Closing
 
-Names inside the bundled references were aligned to fabius for consistency; the ideas are theirs, the synthesis and the system are ours. fabius stands on this open work and tries to credit it honestly. If you own one of these and want a change to the attribution — or a stronger license notice — contact the author (the repo is private, so an issue won't reach us) and it will be fixed.
+Names inside the bundled references were aligned to fabius for consistency; the ideas are theirs, the synthesis and the system are ours. That alignment has a cost worth stating: inside the bundled trees, some rewritten links, package names and import paths no longer resolve upstream. Read them as a corpus; go upstream for anything you intend to run. fabius stands on this open work and tries to credit it honestly. If you own one of these and want a change to the attribution — or a stronger license notice — open an issue on the repository or contact the author, and it will be fixed.

@@ -20,7 +20,7 @@ Loaded on demand by `fabius-decor`. The *materials* an interface is built from �
 | **Open Peeps** · **Humaaans** · **Open Doodles** | CC0 | Pablo Stanley's mix-&-match people (line / flat / sketch). True public domain; map the hero garment to `--accent`, rest to neutrals. |
 | **ManyPixels** | free (commercial, no attribution) | 20,000+ SVG/PNG across ~18 styles — a larger, style-varied unDraw alternative for empty states/marketing. |
 | **Storyset** (Freepik) | Freepik (visible attribution) | Big themed styles (Rafiki/Bro/Amico…), in-browser recolor. **Its headline feature is looping animation — export the STATIC SVG** (law 4); free use needs the credit link. |
-| **IRA Design** | MIT | Gradient-background + sketch builder — constrain gradient stops to `--accent` + a tint (not a rainbow). Repo `ira-design/ira-illustrations`. |
+| **IRA Design** | MIT | Gradient-background + sketch illustrations — constrain gradient stops to `--accent` + a tint (not a rainbow). **Use the repo, not the site:** `github.com/ira-design/ira-illustrations` is live; the hosted builder at `iradesign.io` is down (Cloudflare 522). Pull the SVGs and recolor against your tokens by hand. |
 | **Lukasz Adam** | CC0 / MIT | One illustrator's regularly-updated SVG sets; consistent stroke within a set. |
 | **DrawKit** · **Blush / Croods** | freemium | Themed 2D+3D packs / artist collections with per-layer color. Verify per-pack; SVG export often Pro. Recolor loud sets (Croods) toward neutrals + one accent. |
 | ~~absurd.design~~ | non-commercial + attribution | Striking surrealist ink — but free tier is **non-commercial only, credit mandatory**. Comps/inspiration, not production. |
@@ -67,7 +67,7 @@ Derive stops from your **accent + a tint/shade of it**, never two saturated stoc
 ## Shadows, glass & soft-UI
 
 - **Shadow Palette Generator** (Josh Comeau) *(token-native)* — emits a whole elevation scale as `--shadow-color` + `--shadow-elevation-{low,med,high}`; tint the color from a desaturated accent.
-- **shadows.brumm.af** / **smoothshadows.com** — layered soft shadows (light-angle control on the latter); capture into `--shadow-md/-lg` once, reuse — never paste raw. **CSS Scan box-shadow gallery** for click-to-copy vetted shadows.
+- **smoothshadows.com** — layered soft shadows with light-angle control; capture into `--shadow-md/-lg` once, reuse — never paste a raw stack into a component. **CSS Scan box-shadow gallery** for click-to-copy vetted shadows. *(`shadows.brumm.af` is gone — it answers HTTP 410; use the two above.)*
 - **Glass UI / css.glass** — glassmorphism (`backdrop-filter`): tint from `rgba(var(--surface-rgb),.1)`, border = accent at low alpha, **always ship a solid `--surface` fallback and verify text contrast over the blur** (a11y). GPU-expensive — one recipe per surface.
 - **Neumorphism.io** — soft-UI; base color **must equal** your surface token. *Warning: neumorphism fails contrast/affordance a11y — add real focus/hover states, avoid for primary controls.* **Claymorphism** (Hype4) for puffy decorative cards.
 
@@ -85,12 +85,12 @@ Type is a family too — one display + one body, max. Prefer **self-host** (CSP/
 
 ## Color tooling
 
-Laws: **one accent**, **ink ≠ `#000`** (near-black reads photographic), **WCAG ≥ 4.5:1** body text (APCA for dark UI/thin text), **colorblind-safe** (never hue alone).
+Laws: **one accent**, **ink ≠ `#000`** (near-black reads photographic), **two contrast floors — 4.5:1 for body text and 3:1 for anything non-text that carries meaning** (WCAG 2.2 **1.4.11**: a focus ring, an input border, a toggle's on-state, a chart series, a load-bearing hairline), APCA for dark UI/thin text, **colorblind-safe** (never hue alone). The 3:1 floor is where *these* materials die quietly — a 0.03-opacity pattern, a glass tint, a neumorphic edge and a desaturated shadow are exempt while they stay decorative, and fail the moment one of them becomes the only thing marking a boundary or a state. Criteria in full → `references/platform-baseline.md`.
 
 - **Token systems (adopt wholesale)**: **Radix Colors** (`MIT`, 12-step role-based, APCA-tuned, same index light/dark), **Open Color** (`MIT`, gray-9 is a real near-black), **Tailwind palette** (`MIT`, OKLCH in v4), **Reasonable Colors** (`CC0`, any two steps 5 apart clear AA — a11y baked into the ramp).
 - **Palette generators**: **Coolors** (fast + built-in WCAG/CVD checks), **Realtime Colors** (judge a palette *in a page mockup*, forces role assignment), **Huemint** (role-aware ML), **Adobe Color** (harmony wheel + image extract + WCAG + colorblind-safe checker in one).
 - **Contrast-first / OKLCH**: **Adobe Leonardo** (`Apache`, generate from a target contrast ratio — powers Spectrum), **ColorBox** (algorithm `lyft/coloralgorithm` **Apache-2.0**, not MIT), **oklch.com** (`MIT`, OKLCH picker + P3 gamut warnings), **Harmonizer** (APCA-consistent OKLCH palettes).
-- **Contrast checkers**: **WebAIM** (canonical WCAG-2 gate, ≥4.5 body), **APCA Calculator** (Myndex — perceptual Lc for dark/thin text, WCAG-3-bound; target Lc 75–90), **Colour Contrast Analyser** (TPGi — desktop eyedropper on *rendered* pixels).
+- **Contrast checkers**: **WebAIM** (canonical WCAG-2 gate — run every pair at **both** floors: 4.5 for text, 3.0 for the UI/graphic that carries the meaning), **APCA Calculator** (Myndex — perceptual Lc for dark/thin text, WCAG-3-bound; target Lc 75–90), **Colour Contrast Analyser** (TPGi — desktop eyedropper on *rendered* pixels).
 - **Colorblind sims**: **Color Oracle** (full-screen filter, Win/Mac/Linux), **Coblis** (in-browser), **Sim Daltonism** (macOS) — run token palettes and chart series through one before locking.
 
 ## HuggingFace — the generative-imagery pipeline
@@ -99,14 +99,17 @@ Generating imagery is a *design* act under the same restraint (the slot-fill pro
 
 | Stage · model (HF id) | License | Role |
 |---|---|---|
-| **T2I** · `black-forest-labs/FLUX.1-schnell` | Apache-2.0 | *Default shippable* generator — photoreal/stylized in 1–4 steps (`guidance_scale=0`). |
-| **T2I** · `black-forest-labs/FLUX.1-dev` | **non-commercial** | Higher fidelity for design exploration — flag output preview-only unless a BFL commercial license is on file. |
+| **T2I + Edit** · `black-forest-labs/FLUX.2-klein-4B` | Apache-2.0 | *Default shippable* generator — 4B, **unifies text-to-image and multi-reference editing**, end-to-end inference under a second, runs on ~13GB VRAM (RTX 3090/4070 class). **The family splits by size, not by name:** `FLUX.2-klein-9B` and `FLUX.2-dev` ship under the **FLUX non-commercial** license. Read the card per checkpoint; never infer the license from the family. |
+| **T2I** · `black-forest-labs/FLUX.1-schnell` | Apache-2.0 | The small Apache-2.0 fallback — photoreal/stylized in 1–4 steps (`guidance_scale=0`). Still valid where klein's weights are too heavy. |
+| **T2I** · `Tongyi-MAI/Z-Image-Turbo` | Apache-2.0 | The other high-volume shippable generator — few-step turbo sampling. Benchmark it against klein-4B on *your* prompts before locking one in. |
+| **T2I** · `black-forest-labs/FLUX.1-dev` · `FLUX.2-dev` | **non-commercial** | Higher fidelity for design exploration — flag output preview-only unless a BFL commercial license is on file. |
 | **T2I** · `Qwen/Qwen-Image` | Apache-2.0 | *Best legible in-image text* (wordmarks/labels) — reach here over SD3.5 for lettering. |
 | **T2I** · `stabilityai/stable-diffusion-3.5-large` | Community (<$1M rev) | Strong prompt-adherence; clean fit for indie/agency. |
 | **T2I** · `stabilityai/stable-diffusion-xl-base-1.0` | OpenRAIL++ | The **ecosystem anchor** — the base ControlNet/IP-Adapter/LoRA attach to. |
 | **Layout-lock** · `xinsir/controlnet-union-sdxl-1.0` | Apache-2.0 | One net for canny/depth/pose/lineart/scribble/seg — feed a map from your grid/wireframe so gen lands on token positions (on-composition, not slop). |
 | **Style transfer** · `h94/IP-Adapter` | Apache-2.0 | Transfer a brand reference/style onto generation (SD1.5 + SDXL). |
-| **Edit** · `black-forest-labs/FLUX.1-Kontext-dev` | **non-commercial** | Instruction editing of an approved comp (add/remove/restyle, keep composition) — preview-only. |
+| **Edit** · `Qwen/Qwen-Image-Edit-2511` | Apache-2.0 | *Default shippable* editor — instruction editing that holds composition (add/remove/restyle), multi-image composition (person+product, person+scene), ControlNet conditioning from depth/keypoint/edge maps, and text edits that preserve font, color and material. The Edit stage no longer has to be preview-only. (`Qwen-Image-Edit-2509` is the prior release, also Apache-2.0.) |
+| **Edit** · `black-forest-labs/FLUX.1-Kontext-dev` | **non-commercial** | Instruction editing with a different look — exploration only; a shippable comp goes through the Apache-2.0 editor above. |
 | **Cutout** · `ZhengPeng7/BiRefNet` | MIT | *Shippable* background removal / matting — clean alpha over token backgrounds. |
 | **Cutout** · `briaai/RMBG-2.0` | **non-commercial** | Excellent product edges — preview/internal only. |
 | **Upscale** · `ai-forever/Real-ESRGAN` | BSD-3 (upstream) | Fast, faithful 2×/4× to retina without inventing detail. |

@@ -50,7 +50,7 @@ Compute-heavy science branches on hardware. Probe CPU / GPU / RAM / disk *first*
 
 ## 5. The reproducibility gotchas — the bugs an LLM makes confidently
 
-Bake the domain failure-points into every pipeline as a checklist, because these are the mistakes made *fluently*: RNA-seq wants **raw counts, not TPM/FPKM** into DESeq2, **≥3 replicates**, correct **strandedness**, no **batch/condition confounding**, and **consistent gene IDs** across differential-expression and enrichment; species is **case-sensitive** (`PAX7` ≠ `Pax7`). **Pin tool versions** (database schemas drift upstream), keep API keys in **env, never in scripts or shell history**, and isolate dependencies. Provenance over plausibility.
+Bake the domain failure-points into every pipeline as a checklist, because these are the mistakes made *fluently*: RNA-seq wants **raw counts, not TPM/FPKM** into DESeq2, **≥3 replicates**, correct **strandedness**, no **batch/condition confounding**, and **consistent gene IDs** across differential-expression and enrichment; species is **case-sensitive** (`PAX7` ≠ `Pax7`). Single-cell condition comparisons must be **pseudobulked** — the replicate is the sample, never the cell; a per-cell test across conditions is pseudoreplication that inflates the FDR. **Pin tool versions and the reference annotation** (schemas and genome builds drift upstream, and a convenience genome key can silently pin a decade-old GTF), keep API keys in **env, never in scripts or shell history**, and isolate dependencies. Provenance over plausibility.
 
 ## Boundaries
 
@@ -60,7 +60,7 @@ One concern per skill — keep scientia to the genuinely scientific core and rou
 
 - The hypothesis-generation loop with scoring criteria, the unified database-lookup contract and the cross-identifier maps, the pipeline-as-router pattern, the resource-detection prerequisite, and the per-domain reproducibility checklist → `references/science-playbook.md`.
 - Structural-biology prediction (AlphaFold / -Multimer with honest pLDDT/PAE confidence), resource-gated GPU/MD/FEM simulation and protocol-as-code wet-lab automation (PyLabRobot), and auditable literature grounding (Zotero, Jupyter-AI) as additional pipeline-as-router stages → `references/structural-bio-and-simulation.md`.
-- The verified tool + HuggingFace-model stack — bio/chem/omics toolkits and protein/genomics/chemistry models, with the non-commercial trap flagged (AlphaFold3, ESM3/ESM-C, Nucleotide Transformer) vs the commercial-clean picks (ESM-2, Boltz-2, Chai-1, Evo 2) → `references/science-toolkit.md`.
+- The verified tool + HuggingFace-model stack — bio/chem/omics toolkits and protein/genomics/chemistry models, with the non-commercial trap flagged (AlphaFold3, AlphaGenome's weights and free API, Nucleotide Transformer) vs the commercial-clean picks (ESMC / ESMFold2 — the whole ESM line is MIT since the Biohub release — Boltz-2, Chai-1, OpenFold3, Evo 2). A license flag is a *dated* fact that moves in both directions, and code, weights and hosted API can carry three different terms: re-read all three before one clears a commercial deliverable → `references/science-toolkit.md`.
 
 **Live tier (optional).** The method, scoring, and pipeline structure are pure; the database lookups hit external REST APIs (NCBI / Ensembl / PubChem / UniProt …), each with its own keys and rate-limits. fabius bundles none — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
 

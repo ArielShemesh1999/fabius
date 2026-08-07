@@ -59,10 +59,10 @@ The rule (same as fabius's own benchmark posture): **lead with the sourced numbe
 
 A backtest is the easiest lie in finance because the data is right there to be tortured. Treat a green equity curve as guilty until proven innocent:
 
-- **Lookahead / data-snooping bias** — never let the test see a value it couldn't have known at decision time (restated fundamentals, the close to trade the close, a survivorship-filtered universe).
+- **Lookahead has two channels — the data's and the model's.** Data-side: never let the test see a value it couldn't have known at decision time (restated fundamentals, the close to trade the close, a survivorship-filtered universe). **Parametric** side, invisible in the code: an LLM anywhere in the loop — picking the signal, reading the filing, scoring the sentiment — has already read how the window ended, so any backtest period inside its training corpus is **in-sample by construction**. Suppressing a model's memory of specific entity-date pairs has erased up to two-thirds of the apparent in-sample edge while leaving out-of-sample performance intact. Hold out a post-cutoff period, or re-run the identical workflow on dates the model demonstrably doesn't know, before you report a number.
 - **Survivorship bias** — test on the universe *as it was* (delisted/bankrupt names included), or you're studying only the winners.
 - **In-sample vs out-of-sample** — tune on one period, validate on a held-out period the strategy never saw; better, walk it forward. An in-sample Sharpe is a hypothesis, not a result.
-- **Multiple-testing / p-hacking** — try 200 parameter sets and one will look brilliant by chance; penalize for the search (the same multiple-comparisons discipline `fabius-scientia` enforces with FDR).
+- **Multiple-testing / p-hacking** — try 200 parameter sets and one will look brilliant by chance; penalize for the search (the same multiple-comparisons discipline `fabius-scientia` enforces with FDR). Then audit the *pipeline*, not just the strategy: a specification search will manufacture significant walk-forward results out of unpredictable data, so re-run the whole workflow on synthetic zero-predictability series — if it still finds an edge there, it is falsified.
 - **Costs and capacity** — net of realistic transaction costs, slippage, and the AUM the strategy can actually hold. A signal that dies after fees is no signal.
 
 > A backtest predicts the past. Out-of-sample, cost-aware, search-penalized — or it's marketing.

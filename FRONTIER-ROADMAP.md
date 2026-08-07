@@ -95,4 +95,4 @@ Where it only reaches **parity** (no hand-waving): CodeAct, web tools, MCP, sub-
 - **Provider/model drift** — the `PROVIDERS` tier ids move fast; needs a maintenance cadence.
 
 ---
-*Sources: first-party Manus context-engineering writeup + E2B Firecracker notes; OpenAI Operator/CUA/Agents-SDK/Responses docs; Nous Hermes 3/4 + Hermes Agent runtime; the agent-research canon (ReAct, Toolformer, ToT, Reflexion, MemGPT, DSPy, Voyager, CodeAct) + 2025-26 surveys; the UC-Berkeley/RDI Apr-2026 benchmark-integrity finding. Grounded in `synapse/worker/src/index.js` line refs. Private strategy doc — not in the public-facing set.*
+*Sources: first-party Manus context-engineering writeup + E2B Firecracker notes; OpenAI Operator/CUA/Agents-SDK/Responses docs; Nous Hermes 3/4 + Hermes Agent runtime; the agent-research canon (ReAct, Toolformer, ToT, Reflexion, MemGPT, DSPy, Voyager, CodeAct) + 2025-26 surveys; the UC-Berkeley/RDI Apr-2026 benchmark-integrity finding. Grounded in `synapse/worker/src/index.js` line refs. Internal working note — proprietary (see LICENSE), not part of the README-indexed doc set and not covered by the content seal.*

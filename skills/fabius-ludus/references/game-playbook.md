@@ -84,6 +84,8 @@ palette:        ONE fixed set, no drift across the game
                 (this project's brand example: green palette + red mascot — one identity)
 scale:          integer only (2× / 3× / 4×), never fractional (fractional shimmers)
 grid:           snap positions to whole device-pixels (sub-pixel motion blurs the crispness)
+                — but only while a sprite is axis-aligned and unscaled; snapping one that
+                  rotates or scales swaps blur for vertex wobble, so let it render smooth
 unit:           one base tile/sprite size = the rhythm of the whole layout
 text direction: RTL/Hebrew keeps left-arrow = back/next — DON'T flip it
 ```

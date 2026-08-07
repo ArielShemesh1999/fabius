@@ -27,7 +27,7 @@ The strongest evidence of ownership is a timestamp no one can backdate. A thief 
 At seal time, `provenance/sealed-commit.txt` records the full git commit hash and tree hash of the sealed release. A commit hash is the SHA over the root of a Merkle (hash) tree covering every tracked file, *plus* the commit metadata and parent links — so that one 40-character hash commits every file **and** the full ancestor history; change a single byte anywhere and the hash changes. (Git's object hash is SHA-1 by default: collision-weakened but still second-preimage-secure, and the OpenTimestamps anchor over the file uses SHA-256 — so backdating requires breaking the timestamp, not just git.) `provenance/sealed-commit.txt.ots` is the **OpenTimestamps** proof that anchors the SHA-256 of that file into the **Bitcoin blockchain**.
 
 - **What it proves.** That the sealed commit — and therefore every file it contains — existed no later than the timestamp's Bitcoin block. This is checkable by anyone, forever, with no trusted third party: the proof is math against the public chain.
-- **What it does NOT prove.** Existence-by-a-date is not, by itself, authorship — it proves the *data* was there, not that *you* are the only one who had it. Its power is in combination (§2, §4): priority date **+** your signature **+** GitHub's retained push history (private but producible, §4) makes "I had it first, signed, third-party-recorded" provable from three independent directions.
+- **What it does NOT prove.** Existence-by-a-date is not, by itself, authorship — it proves the *data* was there, not that *you* are the only one who had it. Its power is in combination (§2, §4): priority date **+** your signature **+** GitHub's retained push history (public and independently checkable, §4) makes "I had it first, signed, third-party-recorded" provable from three independent directions.
 - **Honest caveat.** A fresh OpenTimestamps proof is initially attested by calendar servers and *upgrades* to full Bitcoin confirmation within a few hours to a day. Run `ots upgrade provenance/sealed-commit.txt.ots` to pull the Bitcoin attestation once it is mined; `verify.sh` reports which state it is in.
 
 ---
@@ -65,7 +65,7 @@ The fingerprint above is a *discovery* aid; it is not derived from the content. 
 ## 4 · Two records you already hold for free
 
 - **No license granted (legal hook).** fabius is private and **proprietary — all rights reserved** (`LICENSE`; `NOTICE` restates it for visibility). No permission to use, copy, or redistribute is granted to anyone, so a verbatim or substantial copy is copyright infringement from the first copy — there is no license condition to satisfy or forfeit, and no license defense to raise. You still must show they copied substantial protected expression; the proprietary status removes any permission argument, it is not a standalone win.
-- **GitHub's retained history (third-party record).** Every commit and push to this GitHub repo is timestamped and retained by a neutral third party (the repo is private, so this record is not public, but it is preserved and producible). Your commit timeline is corroborating evidence of priority, independent of §1.
+- **GitHub's retained history (third-party record).** Every commit and push to this GitHub repo is timestamped and retained by a neutral third party (the repo is public, so this record is already openly visible and independently checkable by anyone, not merely producible on request). Your commit timeline is corroborating evidence of priority, independent of §1.
 
 ---
 
@@ -77,7 +77,7 @@ The fingerprint above is a *discovery* aid; it is not derived from the content. 
 | **Lazy human** | fork, swap the README, claim it | fingerprint + signed tag + your earlier OTS date (§1–3) |
 | **Determined plagiarist** | strip markers, reword, re-commit | OTS priority date + GitHub history (§1, §4) give priority + authorship evidence that *supports* a substantial-similarity claim — but priority alone does not prove their copy is a derivative; that needs a similarity analysis a court performs, and the fingerprint cannot help once they reword |
 | **"I can just copy it"** | redistribute, drop your name | fabius grants **no** license — any verbatim/substantial copy is infringement from the first byte (§4); idea-level reimplementations are out of reach |
-| **Anyone** | obtain & re-clone the repo | the repo is **private** — access control is the first barrier that *prevents* casual cloning; the seal (§1–4) is the insurance if a copy escapes |
+| **Anyone** | obtain & re-clone the repo | nothing prevents it — the repo is **public** and clonable by a stranger with no credentials (the honesty stance, up front); the seal (§1–4) plus the absence of any license grant (§4) is the *whole* defense, not a backstop |
 
 What this package **cannot** stop: a determined actor who rewrites fabius from scratch using only the *ideas*. Ideas are not protected by any of this — only the expression, the date, and the authorship are. That gap is real and is the price of publishing.
 

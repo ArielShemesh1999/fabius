@@ -65,12 +65,17 @@ ok("router present: fabius", skills.some((s) => s.name === "fabius"));
 ok("always-on core present: fabius-parcus", skills.some((s) => s.name === "fabius-parcus"));
 ok("frontmatter: every contract declares name + description", skills.every((s) => s.name && s.hasDesc));
 
-// every description, flattened to a single line, fits the discovery budget
+// every description, flattened to a single line, fits the discovery budget.
+// Measured in BYTES, not JS string length: these contracts are read by several harnesses and a
+// budget enforced downstream is a byte budget, while `—` and `·` cost 3 and 2 bytes each. Counting
+// code units passes a description that a byte-counting reader truncates or rejects — decor's sat
+// at 1013 "chars" and 1028 bytes. Bytes is the conservative unit, so bytes is the gate.
 const DESC_BUDGET = 1024;
-const descOver = skills.filter((s) => s.descFlat.length > DESC_BUDGET);
-const maxDesc = Math.max(...skills.map((s) => s.descFlat.length));
-ok(`frontmatter: every flattened description ≤ ${DESC_BUDGET} chars`, descOver.length === 0,
-   `max ${maxDesc} chars (${skills.find((s) => s.descFlat.length === maxDesc).name}); ${descOver.length} over`);
+const descLen = (s) => Buffer.byteLength(s.descFlat, "utf8");
+const descOver = skills.filter((s) => descLen(s) > DESC_BUDGET);
+const maxDesc = Math.max(...skills.map(descLen));
+ok(`frontmatter: every flattened description ≤ ${DESC_BUDGET} bytes`, descOver.length === 0,
+   `max ${maxDesc} bytes (${skills.find((s) => descLen(s) === maxDesc).name}); ${descOver.length} over`);
 
 // every top-level frontmatter key is canonical. Repo policy is snake_case `when_to_use` —
 // Claude Code documents it and grok-build reads it as its documented fallback alias; the
@@ -91,11 +96,11 @@ ok("frontmatter: keys canonical (name · description · when_to_use · license �
 
 // description + optional when_to_use share one combined discovery budget, both flattened
 const COMBINED_BUDGET = 1536;
-const combLen = (s) => s.descFlat.length + flattenKey(s.fm, "when_to_use").length;
+const combLen = (s) => Buffer.byteLength(s.descFlat + flattenKey(s.fm, "when_to_use"), "utf8");
 const combOver = skills.filter((s) => combLen(s) > COMBINED_BUDGET);
 const maxComb = Math.max(...skills.map(combLen));
-ok(`frontmatter: description + when_to_use ≤ ${COMBINED_BUDGET} chars flattened`, combOver.length === 0,
-   `max ${maxComb} chars (${skills.find((s) => combLen(s) === maxComb).name}); ${combOver.length} over`);
+ok(`frontmatter: description + when_to_use ≤ ${COMBINED_BUDGET} bytes flattened`, combOver.length === 0,
+   `max ${maxComb} bytes (${skills.find((s) => combLen(s) === maxComb).name}); ${combOver.length} over`);
 
 // license, when a contract declares one, must match the plugin manifest's license
 const pluginLicense = JSON.parse(readFileSync(join(ROOT, ".claude-plugin", "plugin.json"), "utf8")).license;
@@ -166,7 +171,7 @@ const onDisk = skills.map((s) => s.name).sort();
 ok("manifest: plugin.json skill list == skills on disk",
    JSON.stringify(declared) === JSON.stringify(onDisk),
    declared.length === onDisk.length ? `${declared.length} skills, sets equal` : `declared ${declared.length} vs disk ${onDisk.length}`);
-ok("manifest: version is 2.2.0", plugin.version === "2.2.0", plugin.version);
+ok("manifest: version is 2.3.0", plugin.version === "2.3.0", plugin.version);
 
 // ---- 6. content-bound seal: file hashes + Merkle root recompute & match ----------
 const manifest = JSON.parse(readFileSync(join(ROOT, "provenance", "seal-manifest.json"), "utf8"));

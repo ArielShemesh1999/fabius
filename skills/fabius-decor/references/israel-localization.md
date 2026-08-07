@@ -8,13 +8,14 @@ Loaded on demand by `fabius-decor` (pairs with **Fabius Bidi**). For software bu
 
 In Israel, web accessibility is not a nicety — it is a **statutory duty already in force** (deadline for existing sites was **26 Oct 2017**; new sites must be born accessible).
 
-- **The standard:** ת"י 5568 — the Standards Institution of Israel's adoption of W3C **WCAG**. Part 1 = web content; **Part 2 (2023) = digital documents** (PDF/office). The **legal floor is WCAG 2.0 Level AA**; 2.1/2.2 are best practice and increasingly expected in government tenders. **Target WCAG 2.1 AA and you exceed the Israeli minimum.**
+- **The standard:** ת"י 5568 — the Standards Institution of Israel's adoption of W3C **WCAG**. Part 1 = web content; **Part 2 (2023) = digital documents** (PDF/office). **Read the chain, never a vendor page.** תקנה 35 binds a service provider to ת"י 5568 at level **AA**; the current Part 1 is the edition of **28 Sept 2023** (notice published ברשומות 22 Oct 2023, superseding the May 2021 edition, **zero amendment sheets since**); and that edition's own conformance notice declares it **identical to WCAG 2.0 of 11 December 2008**, bar the national changes and additions, digital documents excluded. So the **legal floor is WCAG 2.0 Level AA**, and only a new edition of 5568 raises it — a newer W3C Recommendation does not. Much of the Israeli accessibility trade writes "5568 = WCAG 2.1"; the standard's front matter says 2.0. Quote the front matter.
+- **Write 2.2 AA into the spec anyway.** **WCAG 2.2** is the current W3C Recommendation (first published Oct 2023; current revision **12 Dec 2024**) and was approved as an ISO standard — **ISO/IEC 40500:2025** — on 21 Oct 2025. Content conforming to 2.2 conforms to 2.0 and 2.1 by construction, so one target clears the Israeli floor instead of three, and it is what tenders and audits increasingly ask about: target size, focus not obscured, dragging alternatives, accessible authentication. *(EN 301 549 — the EU yardstick an Israeli exporter is also measured against — is still harmonised at V3.2.1 / WCAG 2.1; a V4 citing 2.2 is expected, so 2.2 covers both without a second pass.)* Reading an old audit template: WCAG 2.2 **removed 4.1.1 Parsing** — don't carry it forward as a finding. The criteria themselves → **`references/platform-baseline.md`**.
 - **The governing law:** חוק שוויון זכויות לאנשים עם מוגבלות (1998) + תקנות … (התאמות נגישות לשירות), 2013.
 - **Accessibility statement (הצהרת נגישות) — mandatory.** Post the accommodations made + the coordinator's contact. A **missing/non-compliant statement is grounds for immediate suit with no prior-notice cure period** (unlike ordinary defects, which get a demand + ~60 days). Don't ship an Israeli site without one.
 - **Accessibility coordinator (רכז נגישות):** required for any public-service provider with **25+ employees**.
 - **Enforcement:** נציבות שוויון זכויות; civil damages **up to ₪50,000 per violation without proof of harm**, plus administrative sanctions.
 - **Exemptions (turnover-based):** עוסק פטור → exempt; turnover **< ₪120k/yr** → 3-yr exemption; **₪120k–1M** → 3-yr exemption for *existing* sites only; **> ₪1M** → no automatic exemption (petition on undue-burden grounds). *(thresholds are config-driven.)*
-- **Delta from plain WCAG for Hebrew:** `dir="rtl" lang="he"` on the root; the statement page + an accessibility menu/widget are a de-facto market expectation; validate contrast/labels on **actual Hebrew glyphs** and test with a Hebrew screen reader (NVDA/JAWS Hebrew, VoiceOver `he-IL`); mixed Hebrew+Latin+digits must satisfy WCAG 1.3.2 *meaningful sequence* — the bidi-isolation rule in **Fabius Bidi**.
+- **Delta from plain WCAG for Hebrew:** `dir="rtl" lang="he"` on the root; the statement page + an accessibility menu/widget are a de-facto market expectation — its launcher pins with physical CSS at a very high `z-index` and will **not** flip with your `dir`, so clear its corner per the clearance carve-out in **Fabius Bidi**; validate contrast/labels on **actual Hebrew glyphs** and test with a Hebrew screen reader (NVDA/JAWS Hebrew, VoiceOver `he-IL`); mixed Hebrew+Latin+digits must satisfy WCAG 1.3.2 *meaningful sequence* — the bidi-isolation rule in **Fabius Bidi**.
 
 ## Anti-spam — Chok HaSpam (תיקון 40, §30א)
 
@@ -87,7 +88,7 @@ Low-level PDF/doc engines place glyphs in **logical (memory) order**, do **no bi
 - **`python-bidi`** — reorders a logical Hebrew string to correct visual order before drawing. **Hebrew needs bidi reordering but NOT reshaping** — `arabic_reshaper` is an Arabic-only cursive-joining step; applying it to Hebrew is a common mistake.
 - **ReportLab** — 4.4.0+ (2025) added native HarfBuzz shaping + RTL (`rlbidi`, experimental); on older versions pre-process through `python-bidi`.
 - **python-docx** — set `w:bidi` on the paragraph and `w:rtl` on the run (write the XML; there's no first-class API) + a Hebrew font.
-- **WeasyPrint / HTML→PDF** — `direction: rtl; unicode-bidi: plaintext` + `lang="he"`; it honors CSS bidi when the markup is right.
+- **WeasyPrint / HTML→PDF** — `direction: rtl` + `lang="he"` on the root; it honors CSS bidi when the markup is right. Do **not** add `unicode-bidi: plaintext` here — it re-resolves each *line's* base direction from that line's first strong character and so defeats the explicit RTL paragraph direction the next bullet requires: any Latin-first heading, table cell or SKU line flush-**lefts** in the output. Reserve it for a block of genuinely per-line-unknown user text (→ **Fabius Bidi**).
 - **Universal:** embed a font that actually **contains Hebrew glyphs** (verify cmap coverage — missing-glyph fallback yields tofu) and set an **explicit RTL paragraph direction**.
 
 ## gov.il design (IGDS)
@@ -96,8 +97,10 @@ Israel's **National Digital Agency (מערך הדיגיטל הלאומי)** ship
 
 ## The Israeli ship checklist
 
-- [ ] `dir="rtl" lang="he"` on the root; WCAG **2.1 AA** validated on **Hebrew glyphs** + a Hebrew screen reader.
+- [ ] `dir="rtl" lang="he"` on the root; WCAG **2.2 AA** validated on **Hebrew glyphs** + a Hebrew screen reader (תקנה 35 → ת"י 5568 → WCAG **2.0** AA is the legal floor; 2.2 is the spec target).
+- [ ] **Both** contrast floors measured on rendered Hebrew — 4.5:1 text, **3:1 non-text** (focus ring, input border, chart series, meaningful hairline). Hebrew has no ascenders or descenders and a different stroke rhythm, so a pair that passed on Latin is not proof.
 - [ ] **Accessibility statement** page present; **רכז נגישות** appointed if ≥ 25 employees.
+- [ ] The accessibility widget's launcher is cleared with **physical** padding (it does not flip with `dir`), and every interactive control is **hit-tested** with `document.elementsFromPoint(cx, cy)[0]` — no send button, no CTA, sits under it.
 - [ ] Any marketing message: prior **opt-in**, labeled **"פרסומת"**, sender identified, free **הסרה** on the same channel.
 - [ ] Personal-data handling: registration/notification if triggered, **DPO** where required, breach-notification ready (Amendment 13 posture).
 - [ ] **ת"ז**, phone, postal, ח"פ validated; **VAT rate + עוסק-פטור ceiling are config**, not literals.

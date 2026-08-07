@@ -2,7 +2,7 @@
 
 The verbal episodic memory of routing. A Reflexion-style lesson log: when a route fails in a way the [routing policy](routing-policy.md) didn't prevent, write the lesson here so the next attempt is conditioned on it — **no fine-tuning, the learning lives in this file.**
 
-This file is **empty by design** and grows from *real incidents only* — never from anticipation (`fabius-parcus`: a rule that no failure has demanded yet does not exist). A repeated lesson here is the signal that a routing rule (R1–R13 / M1–M9) needs to change; promote it.
+This file holds two kinds of entry, kept apart on purpose. **`FAB-*` — measured incidents:** a route that actually failed under fabius, named with the run that measured it; these are the only entries the never-from-anticipation rule admits (`fabius-parcus`: a rule that no failure has demanded yet does not exist). **`LIT-W*` — frontier warnings:** failure modes the literature measured on *other* agents that fabius has not hit yet — admitted only with a citation and a named rule. A warning may attach to an existing rule as a labelled frontier note (LIT-W7 tightens R12 that way; the memory-hygiene warning attaches to M7), but it never becomes a standalone core rule until a real `FAB-*` incident pays for it — the core stays measured-on-fabius, the notes stay marked as borrowed. A repeated `FAB-*` lesson is the signal that a routing rule needs to change; promote it.
 
 ## How an entry is written
 
@@ -16,6 +16,8 @@ On a verifiable failed route, append one entry. Keep it to four lines — what w
 - **Cause:** <the inferred root cause>
 - **Change:** <the single different action next time> → (if it recurs) promote to routing-policy.md as rule R<n>/M<n>
 ```
+
+A `LIT-W*` warning is shorter, because there is no run to cite — two lines: *what could happen*, with the paper and its **direct**/**analogy** label, and the *changed action*, naming the rule it bought. No `Signal` line: a warning that invents one is claiming a `FAB-*` it hasn't earned.
 
 ## The loop (R8 · M4)
 

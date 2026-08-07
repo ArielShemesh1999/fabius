@@ -68,7 +68,7 @@ Company/tech logos are not your icon family and not governed only by a file lice
 - **gilbarbara/logos** (`CC0` drawings, via Iconify `logos:`) — full-color dev/tech logos through the same Iconify pipeline as your icons.
 - **Devicon** (`MIT`) — language/framework/tool logos with plain(monochrome) *and* colored variants — pick plain for token-clean UI, colored for a stack wall.
 - **Font Awesome Brands** (icons `CC BY 4.0`) — ~490 social/brand glyphs with a *font* path Simple Icons lacks; attribution required.
-- **theSVG** (`MIT` code; AWS subset `CC BY-ND`) — brands + AWS/Azure/GCP architecture icons. Keep the no-derivatives AWS paths unmodified.
+- **theSVG** (`thesvg.org` · `github.com/glincker/thesvg`) — code `MIT`; ~4,600 brand marks **plus the AWS Architecture pack (739 icons) redistributed unmodified under `CC BY-ND 2.0`**. The live index is the **`.org`** — `thesvg.com` is a parked for-sale listing now, so never cite it. The license split bites per *file*, not per repo: a no-derivatives icon may not be recolored, re-stroked or bound to `currentColor` at all, so it structurally cannot obey law 3 — keep the AWS set on the brand wall exactly as shipped and never let it into a tokenized UI-icon row.
 
 ## Emoji & flags
 

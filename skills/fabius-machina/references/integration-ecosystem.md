@@ -41,7 +41,7 @@ When data can't cross the network boundary, a self-hostable engine with network 
 
 An automation platform exposed over MCP lets an agent operate the workflow tooling — discover nodes, build, validate, trigger.
 
-**n8n-MCP** (the worked example's own bridge) and its peers are this layer. The hard rule at this seam:
+**n8n-MCP** (the worked example's community bridge) and its peers are this layer — and check the platform's own shipped bridge before installing a third-party one; n8n now has a first-party instance-level MCP server in every edition (→ `automation-playbook.md`). The hard rule at this seam:
 
 - **The seam stays machina.** The wiring the agent builds is still deterministic glue — five gates, silent-failure catalog, idempotency. The MCP bridge changes *who calls the tools*, not what the wiring is.
 - **The agent node stays cohors.** When a *node inside the workflow* is itself an LLM agent (generative output, tool loop), that node is `fabius-cohors`' concern. Own each at its layer; don't collapse them.

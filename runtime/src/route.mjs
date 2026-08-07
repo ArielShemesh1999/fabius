@@ -15,14 +15,16 @@ const SIG = {
   memory: ['remember', 'recall', 'history', 'decided', 'past', 'precedent', 'knowledge', 'wiki', 'note', 'log'],
   tools: ['fetch', 'search', 'api', 'query', 'compute', 'calculate', 'scrape', 'lookup', 'database', 'integrate', 'deploy', 'read the file', 'run the', 'install'],
   planning: ['plan', 'steps', 'roadmap', 'orchestrate', 'pipeline', 'workflow', 'phase', 'milestone', 'sequence', 'then', 'first', 'multi'],
-  strong: ['architecture', 'architect', 'security', 'threat', 'vuln', 'crypto', 'auth', 'design system', 'migration', 'irreversible', 'delete', 'production', 'strategy', 'ambiguous', 'trade-off', 'tradeoff', 'why', 'should we', 'decide', 'choose between', 'risk', 'legal', 'payment', 'money'],
+  strong: ['architecture', 'architect', 'security', 'threat', 'vuln', 'crypto', 'auth', 'oauth', 'design system', 'migration', 'irreversible', 'delete', 'production', 'strategy', 'ambiguous', 'trade-off', 'tradeoff', 'why', 'should we', 'decide', 'choose between', 'risk', 'legal', 'payment', 'money'],
   fast: ['rename', 'format', 'reformat', 'list', 'extract', 'classify', 'translate', 'summarize', 'tag', 'lookup', 'convert', 'lint'],
 };
 
-// The DOMAIN axis — which specialist the task's WHAT pulls. One owner per capability,
-// so these keyword sets are deliberately disjoint.
+// The DOMAIN axis — which specialist the task's WHAT pulls. One owner per capability, so
+// these keyword sets are deliberately disjoint — enforced by the matcher below, not by
+// hoping: word boundaries keep a key from firing inside a longer WORD, and longest-match-wins
+// keeps it from firing inside a longer PHRASE another layer owns.
 const DOMAIN = {
-  'fabius-decor': ['ui', 'design', 'landing page', 'component', 'css', 'brand', 'layout', 'chart', 'graph', 'diagram', 'visuali', 'dashboard', 'figure', 'data-ink', 'svg'],
+  'fabius-decor': ['ui', 'design', 'landing page', 'hero', 'component', 'css', 'brand', 'layout', 'chart', 'graph', 'diagram', 'visuali', 'dashboard', 'figure', 'data-ink', 'svg'],
   'fabius-cohors': ['agent', 'subagent', 'swarm', 'orchestrat', 'multi-agent'],
   'fabius-archivum': ['knowledge base', 'wiki', 'memory'],
   'fabius-mercatus': ['copy', 'positioning', 'launch', 'campaign', 'funnel', 'market', 'headline', 'go-to-market', 'seo', 'ad ', 'ads', 'landing copy'],
@@ -39,11 +41,40 @@ const DOMAIN = {
 // Domains whose stakes — money, irreversibility, security — warrant the strong tier.
 const DOMAIN_STRONG = ['fabius-catena', 'fabius-praesidium', 'fabius-fortuna'];
 
+// A keyword is anchored on its LEFT word boundary and left open on the right, so stems keep
+// earning their keep — 'quantiz' still catches quantized, 'visuali' visualisation — while
+// 'train' stops firing inside "constraint" and "restraint", and 'ad ' inside "read the file".
+// Keys that start with punctuation take no anchor. Compiled once per keyword, because route()
+// runs on every step of every loop.
+const RX = new Map();
+function kwRx(w) {
+  let rx = RX.get(w);
+  if (!rx) { rx = new RegExp((/^[a-z0-9]/.test(w) ? '\\b' : '') + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); RX.set(w, rx); }
+  return rx;
+}
+
 function countHits(text, words) {
   const t = String(text || '').toLowerCase();
   const matched = [];
-  for (const w of words) if (t.includes(w)) matched.push(w);
+  for (const w of words) if (kwRx(w).test(t)) matched.push(w);
   return { n: matched.length, matched };
+}
+
+// Every place a keyword lands, not just whether it landed. Containment has to be judged on
+// SPANS: "improve the design; also fix the level design" contains 'design' standing on its own
+// AND inside ludus's 'level design', and a string-only comparison drops decor for a phrase that
+// matched somewhere else entirely.
+function hitSpans(text, words) {
+  const t = String(text || '').toLowerCase();
+  const out = [];
+  for (const w of words) {
+    const rx = new RegExp(kwRx(w).source, 'g');
+    for (let m = rx.exec(t); m; m = rx.exec(t)) {
+      out.push({ w, start: m.index, end: m.index + m[0].length });
+      if (m.index === rx.lastIndex) rx.lastIndex++;   // zero-width guard
+    }
+  }
+  return out;
 }
 
 export function route(task, opts = {}) {
@@ -54,7 +85,20 @@ export function route(task, opts = {}) {
   const longText = words > 60;
   const axes = { memory: mem.n > 0, tools: tool.n > 0, planning: plan.n > 0 || longText };
 
-  const domains = Object.keys(DOMAIN).filter((layer) => countHits(text, DOMAIN[layer]).n > 0);
+  // Longest-match-wins, judged POSITIONALLY. A word boundary cannot stop a key firing inside a
+  // longer phrase another layer owns — 'market' sits inside fortuna's 'the market', 'design'
+  // inside ludus's 'level design'. But a hit is only swallowed when a longer hit covers THAT
+  // OCCURRENCE: a layer that also fires somewhere else keeps its own evidence and stays. Drop
+  // a layer only when every one of its occurrences sits inside a longer one (R13).
+  const spans = {};
+  for (const layer of Object.keys(DOMAIN)) {
+    const s = hitSpans(text, DOMAIN[layer]);
+    if (s.length) spans[layer] = s;
+  }
+  const allSpans = Object.values(spans).flat();
+  const swallowed = (h) => allSpans.some((o) =>
+    (o.end - o.start) > (h.end - h.start) && o.start <= h.start && o.end >= h.end);
+  const domains = Object.keys(spans).filter((layer) => spans[layer].some((h) => !swallowed(h)));
   axes.domain = domains.length > 0;
 
   const layers = ['fabius-parcus'];
@@ -75,7 +119,19 @@ export function route(task, opts = {}) {
   const rungIndex = LADDER.indexOf(rung);
 
   const strong = countHits(text, SIG.strong), fast = countHits(text, SIG.fast);
-  const ambiguous = (words < 6 && /\?/.test(text)) || /\b(should|which|whether|or)\b/i.test(text);
+  // Ambiguity, not conjunctions. A bare `or` is one of the commonest words in English, and it
+  // was buying the frontier tier for "rename the button label to Save or Cancel" — an
+  // alternation is only a fork when it sits inside a question or under a modal.
+  // `should` and `which` had to keep earning the tier, though: dropping them bare took
+  // "should the API be versioned" and "which caching layer do we pick" down with the noise, so
+  // they return as MODAL phrasings rather than as bare words. `either way` is not here: it
+  // states indifference, which is the opposite of a fork worth paying for.
+  const modal = /\bshould\s+(we|i|you|the|it|they|this)\b/i.test(text)
+    || /\bwhich\b[^.?!]{0,40}\b(should|do we|to use|pick|choose|prefer)\b/i.test(text);
+  const ambiguous = (words < 6 && /\?/.test(text))
+    || /\b(whether|unclear|unsure|not sure|which one)\b/i.test(text)
+    || modal
+    || (/\bor\b/i.test(text) && (/\?/.test(text) || modal));
   const domainStrong = domains.some((d) => DOMAIN_STRONG.includes(d));
 
   let tier = 'mid', tierWhy;

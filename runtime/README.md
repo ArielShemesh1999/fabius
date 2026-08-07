@@ -95,11 +95,18 @@ Two boundaries hold regardless of posture:
   boundary you can rely on is the allowlist above, and the fact that `exec` is not offered
   at all without `--act`.
 
-`fetch` and `recon` reach the public internet only: loopback, RFC1918, link-local (including
-cloud instance metadata at `169.254.169.254`), CGNAT and multicast are refused, hostnames are
-resolved and checked before the request, and every redirect hop is re-checked. One residual,
-stated rather than hidden: the name is resolved for the check and again for the connection,
-so a hostile name on a very short TTL can answer differently the second time.
+The `fetch` and `recon` **tools** — what the agent can reach on its own — reach the public
+internet only: loopback, RFC1918, link-local (including cloud instance metadata at
+`169.254.169.254`), CGNAT and multicast are refused, hostnames are resolved and checked
+before the request, and every redirect hop is re-checked. One residual, stated rather than
+hidden: the name is resolved for the check and again for the connection, so a hostile name on
+a very short TTL can answer differently the second time.
+
+`fabius recon <domain>` typed at the prompt is operator authority, not agent authority, and
+the gate is narrower there. Its HTTP surface holds to the same rule — the entry request,
+every redirect hop, and the plain-HTTP probe all refuse a private address — but the TLS
+handshake and the `--ports` scan connect to whatever host you name, private or not. Point
+them only at hosts you are authorised to test — that is what the `--ports` warning is for.
 
 Every decision, allowed or denied, lands in the run's journal under `~/.fabius/runs/`.
 

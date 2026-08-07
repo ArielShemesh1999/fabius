@@ -8,7 +8,7 @@ description: >
   an Obsidian vault so the next session starts ahead, or whenever the agent is about
   to redo research it (or a past session) already did. Directory schema and page conventions live in
   references/memory-schema.md; the knowledge engine itself — a vector engine, the wiki pattern, and a
-  working RAG pipeline — lives in references/knowledge/. Cross-session auto-recall (capture → compress →
+  RAG pipeline — lives in references/knowledge/. Cross-session auto-recall (capture → compress →
   re-inject without being asked) and source-grounded external-corpus connectors live in
   references/external-recall.md.
 when_to_use: >
@@ -64,7 +64,7 @@ Then the pattern is **hybrid**: narrow symbolically by id or metadata first (pro
 ingest (write) → index (catalog/embed) → query (read, cite, file back) → lint (maintain) → ↺
 ```
 
-The agent does all the bookkeeping — summarize, cross-reference, file, consistency-check. The human only curates sources and asks questions. Concrete directory schema, page frontmatter, and the index/log line formats live in `references/memory-schema.md`. When the corpus outgrows grep, the working engine — vector store, the wiki-pattern layout, and a runnable RAG indexer/query pipeline — is in `references/knowledge/`. The best-in-class retrieval stack — vector stores, RAG frameworks, and HF embedding/reranker models (Hebrew/multilingual, license-honest) → `references/retrieval-stack.md`.
+The agent does all the bookkeeping — summarize, cross-reference, file, consistency-check. The human only curates sources and asks questions. Concrete directory schema, page frontmatter, and the index/log line formats live in `references/memory-schema.md`. When the corpus outgrows grep, the engine — vector store, wiki layout, RAG pipeline — is in `references/knowledge/`, **as design, not dependency**: the naming pass rewrote its package and import names, so its pins do not resolve. Take the shape; wire a store from `references/retrieval-stack.md`. The best-in-class retrieval stack — vector stores, RAG frameworks, and HF embedding/reranker models (Hebrew/multilingual, license-honest) → `references/retrieval-stack.md`.
 
 ## Cross-session memory — autonomous, per project
 
@@ -93,7 +93,7 @@ Reading the index on start (above) is recall you *choose*. The stronger habit is
 - **Compress** — turn the raw capture into a small, *typed and titled* record (a title + a type + a compact body), not a transcript dump. Typed-and-titled is what makes later filtering and progressive disclosure cheap.
 - **Re-inject** — at the **start** of the next session, surface a compact index of the recent records (titles grouped by type, last-N sessions) into context *before* acting. That single step is what turns memory from opt-in to automatic.
 
-Retrieve under **progressive disclosure**: inject the small index (titles/ids) by default; pull a record's full body only on demand. This is `fabius-parcus`'s progressive-disclosure rule applied to memory — the same reason a SKILL.md is lean and its `references/` page in on demand. (In Claude Code this maps onto lifecycle hooks — capture on tool-use, re-inject on session-start — but the *pattern* is what matters; don't build a daemon before the corpus demands one. Wiring in `references/external-recall.md`.)
+Retrieve under **progressive disclosure**: inject the small index (titles/ids) by default; pull a record's full body only on demand. This is `fabius-parcus`'s progressive-disclosure rule applied to memory — the same reason a SKILL.md is lean and its `references/` page in on demand. (Check the harness first — Claude Code keeps a per-repo **auto memory** on by default, its index loaded every session and its topic files on demand; adopt that rather than wiring a parallel store beside it. Hand-wire the hook loop where a harness ships nothing — the *pattern* is what ports. `references/external-recall.md`.)
 
 ## Ground in an external corpus — ask, don't guess
 
@@ -113,6 +113,6 @@ The memory rules from the routing policy (MemGPT, Voyager, the memory surveys; f
 - **Promote verified solutions to skills (M6).** After a self-contained sub-problem is solved *and verified*, file it as a named reusable skill page; query archivum and compose existing skills before planning from scratch; supersede, don't duplicate. Failures leave an anti-pattern note. *(Voyager)*
 - **Tie-break by recency + load-bearingness (M8).** When index entries tie on relevance, surface the freshest decision-bearing pages first; fold a grown batch of log lines up into a synthesis page. *(Generative Agents, analogy)*
 
-**Live tier (optional).** The markdown index + log + grep needs nothing; auto-recall uses Claude Code lifecycle hooks, and an external-corpus connector is provider-agnostic (NotebookLM / `notebooklm-mcp` / a vector store) — you configure it. fabius bundles the *pattern*, not the service — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
+**Live tier (optional).** The markdown index + log + grep needs nothing; auto-recall rides the harness's own memory where it has one and lifecycle hooks where it doesn't; where memory must be a *tool*, the Messages API ships a GA one (`memory_20250818`) whose handler you own — and must path-validate. An external-corpus connector is provider-agnostic (NotebookLM / `notebooklm-mcp` / a vector store) — you configure it. fabius bundles the *pattern*, not the service — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
 
 Pairs with: `fabius-disciplina` (resolved facts and post-mortems get filed here), `fabius-cohors` (grounding and cross-session memory for agents), `fabius-parcus` (don't build the heavy retrieval engine before the corpus demands it).

@@ -104,6 +104,8 @@ Scope **narrow** (changed lines only) but read **wide** (explore the surrounding
 - **Gate external-PR review on maintainer approval** — a human decides the diff is safe to feed the model before it runs.
 - This is a defensive review tool reading attacker-supplied text; treat its input with the same suspicion the playbook demands everywhere else.
 
+**And note what those two lines actually are: leg-deletion, not vigilance.** Gating on trusted diffs cuts *exposure to untrusted content*; a reviewer with no write tool and no outbound call has cut the other two legs. That is the whole design — **this pass is safe because of what it cannot reach, never because the model was told to ignore instructions in the diff.** So the moment someone extends it — auto-commenting on the PR, auto-approving, reading a private repo it can quote back out — a leg comes back and the triage has to be re-run before the feature ships, not after. The triage, the two-legs-vs-three distinction, and the six structural patterns are in `references/hardening-guides.md` §9. Under the OWASP AI enumerations this is LLM01 / ASI01 territory — `references/security-playbook.md` §2 says which pass a given surface needs.
+
 ## It is a prompt + a filter, not a product
 
 Ship it as a **customizable review command**, not a frozen binary. Make tunable, per project:
