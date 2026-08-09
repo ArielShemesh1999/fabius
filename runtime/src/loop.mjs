@@ -238,7 +238,7 @@ async function verify({ task, output, r, cfg, usage, budget, act, jail, emit, ll
       // and the irreversible list, counted against the same command budget, and written
       // into the run's audit trail. It used to spawn a shell with none of that.
       if (budget.execRuns >= budget.maxExecRuns) return { ...verdict, execVerified: null, oracleSkipped: 'command budget exhausted for this run' };
-      const g = await gate.check('exec', `run the delivered ${blk.lang} artifact:\n${String(blk.code).slice(0, 2000)}`, { oracle: true });
+      const g = await gate.check('exec', `run the delivered ${blk.lang} artifact:\n${String(blk.code)}`, { oracle: true });
       if (!g.approved) {
         emit('oracle', { lang: blk.lang, skipped: g.why });
         return { ...verdict, execVerified: null, oracleSkipped: g.why };

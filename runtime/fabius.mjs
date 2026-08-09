@@ -13,6 +13,7 @@
 // and the URLs a task explicitly asks for.
 
 import { createInterface } from 'node:readline/promises';
+import { readFileSync } from 'node:fs';
 import { run } from './src/loop.mjs';
 import { route } from './src/route.mjs';
 import { recon, formatReport, CHECKS } from './src/recon.mjs';
@@ -34,9 +35,12 @@ function parseArgs(argv) {
     if (a.startsWith('--')) {
       const [k, inline] = a.slice(2).split('=');
       const next = argv[i + 1];
-      if (inline !== undefined) flags[k] = inline;
-      else if (next && !next.startsWith('--')) { flags[k] = next; i++; }
-      else flags[k] = true;
+      let v;
+      if (inline !== undefined) v = inline;
+      else if (next && !next.startsWith('--')) { v = next; i++; }
+      else v = true;
+      // repeatable flags (--relay, --owner) accumulate; consumers already [].concat()
+      flags[k] = k in flags ? [].concat(flags[k], v) : v;
     } else positional.push(a);
   }
   return { flags, positional };
@@ -256,7 +260,7 @@ function cmdMemory(positional, flags) {
     const title = rest.join(' ');
     if (!title) die('  fabius memory add "<title>"  (body on stdin)');
     let body = '';
-    try { body = require('node:fs').readFileSync(0, 'utf8'); } catch { /* no stdin */ }
+    try { body = readFileSync(0, 'utf8'); } catch { /* no stdin */ }
     if (!body.trim()) die('  pipe the body in:  echo "the fact" | fabius memory add "title"');
     const w = writeMemory({ title, body, kind: flags.kind || 'note', score: 100 });
     return say(`  wrote ${w.path}`);

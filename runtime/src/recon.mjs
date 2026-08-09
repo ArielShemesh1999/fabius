@@ -637,8 +637,9 @@ export function formatReport(r, { color = true } = {}) {
   L.push('');
   L.push(c('bold', `  ${r.target}`) + c('dim', `   scanned ${r.scannedAt}`));
   if (r.platform) L.push(c('dim', `  hosted on ${r.platform} — DNS, DNSSEC and mail records belong to that zone, so those findings are shown as context only`));
-  L.push(`  grade ${c(r.grade.letter === 'A' ? 'info' : r.grade.letter === 'F' ? 'critical' : 'medium', r.grade.letter)}  (${r.grade.score}/100) · ` +
-    SEVERITY.filter((s) => r.counts[s]).map((s) => `${r.counts[s]} ${s}`).join(' · ') || '  no findings');
+  const sevs = SEVERITY.filter((s) => r.counts[s]).map((s) => `${r.counts[s]} ${s}`).join(' · ');
+  L.push(`  grade ${c(r.grade.letter === 'A' ? 'info' : r.grade.letter === 'F' ? 'critical' : 'medium', r.grade.letter)}  (${r.grade.score}/100)` +
+    (sevs ? ` · ${sevs}` : c('dim', ' · no findings')));
   L.push('');
   if (!r.findings.length) L.push(c('dim', '  nothing to fix — every check passed.'));
   for (const f of r.findings) {

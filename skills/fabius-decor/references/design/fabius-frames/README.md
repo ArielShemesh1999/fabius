@@ -250,7 +250,7 @@ Full documentation: [fabius-frames.heygen.com/introduction](https://fabius-frame
 
 ## Community
 
-Fabius-Frames is used in production at [HeyGen](https://www.heygen.com), with community examples from teams like [tldraw](https://tldraw.com), [TanStack](https://tanstack.com), and others in [ADOPTERS.md](ADOPTERS.md). Open a PR if your team is using Fabius-Frames.
+The upstream project, HyperFrames, is used in production at [HeyGen](https://www.heygen.com), with community examples from teams like [tldraw](https://tldraw.com), [TanStack](https://tanstack.com), and others in [ADOPTERS.md](ADOPTERS.md) — those adoption claims belong to HyperFrames, not to this renamed fabius copy (see NOTICE).
 
 - Questions and ideas: [Discord](https://discord.gg/EbK98HBPdk)
 - Bugs and feature requests: [GitHub Issues](https://github.com/ArielShemesh1999/fabiusissues)

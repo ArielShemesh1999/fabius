@@ -25,8 +25,19 @@ if [ "$before" != "$after" ]; then
   # sign if a signing key is configured locally; fall back to unsigned
   git commit -S -q -m "Provenance: upgrade OTS proof to confirmed Bitcoin attestation" 2>/dev/null \
     || git commit -q -m "Provenance: upgrade OTS proof to confirmed Bitcoin attestation"
-  git push origin HEAD 2>&1 | tail -2
-  echo "done."
+  # Publishing is irreversible — never automatic. Opt in with --push, and a failed
+  # push must never masquerade as success: the public proof stays stale until it lands.
+  if [ "${1:-}" = "--push" ]; then
+    if git push origin HEAD; then
+      echo "pushed — the public repo now carries the confirmed attestation."
+    else
+      echo "COMMIT CREATED BUT NOT PUSHED — the public repo still serves the pending proof."
+      echo "Push manually: git push origin HEAD"
+      exit 1
+    fi
+  else
+    echo "committed — review and publish with: git push origin HEAD   (or re-run with --push)"
+  fi
 else
   echo "no change yet — the anchoring Bitcoin block is not mined. Re-run later."
 fi

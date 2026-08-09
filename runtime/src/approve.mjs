@@ -22,6 +22,7 @@ import { realpathSync, existsSync, lstatSync } from 'node:fs';
 import { resolve, relative, isAbsolute, sep } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { homedir } from 'node:os';
+import { CONFIG_PATH } from './config.mjs';
 
 export const CAPS = ['read', 'net', 'write', 'exec'];
 
@@ -33,6 +34,9 @@ const SECRET_PATTERNS = [
   /(^|\/)id_(rsa|ed25519|ecdsa)(\.pub)?$/, /(^|\/)\.git-credentials$/,
   /(^|\/)credentials(\.json)?$/, /\.(pem|key|p12|pfx|keystore)$/,
   /(^|\/)\.fabius\/config\.json$/, /Library\/Keychains(\/|$)/,
+  // The RESOLVED config path — FABIUS_HOME can move the key file out from under the
+  // literal .fabius/config.json pattern above, so the actual location is always denied.
+  new RegExp(CONFIG_PATH.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'),
 ];
 
 // Commands whose effect cannot be walked back by re-running the agent. These are held
@@ -193,7 +197,13 @@ export function classify({ posture = 'ask', cap, target, jail, dangerous = false
   if (cap === 'exec') {
     const why = isIrreversible(target);
     if (why) {
-      if (dangerous) return { decision: 'allow', reason: `irreversible (${why}) — released by --dangerously-approve-everything` };
+      // Unprompted release needs autonomous mode too: under the default ask posture a
+      // human is approving each action, so the flag only downgrades the hold to the
+      // same prompt everything else gets — never below it.
+      if (dangerous) {
+        if (posture === 'auto') return { decision: 'allow', reason: `irreversible (${why}) — released by --dangerously-approve-everything` };
+        return { decision: 'ask', reason: `irreversible (${why}) — --dangerously-approve-everything lowers the hold to this prompt, not past it` };
+      }
       return { decision: 'ask', reason: `irreversible: ${why}` };
     }
     // The verification oracle runs a whole program the model wrote. No allowlist can
@@ -239,7 +249,13 @@ export async function requestApproval({ cap, target, reason, autoNo = false }) {
   try {
     const head = cap === 'exec' ? 'run this command' : `write ${target}`;
     process.stdout.write(`\n  \x1b[33m⚠ fabius wants to ${head}\x1b[0m\n`);
-    if (cap === 'exec') process.stdout.write(`    \x1b[2m$\x1b[0m ${String(target).slice(0, 600)}\n`);
+    if (cap === 'exec') {
+      const t = String(target);
+      // A multi-line target is a delivered artifact: print it IN FULL — a human
+      // approves only what they can read. Single-line commands keep a sane cap.
+      if (t.includes('\n')) process.stdout.write(t.split('\n').map(l => `    \x1b[2m|\x1b[0m ${l}`).join('\n') + '\n');
+      else process.stdout.write(`    \x1b[2m$\x1b[0m ${t.slice(0, 600)}\n`);
+    }
     process.stdout.write(`    \x1b[2m${reason}\x1b[0m\n`);
     const a = (await rl.question('    approve? [y/N/a=approve all this run] ')).trim().toLowerCase();
     if (a === 'a' || a === 'all') return { approved: true, why: 'approved (all, this run)', all: true };

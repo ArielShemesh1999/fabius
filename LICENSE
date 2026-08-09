@@ -9,7 +9,15 @@ work of Ariel Shemesh.
 No license or permission is granted to any person to use, copy, modify, merge,
 publish, distribute, sublicense, or sell any part of the Software, in whole or
 in substantial part, without the prior written permission of the copyright
-holder. Possessing or accessing a copy conveys no such rights.
+holder, except as stated in the next paragraph. Possessing or accessing a copy
+conveys no further rights.
+
+One narrow permission is granted: personal, non-commercial installation and use
+of fabius as an agent plugin, obtained via the published marketplace command,
+on machines the user controls. This permission does not extend to
+redistribution, modification, derivative works, commercial use, or offering the
+Software (or any service built on it) to third parties, and it may be revoked
+by the copyright holder at any time.
 
 The Software is provenance-sealed; its authorship and integrity are
 independently verifiable (see PROVENANCE.md). Because no license is granted, any

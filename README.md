@@ -149,7 +149,7 @@ Fan out to understand and verify. Ship the smallest correct artifact. Explain it
 
 ## Grounded in agent research
 
-fabius's decisions aren't hand-waving. Its routing policy is drawn from the agent-research canon — ReAct, Toolformer, Tree of Thoughts, RAP, Reflexion, MemGPT, DSPy, Voyager, and the 2026 efficiency and memory surveys — turned into a documented decision policy (a proven core of ten routing + eight orchestration/memory rules, plus operational extensions for model-tier dispatch, long-horizon loops, verticals, and corpus externalization), stated with an explicit ledger separating what the papers *measured* from what fabius *borrows by analogy*. Two principles, illustrated:
+fabius's decisions aren't hand-waving. Its routing policy is drawn from the agent-research canon — ReAct, Toolformer, Tree of Thoughts, RAP, Reflexion, MemGPT, DSPy, Voyager, and the 2026 efficiency and memory surveys — turned into a documented decision policy (a proven core of twenty-two rules — thirteen routing R1–R13 + nine orchestration/memory M1–M9 — plus a researched frontier layer R14–R16 · M10–M13), stated with an explicit ledger separating what the papers *measured* from what fabius *borrows by analogy*. Two principles, illustrated:
 
 <div align="center">
 <img src="assets/fig-capability-ladder.svg" alt="Capability vs machinery: fabius stops at the knee instead of climbing to a swarm" width="49%" />
@@ -190,8 +190,10 @@ The sealed brain in this repo doubles as the owner's own Claude Code plugin (zer
 
 ```bash
 /plugin marketplace add ArielShemesh1999/fabius
-/plugin install fabius
+/plugin install fabius@fabius
 ```
+
+Then run `/reload-plugins` (or restart Claude Code) to activate. The marketplace clone is ~60 MiB and the installed plugin caches ~95 MB — fabius ships its whitepaper, benchmark receipts and runtime alongside the skills.
 
 Or drop any single `skills/<name>/` folder into a project's `.claude/skills/`. The router loads the stance and routes to the rest; the specialists also self-surface by description:
 
@@ -223,7 +225,7 @@ The agent's operating stance is plain markdown, so it travels. The portable brid
 
 | Tool | Carry the stance in via |
 |---|---|
-| Claude Code | the plugin — `/plugin install fabius` (all fifteen layers, progressive disclosure) |
+| Claude Code | the plugin — `/plugin install fabius@fabius` (all fifteen layers, progressive disclosure) |
 | grok-build (xAI) | native — discovers the Claude Code plugin (`.claude/plugins` + `skills/`) and reads `AGENTS.md` automatically; no file conversion — enable the plugin once (`grok plugin install <path> --trust`, then enable) |
 | Codex / OpenAI | the full plugin via Codex's git plugin marketplace (`[marketplaces]` in `~/.codex/config.toml`) — all fifteen skills + [`AGENTS.md`](AGENTS.md) |
 | OpenCode | `AGENTS.md` at the repo root, or copy `skills/` into `.opencode/` |
@@ -259,7 +261,7 @@ fabius/
 │   ├── fabius-doctrina/    AI/ML engineering    · references: serving · MLOps · evaluation playbook
 │   ├── fabius-fortuna/     markets & finance    · references: analysis · valuation · honest backtesting · risk
 │   └── fabius-concilium/   cross-model council  · references: council protocol · council.mjs (runnable)
-├── runtime/                the local body — zero-dependency Node CLI: run · chat · recon · listen · doctor (71 tests, no key)
+├── runtime/                the local body — zero-dependency Node CLI: run · chat · recon · listen · doctor (75 tests, no key)
 ├── evals/                  the benchmark — four panels + receipts (results.benchmark.json canonical) · suite/ (FBS v1.0, 100 tasks) · structural.mjs (23/23) · portable_eval.py
 ├── provenance/             content-bound seal — verify.sh · seal manifest · OTS Bitcoin proof · signed tag
 ├── IDENTITY.md             what fabius is + the evaluation contract (BASE → FAB → FAB_MEMORY)

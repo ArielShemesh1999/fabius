@@ -9,7 +9,7 @@ every answer and prints the per-model gain. Stdlib only — no pip install.
 This is how you get REAL Codex / Mistral / Gemini numbers: set the keys and run it.
 
     export OPENAI_API_KEY=...        # GPT-4o / gpt-4.1 / o-series (Codex family)
-    export MISTRAL_API_KEY=...       # mistral-large-latest
+    export MISTRAL_API_KEY=...       # mistral-large-2512
     export ANTHROPIC_API_KEY=...     # claude-sonnet-4-6 etc.
     export GEMINI_API_KEY=...        # gemini-2.5-pro (Google AI Studio key)
     export XAI_API_KEY=...           # grok-4.5 (xAI)
@@ -91,7 +91,7 @@ VENDORS = {
     # flagship and re-measured rather than left to a gateway alias.
     "xai":       {"env": "XAI_API_KEY",       "model": "grok-4.5",             "call": call_xai},  # seat added 2026-07-19, repinned 2026-08-06, unmeasured — Panel C pins below are as-measured 2026-06-22
     "openai":    {"env": "OPENAI_API_KEY",    "model": "gpt-4o",               "call": call_openai},
-    "mistral":   {"env": "MISTRAL_API_KEY",   "model": "mistral-large-latest", "call": call_mistral},
+    "mistral":   {"env": "MISTRAL_API_KEY",   "model": "mistral-large-2512", "call": call_mistral},
     "anthropic": {"env": "ANTHROPIC_API_KEY", "model": "claude-sonnet-4-6",    "call": call_anthropic},
     "gemini":    {"env": "GEMINI_API_KEY",    "model": "gemini-2.5-pro",       "call": call_gemini},
 }

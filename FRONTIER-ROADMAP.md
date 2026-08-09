@@ -34,7 +34,7 @@ Grounded in `synapse/worker/src/index.js` (the executable runtime) + the 15 skil
 - **Multi-agent orchestration that executes** + a **resumable Flow DAG** (handoffs, human gates, atomic step-claim, retry, dep-cascade; `runFlowWave` ~1780).
 - **Key-vault security** (per-request `X-LLM-Key`, never persisted), rate-limit denial-of-wallet guard, token/step caps.
 - **Live org-graph console** (Synapse) on a real CF Worker + D1 + Vectorize backend.
-- **The wedge** — the Fabian stance compiled to a **proven 18-rule routing policy** (sourced to ReAct/ToT/Reflexion/MemGPT/DSPy/Voyager), **content-bound provenance seal**, 15 single-owner skills.
+- **The wedge** — the Fabian stance compiled to a **proven 22-rule routing policy** (sourced to ReAct/ToT/Reflexion/MemGPT/DSPy/Voyager; + the researched frontier layer R14–R16 · M10–M13), **content-bound provenance seal**, 15 single-owner skills.
 
 ## The gap as of 2026-06-26, pre-Phase-0 (the hands + autonomy)
 

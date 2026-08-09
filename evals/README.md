@@ -9,7 +9,7 @@ The measurement behind **the fabius benchmark** ([`../BENCHMARKS.md`](../BENCHMA
 | `harness.v7.workflow.js` | **Panel D harness — the FBS run**: the committed suite × 3 modes; the FAB mode carries the shipped files verbatim, the FAB_MEMORY mode adds the task's committed memory snapshot as recalled `fabius-archivum` memory; **two blind judges** (Opus + Fable) on the 7-dim rubric + a strict objective grader per answer over the task's `automatic_checks`. |
 | `results.v7.json` | **Panel D raw** — per-task 7-dimension scores per mode, automatic-check pass rates, per-tier and per-category aggregates, BASE→FAB→FAB_MEMORY deltas. Committed. |
 | `structural.mjs` | The benchmark's **deterministic structural suite** — no model, no key, no network. Proves the *system* is well-formed: fifteen single-owner contracts, every `SKILL.md` under budget, every flattened `description` ≤ 1024 chars, frontmatter keys canonical (`description` + `when_to_use` ≤ 1536 chars flattened; `license` / `metadata.author` coherent when declared), every reference live (markdown links **and** backtick-quoted mentions), no sealed-set drift (manifest file list == on-disk set), the content-bound seal verifiable. 23/23 must pass (the seal hash-match goes red mid-edit, green on re-seal). `node evals/structural.mjs` |
-| `harness.v5.workflow.js` | **Panel A harness** — quality, blind, the four newest Claude models: 15 tasks × 4 models × 3 arms with the shipped skill files injected **verbatim**, **two blind judges** (Opus + Fable, inter-judge gap 0.72/15). |
+| `harness.v5.workflow.js` | **Panel A harness** — quality, blind, the four Claude models current at the 2026-07-01 run: 15 tasks × 4 models × 3 arms with the shipped skill files injected **verbatim**, **two blind judges** (Opus + Fable, inter-judge gap 0.72/15). |
 | `results.v5.json` | **Panel A raw** — per-cell scores from both judges, lengths, per-model and per-domain deltas. Committed. |
 | `harness.v6.workflow.js` | **Panel B harness** — objective, no judge taste: generated code **executed against hidden test suites** + domain deliverables graded against a **factual checklist** by two strict graders. 9 deliverables × 4 models × 3 arms. |
 | `results.v6.json` | **Panel B raw** — per-task pass rates (tests + checks) per cell. Committed. |
@@ -35,7 +35,7 @@ Behavioral runs ask *does fabius act better*; this asks *is fabius built right* 
 ```bash
 export OPENAI_API_KEY=...      # GPT/Codex family
 export XAI_API_KEY=...         # grok family
-export MISTRAL_API_KEY=...     # mistral-large-latest
+export MISTRAL_API_KEY=...     # mistral-large-2512
 export ANTHROPIC_API_KEY=...   # claude models
 python3 evals/portable_eval.py            # runs every vendor whose key is set
 python3 evals/portable_eval.py --models openai mistral   # subset
@@ -48,7 +48,7 @@ Writes `results.portable.json`. No fabrication — rows appear only for vendors 
 
 - **Arms:** `baseline` (task only) · `terse` (task + generic "be concise, write minimal code") · `fabius` (task + the fabius stance). The Panel A/B harnesses (`harness.v5` / `harness.v6`) and `eval.mjs` load the shipped `AGENTS.md` (+ routed `SKILL.md`) **verbatim**; the `harness.v3` coverage harness injects a faithful condensed transcription instead. The `terse` arm is the control that separates fabius's **structure** from plain brevity — the real test.
 - **Modes (Panel D / FBS):** `BASE` (bare model) · `FAB` (shipped stance + routed contract, verbatim) · `FAB_MEMORY` (FAB + the task's committed memory snapshot injected as recalled `fabius-archivum` memory) — the three evaluation modes fixed in [`../IDENTITY.md`](../IDENTITY.md), scored on the suite's 7-dimension 0–4 rubric plus objective per-task automatic checks.
-- **Models:** the four newest Claude models — Fable 5 (`claude-fable-5`), `claude-opus-4-8`, `claude-sonnet-5`, `claude-haiku-4-5` — each actually run via per-agent model override (Panel A/B). Panel C carries the same arms cross-family (GPT / Grok / Mistral / Gemini) through `portable_eval.py`.
+- **Models:** the four Claude models current at the 2026-07-01 run — Fable 5 (`claude-fable-5`), `claude-opus-4-8`, `claude-sonnet-5`, `claude-haiku-4-5` — each actually run via per-agent model override (Panel A/B). (Date the roster; never claim it is the newest — Opus 5 shipped 2026-07-24, after these runs.) Panel C carries the same arms cross-family (GPT / Grok / Mistral / Gemini) through `portable_eval.py`.
 - **Judge:** Panel A uses **two** blind judges (Opus + Fable, averaged; inter-judge gap 0.72/15); the single-judge supporting harnesses used `claude-opus-4-8`, **blind** (never told which arm wrote which answer), scoring correctness / minimality / best-practice, 0–5 each. Panel B removes the judge entirely — executed tests + factual checklists.
 - **Objective metric:** average output length (chars) — bias-free.
 

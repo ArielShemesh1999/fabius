@@ -103,6 +103,9 @@ export function redact(text, cfg = loadConfig()) {
   for (const extra of [process.env.TAVILY_API_KEY, process.env.SYNAPSE_TOKEN, process.env.NOSTR_NSEC]) {
     if (typeof extra === 'string' && extra.length >= 12) secrets.add(extra.trim());
   }
+  // The DM-channel identity is stored as RAW HEX, which no vendor-prefix pattern
+  // below will ever match — it must be in the literal set.
+  if (typeof cfg?.nostr?.sk === 'string' && cfg.nostr.sk.length >= 12) secrets.add(cfg.nostr.sk.trim());
   for (const s of secrets) t = t.split(s).join('••••redacted••••');
   // Catch key-shaped strings we were never told about (a stray sk-… in a file the
   // agent read). Deliberately narrow: known vendor prefixes only, so ordinary text

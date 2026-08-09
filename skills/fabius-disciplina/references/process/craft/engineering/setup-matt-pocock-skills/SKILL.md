@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 # Setup the Craft Set's Skills
 
+> The craft set is Matt Pocock's `skills` repo (MIT), carried in fabius under its own naming — the upstream `LICENSE` sits at `references/process/craft/LICENSE`, and the attribution lives in `credits/README.md`.
+
 Scaffold the per-repo configuration that the engineering skills assume:
 
 - **Issue tracker** — where issues live (GitHub by default; local markdown is also supported out of the box)

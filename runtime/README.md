@@ -10,7 +10,7 @@ node runtime/fabius.mjs run "read this repo and write the README it is missing"
 ```
 
 No install step, no dependency tree, no build. Node 22 or newer and the repo you are
-already holding. `npm test` runs **71 checks and spends nothing** — 64 of them offline, and
+already holding. `npm test` runs **75 checks and spends nothing** — 68 of them offline, and
 the 7 specification-vector tests skip until `npm run vectors` fetches the vectors once.
 They skip loudly rather than passing quietly, because a crypto test that silently does
 nothing is worse than no test.
@@ -70,8 +70,9 @@ code (`node -e`) cannot be inspected honestly, because the shell re-reads it aft
 has looked, so it is never auto-approved. Everything else — `rm -rf` however it is spelled,
 `git push`, `vercel --prod`, `sudo`, `DROP TABLE`, `curl … | sh` — stops and waits for a
 human, and a non-interactive run refuses it rather than guessing. Releasing the irreversible
-list needs `--dangerously-approve-everything`, and taking that step is written into the run's
-audit log. The delivered artifact that the execution oracle runs goes through the same gate,
+list unprompted needs `--dangerously-approve-everything` **on top of** `--yes` — under the
+default ask posture the flag only lowers the hold to the same prompt everything else gets —
+and taking that step is written into the run's audit log. The delivered artifact that the execution oracle runs goes through the same gate,
 printed in full, counted against the same command budget — and because no allowlist can
 vouch for a whole program the way it can vouch for `npm test`, `--yes` does **not** release
 it: the oracle asks even in autonomous mode, and an unattended run skips the execution check
@@ -222,8 +223,8 @@ so rather than pretending a 7B model is one.
 ## Testing
 
 ```bash
-npm test                        # 71 checks — 64 run offline, 7 skip without the vectors
-npm run vectors && npm test     # fetch the BIP-340 and NIP-44 vectors once → 71/71
+npm test                        # 75 checks — 68 run offline, 7 skip without the vectors
+npm run vectors && npm test     # fetch the BIP-340 and NIP-44 vectors once → 75/75
 ```
 
 The vectors are never vendored: they belong to their upstream projects, and a stale copy
