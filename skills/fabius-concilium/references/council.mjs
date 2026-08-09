@@ -16,7 +16,7 @@
 // Usage:
 //   node council.mjs --selftest                     # wiring + Borda check — no key, no network, no cost
 //   export OPENROUTER_API_KEY=sk-or-...
-//   export COUNCIL_MODELS=anthropic/claude-sonnet-5,openai/gpt-5.1,google/gemini-3.1-pro-preview,mistralai/mistral-large
+//   export COUNCIL_MODELS=anthropic/claude-sonnet-5,openai/gpt-5.6-terra,google/gemini-3.1-pro-preview,mistralai/mistral-large
 //   export COUNCIL_CHAIRMAN=anthropic/claude-opus-5
 //   node council.mjs "Should a 3-person startup use a monolith or microservices?"
 //   node council.mjs --json "..."   > run.json
