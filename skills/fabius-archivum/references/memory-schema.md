@@ -102,6 +102,12 @@ Small project → collapse `wiki/` into a flat folder beside `MEMORY.md`. Don't 
 3. **Session end** — refresh `Goal now` + `Open threads` so the next session opens mid-stride.
 4. **Periodic lint** — fold contradictions, drop stale claims, link orphans (the `LINT` operation above).
 
+### Three session-memory hygiene rules
+
+- **Dump before compaction.** When a large tool output — a fetched page, an API response, a research result — will be needed later, write it to a memory file *immediately*: compaction/truncation destroys unpersisted tool results mid-session. This is the store-side twin of the pre-compaction lifeboat in [`external-recall.md`](external-recall.md).
+- **Bookkeeping files are internal.** The auto-index, description sidecars — hide them from the agent's ls/grep surface, so scaffolding is never confused for content.
+- **Cap the auto-maintained index** at a fixed entry count (~50); regenerate it and inject it every turn, so the model always knows *what memories exist* without reading them. Past the cap, consolidate rather than append.
+
 ### Obsidian onboarding steps (offer once, never block)
 
 The vault is just the project's memory folder — no migration, no export:

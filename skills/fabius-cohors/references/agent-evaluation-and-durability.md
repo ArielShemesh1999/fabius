@@ -28,6 +28,21 @@ A loop that exceeds one context window is a different machine. **A long autonomo
 
 **Or attach an engine instead of hand-rolling the scaffolding.** Durable execution is a tier you bolt onto an agent now. The engine journals each completed step and replays the journal on restart, so a resumed run *replays* the tool calls it already made instead of re-issuing them — the rule above, enforced by the runtime rather than by the operator's memory. **Temporal, DBOS and Prefect attach directly to a Pydantic-AI agent** (Restate integrates through its own SDK); **DBOS wraps an OpenAI-Agents runner** with `@DBOS.workflow` / `@DBOS.step` and needs only Postgres — SQLite in development — so there is no new infrastructure to stand up; **LangGraph** has the property natively through checkpointers plus an explicit durability setting. Reach for the engine when the run is long, asynchronous, or human-gated. Keep the hand-built checkpoint only when adding a database is genuinely the heavier cost.
 
+**Checkpoint granularity, and what a restart must know.** For a chat agent, persist history after **every model call**, not once per user turn — a crash mid-tool-loop then resumes from the last model call instead of losing the whole turn (the repair-the-partial-batch law in `references/agent-patterns.md` still governs the orphaned tool calls). Around that checkpoint, three restart rules:
+
+- **A fourth task status: LOST.** Background/spawned tasks need more than running/completed/failed — when the in-process reference was orphaned (a restart, typically), the task is **LOST**, with its own agent-facing message ("cannot be continued; start a new task"), never a false *running* or a false *failed*.
+- **Two orthogonal recovery flags, strict precedence.** Hard wipe (user stop / escalation — always a fresh session id) beats soft resume (preserve id + transcript, cleared only after the NEXT successful turn completes, so a re-crash retries) beats policy expiry beats normal return.
+- **A restart counter detects crash-resume loops.** A session still active across 3+ consecutive process restarts is auto-suspended — the user gets a clean slate instead of an infinite crash-resume cycle.
+
+### The typed failure taxonomy — and the retry policy it drives
+
+Running agents in bulk over a provider, raw harness/provider failures must be classified into a **closed set of typed codes** covering at least these classes — failed auth, model capacity, provider throttling, a per-key rate limit vs an exhausted account quota vs a child-agent ceiling, denied access, network faults, upstream 5xx, bad config, an invalid request, a safety block, invalid output — and **the CODE, never the raw text, decides retry vs terminal**. Two parsing traps and two policy rules:
+
+- **Match HTTP statuses with a guard pattern** — a bare number inside an error body is not a status, and matching it as one misclassifies the failure.
+- **Retry-After arrives in four dialects** — milliseconds, seconds, header dates, and "try again at *date*" phrasing — parse all four, clamped to per-code maxima. With no hint: exponential backoff base·2^(attempt−1), capped, with 0.8–1.2 jitter.
+- **Account-quota exhaustion gets a long fixed resume delay with persistent re-probing** — quota windows often replenish before the advertised deadline; do not trust the provider's clock.
+- **Injection hygiene.** The operator-facing message is a FIXED safe string per code, never echoed provider text — an upstream error body is untrusted input that would otherwise flow into human eyes or a log (`fabius-praesidium`).
+
 For the swarm's own durability — shared task list as source of truth, coordinator reassigning stalled work — see SKILL.md and `references/agent-patterns.md`.
 
 ## 3. Acquire tools via MCP
@@ -66,6 +81,8 @@ Agents get capabilities through **MCP servers** — the standard for tool acquis
 
 - **Default deny** — no host filesystem, no host network, no host credentials reach the sandbox.
 - **Ecosystem to copy from**: smolagents — a ~1000-line code-agent that runs generated code in a sandbox by default. Adopt the *posture* (sandbox is the default execution path), not just the library.
+
+**CodeAct: the sandbox's tool registry is owned, never inferred.** When the model writes code that calls tools from *inside* the sandbox, the set of reachable tools is an **explicit registry owned by the code-execution provider** — never inferred from the agent's direct tool surface. Inference is fragile and silently widens the sandbox. Exposure is decided purely by placement: a sandbox-only tool is registered on the provider only; a direct-only tool on the agent only; a tool meant for both is registered in both — and re-registering a name replaces it. Keep the sandbox's capabilities as **portable config, not backend wiring**: file mounts and an outbound domain allowlist live as CRUD-managed registry entries, so execution backends stay swappable behind the same contract.
 
 → Prompt-injection screening *before* execution is the safety-guard shape in `references/agent-patterns.md`; sandboxing is the containment *after* it.
 

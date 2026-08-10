@@ -330,7 +330,49 @@ Three tiers, in order:
 Deterministic service-to-service wiring — the "when X happens, do Y" plumbing — is
 `fabius-machina`. This layer owns the agent that decides; that layer owns the pipe.
 
-## 12. The checklist
+## 12. Pulling the final answer out of a noisy CLI stream
+
+A harnessed coding CLI driven as a worker mixes everything into stdout: reasoning, tool
+chatter, intermediate JSON that looks exactly like the answer. The disambiguator is a
+**reserved sentinel field** — a schema const the FINAL object must carry, re-injected into
+the schema if the caller's version lacks it. Mid-reasoning JSON does not carry it; the
+answer does.
+
+Collect candidates three ways — the raw stripped text, every fenced JSON block, and a
+balanced-brace scanner that respects strings and escapes — then prefer the candidate
+carrying the sentinel, then any structurally-plausible one, and unwrap the known wrapper
+shapes the harness adds around results.
+
+When the final answer arrives corrupted, do not re-run the expensive task. **Resume the
+same session** with a terse instruction to skip any further analysis and re-emit only the
+final JSON object, restating the schema and the validity rules. The resume path itself
+layers fallbacks before giving up: the declared output file, then JSONL stdout, then the
+agent's on-disk session files — and only then is the run classified as invalid output
+(the typed failure class that decision feeds → `agent-evaluation-and-durability.md`).
+
+## 13. The disposable per-job container recipe
+
+When the runtime farms jobs out over untrusted code, the unit of containment is **one
+throwaway container per job**: `--rm --init`, a per-job network and mount namespace,
+`--pids-limit`, `--memory` equal to `--memory-swap` (a hard cap that includes swap) plus a
+reservation, a tmpfs `/tmp` (`nosuid,nodev`, sized), and exactly two bind-mounts — the
+repo checkout and a per-job HOME. Nothing else. (Which sandbox tier to reach for at all →
+the §4 table in `agent-evaluation-and-durability.md`; this is the Docker row, spelled out.)
+
+The isolation invariants: the job sees ONLY its checkout, its job HOME, and the single
+provider credential it needs — environment variables explicitly allow-listed, never
+inherited wholesale. The Docker socket, the database, and the project `.env` stay with the
+privileged engine outside the container. One gotcha costs an afternoon: Claude Code
+refuses bypass-permissions as root unless `IS_SANDBOX=1` — safe to set here precisely
+because the container is already the boundary.
+
+Budget concurrency by memory, not by count: effective workers =
+min(configured, (total RAM − reserve) ÷ per-runner bytes), falling back to the configured
+ceiling when memory info is unavailable. The pool cannot over-commit RAM while each runner
+keeps its own hard cap. Label the sandbox containers, and reap stale ones on startup — an
+orphaned container is §2's orphaned process wearing a namespace.
+
+## 14. The checklist
 
 Before calling a local runtime finished:
 

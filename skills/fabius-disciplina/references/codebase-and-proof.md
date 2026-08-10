@@ -2,7 +2,7 @@
 
 The on-demand depth for `fabius-disciplina`'s *scout* and *prove* steps when the unknown is a large codebase, a current-world fact, or a UI in a browser. The skill is the contract; this is how you run the loop well. These are capabilities fabius can **apply** by reaching for named ecosystem tools — fabius bundles no runtime; the optional live tier routes to ARCHITECTURE.md external connections. Tool names and versions are a point-in-time snapshot (early 2026); re-verify before you depend on one.
 
-Scout wide, strike narrow. Three of these sharpen *how you understand* before an edit; two sharpen *how you prove* after it.
+Scout wide, strike narrow. Three of these sharpen *how you understand* before an edit; the rest sharpen *how you prove* after it.
 
 ## 1. Scout the code with a graph, not a grep
 
@@ -55,7 +55,17 @@ Phase 4 is the iron law: no production code for non-trivial logic until a test f
 
 **Decision rule:** wire the gate when correctness is load-bearing and the cost of a silent regression is high. Don't gate throwaway prototypes, generated code, or pure config — the same narrow exceptions phase 4 already names, each with the human's sign-off.
 
-## 6. Prove an agent loop without a key — inject the model call
+## 6. Verify on stop — gate the turn's end, not just its start
+
+The pre-edit gate (§5) governs where an edit may *begin* — no code before red. This gates where a turn may *end*. A passive **evidence ledger** records every classified check the agent actually ran — command, kind (test / build / run), scope, exit code, output summary. It never runs checks itself, never blocks completion, and never upgrades a targeted check into "repo green": one passing test is not a passing suite, and the ledger must not pretend otherwise.
+
+The policy fires in exactly one case: the agent tries to end a turn immediately after editing code with **no fresh evidence** in the ledger. Then — and only then — append **one** synthetic nudge carrying a capped list of the changed paths, driving a single bounded verification follow-up. One nudge, one follow-up; not a loop.
+
+Design the false positives out up front. Turns touching only non-code paths — docs, changelogs, licenses — never nudge. On human chat surfaces the nudge defaults **off**: verification narration there is noise, not proof.
+
+The general law underneath: synthetic scaffolding turns exist to *drive the loop*, never to be replayed as context. Exclude them from session persistence — or a resumed session replays the nudge as genuine history and acts on scaffolding it mistook for the user.
+
+## 7. Prove an agent loop without a key — inject the model call
 
 Agent code has a testing problem the rest of the codebase does not: the interesting logic
 sits *around* a paid, non-deterministic, network-bound call. So it goes untested, and the

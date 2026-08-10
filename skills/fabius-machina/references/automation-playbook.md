@@ -132,6 +132,46 @@ Prefer **smart parameters** over fragile index math: `branch: "true"` for an IF 
 - **Secrets in env / a manager** — never in the workflow JSON (`fabius-praesidium`, `fabius-parcus`). A workflow you can't safely re-run is a liability.
 - **Isolate the code executor** — the Code node runs user-supplied code, and in n8n's default `internal` task-runner mode it runs as a child process of n8n sharing its `uid`/`gid`. That makes *edit a workflow* and *execute on the host* the same permission, which is why n8n's own docs rule internal mode out for production. Production shape: `N8N_RUNNERS_MODE=external` with the `n8nio/runners` sidecar (image version matched to the `n8nio/n8n` image) and a shared `N8N_RUNNERS_AUTH_TOKEN`; in queue mode every worker needs its own sidecar. Harden it — the `-distroless` tag, the unprivileged `nobody` user (uid/gid `65532`), a read-only root filesystem with a small writable `/tmp`, and an AppArmor profile that keeps the runner out of `/proc/*/environ`. If you can't run a sidecar, remove the capability instead — but note the var is typed as a JSON array and **replaces** the default rather than extending it, so re-list what shipped there or you re-enable Execute Command while hardening the Code node: `NODES_EXCLUDE='["n8n-nodes-base.code","n8n-nodes-base.executeCommand","n8n-nodes-base.localFileTrigger"]'`. The import allowlists are part of the boundary, not a convenience — `NODE_FUNCTION_ALLOW_BUILTIN` / `NODE_FUNCTION_ALLOW_EXTERNAL` for JS and `N8N_RUNNERS_STDLIB_ALLOW` / `N8N_RUNNERS_EXTERNAL_ALLOW` for Python, set in the launcher's `n8n-task-runners.json`, which ships locked down on purpose. Widen it one package at a time (→ `fabius-praesidium`).
 
+### Scheduled agents — the LLM-specific guardrails
+
+The moment a scheduled node *is* an agent, the node belongs to `fabius-cohors` — but the **scheduler hardening stays here**, and an agent job adds failure modes a deterministic job does not have:
+
+- **Hard per-job interrupt** — config-defaulted, ~10 minutes — so a runaway agent loop cannot monopolize the scheduler.
+- **Missed-fire catchup window** = half the job's period, clamped to roughly 2 minutes–2 hours, plus a short grace for one-shots. A fire time outside the window is rejected as stale — never fired late.
+- **File-lock the scheduler tick** so concurrent processes cannot double-tick, and record in-flight job ids *before* writing interrupted status — otherwise a run that completes during the write overwrites "interrupted" with a false "ok".
+- **Two boundaries that point into cohors territory** (stated here as boundaries, not doctrine): keep scheduled-run content out of the user model — it pollutes user representations — and out of the target chat session. Deliveries land in their **own session** with a header/footer frame so message-role alternation stays valid.
+- **Two schema extras worth copying:** a pre-run script whose stdout injects into the prompt (with a script-only mode that degrades an LLM job to a deterministic one), and chaining one job's last output into the next job's prompt.
+
+## Compile the scrape once — LLM at build time, deterministic at run time
+
+The cost rule for recurring extraction: a **one-off question** gets direct LLM extraction over the page; a **recurring or scheduled scrape** spends LLM calls *once* — compiling a verified deterministic extractor — then runs it for free. The compile pipeline:
+
+```
+fetch
+→ direct LLM extraction over the page   # this answer becomes the validation oracle
+→ map the request onto the output schema, field by field
+  (note the schema fields the request does not address)
+→ analyze a size-reduced copy of the HTML for selectors and repeated
+  structure — analysis only, no code, static-HTML target
+→ generate the extractor; verify it through the typed gates
+  (→ `fabius-cohors` verified codegen)
+→ save the script
+```
+
+Keep the LLM answer as the **regression fixture**: when the site's HTML changes and the script's output stops validating, re-invoke the compiler — a fabius-derived operating rule. Sizing the HTML copy for the analysis step is the reduction ladder below.
+
+## Fit the page to the window — the reduction ladder
+
+Grade HTML reduction by task:
+
+- **Level 0** = minify — strip comments, collapse whitespace.
+- **Level 1** = level 0 + drop every attribute except `class` / `id` / `href` / `src` / `type`, and blank the styles.
+- **Level 2** = level 1 + drop the head and truncate every text node to its first ~20 chars. Level 2 is for **selector discovery**, where content is irrelevant.
+
+**Always mine the script tags** — assignments that parse as JSON: on SPAs the data lives in embedded JSON, not the rendered DOM.
+
+For **content extraction**, convert HTML→Markdown first and chunk token-counted against the model window minus a safety margin. Derive chunk size from a per-model context registry with a fail-soft default — copy the registry *pattern*, never its numbers (they rot). Two halves of one pipeline: this ladder sizes the shards; `fabius-archivum`'s map-reduce extraction contract (`external-recall.md`) governs what each shard must return — cross-link, don't duplicate.
+
 ## Boundary — where machina stops
 
 Machina wires the **deterministic** steps. The moment a node *is* an LLM agent (generative output, tool loop), that node is `fabius-cohors`' concern — own it there. Don't re-document fabius's own router/specialist structure here; the value of this doc is the automation-domain know-how. See `../SKILL.md` for the machina/cohors line, and `../../../CORPUS.md` for where this library sits in the index.

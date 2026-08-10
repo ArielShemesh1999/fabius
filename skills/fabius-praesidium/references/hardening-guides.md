@@ -97,6 +97,17 @@ Rule: never let untrusted bytes become a *live object graph*. Parse to plain dat
 [ ] set Content-Disposition: attachment + X-Content-Type-Options: nosniff when serving back
 ```
 
+**Resource limits against archive/XML bombs (verify present):** any parser accepting an untrusted archive or XML document needs a fixed cap in *every* one of these classes — the class you skip is the bomb:
+```
+[ ] per-entry decompressed bytes AND total decompressed bytes per archive
+[ ] archive entry count
+[ ] XML nesting depth AND XML nodes per part
+[ ] repeat-expansion: BOTH the expansion positions and the duplicated bytes
+[ ] legacy record depth / count
+[ ] retained embedded assets — the OUTPUT can bomb too, not just the parse
+```
+The limits are deliberately **not configurable** — a knob is an invitation to disable the guard. Size each cap from measured worst-case cost (e.g. bytes-per-DOM-node) so real documents sit orders of magnitude below it. Amplification is why the repeat line carries **dual caps**: a tiny file can legally say "repeat this cell a billion times", so bound both the expansion positions and the duplicated text bytes. And a limit breach is a **typed, FATAL error** — any lenient/recovering parse path must re-raise it, because a forgiving parser must never swallow its own bomb detector.
+
 ---
 
 ## §4 — Input-validation cookbook (per type)
@@ -132,6 +143,7 @@ The same value is safe in one sink and an injection in another. Encode **for the
 | **SQL** | **parameterize — never encode** | bind values as parameters/placeholders; allowlist for identifiers (table/column names can't be bound) |
 | **Shell / OS command** | avoid; pass argv array, never a string | use exec-with-args APIs; never `shell=True`/string-built commands on input |
 | **Log line** | neutralize newlines/control chars | strip `\r\n` to stop log-forging; never log the secret/PII itself |
+| **Markdown** | context-sensitive escape (rules below) | untrusted text written into Markdown is an injection surface like any other sink — structure corruption, table breakage, link smuggling; don't blanket-escape |
 
 SQL parameterization (the canonical one):
 ```python
@@ -140,6 +152,14 @@ cur.execute("SELECT * FROM users WHERE email = %s", (email,))
 # Identifier (can't bind) → allowlist:
 assert col in {"created_at", "name"}; cur.execute(f"ORDER BY {col}")
 ```
+
+**Markdown (the sink most encoders forget).** Escape **context-sensitively** — only where a character can actually *parse* as syntax at that position; blanket escaping drowns the text in backslashes:
+- **Line starts** get guards for heading/list/blockquote/setext markers; mid-line, the same characters are inert.
+- **Pairable delimiters** (`*` `_` `~` backtick `]`) escape only when a later partner exists to close them; `|` only inside table cells; `&` only before a real entity; `<` only before a tag-capable character.
+- **URLs:** percent-encode `|` (a raw pipe splits GFM table cells), angle brackets, and control chars; angle-bracket destinations containing whitespace or parens.
+- **Code spans:** fence with one more backtick than the longest backtick run inside.
+- **Tables:** render merged cells as a canonical grid — covered positions blank, content on the origin cell only; always emit the delimiter row (empty header if the source has none).
+- **Source-derived list-marker/label text** is neutralized (controls → spaces, syntax escaped) so a crafted label cannot alter document structure; emit explicit anchors only for targets something actually links to.
 
 ---
 

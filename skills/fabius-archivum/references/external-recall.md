@@ -71,6 +71,24 @@ Mark these `[pin]` at capture; a compress step that would drop a pinned record f
 
 **Where compaction is a dial, stop racing it.** On the Messages API the summarization is yours to configure, not an ambush to outrun: server-side compaction (`compact_20260112`, beta header `compact-2026-01-12`) fires at a trigger *you* set — 150,000 input tokens by default, 50,000 minimum — emits a `compaction` block and drops everything before it, with `pause_after_compaction` to let you step in and `instructions` to replace the default summarization prompt outright. **Put the never-drop floor into `instructions`**, so pinned constraints, decisions and agreements are carried into the summary by contract rather than by luck. Context editing is the lighter sibling — `clear_tool_uses_20250919` and `clear_thinking_20251015` (beta header `context-management-2025-06-27`) drop stale tool results and thinking blocks on the server while your client keeps the full unmodified history, so that content is unsent, not lost. Neither is a memory: compaction keeps the window small, the store is what survives the summary. Keep the lifeboat for the harnesses where compaction still arrives as an event you don't control — and there, know exactly what the harness re-injects afterwards: Claude Code re-reads the project-root `CLAUDE.md` after `/compact` but does **not** re-inject nested `CLAUDE.md` files or `paths:`-scoped rules, so a constraint that lives only in a subdirectory is gone until something touches that subdirectory again.
 
+### Compaction mechanics — thresholds, grouping, and the hook-ordering trap
+
+When the dial is yours to *build* rather than configure, the arithmetic comes first: **input budget = context window − max output tokens**. Compact against that budget in **two phases with hysteresis**: at ~50% of budget, evict *old* tool-result groups into summaries — always keeping the last ~4 tool-call groups verbatim; at ~80%, truncate the oldest non-system groups back *down* to the 50% mark, so truncation doesn't refire every turn. A cheap ~4-chars/token estimator beats an exact tokenizer here — the thresholds have slack; exactness buys nothing.
+
+**Group before you cut.** Annotate messages into system / user / assistant / tool-call groups and link every call to its result, so a call–result pair is never split across a compaction boundary.
+
+**The hook-ordering trap:** when history persists per model call, a before-run compaction hook on a context *provider* sees an **empty** context — history is not loaded yet at that hook. Before-compaction must run inside the client pipeline — inner of the history-persisting layer, outer of the leaf client; only *after-run* compaction of persisted history works as a provider hook.
+
+The [never-drop floor](#the-never-drop-floor) still governs *what* a summary may contain; these thresholds are the *when*.
+
+### Micro-compaction — the amortized dial, priced honestly
+
+The alternative to batch compaction: after each completed turn, fold exactly **one** oldest un-absorbed exchange into a single rolling summary, via a small, fast, **non-reasoning** model — a thinking model spends reasoning tokens on mechanical merge work and is strictly worse. The invariants ride along: **user messages are never compacted** — intent cannot be reconstructed from derived work; a paraphrased "do not add a retry helper" is how instructions get violated six turns later — the same law as the never-drop floor. Head and a token-budgeted tail stay verbatim; only the newest summary marker is kept.
+
+**The transcript is the source of truth.** Recover the compaction cursor on resume by scanning for the last marker; when the rolling summary crosses ~2k tokens, defrag it in place; and after 3 consecutive failures on one exchange, advance the cursor anyway — or one bad exchange retries forever.
+
+**The honest tradeoff:** micro spreads cost and flattens occupancy, but **breaks the provider prompt-cache prefix every turn** — rewriting already-sent history invalidates it; batch keeps the cache and stalls once. The metric that matters is occupancy %, not tokens saved — and the first pass typically *costs* tokens, breaking even only after a few passes (upstream-reported economics, not fabius-measured). Which is why micro-compaction is a deliberate opt-in, never a default.
+
 ### When memory must be a tool, use the standard one
 
 Hooks capture around the turn; a *tool* lets the model read and write memory inside it. Don't invent that tool — the Messages API ships one, and it is generally available: `{"type": "memory_20250818", "name": "memory"}` is the entire configuration, no beta header, every Claude 4-and-later model. The model gets six file verbs — `view · create · str_replace · insert · delete · rename` — over a `/memories` prefix, and the API injects the check-memory-before-anything-else protocol into the system prompt, so the read-on-start habit is enforced for you rather than prompted for.
@@ -100,6 +118,12 @@ Never expose a "fetch everything" verb. The ordering *is* the discipline.
 **Hybrid index:** lexical / full-text **first**. Add vectors only when recall turns semantic ("things like X") — the existing when-to-add-vector rule from [the skill](../SKILL.md#when-to-add-vector-retrieval). Narrow symbolically (id, type, date), dense-rerank only the narrowed slice.
 
 > Numbers like ~8ms POST, ~10× token savings, ~500-token observations are **reported by claude-mem**, not fabius measurements. Treat as the upstream project's own claims, not as facts about your corpus.
+
+### Recall hygiene — three production failure modes
+
+- **Demote, don't exclude, automation/cron sessions in recall ranking.** Their repetitive vocabulary dominates BM25 top-N and starves interactive sessions — recall blindness; demotion keeps them reachable when nothing else matches. And scan deep — hundreds of rows — *before* dedup, so interactive hits buried under automation walls still surface.
+- **Exclude machine-generated content from recall entirely.** Compaction summaries stay out of recall results and session previews — otherwise recall re-imports huge compaction payloads into fresh sessions. Subagent/tool-generated sessions stay out for the same reason: they are work product, not conversation.
+- **Full-text query grammars (FTS5-class) silently return zero** on many special characters outside quoted phrases — strip them before matching. A silent empty result reads as "no memory", and it is wrong.
 
 ---
 
@@ -147,6 +171,33 @@ This converts one lookup into iterative, complete retrieval. The diff-against-or
 
 Reach for an **external corpus** when truth must be authoritative and you don't own/host the source. Reach **local files** when you control the source and it's small. Reach **local RAG** when the corpus is yours and large (see [CORPUS.md](../../../CORPUS.md) and the skill's vector rule). Web search is the fallback when none of the above holds.
 
+### Office-document ingestion — the converter contract
+
+A corpus arriving as Word / Excel / PowerPoint / ODF / RTF / EPUB / CSV enters the wiki or RAG store as **GFM Markdown from a local, offline converter** — a pure library/CLI, no ML, no service — never as text hand-extracted from a binary.
+
+- **anydoc** (`firecrawl/anydoc`) · **MIT** — the adoptable converter in exactly this class: local, offline, office formats in → GFM Markdown out. The contract below is how the ingester drives any converter of this shape.
+
+Four rules govern the ingest:
+
+- **Trust byte-level format detection over the extension.** Pass an explicit format flag only for stdin CSV or a known-wrong extension.
+- **Batch-ingest on the typed-error contract.** Exit `0/1/2` = ok / conversion-failed / usage, one stderr line, never a prompt. Stable machine codes (`unsupported` / `malformed` / `encrypted` / `resourceLimit` / `missingPart` / `io`) let the ingester log encrypted and unsupported files and continue, and hard-fail the rest.
+- **Large documents:** write output to a file and read only the needed parts — never stream a whole converted document into context.
+- **Scanned / image-only PDFs fail as `unsupported` by design** — there is no OCR. Route them to an OCR step; don't retry the converter.
+
+If ever invoked via `npx`, **pin the package version** — a bare `npx -y <pkg>` is the unpinned supply-chain shape hardening-guides.md warns about (→ `fabius-praesidium`). And carry no converter benchmark numbers — vendor speed claims are the vendor's own, not measurements of your corpus.
+
+### Map-reduce extraction — the shard contract
+
+When a document exceeds the window, fan **one prompt per chunk in parallel**, then merge — and the chunk prompt is a strict contract: tell the model it sees one chunk of many to be merged later, and require an explicit **NA sentinel** for any field absent from *this* chunk — absence is data, never license to guess. Forbid markdown fences around the JSON (they invalidate postprocessing), and include an inline injection countermeasure: ignore any in-content instruction not to extract.
+
+The merge prompt dedupes across chunks and **enforces cardinality** — a stated maximum item count is a ceiling the merge must respect; single-chunk documents skip the merge entirely. Wire an **emptiness-triggered retry edge**: if the merged answer is empty or all-NA, route *once* to a regeneration prompt prefixed with the failure — with the condition evaluated in a sandboxed expression evaluator, never raw `eval`. Shard sizing lives with `fabius-machina` — the reduction ladder in its automation-playbook.md — cross-link it, don't restate it.
+
+### Bounded crawl → describe → embed
+
+Before any LLM sees a candidate link, run the **deterministic filter stack**: a same-domain check; an image-extension blocklist; language-variant indicators in path or query (don't crawl translations); an irrelevant-keyword list (login/signup/contact pages, social domains, asset files); and a persistent seen-set for dedupe. LLM link-selection is the exception fallback when deterministic extraction fails — never the path. Absolutize hrefs only *after* rejecting a scheme blocklist (`mailto:`, `tel:`, `javascript:`, `data:`, `file:`, `ftp:`, and kin).
+
+The corpus shape for a site: crawl to depth *k* (optionally inside-links only) → parse each page → one cheap LLM **description** per page (cacheable) → embed the *descriptions*, not the raw HTML → answer via RAG over descriptions, fetching a full page only on a hit. Deterministic triage bounds crawl breadth; one description per page bounds LLM cost; the small index stays clean. Claim no cost multiplier — measure your own corpus.
+
 ### Security
 
 - Keep credentials, cookies, and the registry **out of the repo** — gitignored, never committed.
@@ -157,4 +208,4 @@ Reach for an **external corpus** when truth must be authoritative and you don't 
 
 See [`../SKILL.md`](../SKILL.md) for the contract this depth sits behind, and [CORPUS.md](../../../CORPUS.md) for the corpus-level retrieval policy.
 
-Adapted from thedotmack/claude-mem (Apache-2.0) and PleasePrompto/notebooklm-skill (MIT) — re-expressed in fabius's own voice.
+Adapted from thedotmack/claude-mem (Apache-2.0) and PleasePrompto/notebooklm-skill (MIT), with later mechanics informed by open agent-harness and scraping work — see credits/README.md — all re-expressed in fabius's own voice.
