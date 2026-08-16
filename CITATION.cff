@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+title: "Fabius: the autonomous AI agent that runs on every major model"
+message: "If you cite this work, please cite the whitepaper in paper/fabius-as-a-system.pdf."
+type: software
+authors:
+  - family-names: Shemesh
+    given-names: Ariel
+abstract: >-
+  A fifteen-skill agent architecture with a router that dispatches by
+  layer, machinery and model tier over an always-on lean core. The
+  decision core is twenty-two routing rules, each carrying a proof of
+  the mathematics beneath it, together with a coherence theorem stating
+  that the core composes into one consistent, complete and composable
+  decision system, exceptions printed rather than omitted. Each of the
+  twenty-six formal statements was written by one agent and then
+  adversarially reviewed by an independent verifier whose only task was
+  to find an error; that pass corrected ten of them before publication.
+  Proof blocks are classed real-math or qualitative (22 and 4
+  respectively) and every citation behind a rule is labelled direct or
+  analogy, direct only where a result was measured on LLM agents.
+  Evaluation is one reproducible benchmark in four panels, including a
+  blind-judged quality panel across four Claude tiers and the versioned
+  hundred-task FBS suite run BASE, FAB and FAB_MEMORY.
+version: 2.3.1
+repository-code: "https://github.com/ArielShemesh1999/fabius"
+url: "https://fabius-landing.vercel.app"
+license-url: "https://github.com/ArielShemesh1999/fabius/blob/main/LICENSE"
+keywords:
+  - ai-agents
+  - agent-architecture
+  - llm-routing
+  - evaluation
+  - provenance
