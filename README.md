@@ -196,6 +196,8 @@ The sealed brain in this repo doubles as the owner's own Claude Code plugin (zer
 
 Then run `/reload-plugins` (or restart Claude Code) to activate. The marketplace clone is ~60 MiB and the installed plugin caches ~95 MB — fabius ships its whitepaper, benchmark receipts and runtime alongside the skills.
 
+**Stay current automatically:** third-party marketplaces ship with auto-update off, so turn it on once — `/plugin` → **Marketplaces** → `fabius` → **Enable auto-update**. Every fabius release bumps the plugin version, so with auto-update on, new releases install in the background after a session starts; run `/reload-plugins` (or restart) when notified to activate.
+
 Or drop any single `skills/<name>/` folder into a project's `.claude/skills/`. The router loads the stance and routes to the rest; the specialists also self-surface by description:
 
 ```text
