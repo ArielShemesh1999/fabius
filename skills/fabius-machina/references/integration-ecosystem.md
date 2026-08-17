@@ -59,6 +59,21 @@ The platform is the only variable. These hold on every one:
 - **Least privilege + secrets in env** — managed catalog or self-host, the scope is narrow and the secret is never in the JSON (→ `fabius-praesidium`, `fabius-parcus`).
 - **Smallest wiring that holds** — reach for a heavier platform only when the intent (breadth, isolation, agent-driven) actually demands it; otherwise stay on the default (→ `fabius-parcus`, the YAGNI ladder).
 
+## 6. The personal-account / browser-session routine — an observed product shape
+
+Some products expose the trigger→action model at a layer machina never wires: the user's own logged-in browser. **Strawberry** (strawberrybrowser.com — a closed commercial AI browser, free-2000-credits → $250/mo tiers) ships **"Routines"**: event-triggered recurring tasks fired by events in the user's *own* Gmail / Slack / GitHub — *when an email lands, draft a reply; when a PR is ready, approve it.* The same shape machina already owns: an event fires, a fixed action runs. Alongside it — no-bot meeting transcription, structured web-data extraction to spreadsheets, capture from login-protected pages — all riding the user's existing sessions.
+
+**Closed-source, no public API or SDK — nothing here to integrate.** This is the Wispr Flow treatment (→ `fabius-cohors` → *Voice in — the polish law*): the product ships no seam to wire against, so what transfers is the pattern, not a connector. No credits row. An observed product shape, re-derived — not a tool fabius applies.
+
+**What it validates.** The event-triggered Routine over personal accounts is machina's trigger→action seam relocated to the browser-session layer. It confirms the model holds where the actor is the user's authenticated tab rather than a service token — the same five gates, the same idempotency-on-a-re-fired-trigger. Nothing new to build.
+
+**⚠️ The ambient-authority caveat.** An agent acting *inside* your live, already-logged-in sessions wields **broad ambient authority**: it can do anything your logged-in self can, with **no per-action scope** and no OAuth grant to narrow. This inverts machina's normal failure mode — a service-token workflow fails *closed* to its granted scopes; a browser-session actor fails *open* to the whole authenticated identity. A managed catalog at least names its scopes (§2); a live session grants everything at once. That is a standing least-privilege / consent / audit problem, not a feature — route it:
+
+- **least-privilege + consent gate + audit trail → `fabius-praesidium`.** Ambient session authority needs an explicit per-action consent boundary and a logged trail; the browser gives neither for free.
+- **the browser-driving actor → `fabius-cohors`.** The moment the actor is a *computer-use / browser-driving agent* — generative, deciding what to click — that's cohors' concern. Machina owns only the **deterministic trigger→action seam**; the generative actor at the other end of it is never machina.
+
+**Personalization / memory** — the "remembers you across sessions" claim — is already held by `fabius-archivum`; nothing to add here.
+
 ## Boundary — where this doc stops
 
 This is machina's platform map: which deterministic-wiring engine fits which intent, and the discipline that survives the swap. It does **not** cover agent orchestration — the moment a node *is* an agent, that's `fabius-cohors`. It does **not** re-spec credential handling or network isolation — that's `fabius-praesidium`. The catalogued strengths above (Composio, Activepieces, n8n-MCP) are capabilities fabius can *apply*, credited to their tools — fabius bundles no runtime; the optional live tier is in [ARCHITECTURE.md](../../../ARCHITECTURE.md).

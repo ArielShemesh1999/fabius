@@ -94,7 +94,19 @@ A one-time audit rots on the next bump (§2). Encode the checks so they re-run o
 
 Tool names and versions here are a **point-in-time snapshot (early 2026), not law** — Semgrep, the per-ecosystem auditors, the registries' auto-update behavior all move. Encode the decision (audit → pin → sandbox → least-privilege → re-verify on bump); re-verify the tool and the version number when you run it.
 
-## 7. Credit, not bundle
+## 7. AI-provenance-mark hygiene — content you own
+
+`watermarks-remover` (guillaumemeyer, **MIT** — verified) fuses two unlike jobs under one name. Split them: one is a standing fabius gate, the other narrow privacy work, and **both stay brand-safe only because neither is detector-evasion.**
+
+**Job A — invisible-character hygiene (defensive, always-on).** Its deterministic, stdlib-only pass strips zero-width chars, bidirectional marks, Unicode tag chars, and exotic whitespace. That is **exactly the Trojan-Source / bidi-override / homoglyph class** — invisible codepoints that make source read one way and compile another. Stripping them from code and prose you ship is a **correctness + anti-Trojan-Source hardening gate**, not hygiene theater. **fabius runs this strip on generated code and text before shipping** — a standing output gate under `fabius-disciplina` (verify-before-ship) and `fabius-parcus` (always-on floor). This is the capability to use regularly; it never asks "will a detector fire."
+
+**Job B — metadata/privacy strip on content you own.** Remove C2PA / EXIF / XMP / document-properties across images and docs (PNG/JPEG/WebP/AVIF/HEIC/PDF/DOCX/EPUB/ODT/HTML/MD) via optional `exiftool` / `qpdf` / `c2patool`. Gotcha: **a PDF's metadata is not truly gone until qpdf does a structural rebuild** — a properties wipe leaves it recoverable in the file body. The honest case is your own EXIF GPS/device trail. Owned content only.
+
+**The boundary — the upstream states it against itself.** Its Layer B (statistical token-watermark removal by paraphrase) **degrades the copy** — flattens tone, voice, precision — and it **"cannot certify vendor detectors will fail after cleaning."** It reports verifiable removals (character counts, metadata actions) separately from best-effort rewrites, and prefers a non-origin model for the rewrite. Hold to **"content you own or are authorized to process."** fabius does **not** frame any of this as defeating content-authenticity or evading AI detection. The `fabius-catena` duality in one line: **catena ADDS verifiable provenance (the seal); this STRIPS vendor marks from content you own — fabius proves its own provenance, it does not erase anyone else's.** (Shape nod: a code-free skill driving a stdlib HTTP service — `/clean` `/inspect` `/health`, base64 payloads, optional bearer — the same keyless "skill drives machinery off the agent host" pattern fabius's own runtime recon uses.)
+
+**⚠️ The supply-chain trap — a second worked instance of `hardening-guides.md` §9.** The MIT core is clean; its *advertised* capability reaches for backends under worse terms — **reverse-SynthID = ⚠️ Non-commercial Research License**, **noai-watermark = ⚠️ no license at all = all-rights-reserved, which GitHub reports as `NOASSERTION`** (MarkLLM / MarkDiffusion are Apache-2.0). This is the exact failure `hardening-guides.md` §9 names: a gate that blocks AGPL and allows the rest **passes non-commercial AND unknown straight through, reporting green.** A tool whose core is MIT but whose advertised pixel-watermark removal *requires* an all-rights-reserved backend is **unshippable via that backend** — the backend is the dependency, not the wrapper. Default-deny on the classification.
+
+## 8. Credit, not bundle
 
 These are capabilities fabius **applies**, drawn from named ecosystem tools — Semgrep's rule packs, the per-ecosystem auditors, trailofbits-class breadth in what to look at. fabius bundles **no runtime**: it carries the decision rules and the audit method, not the scanners. The optional live tier is in `ARCHITECTURE.md`. Present every one of these as "how to do X well, crediting tool Y" — never as a fabius-shipped binary.
 

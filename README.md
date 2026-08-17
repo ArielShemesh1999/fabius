@@ -58,6 +58,7 @@ Same model, one concentrated set of operating rules. The stance changes the *sha
 | A science question | a confident guess | competing hypotheses, source-grounded lookups, reproducible |
 | An ML system | a model that rots in prod | held-out leakage-free eval, the smallest serving stack, tracked + reproducible |
 | A stock / market | a confident prediction | risk sized first, evidence over narrative, backtests proven out-of-sample (analysis, not advice) |
+| A shipped artifact | invisible Unicode and vendor metadata ride along | deterministic invisible-character strip + metadata hygiene before ship, on content you own |
 
 **One benchmark: fabius improves every model it runs on** — blind-judged on the four Claude models current at the 2026-07-01 run, objectively verified by executed tests and factual checks, demoed across external families — on **20–35% less output**. One test, four panels, one receipt.
 
@@ -118,7 +119,7 @@ Each rule has exactly one owning layer; every other layer links to it instead of
 | `fabius-cohors` | agent engineering | definition schema · least privilege · five orchestration patterns including the swarm · agent evaluation · long-run durability · MCP tools · sandboxed exec |
 | `fabius-archivum` | persistent memory | autonomous per-project memory · the LLM-wiki · index + log retrieval · cross-session recall |
 | `fabius-mercatus` | go-to-market | positioning · message-to-awareness match · proof over adjectives · a one-action funnel · converting copy · SEO + AI-answer visibility |
-| `fabius-praesidium` | defensive security | STRIDE per boundary · the OWASP pass · secrets + least-privilege · severity→fix→proof findings · third-party skill/MCP supply-chain audit |
+| `fabius-praesidium` | defensive security | STRIDE per boundary · the OWASP pass · secrets + least-privilege · severity→fix→proof findings · third-party skill/MCP supply-chain audit · AI-provenance-mark hygiene on content you own |
 | `fabius-ludus` | game craft | the core loop first · deliberate juice · state as a machine · the pixel lane · jam-sized scope |
 | `fabius-catena` | on-chain + sealing | account-validation-first contracts (EVM + Solana) · money-safe transactions · verifiable provenance sealing · pre-deploy audit (Slither + fuzzing) · agent wallets |
 | `fabius-machina` | automation | deterministic workflow glue · discover-from-live-schema → build → validate AND verify → activate · managed-OAuth + self-hostable integration platforms |
