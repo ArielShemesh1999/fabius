@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/ArielShemesh1999/fabius/security/advisories/new
+    about: Report privately. A way to make verify.sh accept unsealed content is the highest-severity class of bug here — please do not open it as a public issue.
+  - name: Question about install or usage
+    url: https://github.com/ArielShemesh1999/fabius/discussions
+    about: The discussions already cover cross-harness install and what the -sealed tags prove.
