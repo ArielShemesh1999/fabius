@@ -1,0 +1,24 @@
+name: Bug report
+description: Something the runtime, a skill contract or the docs did wrong
+labels: [bug]
+body:
+  - type: input
+    id: surface
+    attributes:
+      label: Where
+      description: Harness and version — Claude Code / Codex / grok-build, and `fabius --version` if the local runtime is involved
+      placeholder: Claude Code · fabius v2.3.1
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What you ran, what you expected, what happened
+      description: The three things that turn a maybe into a fix
+    validations:
+      required: true
+  - type: textarea
+    id: receipts
+    attributes:
+      label: Receipts
+      description: Output, transcript excerpt, or the doc line that is wrong. Redact anything private — the runtime's redact() should have done it already, and if it did not, that is a security report instead.
