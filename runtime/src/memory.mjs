@@ -1,11 +1,11 @@
 // LOCAL MEMORY — the archivum layout, on your disk, in plain markdown.
 //
-// The console compounds memory into a vector database. Locally there is no database and
+// A harness may compound memory into a vector database. Locally there is no database and
 // there should not be one: a knowledge base you cannot read in a text editor is a
 // knowledge base you cannot correct. So memory here is exactly what archivum specifies —
 // one page per fact, an index, and an append-only log — stored as files you own.
 //
-// Two properties carry over from the console, because both were measured, not assumed:
+// Two properties come straight from the archivum rules, because both were measured, not assumed:
 //
 //   VERIFY-GATED WRITES. Only a deliverable that passed review at score ≥ 70 may
 //   compound. An unverified answer that becomes "precedent" poisons every later recall.

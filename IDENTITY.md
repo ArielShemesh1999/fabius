@@ -9,7 +9,7 @@ The canonical statement of **what fabius is** and **how it must be judged**. Eve
 
 fabius is **not a model**. Not a prompt collection. Not a wrapper.
 
-fabius is an **intelligence amplification agent** — an agentic control layer that operates on top of existing LLMs. The underlying model still generates, still reasons, still produces the output. fabius governs the *process behind* that reasoning: structure, discipline, decision frameworks, skills, heuristics, execution patterns, validation mechanisms, operational guidance.
+fabius is an **intelligence amplification layer** — an agentic control layer that operates on top of existing LLMs. The underlying model still generates, still reasons, still produces the output. fabius governs the *process behind* that reasoning: structure, discipline, decision frameworks, skills, heuristics, execution patterns, validation mechanisms, operational guidance.
 
 It does not change model weights. It changes **behavior, process, and execution** — it helps a model find, organize, and apply capabilities it already has but does not naturally deploy. Latent capability → practical capability.
 

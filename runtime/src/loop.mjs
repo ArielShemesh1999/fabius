@@ -1,6 +1,6 @@
 // THE RUN — route, sense, act, prove, compound.
 //
-// The same loop the console runs, with three things only a local process can do:
+// The loop the fabius rules describe, with three things only a local process can do:
 //
 //   1. The routed SKILL.md contracts are loaded from disk and given to the model, so the
 //      specialist that the router picked actually shapes the work instead of only being

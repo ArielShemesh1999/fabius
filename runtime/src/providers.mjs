@@ -1,7 +1,7 @@
 // The BYOK gateway — one call shape over every provider fabius runs on.
 //
-// Same roster and same tier map as the cloud console, so a task routed locally picks
-// the model it would have picked in the console. `frontier` is the strongest widely
+// One roster and one tier map, so a task routed locally picks a model the same way on
+// every provider. `frontier` is the strongest widely
 // released tier per provider; R11 reserves it for ambiguity, architecture, security
 // and irreversible work, and takes the cheap tier for mechanical work.
 

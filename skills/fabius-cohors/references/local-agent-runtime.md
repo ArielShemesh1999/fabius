@@ -7,7 +7,7 @@ A hosted agent's blast radius is a container someone else pays for. A local agen
 radius is the user's laptop: their repositories, their credentials, their shell. That one
 change of setting rewrites the design. Everything below follows from it.
 
-fabius ships a working implementation of this document at `runtime/` in this repository.
+fabius ships a working implementation of this document — a zero-dependency local runner for the same rules — at `runtime/` in this repository.
 Read it when a claim here needs a referent.
 
 ---
@@ -264,8 +264,8 @@ ownership models, and the difference between them is who can take it away:
 
 | | infrastructure | who can revoke it |
 |---|---|---|
-| a bot platform (Telegram-class) | none — they host it | the platform |
-| a bridge to a consumer network (WhatsApp-class) | a host you pay for | the platform, and the account |
+| a bot hosted by a messaging platform | none — they host it | the platform |
+| a bridge into a closed consumer network | a host you pay for | the platform, and the account |
 | a keypair on public relays (Nostr-class) | none | nobody — relays are interchangeable |
 
 The third is worth understanding even if you never ship it, because it removes the

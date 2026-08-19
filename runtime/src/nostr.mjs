@@ -1,12 +1,12 @@
 // A CHANNEL WITH NO SERVER.
 //
-// fabius can already be reached over Telegram (Telegram hosts the bot) and WhatsApp (you
-// host a bridge). Both work; both mean someone can take the channel away — an account
-// suspension, a banned number, a VPS that stops paying for itself.
+// A bot hosted by a messaging platform can be taken away by that platform; a bridge into a
+// closed network needs a host and carries a ban risk — an account suspension, a banned
+// number, a VPS that stops paying for itself.
 //
-// This is the third option, and it is the one with no owner: a keypair is the identity,
-// public relays are interchangeable and disposable, there is no account to suspend and
-// no phone number to ban. Messages are end-to-end encrypted and metadata-wrapped, so a
+// This channel is the option with no owner: a keypair is the identity, public relays are
+// interchangeable and disposable, there is no account to suspend and no phone number to
+// ban. Messages are end-to-end encrypted and metadata-wrapped, so a
 // relay sees only that *someone* sent *something* to an ephemeral key.
 //
 // WHAT IS IMPLEMENTED, EXACTLY

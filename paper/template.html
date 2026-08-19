@@ -4,7 +4,7 @@
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Fabius — the autonomous AI agent that runs on every major model</title>
+<title>Fabius — one set of operating rules above every model</title>
 <script>
 window.MathJax = {
   tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
@@ -112,19 +112,19 @@ window.MathJax = {
 <!-- ================= TITLE ================= -->
 <div class="title-page">
   <!--FIG:fabius-pixel-->
-  <div class="kicker" style="text-align:center;margin-bottom:8px">Whitepaper · v2.3.1</div>
+  <div class="kicker" style="text-align:center;margin-bottom:8px">Whitepaper · v2.4.0</div>
   <div class="title">Fabius</div>
-  <div class="subtitle">The autonomous AI agent that runs on every major model — fifteen coordinated skills, a research-grounded decision policy, and the mathematics of knowing when to stop.</div>
+  <div class="subtitle">A plugin, not a platform — fifteen coordinated skills and twenty-two proven routing rules loaded above every model, and the mathematics of knowing when to stop.</div>
   <hr class="rule-hr" />
   <div class="byline"><b>Ariel Shemesh</b></div>
   <div class="byline">fabius-landing.vercel.app &nbsp;·&nbsp; private · provenance-sealed</div>
 
   <div class="abstract">
     <h4>Abstract</h4>
-    <p>Large language models, used as coding and reasoning agents, fail in two opposite directions: they over-explain and over-engineer, or — when told merely to "be concise" — they cut the validation, security, and accessibility that make an artifact correct. <strong>Fabius</strong> is a single operating stance, realized as an autonomous AI agent — fifteen coordinated skills under one router — that resolves this tension along one axis: <em>scout wide in what you investigate, strike narrow in what you ship.</em></p>
+    <p>Large language models, used as coding and reasoning agents, fail in two opposite directions: they over-explain and over-engineer, or — when told merely to "be concise" — they cut the validation, security, and accessibility that make an artifact correct. <strong>Fabius</strong> is a single operating stance, shipped as a plugin — fifteen coordinated skills under one router — that resolves this tension along one axis: <em>scout wide in what you investigate, strike narrow in what you ship.</em></p>
     <p>This whitepaper presents fabius as a system. It gives the architecture (a router — the <em>praetorium</em> — that dispatches on three axes over an always-on lean core, four engineering specialists, and nine domain verticals), the decision policy (a proven core of <strong>twenty-two</strong> routing rules — eighteen forming the mathematical core and four governing what the router itself adds: model-tier dispatch, long-horizon loops, vertical composition, and corpus externalization — plus a researched frontier layer at the working edge), and — the centre of the document — the <strong>mathematics</strong> beneath each core rule: every gate reduced to a formal statement, proved, and adversarially checked. We then prove the core <em>coheres</em>: all twenty-two rules are one expected-loss / value-of-information threshold applied to disjoint variables, composed in an acyclic pipeline that routes every task and terminates — every gate adversarially checked, the composition’s exceptions printed in full. A strict boundary separates fabius's proven mathematical gates from the few operational heuristics it states as such — and marks the researched frontier layer (R14–R16 · M10–M13) as the working edge, outside the proof by construction. Every rule here is fabius's own. We close with the <strong>fabius benchmark</strong> — one reproducible test read out on four panels: blind-judged quality on the four Claude models current at the 2026-07-01 run, objective deliverable tests that execute generated code against hidden suites and grade domain work against factual checklists, blind external-model demos across families, and the <strong>FBS run</strong> — a versioned 100-task suite executing the system's own identity contract (<code>IDENTITY.md</code>: an intelligence amplification layer, judged on outcomes-per-token) as <code>BASE → FAB → FAB_MEMORY</code>, with persistent memory measured behaviorally for the first time. Structure beats brevity, and the advantage grows as the model's default discipline drops — on 20–35% less output.</p>
-    <p>Fabius is realized as an <strong>autonomous agent</strong>: it runs on every major model (Anthropic, OpenAI, Google, Mistral, Groq), executes the loop — <em>Scout → Plan → Strike → Prove → Record</em> — with an independent, execution-grounded verifier, and is operated from the <strong>synapse console</strong>. Three surfaces, one identity: a public face, a private provenance-sealed brain, and the console that runs it. This paper formalizes the decision policy — the router — at the agent's core.</p>
-    <div class="meta-row">Version 2.3.1 · August 2026 · figures computed (numpy → SVG), reproducible</div>
+    <p>Fabius ships as a <strong>plugin</strong> — one set of operating rules loaded above whatever model the user already runs (Claude, GPT, Gemini, DeepSeek, GLM, Qwen, Llama, Mistral, Kimi, Grok and any other) inside the harness they already use. It has no runtime of its own: the model supplies capability, fabius supplies discipline — the loop <em>Scout → Plan → Strike → Prove → Record</em> with an independent, execution-grounded verifier. Two surfaces, one identity: a public face and a private provenance-sealed set of rules. This paper formalizes the decision policy — the router — at the plugin's core.</p>
+    <div class="meta-row">Version 2.4.0 · August 2026 · figures computed (numpy → SVG), reproducible</div>
   </div>
 </div>
 
@@ -137,7 +137,7 @@ window.MathJax = {
 
 <div class="maxim">Scout wide in what you investigate.&nbsp;&nbsp;Strike narrow in what you ship.</div>
 
-<p>Fan out to understand and to verify; deliver the smallest correct artifact; explain it in the fewest exact words. These never conflict, because they live on different axes — process and memory make you wide, lean makes you narrow. Fabius realizes this as one agent of fifteen coordinated skills: a router, an always-on lean core, four engineering specialists (process, design, agent-engineering, memory), and nine domain verticals (go-to-market, defensive security, game craft, on-chain + sealing, automation, science, AI/ML engineering, markets &amp; finance, cross-model council).</p>
+<p>Fan out to understand and to verify; deliver the smallest correct artifact; explain it in the fewest exact words. These never conflict, because they live on different axes — process and memory make you wide, lean makes you narrow. Fabius realizes this as one plugin of fifteen coordinated skills: a router, an always-on lean core, four engineering specialists (process, design, agent-engineering, memory), and nine domain verticals (go-to-market, defensive security, game craft, on-chain + sealing, automation, science, AI/ML engineering, markets &amp; finance, cross-model council).</p>
 
 <p>The contribution of this whitepaper is to show that the stance is not a vibe. Section 2 gives the system architecture and the single-owner coordination contract that keeps fifteen skills from contradicting one another. Section 3 states the decision policy: a proven core of twenty-two operational rules, each derived from fabius's own decision-theoretic core, and a researched frontier layer at the working edge. Section 4 — the heart of the document — supplies the <strong>mathematics</strong> under each core rule, every theorem proved and adversarially verified, with a hard line between the mathematical gates that <em>govern</em> a routing decision and the few operational heuristics stated as such. Section 5 proves the twenty-two core rules <strong>compose into one coherent decision system</strong>. Section 6 reports the fabius benchmark — one reproducible test in four panels: blind-judged quality, objective deliverable tests, cross-family demos, and the FBS run on the versioned suite. The discipline of the whole is in Section 7: <strong>measured, not claimed</strong>.</p>
 </section>
@@ -145,7 +145,7 @@ window.MathJax = {
 <!-- ================= 2. THE SYSTEM ================= -->
 <section class="sec">
 <h2>2 · The system</h2>
-<p>Fabius is one agent, not a bundle of plugins. A single router — the <em>praetorium</em> — dispatches fourteen coordinated capability layers over a thin supporting spine (fifteen skills in all, counting the router), so the agent gains end-to-end capability under one stance. The router does not just pick a layer; it dispatches on three axes at once: <strong>which layer(s)</strong>, <strong>how much machinery</strong> (the capability ladder of §4.1), and <strong>which model tier</strong>.</p>
+<p>Fabius is one plugin under one router, not a bundle of unrelated skills. A single router — the <em>praetorium</em> — dispatches fourteen coordinated capability layers over a thin supporting spine (fifteen skills in all, counting the router), so the agent gains end-to-end capability under one stance. The router does not just pick a layer; it dispatches on three axes at once: <strong>which layer(s)</strong>, <strong>how much machinery</strong> (the capability ladder of §4.1), and <strong>which model tier</strong>.</p>
 
 <figure class="arch">
   <!--FIG:architecture-->
@@ -356,7 +356,7 @@ python3 assets/charts/render_figures.py
 node evals/eval.mjs --selftest
 ANTHROPIC_API_KEY=...  node evals/eval.mjs --model claude-sonnet-5
 GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini</pre>
-<p>Fabius runs as an autonomous agent on every major model, operated from the synapse console. Its brain is also the owner's working Claude Code plugin — any single <code>skills/&lt;name&gt;/</code> folder drops into a project's <code>.claude/skills/</code>. Because the fifteen skills are plain markdown, the portable bridge <code>AGENTS.md</code> carries the same stance to Codex, Cursor, Windsurf, Cline, Copilot, OpenCode, and Gemini — the agent operates under fabius end to end, in any tool that reads standing instructions.</p>
+<p>Fabius is a plugin. It installs into Claude Code (<code>/plugin marketplace add ArielShemesh1999/fabius</code> · <code>/plugin install fabius@fabius</code>), into Codex through its git plugin marketplace, and into Grok Build natively; any single <code>skills/&lt;name&gt;/</code> folder also drops into a project's <code>.claude/skills/</code>. Because the fifteen skills are plain markdown, the portable bridge <code>AGENTS.md</code> carries the same rules to Cursor, Windsurf, Cline, Copilot, OpenCode and Gemini CLI — the model operates under fabius end to end, in any tool that reads standing instructions.</p>
 <p>The system is built to grow without bloating. Adding a capability is a new <code>skills/fabius-&lt;name&gt;/SKILL.md</code> with one precisely-described owned concern plus a row in the corpus index — never a megabyte bundled into the install (M9). That is how the system went from six skills to fifteen — adding the go-to-market, defensive-security, game-craft, on-chain, automation, science, AI/ML-engineering, markets, and cross-model-council verticals — while the installed brain stayed lean and the libraries moved behind the index. Each new layer links to its siblings instead of duplicating them, so the single-owner contract, and the coherence it enables, survive every addition.</p>
 </section>
 
@@ -370,7 +370,7 @@ GEMINI_API_KEY=...     python evals/portable_eval.py --models gemini</pre>
 
 <!-- ================= FOOTER ================= -->
 <section class="sec">
-<div class="footer-tag">Fabius v2.3.1 · scout wide, strike narrow · fabius-landing.vercel.app · private · provenance-sealed</div>
+<div class="footer-tag">Fabius v2.4.0 · scout wide, strike narrow · fabius-landing.vercel.app · private · provenance-sealed</div>
 </section>
 
 </div>

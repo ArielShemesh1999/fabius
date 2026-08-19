@@ -2,7 +2,7 @@
   "name": "fabius-runtime",
   "version": "1.0.0",
   "private": true,
-  "description": "fabius, running locally: the routed brain, local hands, a permission gate, on-disk memory, keyless external recon, and a serverless channel.",
+  "description": "A zero-dependency local runner for the fabius rules — the same sealed rule files handed to a model through your own API key, with a permission gate, on-disk memory, keyless external recon, and a serverless channel.",
   "type": "module",
   "bin": { "fabius": "./fabius.mjs" },
   "engines": { "node": ">=22" },

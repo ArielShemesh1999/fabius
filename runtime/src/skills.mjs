@@ -1,10 +1,9 @@
 // THE BRAIN, LOADED FROM DISK.
 //
-// The console injects the fabius stance; a harness like Claude Code injects the whole
-// contract. Locally there is no harness — so the runtime reads the sealed SKILL.md
-// contracts itself and hands the routed one to the model. That is what makes a local
-// run *fabius* and not a generic ReAct loop: the same words, byte-for-byte, that the
-// seal covers.
+// A harness like Claude Code injects the whole contract. Here there is no harness — so
+// the runner reads the sealed SKILL.md contracts itself and hands the routed one to the
+// model. That is what makes a local run *fabius* and not a generic ReAct loop: the same
+// words, byte-for-byte, that the seal covers.
 
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';

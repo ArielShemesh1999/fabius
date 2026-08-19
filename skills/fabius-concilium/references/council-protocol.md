@@ -1,7 +1,7 @@
 <!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
 # Council protocol — the depth
 
-The runnable reference is [`council.mjs`](council.mjs) (Node ≥18, zero dependencies). This doc is the spec it implements: the exact stage prompts, the anonymization scheme, and the aggregation math, so the protocol is reproducible by hand or in any other runtime (synapse, a Worker, a notebook). `SKILL.md` is the lean contract; this is the playbook.
+The runnable reference is [`council.mjs`](council.mjs) (Node ≥18, zero dependencies). This doc is the spec it implements: the exact stage prompts, the anonymization scheme, and the aggregation math, so the protocol is reproducible by hand or in any other runtime (a harness, a Worker, a notebook). `SKILL.md` is the lean contract; this is the playbook.
 
 ## Roster — env-configured, never hardcoded
 
@@ -14,7 +14,7 @@ COUNCIL_CHAIRMAN     the synthesizing model, e.g. anthropic/claude-opus-5
 
 **Resolve every seat id against the gateway's live model list before the run** (`GET /api/v1/models`). A seat whose id no longer exists does not fail the run — it errors, drops out, and Borda recomputes K from the survivors, so the council completes looking healthy while the answer came from a narrower field than you paid for. This is the failure mode that hides: a dead seat costs you diversity silently, and a three-seat council that quietly ran on two has lost the tie-break the odd count was for. Model ids churn faster than this document — treat the roster above as an example, not a guarantee, and re-check it whenever a run's seat count surprises you.
 
-OpenRouter is the reference gateway for the same reason karpathy's *llm-council* uses it: one key, one request shape, every provider — so seat diversity costs no extra plumbing. The protocol is provider-agnostic; in the **synapse** console the same three stages run over fabius's native 5-provider runtime (`/api/fabius/run` + the `X-LLM-Key` vault) instead of OpenRouter — the stages and prompts are identical, only the transport changes. Keys live in env / the vault, **never** in the repo (`fabius-praesidium`: secrets-in-env).
+OpenRouter is the reference gateway for the same reason karpathy's *llm-council* uses it: one key, one request shape, every provider — so seat diversity costs no extra plumbing. The protocol is provider-agnostic: any harness or gateway that can reach several models can run the same three stages instead of OpenRouter — the stages and prompts are identical, only the transport changes. Keys live in env, **never** in the repo (`fabius-praesidium`: secrets-in-env).
 
 ## Stage 1 — first opinions (parallel, independent)
 

@@ -1,7 +1,7 @@
 // THE PERMISSION GATE — the difference between an agent in a sandbox and an agent on
 // your laptop.
 //
-// In the cloud console the blast radius is a worker with no filesystem. Locally the
+// In a hosted sandbox the blast radius is a container with no filesystem. Locally the
 // blast radius is the owner's machine, so capability is not a preference: every tool
 // declares a `cap`, every cap has a standing decision, and the decisions that cannot
 // be undone are held back even in autonomous mode.

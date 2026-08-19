@@ -22,7 +22,7 @@ metadata:
 
 # Fabius Concilium — convene the council, synthesize one answer
 
-*Concilium* — the summoned assembly, the council called to deliberate before the decision is taken. fabius's whole identity is *runs on every major model, one console*; concilium is the layer that turns that into an epistemic advantage — instead of routing a question to the single best model, it seats several, lets them answer and judge each other blind, and has a chairman fuse the field. The product is one answer that is more accurate and less idiosyncratic than any single seat produced. Patterned on karpathy's *llm-council*.
+*Concilium* — the summoned assembly, the council called to deliberate before the decision is taken. fabius's whole identity is *one set of rules above every model*; concilium is the layer that turns that into an epistemic advantage — instead of routing a question to the single best model, it seats several, lets them answer and judge each other blind, and has a chairman fuse the field. The product is one answer that is more accurate and less idiosyncratic than any single seat produced. Patterned on karpathy's *llm-council*.
 
 ## The lean gate first — does this need a council at all? (`fabius-parcus`)
 
@@ -42,7 +42,7 @@ Rung one is **self-samples of the strongest seat**, not a panel: N samples of on
 ## Seating the council
 
 - **Set the admission bar before the seating chart.** A council's accuracy tracks the **average quality of its seats** far harder than it tracks their variety, and a seat admitted for provider spread alone drags the aggregate down faster than its disagreement lifts it. The bar: every seat must be a model you would have been willing to ask *alone* for this question. Mixing pays only among near-equals, and there by fractions of a point — buying diversity below the bar measurably loses (M10). If only one model clears the bar, don't pad the table: that *is* rung one — sample that model N times and aggregate its own answers.
-- **Then pull diversity across providers**, not three checkpoints of one family — Anthropic · OpenAI · Google · Mistral · Groq, the same roster the `fabius` router already speaks to. Cross-provider disagreement is what the panel is buying — but only from seats that already cleared the bar; same-family seats correlate and waste the spend.
+- **Then pull diversity across providers**, not three checkpoints of one family — Claude · GPT · Gemini · DeepSeek · Mistral · Grok and the rest of the field fabius already runs above. Cross-provider disagreement is what the panel is buying — but only from seats that already cleared the bar; same-family seats correlate and waste the spend.
 - **3–5 seats** is the working band. Two can't break a tie; past five, cost climbs and rankings flatten. Odd counts ease tie-breaks.
 - **The chairman is a strong-tier model** (it does the hardest reasoning — the merge) and **may be a seat** or a separate model; `fabius` (R11) picks the tier. Seats all sit at **one** tier and only the chair may sit above it — never mix capability tiers inside the pool, and never seat a weaker model for *diversity* (M10).
 - **Surface the seats and the chair** to the user — a council whose membership is hidden can't be trusted or reproduced.

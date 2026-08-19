@@ -1,6 +1,6 @@
 // THE TOOL REGISTRY — the local hands.
 //
-// The cloud console can fetch, search and run code in someone else's sandbox. On this
+// A hosted harness can fetch, search and run code in someone else's sandbox. On this
 // machine the agent gets the things that only a local process can do: read your files,
 // write your files, and run your commands. Which is precisely why every one of them is
 // declared with a capability and passed through the gate in approve.mjs before it runs.

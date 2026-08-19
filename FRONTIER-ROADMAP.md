@@ -1,15 +1,17 @@
-# fabius → frontier agent — roadmap
+# synapse (on the fabius rules) → frontier agent — roadmap
 
-*Research-backed plan to take fabius from "disciplined advisor" to a frontier-class autonomous operator in the league of Manus, OpenAI (Operator/CUA + Agents SDK), and Nous Hermes. Synthesized from a 7-agent research sweep (2026-06-26) and an adversarial feasibility review. Honest by design — fabius's own ethos is "structure beats brevity, measured."*
+> Scope note: fabius is a plugin — one set of rules above every model, with no runtime of its own. The console features recorded below were built in the separate synapse project (not part of fabius) and are kept here only as design history for the rules.
+
+*Research-backed plan to take an agent running the fabius rules from "disciplined advisor" to a frontier-class autonomous operator (built in the separate synapse project) in the league of Manus, OpenAI (Operator/CUA + Agents SDK), and Nous Hermes. Synthesized from a 7-agent research sweep (2026-06-26) and an adversarial feasibility review. Honest by design — fabius's own ethos is "structure beats brevity, measured."*
 
 ## Status
 
-- **Phase 0–1 SHIPPED (2026-06-26)** — fabius is now an *operator*, not just an advisor. Built into the synapse worker: acting tools (`fetch` · `web_search` · `code`/CodeAct) on a **least-privilege capability model** (`read` always · `web` only when a search key exists · `exec` only on an explicit `act` opt-in), an **execution-grounded verify oracle** (run the code; a non-zero exit hard-overrides the LLM judge — free via Wandbox, python/js/ts), and a per-run cost/step governor. The console exposes an **Operator-mode toggle** and renders the new tool + code-exec phases. 72/72 worker tests green. Commits: runtime `9575b97`, console `d7d4813`. Found en route: the memory gate was *already* honest (score 60 < the 70 gate → unverified output never compounds), so the real leap was the acting tools + oracle, not a "fail-closed flip." *Paid backends (E2B isolated sandbox · Tavily search · Browserbase) remain opt-in and OFF.* To run live: `wrangler deploy` + one provider key, then POST `/api/fabius/run {"act":true}`.
+- **Phase 0–1 SHIPPED (2026-06-26)** — the separate synapse project's agent (running the fabius rules) is now an *operator*, not just an advisor. Built into the separate synapse project's worker: acting tools (`fetch` · `web_search` · `code`/CodeAct) on a **least-privilege capability model** (`read` always · `web` only when a search key exists · `exec` only on an explicit `act` opt-in), an **execution-grounded verify oracle** (run the code; a non-zero exit hard-overrides the LLM judge — free via Wandbox, python/js/ts), and a per-run cost/step governor. The synapse console exposes an **Operator-mode toggle** and renders the new tool + code-exec phases. 72/72 worker tests green. Commits: runtime `9575b97`, console `d7d4813`. Found en route: the memory gate was *already* honest (score 60 < the 70 gate → unverified output never compounds), so the real leap was the acting tools + oracle, not a "fail-closed flip." *Paid backends (E2B isolated sandbox · Tavily search · Browserbase) remain opt-in and OFF.* To run live: `wrangler deploy` + one provider key, then POST `/api/fabius/run {"act":true}`.
 - **Next:** Phase 2 (early eval gate) → Phase 3 (unify the two stacks + MCP) → Phase 4 (long-horizon driver) → Phase 5 (computer-use, last/narrow).
 
 ## The north star (revised after the adversarial pass)
 
-> **fabius is the most *auditable, owner-controlled, verify-gated* autonomous operator — at capability parity with the frontier, and ahead of it on trust.**
+> **An agent on the fabius rules (the synapse project) is the most *auditable, owner-controlled, verify-gated* autonomous operator — at capability parity with the frontier, and ahead of it on trust.**
 
 Not "the most advanced on raw capability." On raw long-horizon computer-use, every frontier agent rides the **same shared tech** (frontier models + E2B/Browserbase sandboxes + MCP). fabius's defensible lead is the **harness, the discipline, and provenance** — proven by measured evals, not asserted.
 
@@ -22,9 +24,9 @@ Not "the most advanced on raw capability." On raw long-horizon computer-use, eve
 | **Hermes** (Nous) | Leading **open-weights** agentic line — schema-faithful tool-calling, toggleable reasoning, **operator owns the policy layer**, self-hostable; 2026 Hermes Agent runtime (ReAct + MCP + sandbox + portable skills) | The model is **not a product** — no runtime/sandbox/computer-use; you build the harness; neutral alignment pushes all safety onto you |
 | **The technique frontier** | Action space → **CodeAct** (executable code in a real sandbox); long-horizon reliability is the headline metric (~16h@50% mid-2026); capability lives in the **harness** (context engineering, sub-agents, verifiers) | **Benchmark integrity collapse** (Apr-2026 RDI: all 8 major agent benchmarks reward-hacked); reliability tax over long horizons; brittle "memory" that's really retrieval; fragile/slow computer-use grounding |
 
-## What fabius already has (the brain — the hard part most agents lack)
+## What already exists (the brain — the hard part most agents lack)
 
-Grounded in `synapse/worker/src/index.js` (the executable runtime) + the 15 skills:
+Grounded in the separate synapse project's `synapse/worker/src/index.js` (its executable runtime — not part of fabius) + the 15 fabius skills. The first eight items are synapse; the last is fabius:
 
 - **Multi-model gateway**, 5 providers, one normalized shape, keyed fallback (`PROVIDERS`/`callLLM` ~2174-2291) — incl. open-weights (Hermes/Llama via Groq).
 - **Inspectable 3-axis router** + 6-rung capability ladder + tier selection, callable **token-free** at `/api/fabius/route` (`route()` ~2340).
@@ -34,7 +36,7 @@ Grounded in `synapse/worker/src/index.js` (the executable runtime) + the 15 skil
 - **Multi-agent orchestration that executes** + a **resumable Flow DAG** (handoffs, human gates, atomic step-claim, retry, dep-cascade; `runFlowWave` ~1780).
 - **Key-vault security** (per-request `X-LLM-Key`, never persisted), rate-limit denial-of-wallet guard, token/step caps.
 - **Live org-graph console** (Synapse) on a real CF Worker + D1 + Vectorize backend.
-- **The wedge** — the Fabian stance compiled to a **proven 22-rule routing policy** (sourced to ReAct/ToT/Reflexion/MemGPT/DSPy/Voyager; + the researched frontier layer R14–R16 · M10–M13), **content-bound provenance seal**, 15 single-owner skills.
+- **The wedge (fabius itself)** — the Fabian stance compiled to a **proven 22-rule routing policy** (our own research, derived and adversarially verified; + the researched frontier layer R14–R16 · M10–M13), **content-bound provenance seal**, 15 single-owner skills.
 
 ## The gap as of 2026-06-26, pre-Phase-0 (the hands + autonomy)
 
@@ -74,14 +76,14 @@ Grounded in `synapse/worker/src/index.js` (the executable runtime) + the 15 skil
 **Phase 5 — computer use (deferred/descoped).**
 - `/api/fabius/cua` observe→reason→act over headless Chromium (Anthropic computer-use tool + Set-of-Marks fallback), **per-action human gate**, scoped to high-value flows only. XL, parity-at-best, inherits the anti-bot/2FA/CAPTCHA reliability ceiling — lowest leap-per-effort; do it last and narrow.
 
-## Where fabius genuinely leads (honest)
+## Where the fabius rules genuinely lead (honest)
 
-Not raw capability — **trust**:
-1. **Auditability** — the dispatch decision is inspectable and callable **token-free** before spend. No competitor exposes this.
-2. **Multi-model freedom** — one gateway over 5 providers incl. open-weights for owner-controlled, neutral-aligned, self-hostable runs. Manus/OpenAI are locked to their own brain; Hermes has no product.
-3. **Verification honesty** — once Phase 1 lands, memory gates on whether code actually *ran*, vs the frontier's documented "confident hallucination."
+Not raw capability — **trust**. Items 1, 3 and 5 are mechanics of the separate synapse project (not part of fabius) that show what the rules can lead on when a runtime enforces them; items 2 and 4 are the plugin's own:
+1. **Auditability** — the dispatch decision is inspectable, and the synapse project shows it can be called **token-free** before spend. No competitor exposes this.
+2. **Multi-model freedom** — one set of rules above every model, incl. open-weights (the separate synapse project's own gateway spans 5 providers), for owner-controlled, neutral-aligned, self-hostable runs. Manus/OpenAI are locked to their own brain; Hermes has no product.
+3. **Verification honesty** — in the synapse project, once Phase 1 lands, memory gates on whether code actually *ran*, vs the frontier's documented "confident hallucination."
 4. **Provenance** — content-bound SSH + Bitcoin-anchored seal on skills (and, later, run transcripts): authenticated, owner-attributed agent work. Unique.
-5. **Disciplined cost** — cheapest-tier-that-holds + caps, vs Manus's prefill-heavy ~100:1 unpredictable-credit loop.
+5. **Disciplined cost** — cheapest-tier-that-holds (a fabius rule) + the synapse project's per-run caps, vs Manus's prefill-heavy ~100:1 unpredictable-credit loop.
 
 Where it only reaches **parity** (no hand-waving): CodeAct, web tools, MCP, sub-agents, computer-use — all ride the same external tech as everyone. Raw model IQ is **not** a fabius lever. The edge is entirely harness + discipline + control, and it isn't real until the Phase 2 eval numbers publish.
 
@@ -95,4 +97,4 @@ Where it only reaches **parity** (no hand-waving): CodeAct, web tools, MCP, sub-
 - **Provider/model drift** — the `PROVIDERS` tier ids move fast; needs a maintenance cadence.
 
 ---
-*Sources: first-party Manus context-engineering writeup + E2B Firecracker notes; OpenAI Operator/CUA/Agents-SDK/Responses docs; Nous Hermes 3/4 + Hermes Agent runtime; the agent-research canon (ReAct, Toolformer, ToT, Reflexion, MemGPT, DSPy, Voyager, CodeAct) + 2025-26 surveys; the UC-Berkeley/RDI Apr-2026 benchmark-integrity finding. Grounded in `synapse/worker/src/index.js` line refs. Internal working note — proprietary (see LICENSE), not part of the README-indexed doc set and not covered by the content seal.*
+*Sources: first-party Manus context-engineering writeup + E2B Firecracker notes; OpenAI Operator/CUA/Agents-SDK/Responses docs; Nous Hermes 3/4 + Hermes Agent runtime; the agent-research literature (ReAct, Toolformer, ToT, Reflexion, MemGPT, DSPy, Voyager, CodeAct) + 2025-26 surveys, read for the frontier landscape above — the 22 routing rules themselves are fabius's own research; the UC-Berkeley/RDI Apr-2026 benchmark-integrity finding. Grounded in line refs into the separate synapse project's `synapse/worker/src/index.js` (not part of fabius). Internal working note — proprietary (see LICENSE), not part of the README-indexed doc set and not covered by the content seal.*

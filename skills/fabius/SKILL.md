@@ -2,17 +2,17 @@
 name: fabius
 description: >
   Load at the start of any non-trivial task — the router that sets HOW to work before any
-  specialist layer fires. fabius is the autonomous AI agent that runs on every major model
-  (Anthropic · OpenAI · Google · Mistral · Groq), managed from one console. One stance, end to
-  end: code, prose, agents, UI, data visualization, debugging, marketing, defensive security,
-  games, on-chain work and artifact sealing, automations, scientific research, ML/LLM
-  engineering, market analysis, cross-model deliberation, and memory. Scout wide, strike
-  narrow — talk lean, build lean, run a disciplined process, design at ship quality — then
-  route to the specialist layers fabius-parcus, fabius-disciplina, fabius-decor,
-  fabius-cohors, fabius-archivum, fabius-mercatus, fabius-praesidium, fabius-ludus,
-  fabius-catena, fabius-machina, fabius-scientia, fabius-doctrina, fabius-fortuna, and
-  fabius-concilium. Use when the user says "fabius", wants the agent, or wants end-to-end
-  capability from one place.
+  specialist fires. fabius is a plugin — one set of operating rules loaded above every model
+  (Claude · GPT · Gemini · DeepSeek · GLM · Qwen · Llama · Mistral · Kimi · Grok and any
+  other), never a platform of its own. One stance, end to end: code, prose, agents, UI, data
+  visualization, debugging, marketing, defensive security, games, on-chain work and sealing,
+  automations, scientific research, ML/LLM engineering, market analysis, cross-model
+  deliberation, and memory. Scout wide, strike narrow — talk lean, build lean, run a
+  disciplined process, design at ship quality — then route to the specialists fabius-parcus,
+  fabius-disciplina, fabius-decor, fabius-cohors, fabius-archivum, fabius-mercatus,
+  fabius-praesidium, fabius-ludus, fabius-catena, fabius-machina, fabius-scientia,
+  fabius-doctrina, fabius-fortuna, and fabius-concilium. Use when the user says "fabius" or
+  wants end-to-end capability from one place.
 when_to_use: >
   "how should we approach this", "set up the way of working", "which layer handles this", or at
   the start of any multi-step build before a specialist fires.
@@ -107,13 +107,12 @@ stock · market · economy · valuation ·       → fabius-fortuna     (analysi
 5. **Prove** — run it, show the evidence. No "should work". (`fabius-disciplina`)
 6. **Compound** — file what was learned so the next task starts ahead; a route that failed in a way the policy didn't prevent goes in the lesson log. (`fabius-archivum` · `references/failures.md`)
 
-## Where fabius runs
+## Where fabius loads
 
-Three surfaces, one brain. Whichever is in front of you, the routing above is the same.
+Two ways in, one set of rules. Whichever is in front of you, the routing above is the same.
 
-- **A harness** (Claude Code · Codex · Grok Build) — it loads these contracts and fabius shapes the work.
-- **The console** — the long-running operator: survives the laptop closing, holds compounding memory, reachable from a browser.
-- **Locally, in `runtime/`** — the half that only a process on the user's own machine can be. It reads the working tree, runs the real toolchain, and keeps the task on the machine. Same router, same rules, with local hands behind a permission gate: `fabius run` · `chat` · `recon <domain>` (keyless external audit) · `listen` (encrypted, no server) · `doctor`. Zero dependencies, Node 22+. Design contract → `../fabius-cohors/references/local-agent-runtime.md`.
+- **A harness** (Claude Code · Codex · Grok Build · any AGENTS.md reader — Cursor, Windsurf, Cline, Copilot, Gemini CLI, OpenCode) — it loads these contracts and fabius shapes the work. fabius has no runtime of its own: nothing to host, no account, no server.
+- **Locally, in `runtime/`** — a zero-dependency runner for the same rules when no harness is present — it reads the working tree, runs the real toolchain, and keeps the task on the machine. Same router, same rules, with local hands behind a permission gate: `fabius run` · `chat` · `recon <domain>` (keyless external audit) · `listen` (encrypted, no server) · `doctor`. Zero dependencies, Node 22+. Design contract → `../fabius-cohors/references/local-agent-runtime.md`.
 
 ## Boundaries
 

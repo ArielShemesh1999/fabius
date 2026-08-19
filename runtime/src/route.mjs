@@ -3,8 +3,9 @@
 // ambiguity, architecture, security, money, irreversibility).
 //
 // Heuristic and inspectable on purpose: no model call, no network, fully deterministic,
-// and it prints its reasoning. The same classification the console runs, so a task
-// routed on this machine lands on the same specialist it would land on in the cloud.
+// and it prints its reasoning. The same classification the fabius router rule (R1)
+// specifies, so a task routed on this machine lands on the same specialist it would
+// land on inside any harness that loads the plugin.
 
 import { PROVIDERS, resolveModel, overrideModel, availableProviders } from './providers.mjs';
 import { loadConfig } from './config.mjs';

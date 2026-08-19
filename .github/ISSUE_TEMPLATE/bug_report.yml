@@ -7,7 +7,7 @@ body:
     attributes:
       label: Where
       description: Harness and version — Claude Code / Codex / grok-build, and `fabius --version` if the local runtime is involved
-      placeholder: Claude Code · fabius v2.3.1
+      placeholder: Claude Code · fabius v2.4.0
     validations:
       required: true
   - type: textarea

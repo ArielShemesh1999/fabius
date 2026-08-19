@@ -69,8 +69,8 @@ export function saveConfig(patch) {
   return next;
 }
 
-// Env var per provider — the same names the cloud console uses, so one export works
-// for both surfaces.
+// Env var per provider — the conventional names each vendor's SDK reads, so one export
+// works for the runner and for whatever harness you already use.
 export const ENV_KEY = {
   anthropic: 'ANTHROPIC_API_KEY',
   openai: 'OPENAI_API_KEY',

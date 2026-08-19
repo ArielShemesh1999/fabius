@@ -4,18 +4,17 @@
 
 #### scout wide · strike narrow
 
-*An autonomous AI agent that runs on every major model — Anthropic · OpenAI · Google · Mistral · Groq — from one console.*
+*A plugin, not a platform — one set of rules above every model.*
 
 <br/>
 
-<img src="assets/hero.webp" alt="fabius — an autonomous AI agent of fifteen coordinated capability layers, one console, every model" width="100%" />
+<img src="assets/hero.webp" alt="fabius — a plugin of fifteen coordinated capability layers, one set of rules above every model" width="100%" />
 
 <br/>
 <br/>
 
-[![Autonomous agent](https://img.shields.io/badge/fabius-autonomous_AI_agent-7a3dff?style=for-the-badge)](https://synapse-vert-one.vercel.app)
-[![Runs on every model](https://img.shields.io/badge/runs_on-every_model-7a3dff?style=for-the-badge)](#what-it-is)
-[![Open the console](https://img.shields.io/badge/console-synapse-6322e8?style=for-the-badge)](https://synapse-vert-one.vercel.app)
+[![Plugin](https://img.shields.io/badge/plugin-install_in_Claude_Code_%C2%B7_Codex_%C2%B7_Grok_Build-7a3dff?style=for-the-badge)](#install-it)
+[![Runs above every model](https://img.shields.io/badge/runs_above-every_model-7a3dff?style=for-the-badge)](#install-it)
 [![Benchmark](https://img.shields.io/badge/benchmark-blind,_reproducible-2ea44f?style=for-the-badge)](#what-it-does)
 [![Structural tests](https://img.shields.io/badge/structural_tests-23%2F23-2ea44f?style=for-the-badge)](BENCHMARKS.md)
 [![Research-grounded](https://img.shields.io/badge/research--grounded-routing_policy-7a3dff?style=for-the-badge)](RESEARCH.md)
@@ -27,15 +26,14 @@
 
 ## What it is
 
-fabius is an autonomous AI agent. It runs on **every major model** — Anthropic · OpenAI · Google · Mistral · Groq — managed from one console, with a **Scout → Plan → Strike → Prove → Record** loop, an independent verifier, verify-gated compounding memory, least-privilege operator tools (`fetch` · `web_search` · `code`-exec), voice, and channels (Telegram [@fabiusagent_bot](https://t.me/fabiusagent_bot), WhatsApp). It sets *how* the work gets done across the whole job — write code, write prose, build and orchestrate other agents, design UI, visualize data, debug, market the value, harden security, build games, develop on-chain and cryptographically seal artifacts, wire automations, research the sciences, engineer and serve ML systems, analyze markets, and remember — drawing on a specialist layer only when a task needs depth. One stance, applied everywhere: talk lean, build lean, run a disciplined process, design at ship quality, build other agents, and stop re-deriving.
+fabius is a plugin — **fifteen coordinated skills and twenty-two proven routing rules**, loaded on top of the model you already run (Claude, GPT, Gemini, DeepSeek, GLM, Qwen, Llama, Mistral, Kimi, Grok, Command …), inside the harness you already use (Claude Code · Codex · Grok Build · any `AGENTS.md` reader). Nothing to host, no account, no runtime of its own. The model supplies capability; fabius supplies discipline: scope · route · specialize · guard · verify · remember. The rules make the model run a **Scout → Plan → Strike → Prove → Record** loop, pass an independent verifier, and keep verify-gated compounding memory. They set *how* the work gets done across the whole job — write code, write prose, build and orchestrate other agents, design UI, visualize data, debug, market the value, harden security, build games, develop on-chain and cryptographically seal artifacts, wire automations, research the sciences, engineer and serve ML systems, analyze markets, and remember — drawing on a specialist layer only when a task needs depth. One stance, applied everywhere: talk lean, build lean, run a disciplined process, design at ship quality, build other agents, and stop re-deriving.
 
-It lives across three aligned surfaces:
+It lives across two aligned surfaces:
 
-- **Brain** — this provenance-sealed repo.
-- **Face** — the landing: **[fabius-landing.vercel.app](https://fabius-landing.vercel.app)**
-- **Console** — synapse, the system itself: **[synapse-vert-one.vercel.app](https://synapse-vert-one.vercel.app)**
+- **Rules** — this provenance-sealed repo (the plugin).
+- **Site** — the landing: **[fabius-landing.vercel.app](https://fabius-landing.vercel.app)**
 
-It is named for the Fabian doctrine: **scout the whole field, fight only the battle that matters.** Internally the agent is composed of fifteen coordinated, non-overlapping capability layers — a router (`fabius`), an always-on lean core (`fabius-parcus`), and thirteen engineering specialists — that decide how each job is done.
+It is named for the Fabian doctrine: **scout the whole field, fight only the battle that matters.** Internally the plugin is composed of fifteen coordinated, non-overlapping capability layers — a router (`fabius`), an always-on lean core (`fabius-parcus`), and thirteen engineering specialists — that decide how each job is done.
 
 What fabius *is* — an **intelligence amplification layer**, not a model — and the contract for how it must be judged (same model, BASE → FAB → FAB_MEMORY, better outcomes on less waste) is fixed in **[IDENTITY.md](IDENTITY.md)**; its executable form is the **Fabius Benchmark Suite** in [`evals/suite/`](evals/suite/).
 
@@ -150,7 +148,7 @@ Fan out to understand and verify. Ship the smallest correct artifact. Explain it
 
 ## Grounded in agent research
 
-fabius's decisions aren't hand-waving. Its routing policy is drawn from the agent-research canon — ReAct, Toolformer, Tree of Thoughts, RAP, Reflexion, MemGPT, DSPy, Voyager, and the 2026 efficiency and memory surveys — turned into a documented decision policy (a proven core of twenty-two rules — thirteen routing R1–R13 + nine orchestration/memory M1–M9 — plus a researched frontier layer R14–R16 · M10–M13), stated with an explicit ledger separating what the papers *measured* from what fabius *borrows by analogy*. Two principles, illustrated:
+fabius's decisions aren't hand-waving. Its routing policy is our own research — a field of agent behaviour investigated, convened and forged into a documented decision policy (a proven core of twenty-two rules — thirteen routing R1–R13 + nine orchestration/memory M1–M9 — plus a researched frontier layer R14–R16 · M10–M13), each rule derived and adversarially verified, stated with an explicit ledger separating what was *measured* from what was *derived*. Two principles, illustrated:
 
 <div align="center">
 <img src="assets/fig-capability-ladder.svg" alt="Capability vs machinery: fabius stops at the knee instead of climbing to a swarm" width="49%" />
@@ -159,42 +157,24 @@ fabius's decisions aren't hand-waving. Its routing policy is drawn from the agen
 
 **Climb one rung, stop at the knee** (left) — capability scales sub-linearly with machinery, so fabius adds the smallest sufficient rung (`inline → tool → retrieval → plan → subagent → swarm`) and never jumps to a swarm. **Refine on a real signal** (right) — a hard oracle (test, compiler) earns ~3 iterations, soft self-critique caps at 1–2, no signal ships once to human review.
 
-Under the policy sits a **mathematical-foundations layer**: every rule reduced to its formal statement (decision theory, information theory, optimization, scheduling) — adversarially verified, then *proven* to compose as **one consistent, gap-free, model-applicable decision system** (all **22** rules are the same expected-loss / value-of-information threshold wrapped in a measurable task-partition, the composition’s exceptions printed; a researched frontier layer R14–R16 · M10–M13 sits at the working edge). The decision policy, the math behind all seven figures, the foundations table, the coherence proof, and the direct-vs-analogy honesty ledger live in **[RESEARCH.md](RESEARCH.md)**. The figures are conceptual shapes of documented principles, not fabius measurements — reproduce them with `python3 assets/charts/render_figures.py`.
+Under the policy sits a **mathematical-foundations layer**: every rule reduced to its formal statement (decision theory, information theory, optimization, scheduling) — adversarially verified, then *proven* to compose as **one consistent, gap-free, model-applicable decision system** (all **22** rules are the same expected-loss / value-of-information threshold wrapped in a measurable task-partition, the composition’s exceptions printed; a researched frontier layer R14–R16 · M10–M13 sits at the working edge). The decision policy, the math behind all seven figures, the foundations table, the coherence proof, and the measured-vs-derived honesty ledger live in **[RESEARCH.md](RESEARCH.md)**. The figures are conceptual shapes of the rules as derived, not measurements — reproduce them with `python3 assets/charts/render_figures.py`.
 
 The full treatment — the fifteen-skill architecture, the proven core of twenty-two rules with **a complete proof of the mathematics under each one** (every proof adversarially verified, corrections recorded in the receipt), the coherence theorem with its exceptions printed, the researched frontier layer held honestly at the edge, the blind benchmark, and the honesty ledger — is collected as a **whitepaper** (40+ pages): **[paper/fabius-as-a-system.pdf](paper/fabius-as-a-system.pdf)** (reproduce with `bash paper/build.sh`).
 
 ---
 
-## Run it
+## Install it
 
-fabius runs from **one console — [synapse-vert-one.vercel.app](https://synapse-vert-one.vercel.app)** — across every major model (Anthropic · OpenAI · Google · Mistral · Groq): pick a model, give it the goal, and watch the Scout → Plan → Strike → Prove → Record loop run with an independent verifier and verify-gated memory. Reach the agent on Telegram [@fabiusagent_bot](https://t.me/fabiusagent_bot) or WhatsApp. Read the paper → **[paper/fabius-as-a-system.pdf](paper/fabius-as-a-system.pdf)**.
+fabius is a plugin. It loads on top of the model you already run, inside the harness you already use — nothing to host, no account, no runtime of its own.
 
-### …and on your own machine
-
-The console is the right place for a long-running operator — it survives the laptop closing and holds the compounding memory. What it cannot be is *here*: it has no filesystem, so it cannot read the repository you are working in, and the task leaves the building. **[`runtime/`](runtime/)** is the other half.
-
-```bash
-node runtime/fabius.mjs doctor                     # what is configured, and whether the seal still matches
-node runtime/fabius.mjs run "read this repo and write the README it is missing"
-node runtime/fabius.mjs recon areta.co.il          # external audit — no API key, no account
-node runtime/fabius.mjs listen --owner npub1…      # reachable by encrypted message, no server in between
-```
-
-No install, no dependencies, no build — Node 22+ and this repo. Same router, same rules, same contracts (read off disk and handed to the model, verbatim from the sealed files), with hands only a local process can have: your files, your shell, your toolchain.
-
-Capability is gated, not configured. Read-only by default; `--act` lets it write and run, asking each time; `--yes` makes it autonomous over an **allowlist**, not a list of banned words — it approves only what it recognises and can inspect (`npm test`, `node build.mjs`, `pytest`, `git status`, `ls`, `grep` and their neighbours), holds anything carrying a pipe, a `;`, a `$(…)`, a backtick, a redirect or an interpreter handed inline code, and still holds `git push`, `--prod`, `rm -rf`, `sudo` and `DROP TABLE` for a human — a non-interactive run refuses those rather than guessing, and only `--dangerously-approve-everything` releases them, written into the run's audit log. The working directory is a symlink-resolved jail, secrets are on a deny-list no flag overrides, and when the artifact is code the runtime **runs it** — through the same gate, printed in full — and lets a non-zero exit overrule the reviewer's score. Because no allowlist can vouch for a whole program the way it can vouch for `npm test`, `--yes` does **not** release that one: the oracle asks even in autonomous mode, and an unattended run skips the execution check rather than running authored code unread. `npm test` in `runtime/` is **75 checks that spend nothing** (68 fully offline; 7 specification-vector tests skip until `npm run vectors`) — including the BIP-340 and NIP-44 specification vectors behind the channel.
-
-<details>
-<summary>The brain is also an installable Claude Code plugin</summary>
-
-The sealed brain in this repo doubles as the owner's own Claude Code plugin (zero build, zero config):
+### Claude Code
 
 ```bash
 /plugin marketplace add ArielShemesh1999/fabius
 /plugin install fabius@fabius
 ```
 
-Then run `/reload-plugins` (or restart Claude Code) to activate. The marketplace clone is ~60 MiB and the installed plugin caches ~95 MB — fabius ships its whitepaper, benchmark receipts and runtime alongside the skills.
+Then run `/reload-plugins` (or restart Claude Code) to activate. The marketplace clone is ~60 MiB and the installed plugin caches ~95 MB — fabius ships its whitepaper, benchmark receipts and local runner alongside the skills.
 
 **Stay current automatically:** third-party marketplaces ship with auto-update off, so turn it on once — `/plugin` → **Marketplaces** → `fabius` → **Enable auto-update**. Every fabius release bumps the plugin version, so with auto-update on, new releases install in the background after a session starts; run `/reload-plugins` (or restart) when notified to activate.
 
@@ -218,18 +198,57 @@ markets / backtest  → fabius-fortuna
 ask a council       → fabius-concilium
 ```
 
-</details>
+### Codex
+
+The same plugin, through Codex's git plugin marketplace. In `~/.codex/config.toml`:
+
+```toml
+[marketplaces.fabius]
+source_type = "git"
+source = "https://github.com/ArielShemesh1999/fabius.git"
+
+[plugins."fabius@fabius"]
+enabled = true
+```
+
+### Grok Build
+
+Native plugin format — two commands:
+
+```bash
+grok plugin install ArielShemesh1999/fabius --trust
+grok plugin enable fabius
+```
+
+### Any other harness
+
+Cursor · Windsurf · Cline · GitHub Copilot · Gemini CLI · OpenCode — or a raw system prompt: carry [`AGENTS.md`](AGENTS.md) in. The per-tool paths are in the [Portable stance](#portable-stance) table below.
+
+### …without a harness
+
+**[`runtime/`](runtime/)** is a zero-dependency local runner: it reads the same sealed rule files off disk and hands them to a model through your own API key — a convenience for running the same rules where no harness is loaded, nothing more.
+
+```bash
+node runtime/fabius.mjs doctor                     # what is configured, and whether the seal still matches
+node runtime/fabius.mjs run "read this repo and write the README it is missing"
+node runtime/fabius.mjs recon areta.co.il          # external audit — no API key, no account
+node runtime/fabius.mjs listen --owner npub1…      # reachable by encrypted message, no server in between
+```
+
+No install, no dependencies, no build — Node 22+ and this repo. Same router, same rules, same contracts (read off disk and handed to the model, verbatim from the sealed files), with hands only a local process can have: your files, your shell, your toolchain.
+
+Capability is gated, not configured. Read-only by default; `--act` lets it write and run, asking each time; `--yes` makes it autonomous over an **allowlist**, not a list of banned words — it approves only what it recognises and can inspect (`npm test`, `node build.mjs`, `pytest`, `git status`, `ls`, `grep` and their neighbours), holds anything carrying a pipe, a `;`, a `$(…)`, a backtick, a redirect or an interpreter handed inline code, and still holds `git push`, `--prod`, `rm -rf`, `sudo` and `DROP TABLE` for a human — a non-interactive run refuses those rather than guessing, and only `--dangerously-approve-everything` releases them, written into the run's audit log. The working directory is a symlink-resolved jail, secrets are on a deny-list no flag overrides, and when the artifact is code the runner **runs it** — through the same gate, printed in full — and lets a non-zero exit overrule the reviewer's score. Because no allowlist can vouch for a whole program the way it can vouch for `npm test`, `--yes` does **not** release that one: the oracle asks even in autonomous mode, and an unattended run skips the execution check rather than running authored code unread. `npm test` in `runtime/` is **75 checks that spend nothing** (68 fully offline; 7 specification-vector tests skip until `npm run vectors`) — including the BIP-340 and NIP-44 specification vectors behind the channel.
 
 ---
 
 ## Portable stance
 
-The agent's operating stance is plain markdown, so it travels. The portable bridge is [`AGENTS.md`](AGENTS.md) — drop it into any other tool (or paste it into a system prompt) and that tool runs under the same fabius stance end to end.
+The fabius stance is plain markdown, so it travels. The portable bridge is [`AGENTS.md`](AGENTS.md) — drop it into any other tool (or paste it into a system prompt) and that tool runs under the same fabius stance end to end.
 
 | Tool | Carry the stance in via |
 |---|---|
 | Claude Code | the plugin — `/plugin install fabius@fabius` (all fifteen layers, progressive disclosure) |
-| grok-build (xAI) | native — discovers the Claude Code plugin (`.claude/plugins` + `skills/`) and reads `AGENTS.md` automatically; no file conversion — enable the plugin once (`grok plugin install <path> --trust`, then enable) |
+| grok-build (xAI) | native — discovers the Claude Code plugin (`.claude/plugins` + `skills/`) and reads `AGENTS.md` automatically; no file conversion — enable the plugin once (`grok plugin install ArielShemesh1999/fabius --trust`, or a local path, then `grok plugin enable fabius`) |
 | Codex / OpenAI | the full plugin via Codex's git plugin marketplace (`[marketplaces]` in `~/.codex/config.toml`) — all fifteen skills + [`AGENTS.md`](AGENTS.md) |
 | OpenCode | `AGENTS.md` at the repo root, or copy `skills/` into `.opencode/` |
 | Cursor | `AGENTS.md` → `.cursor/rules/fabius.mdc` |
@@ -264,7 +283,7 @@ fabius/
 │   ├── fabius-doctrina/    AI/ML engineering    · references: serving · MLOps · evaluation playbook
 │   ├── fabius-fortuna/     markets & finance    · references: analysis · valuation · honest backtesting · risk
 │   └── fabius-concilium/   cross-model council  · references: council protocol · council.mjs (runnable)
-├── runtime/                the local body — zero-dependency Node CLI: run · chat · recon · listen · doctor (75 tests, no key)
+├── runtime/                the local runner — zero-dependency Node CLI that reads the same rules: run · chat · recon · listen · doctor (75 tests, no key)
 ├── evals/                  the benchmark — four panels + receipts (results.benchmark.json canonical) · suite/ (FBS v1.0, 100 tasks) · structural.mjs (23/23) · portable_eval.py
 ├── provenance/             content-bound seal — verify.sh · seal manifest · OTS Bitcoin proof · signed tag
 ├── IDENTITY.md             what fabius is + the evaluation contract (BASE → FAB → FAB_MEMORY)

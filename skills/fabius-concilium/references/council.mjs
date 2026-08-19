@@ -10,8 +10,8 @@
 //
 // Zero dependencies (Node ≥18, native fetch). Every model through ONE OpenRouter key — same
 // gateway karpathy's llm-council uses, so seat diversity costs no extra plumbing. The protocol
-// is provider-agnostic; in the synapse console the identical three stages run over fabius's own
-// 5-provider runtime instead. Spec + exact prompts: ./council-protocol.md
+// is provider-agnostic: the identical three stages run over any harness or gateway that can
+// reach several models — only the transport changes. Spec + exact prompts: ./council-protocol.md
 //
 // Usage:
 //   node council.mjs --selftest                     # wiring + Borda check — no key, no network, no cost

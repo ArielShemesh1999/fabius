@@ -1,7 +1,10 @@
 # fabius, locally
 
-The agent, running on your machine. Same router, same rules, same contracts as the
-console — with hands it can only have here: your files, your shell, your network.
+A zero-dependency local runner for the same rules. fabius is a plugin — one set of rules
+above every model — and normally your harness (Claude Code, Codex, an AGENTS.md reader)
+loads it. This folder is the convenience for when there is no harness: it reads the same
+sealed `SKILL.md` contracts off disk and hands them to a model through your own API key,
+with hands only a local process can have: your files, your shell, your network.
 
 ```bash
 node runtime/fabius.mjs doctor          # what is configured and what is missing
@@ -15,18 +18,17 @@ the 7 specification-vector tests skip until `npm run vectors` fetches the vector
 They skip loudly rather than passing quietly, because a crypto test that silently does
 nothing is worse than no test.
 
-## Why local at all
+## Why a runner at all
 
-The console is the right place for a long-running operator: it survives your laptop
-closing, it holds the org's memory, it is reachable from anything with a browser.
+Inside a harness the harness reads the routed contracts and drives the model; the plugin
+needs nothing else. Without one you still want the same rules — and you want them to run
+where the work is: a hosted sandbox has no filesystem, so it cannot read the repository you
+are working in, cannot run your test suite against your toolchain, and sends your task to
+a server, so the task leaves the building.
 
-What it cannot be is *here*. It has no filesystem, so it cannot read the repository you
-are working in. It runs code in someone else's sandbox, so it cannot run your test suite
-against your toolchain. It sends your task to a server, so the task leaves the building.
-
-This runtime is the other half. Your files never leave the machine unless a task sends
-them; the only outbound traffic is the model provider you chose and URLs a task explicitly
-names.
+This runner keeps it here. Nothing to host, no account, no server. Your files never leave
+the machine unless a task sends them; the only outbound traffic is the model provider you
+chose and URLs a task explicitly names.
 
 ## The command surface
 
@@ -113,8 +115,8 @@ Every decision, allowed or denied, lands in the run's journal under `~/.fabius/r
 
 ## What the loop actually does
 
-Routing is the same three-axis classification the console runs — layer, machinery, model
-tier — and it prints its reasoning:
+Routing is the three-axis classification the fabius router rule specifies — layer,
+machinery, model tier — and it prints its reasoning:
 
 ```
 Memory=false · Tools=true · Planning=true · Domain=true (→ praesidium)
@@ -122,11 +124,11 @@ R2 → smallest sufficient rung: subagent (stopped before swarm)
 R11 → frontier: high-stakes domain (security) — reserved for money and security calls
 ```
 
-Then the difference from the console: the routed `SKILL.md` contracts are **read off disk
-and handed to the model**, verbatim from the files the provenance seal covers. In a
-harness like Claude Code the harness does that. Here there is no harness, so the runtime
-does it — which is what makes a local run *fabius* rather than a generic loop.
-`fabius doctor` reports whether those files still match the sealed manifest.
+Then the routed `SKILL.md` contracts are **read off disk and handed to the model**,
+verbatim from the files the provenance seal covers. In a harness like Claude Code the
+harness does that. Here there is no harness, so the runner does it — which is what makes
+a local run *fabius* rather than a generic loop. `fabius doctor` reports whether those
+files still match the sealed manifest.
 
 The rules that were measured, and fire here too:
 
@@ -188,9 +190,10 @@ fabius whoami                                    # npub1…  — this agent's ad
 fabius listen --owner npub1yourphone…            # now message it from anywhere
 ```
 
-Telegram works, and Telegram can suspend it. A WhatsApp bridge works, and it needs a host
-and carries a ban risk. This third option has no owner: a keypair is the identity, relays
-are public and interchangeable, and there is no account to suspend or number to ban.
+A bot hosted by a messaging platform can be suspended by that platform. A bridge into a
+closed network needs a host and carries a ban risk. This channel has no owner: a keypair
+is the identity, relays are public and interchangeable, and there is no account to
+suspend or number to ban.
 
 Messages are end-to-end encrypted and metadata-wrapped, so a relay sees only that some
 ephemeral key sent something to you.
@@ -212,8 +215,9 @@ author, which is the check that blocks impersonation. Both are tested.
 
 ## Providers
 
-Eight, one call shape: Anthropic · OpenAI · Google · Mistral · Groq · HuggingFace ·
-OpenRouter · Ollama. Keys come from the environment first, then `~/.fabius/config.json`.
+Eight provider adapters, one call shape: Anthropic, OpenAI, Google, Mistral, Groq,
+HuggingFace, OpenRouter and Ollama — and through the two routers, any model they reach.
+Keys come from the environment first, then `~/.fabius/config.json`.
 A custom model id overrides the tier default only when you also named the provider it
 belongs to, so a HuggingFace repo id can never be pasted onto a fallback Anthropic call.
 

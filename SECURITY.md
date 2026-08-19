@@ -10,7 +10,7 @@ A first response should arrive within 72 hours. If a report is accepted, a fix a
 
 ## What is in scope
 
-fabius is a set of skill contracts, a plugin manifest and a zero-dependency Node runtime. The interesting surface is:
+fabius is a set of skill contracts, a plugin manifest and a zero-dependency local runner (`runtime/`) that hands the same sealed rules to a model through the user's own API key. The interesting surface is:
 
 - **The runtime's gates.** `--dangerously-approve-everything`, the ask posture, and the deny-list around the resolved config path. A path that releases an irreversible command without a prompt is a real finding — one such path was fixed in v2.3.1.
 - **Secret redaction.** `redact()` is meant to cover every secret the runtime holds, the nostr identity key included. A secret that reaches a log or an artifact is in scope.
@@ -19,8 +19,8 @@ fabius is a set of skill contracts, a plugin manifest and a zero-dependency Node
 
 ## What is not in scope
 
-- The behaviour of the underlying models. fabius routes to Anthropic, OpenAI, Google, Mistral and Groq; their outputs are not this project's attack surface.
-- Anything requiring an already-compromised machine, since the runtime holds the operator's keys by design.
+- The behaviour of the underlying models. fabius is a rule set loaded above whatever model the user already runs — Claude, GPT, Gemini or any other; the model's outputs are not this project's attack surface.
+- Anything requiring an already-compromised machine, since the runner holds the user's own API keys by design.
 - The fact that a public repository can be cloned. [PROVENANCE.md](PROVENANCE.md) states this plainly: the design defends provenance and enforcement, not access.
 
 ## Supported versions
