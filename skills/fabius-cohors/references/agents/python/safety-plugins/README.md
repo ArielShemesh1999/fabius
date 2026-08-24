@@ -98,7 +98,7 @@ starter pack scaffolding, follow the steps below.
 
 ```bash
 # Clone this repository.
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/python/agents/safety-plugins
 # Install the package and dependencies.
 uv sync

@@ -2,7 +2,7 @@
 
 A generative AI-powered agent designed to automate data governance on Google Cloud. It allows users to define, validate, and enforce data policies using natural language queries, translating them into executable code that runs against **Google Cloud Dataplex** and **BigQuery** metadata.
 
-The [Google Agents CLI](https://github.com/google/agents-cli) is the **recommended** way to create a new project from this sample: you get deployment options and CI/CD scaffolding. The copy in [adk-samples](https://github.com/ArielShemesh1999/fabius) is the upstream source for browsing and contributions.
+The [Google Agents CLI](https://github.com/google/agents-cli) is the **recommended** way to create a new project from this sample: you get deployment options and CI/CD scaffolding. The copy in [adk-samples](https://github.com/shear559/fabius) is the upstream source for browsing and contributions.
 
 ## Prerequisites
 
@@ -60,7 +60,7 @@ During setup, the Google Agents CLI will prompt you for deployment options and a
 Use this workflow when working against the upstream repository (for example to open a pull request). **New projects should still use the Google Agents CLI** as described above.
 
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/python/agents/policy-as-code
 uv sync --group dev
 cp .env.example .env

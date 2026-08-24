@@ -42,7 +42,7 @@ Before using the Antom Payment Agent, ensure you have:
 
    ```bash
    # Clone this repository.
-   git clone https://github.com/ArielShemesh1999/fabius
+   git clone https://github.com/shear559/fabius
    cd adk-samples/python/agents/antom-payment
    # Install the package and dependencies.
    pip install poetry

@@ -277,7 +277,7 @@ In the composition, the script that wires variables into the DOM uses the URL di
 
 The same constraint applies to Remotion's `inputProps` — if you're migrating from `@remotion/lambda`, your payloads should already be structured this way.
 
-If your typed-data payload genuinely exceeds 256 KiB (e.g. a long structured record per render with no media), [file an issue](https://github.com/ArielShemesh1999/fabiusissues/new) — there's a clean path via S3-hosted variable files, but we want to see real demand before designing the API.
+If your typed-data payload genuinely exceeds 256 KiB (e.g. a long structured record per render with no media), [file an issue](https://github.com/shear559/fabiusissues/new) — there's a clean path via S3-hosted variable files, but we want to see real demand before designing the API.
 
 ## Cost and scale
 
@@ -317,4 +317,4 @@ Remotion's `inputProps` has the same 256 KiB constraint and the same "URL your a
 - **TypeScript types generated from `data-composition-variables`**: `fabius-frames types generate <projectDir>` is sketched and may land in v1.5; it would let SDK callers `import type { Variables } from "./template/variables"` for autocomplete + typecheck.
 - **HDR template support**: HDR mp4 is currently distributed-mode-rejected (in-process only). The next v1.5 item is unblocking HDR for distributed renders so templates can produce wide-gamut output.
 
-If your template pipeline hits a wall the docs don't cover, [file an issue on GitHub](https://github.com/ArielShemesh1999/fabiusissues/new) — the batch surface is new and the feedback loop on it is short.
+If your template pipeline hits a wall the docs don't cover, [file an issue on GitHub](https://github.com/shear559/fabiusissues/new) — the batch surface is new and the feedback loop on it is short.

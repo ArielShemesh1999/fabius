@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/ArielShemesh1999/fabius/evals/suite/schema.json",
+  "$id": "https://github.com/shear559/fabius/evals/suite/schema.json",
   "title": "Fabius Benchmark Suite task (FBS v1.0)",
   "type": "object",
   "properties": {

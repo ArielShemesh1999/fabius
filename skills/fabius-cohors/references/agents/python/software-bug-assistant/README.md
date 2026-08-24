@@ -42,7 +42,7 @@ up-to-date knowledge.
 
 ## Setup and Installation
 
-The [Google Agents CLI](https://github.com/google/agents-cli) is the **recommended** path for new projects; the [adk-samples](https://github.com/ArielShemesh1999/fabius) tree is for browsing and contributions.
+The [Google Agents CLI](https://github.com/google/agents-cli) is the **recommended** path for new projects; the [adk-samples](https://github.com/shear559/fabius) tree is for browsing and contributions.
 
 ### Prerequisites
 
@@ -80,7 +80,7 @@ The Google Agents CLI prompts for deployment options and adds production-oriente
 **New projects should still use the Google Agents CLI** when possible.
 
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/python/agents/software-bug-assistant
 uv sync --group dev
 ```

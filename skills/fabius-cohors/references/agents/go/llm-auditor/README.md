@@ -53,7 +53,7 @@ to implement this workflow.
 
     ```bash
     # Clone this repository.
-    git clone https://github.com/ArielShemesh1999/fabius
+    git clone https://github.com/shear559/fabius
     cd adk-samples/go/agents/llm-auditor
     # Tidy up the dependencies
     go mod tidy

@@ -2,7 +2,7 @@
 
 Some Remotion compositions can't be translated cleanly. The skill should
 recognize them upfront and recommend the **runtime interop pattern** from
-[PR #214](https://github.com/ArielShemesh1999/fabiuspull/214) instead of
+[PR #214](https://github.com/shear559/fabiuspull/214) instead of
 producing broken HTML.
 
 ## When to recommend interop
@@ -23,7 +23,7 @@ relies on. Translating them produces silently-wrong output.
 
 ## What the interop pattern actually does
 
-Per [PR #214](https://github.com/ArielShemesh1999/fabiuspull/214), the
+Per [PR #214](https://github.com/shear559/fabiuspull/214), the
 runtime adapter:
 
 1. Bundles the user's Remotion code with React + `@remotion/player` via esbuild.
@@ -46,7 +46,7 @@ When the skill detects a blocker, output something like:
 > **runtime interop pattern**: bundle your Remotion code with `@remotion/player`
 > and let HF drive it frame-by-frame.
 >
-> See https://github.com/ArielShemesh1999/fabiuspull/214 for the full
+> See https://github.com/shear559/fabiuspull/214 for the full
 > implementation. Quick summary:
 >
 > 1. Bundle `entry.tsx` with esbuild: `npx esbuild entry.tsx --bundle --outfile=dist/bundle.js --format=iife --jsx=automatic`

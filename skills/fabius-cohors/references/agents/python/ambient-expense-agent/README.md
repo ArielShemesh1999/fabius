@@ -111,7 +111,7 @@ with [Cloud Monitoring](https://cloud.google.com/monitoring) for email alerts:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/python/agents/ambient-expense-agent
 ```
 

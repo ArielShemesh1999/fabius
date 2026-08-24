@@ -40,7 +40,7 @@ graph LR
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/python/agents/podcast_transcript_agent
 ```
 

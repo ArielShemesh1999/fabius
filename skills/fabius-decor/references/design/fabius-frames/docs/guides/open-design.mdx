@@ -3,7 +3,7 @@ title: Open Design
 description: "Create Fabius-Frames video drafts in Open Design — the open-source, BYOK Claude-Design alternative — then refine in any AI coding agent."
 ---
 
-[Open Design](https://github.com/ArielShemesh1999/fabius) is an open-source, local-first alternative to Claude Design. It runs on your laptop with `pnpm tools-dev`, deploys the web layer to Vercel, and delegates to whichever coding-agent CLI you already have on your `PATH` (Claude Code, Codex, Cursor Agent, Gemini CLI, OpenCode, Qwen, Copilot, Hermes, Kimi, Pi) — or to any OpenAI-compatible BYOK endpoint.
+[Open Design](https://github.com/shear559/fabius) is an open-source, local-first alternative to Claude Design. It runs on your laptop with `pnpm tools-dev`, deploys the web layer to Vercel, and delegates to whichever coding-agent CLI you already have on your `PATH` (Claude Code, Codex, Cursor Agent, Gemini CLI, OpenCode, Qwen, Copilot, Hermes, Kimi, Pi) — or to any OpenAI-compatible BYOK endpoint.
 
 Open Design produces a **valid first draft** of a Fabius-Frames composition — palette, scene content, GSAP entrance tweens, mid-scene activity, and shader transitions. You then download the project and refine in any AI coding agent with linting and live preview.
 
@@ -11,11 +11,11 @@ Open Design produces a **valid first draft** of a Fabius-Frames composition — 
 
 <Steps>
   <Step title="Download the instruction file">
-    Open [`fabius-design-fabius-frames.md`](https://github.com/ArielShemesh1999/fabiusblob/main/docs/guides/fabius-design-fabius-frames.md) on GitHub and click the download button (↓) to save it.
+    Open [`fabius-design-fabius-frames.md`](https://github.com/shear559/fabiusblob/main/docs/guides/fabius-design-fabius-frames.md) on GitHub and click the download button (↓) to save it.
   </Step>
   <Step title="Run Open Design locally">
     ```bash
-    git clone https://github.com/ArielShemesh1999/fabius
+    git clone https://github.com/shear559/fabius
     cd fabius-design
     pnpm install
     pnpm tools-dev run web
@@ -50,10 +50,10 @@ Open Design produces a **valid first draft** of a Fabius-Frames composition — 
 
 | Surface                                | Recommended setup                                                                                                                                                            |
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Open Design (open-source)              | Drop [`fabius-design-fabius-frames.md`](https://github.com/ArielShemesh1999/fabiusblob/main/docs/guides/fabius-design-fabius-frames.md) into `skills/fabius-frames-handoff/SKILL.md`   |
+| Open Design (open-source)              | Drop [`fabius-design-fabius-frames.md`](https://github.com/shear559/fabiusblob/main/docs/guides/fabius-design-fabius-frames.md) into `skills/fabius-frames-handoff/SKILL.md`   |
 | Claude Code                            | `npx skills add heygen-com/fabius-frames`, then use `/fabius-frames`                                                                                                             |
 | Cursor / Codex / Gemini CLI            | `npx skills add heygen-com/fabius-frames`                                                                                                                                       |
-| Claude Design (closed-source)          | Attach [`claude-design-fabius-frames.md`](https://github.com/ArielShemesh1999/fabiusblob/main/docs/guides/claude-design-fabius-frames.md) to your chat                          |
+| Claude Design (closed-source)          | Attach [`claude-design-fabius-frames.md`](https://github.com/shear559/fabiusblob/main/docs/guides/claude-design-fabius-frames.md) to your chat                          |
 
 ## How it works
 
@@ -64,7 +64,7 @@ The instruction file gives Open Design **pre-valid HTML skeletons** — the stru
 3. **Animations** — GSAP entrance tweens and mid-scene activity
 4. **Transitions** — hard cuts for most scenes, shader transitions at 2-3 key moments
 
-Open Design's [5-dimensional self-critique](https://github.com/ArielShemesh1999/fabiusblob/main/apps/web/src/prompts/discovery.ts) runs before emission, so the artifact arrives lint-clean and your coding agent can start refining immediately without structural fixes.
+Open Design's [5-dimensional self-critique](https://github.com/shear559/fabiusblob/main/apps/web/src/prompts/discovery.ts) runs before emission, so the artifact arrives lint-clean and your coding agent can start refining immediately without structural fixes.
 
 ## Example prompts
 

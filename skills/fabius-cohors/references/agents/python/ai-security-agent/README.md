@@ -234,7 +234,7 @@ The Google Agents CLI will prompt you to select deployment options and provides 
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/ArielShemesh1999/fabius
+    git clone https://github.com/shear559/fabius
     cd python/agents/ai-security-agent
     ```
 

@@ -53,7 +53,7 @@ The goal of this agent is to show how the agent decomposes a single complex goal
 
     Clone this repository and change to the repo directory:
     ```
-    git clone https://github.com/ArielShemesh1999/fabius
+    git clone https://github.com/shear559/fabius
     cd adk-samples/python/agents/parallel_task_decomposition_execution
     ```
 

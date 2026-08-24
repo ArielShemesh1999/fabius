@@ -66,7 +66,7 @@ The Guidelines Driven Media Gen Agent implements a sequential workflow using spe
 
     ```bash
     # Clone this repository.
-    git clone https://github.com/ArielShemesh1999/fabius
+    git clone https://github.com/shear559/fabius
     cd adk-samples/python/agents/on-brand-genmedia
     # Install the package and dependencies.
     uv sync

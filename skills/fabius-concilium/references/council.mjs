@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// © 2026 Ariel Shemesh · fabius · provenance fab1- · github.com/ArielShemesh1999/fabius
+// © 2026 Ariel Shemesh · fabius · provenance fab1- · github.com/shear559/fabius
 //
 // fabius-concilium — a runnable reference for the cross-model council.
 //
@@ -85,7 +85,7 @@ async function openrouterChat(model, messages) {
     headers: {
       Authorization: `Bearer ${key}`,
       "Content-Type": "application/json",
-      "HTTP-Referer": "https://github.com/ArielShemesh1999/fabius",
+      "HTTP-Referer": "https://github.com/shear559/fabius",
       "X-Title": "fabius-concilium",
     },
     body: JSON.stringify({ model, messages }),

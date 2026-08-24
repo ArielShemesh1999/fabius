@@ -14,7 +14,7 @@ This directory contains a sample ADK agent that builds personalized food tours u
 
 1. **Clone the sample repository**
    ```bash
-   git clone https://github.com/ArielShemesh1999/fabius
+   git clone https://github.com/shear559/fabius
    ```
 2. **Navigate to the sample directory**
    ```bash

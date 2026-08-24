@@ -5,7 +5,7 @@ description: "Open-source Fabius-Frames compositions behind HeyGen's product lau
 
 The HeyGen team builds its launch videos in Fabius-Frames. Every composition — including the original Fabius-Frames announcement, the Timeline Editor reveal, and the Website-to-Video demo — lives in a public repository you can read, run, and remix.
 
-<Card title="fabius-frames-launches" icon="github" href="https://github.com/ArielShemesh1999/fabius">
+<Card title="fabius-frames-launches" icon="github" href="https://github.com/shear559/fabius">
   Open-source Fabius-Frames compositions behind HeyGen's product launch videos.
 </Card>
 
@@ -18,11 +18,11 @@ Each subdirectory is a standalone Fabius-Frames project — `index.html`, `compo
 
 | Project | What it shows | Source |
 | --- | --- | --- |
-| **Fabius-Frames launch** | The original announcement video — 49.7 s, glass-frame intro, CSS / GSAP / Lottie / shader / Three.js flex section, full narrative arc. | [`fabius-frames-launch/`](https://github.com/ArielShemesh1999/fabiustree/main/fabius-frames-launch) |
-| **Website → Fabius-Frames** | Companion to the [website-to-video](/guides/website-to-video) workflow — captures a site and animates it. | [`website-to-fabius-frames/`](https://github.com/ArielShemesh1999/fabiustree/main/website-to-fabius-frames) |
-| **Timeline Editor launch** | 60 fps reveal video for the Fabius-Frames Timeline Editor: late-SFX cold open, chat-spiral of fine-tune prompts, editor reveal. | [`timeline-launch/`](https://github.com/ArielShemesh1999/fabiustree/main/timeline-launch) |
-| **Texture launch** | Texture-mask text + shader-driven background, used as a launch teaser. | [`texture-launch-video/`](https://github.com/ArielShemesh1999/fabiustree/main/texture-launch-video) |
-| **VFX × HeyGen combined** | Multi-act video chaining a VFX text-cursor scene with the HeyGen iPhone canvas test — useful as a reference for combining two existing projects into one render. | [`vfx-heygen-combined/`](https://github.com/ArielShemesh1999/fabiustree/main/vfx-heygen-combined) |
+| **Fabius-Frames launch** | The original announcement video — 49.7 s, glass-frame intro, CSS / GSAP / Lottie / shader / Three.js flex section, full narrative arc. | [`fabius-frames-launch/`](https://github.com/shear559/fabiustree/main/fabius-frames-launch) |
+| **Website → Fabius-Frames** | Companion to the [website-to-video](/guides/website-to-video) workflow — captures a site and animates it. | [`website-to-fabius-frames/`](https://github.com/shear559/fabiustree/main/website-to-fabius-frames) |
+| **Timeline Editor launch** | 60 fps reveal video for the Fabius-Frames Timeline Editor: late-SFX cold open, chat-spiral of fine-tune prompts, editor reveal. | [`timeline-launch/`](https://github.com/shear559/fabiustree/main/timeline-launch) |
+| **Texture launch** | Texture-mask text + shader-driven background, used as a launch teaser. | [`texture-launch-video/`](https://github.com/shear559/fabiustree/main/texture-launch-video) |
+| **VFX × HeyGen combined** | Multi-act video chaining a VFX text-cursor scene with the HeyGen iPhone canvas test — useful as a reference for combining two existing projects into one render. | [`vfx-heygen-combined/`](https://github.com/shear559/fabiustree/main/vfx-heygen-combined) |
 
 Storyboards (`STORYBOARD.md`), design notes (`DESIGN.md`), and handoff docs (`HANDOFF.md`) sit next to the source so you can see not just the code but the production thinking: VO direction, beat timing, color/style decisions. The structure follows the [Fabius-Frames pipeline](/guides/pipeline), which documents each artifact in detail.
 
@@ -42,7 +42,7 @@ The repo uses Git LFS for video, audio, image, and font assets:
 ```bash Terminal
 brew install git-lfs   # macOS — or your platform's git-lfs install
 git lfs install
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd fabius-frames-launches/fabius-frames-launch
 fabius-frames preview    # opens the studio for that launch
 ```
@@ -50,7 +50,7 @@ fabius-frames preview    # opens the studio for that launch
 To clone just the source (skip large LFS assets and pull on demand):
 
 ```bash Terminal
-GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/ArielShemesh1999/fabius
+GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/shear559/fabius
 cd fabius-frames-launches
 git lfs pull --include="fabius-frames-launch/assets/*"
 ```

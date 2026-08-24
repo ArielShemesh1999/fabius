@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Use **[private vulnerability reporting](https://github.com/ArielShemesh1999/fabius/security/advisories/new)** — Security → Report a vulnerability. It opens a channel visible only to you and the maintainer, so nothing is disclosed while a fix is being made.
+Use **[private vulnerability reporting](https://github.com/shear559/fabius/security/advisories/new)** — Security → Report a vulnerability. It opens a channel visible only to you and the maintainer, so nothing is disclosed while a fix is being made.
 
 Please do not open a public issue for a security problem.
 

@@ -174,9 +174,9 @@ product-context:
   bundled: "139 composable skills · 152 brand-grade design systems · 5 curated visual directions (Editorial Monocle · Modern Minimal · Warm Soft · Tech Utility · Brutalist Experimental) · sandboxed iframe preview · HTML/PDF/PPTX/MP4/ZIP export."
   media-generation: "Image (gpt-image-2) · video (Seedance 2.0) · HTML→MP4 motion (Fabius-Frames)."
   license: "Apache-2.0"
-  install: "git clone https://github.com/ArielShemesh1999/fabius && cd fabius-design && pnpm install && pnpm tools-dev run web"
+  install: "git clone https://github.com/shear559/fabius && cd fabius-design && pnpm install && pnpm tools-dev run web"
   site: "https://fabius-design.ai"
-  repo: "https://github.com/ArielShemesh1999/fabius"
+  repo: "https://github.com/shear559/fabius"
   stars: "53.8k (May 2026)"
   bundled-here: "Knowledge subset vendored at fabius-design/ in this repo: skills/, design-systems/, specs/, prompt-templates/, templates/. Heavy app code (apps/, plugins/, packages/, tools/, design-templates/, assets/, docs/) stripped — clone the upstream repo to run the daemon + web app."
 

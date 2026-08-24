@@ -4,7 +4,7 @@
 
 This agent is designed to show the basic principles for tackling software engineering problems from two prominent benchmarks: SWE-bench and TerminalBench. It is not meant to be a production ready implementation.
 
-The [Google Agents CLI](https://github.com/google/agents-cli) is the **recommended** way to create a new project from this sample: you get a production-oriented layout, deployment choices, and CI/CD scaffolding. The copy in [adk-samples](https://github.com/ArielShemesh1999/fabius) remains the upstream source for browsing and contributions.
+The [Google Agents CLI](https://github.com/google/agents-cli) is the **recommended** way to create a new project from this sample: you get a production-oriented layout, deployment choices, and CI/CD scaffolding. The copy in [adk-samples](https://github.com/shear559/fabius) remains the upstream source for browsing and contributions.
 
 ## Agent Details
 
@@ -80,7 +80,7 @@ During setup, the Google Agents CLI will prompt you for deployment options and a
 Use this workflow when working against the upstream repository (for example to open a pull request). **New projects should still use the Google Agents CLI** as described above.
 
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/python/agents/swe-benchmark-agent
 uv sync --group dev
 ```

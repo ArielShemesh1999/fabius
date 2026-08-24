@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/ArielShemesh1999/fabiusblob/main/LICENSE"><img src="https://img.shields.io/pypi/l/the-vector-engine" alt="License"></a>
+  <a href="https://github.com/shear559/fabiusblob/main/LICENSE"><img src="https://img.shields.io/pypi/l/the-vector-engine" alt="License"></a>
   <a href="https://pypi.org/project/the-vector-engine/"><img src="https://img.shields.io/pypi/v/the-vector-engine?label=pypi&color=blue" alt="PyPI version"></a>
   <a href="https://crates.io/crates/the-vector-engine"><img src="https://img.shields.io/crates/v/the-vector-engine?label=crates.io&color=blue" alt="crates.io version"></a>
   <a href="https://arxiv.org/abs/2504.19874"><img src="https://img.shields.io/badge/paper-arXiv-b31b1b.svg" alt="TurboQuant paper"></a>

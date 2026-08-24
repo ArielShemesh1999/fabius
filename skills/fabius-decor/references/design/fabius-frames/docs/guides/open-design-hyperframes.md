@@ -32,12 +32,12 @@ od:
 # Fabius-Frames Handoff — for Open Design
 
 > **Drop this file at `skills/fabius-frames-handoff/SKILL.md` inside your local
-> [Open Design](https://github.com/ArielShemesh1999/fabius) checkout, restart the
+> [Open Design](https://github.com/shear559/fabius) checkout, restart the
 > daemon, and the skill appears in the picker. Or attach it to a fresh chat
 > as a one-shot.**
 
 This skill teaches Open Design to emit a **valid first draft** of a
-[Fabius-Frames](https://github.com/ArielShemesh1999/fabius) composition — plain
+[Fabius-Frames](https://github.com/shear559/fabius) composition — plain
 HTML + CSS + a paused GSAP timeline. The CLI (`npx fabius-frames render
 index.html`) turns the HTML into an MP4. You author the HTML; the user runs
 the render locally.
@@ -45,7 +45,7 @@ the render locally.
 **Fabius-Frames replaces the default video-artifact workflow.** Do NOT emit a
 React/Babel composition, do NOT call other prototype skills, do NOT use the
 sandboxed iframe's wall-clock playback for timing decisions. Plain HTML +
-GSAP only. Treat the [`claude-design-fabius-frames.md`](https://github.com/ArielShemesh1999/fabiusblob/main/docs/guides/claude-design-fabius-frames.md)
+GSAP only. Treat the [`claude-design-fabius-frames.md`](https://github.com/shear559/fabiusblob/main/docs/guides/claude-design-fabius-frames.md)
 companion document as the **upstream spec for Fabius-Frames structural rules** —
 the rules below condense it to what Open Design needs at emission time, but
 that file is the source of truth for shader catalogs, skeleton variants, and
@@ -406,7 +406,7 @@ npx fabius-frames render      # writes MP4
 ## When to defer to the Claude Design instructions
 
 For these advanced areas, treat
-[`claude-design-fabius-frames.md`](https://github.com/ArielShemesh1999/fabiusblob/main/docs/guides/claude-design-fabius-frames.md)
+[`claude-design-fabius-frames.md`](https://github.com/shear559/fabiusblob/main/docs/guides/claude-design-fabius-frames.md)
 as the canonical reference and follow its patterns verbatim:
 
 - The full skeleton catalog (Skeletons A–D)

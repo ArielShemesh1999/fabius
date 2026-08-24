@@ -87,7 +87,7 @@ Use this path to run the **adk-samples** checkout of Short Movie Agents without 
 1. **Clone and enter the sample directory:**
 
    ```bash
-   git clone https://github.com/ArielShemesh1999/fabius
+   git clone https://github.com/shear559/fabius
    cd adk-samples/python/agents/short-movie-agents
    ```
 

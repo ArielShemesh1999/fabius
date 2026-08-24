@@ -9,7 +9,7 @@ details (timing, transitions, etc.).
 - **`drop`** = remove from output entirely. The HF runtime handles it.
 - **`see references/X.md`** = the mapping is non-trivial; read the linked file.
 - **`refuse + interop`** = the skill bows out and recommends the runtime adapter
-  pattern from [PR #214](https://github.com/ArielShemesh1999/fabiuspull/214).
+  pattern from [PR #214](https://github.com/shear559/fabiuspull/214).
 
 ## Composition root
 
@@ -135,7 +135,7 @@ in `TRANSLATION_NOTES.md`. HF is single-machine today; document the gap.
 ## When to bow out entirely
 
 If any blocker pattern is present, recommend the runtime interop pattern from
-[PR #214](https://github.com/ArielShemesh1999/fabiuspull/214) instead of
+[PR #214](https://github.com/shear559/fabiuspull/214) instead of
 attempting translation. See [escape-hatch.md](escape-hatch.md).
 
 The blockers are documented in [`scripts/lint_source.py`](../scripts/lint_source.py)

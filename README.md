@@ -175,7 +175,7 @@ fabius is a plugin. It loads on top of the model you already run, inside the har
 ### Claude Code
 
 ```bash
-/plugin marketplace add ArielShemesh1999/fabius
+/plugin marketplace add shear559/fabius
 /plugin install fabius@fabius
 ```
 
@@ -210,7 +210,7 @@ The same plugin, through Codex's git plugin marketplace. In `~/.codex/config.tom
 ```toml
 [marketplaces.fabius]
 source_type = "git"
-source = "https://github.com/ArielShemesh1999/fabius.git"
+source = "https://github.com/shear559/fabius.git"
 
 [plugins."fabius@fabius"]
 enabled = true
@@ -221,7 +221,7 @@ enabled = true
 Native plugin format — two commands:
 
 ```bash
-grok plugin install ArielShemesh1999/fabius --trust
+grok plugin install shear559/fabius --trust
 grok plugin enable fabius
 ```
 
@@ -253,7 +253,7 @@ The fabius stance is plain markdown, so it travels. The portable bridge is [`AGE
 | Tool | Carry the stance in via |
 |---|---|
 | Claude Code | the plugin — `/plugin install fabius@fabius` (all fifteen layers, progressive disclosure) |
-| grok-build (xAI) | native — discovers the Claude Code plugin (`.claude/plugins` + `skills/`) and reads `AGENTS.md` automatically; no file conversion — enable the plugin once (`grok plugin install ArielShemesh1999/fabius --trust`, or a local path, then `grok plugin enable fabius`) |
+| grok-build (xAI) | native — discovers the Claude Code plugin (`.claude/plugins` + `skills/`) and reads `AGENTS.md` automatically; no file conversion — enable the plugin once (`grok plugin install shear559/fabius --trust`, or a local path, then `grok plugin enable fabius`) |
 | Codex / OpenAI | the full plugin via Codex's git plugin marketplace (`[marketplaces]` in `~/.codex/config.toml`) — all fifteen skills + [`AGENTS.md`](AGENTS.md) |
 | OpenCode | `AGENTS.md` at the repo root, or copy `skills/` into `.opencode/` |
 | Cursor | `AGENTS.md` → `.cursor/rules/fabius.mdc` |
@@ -263,7 +263,7 @@ The fabius stance is plain markdown, so it travels. The portable bridge is [`AGE
 | Gemini CLI | `GEMINI.md` at the repo root |
 | Any model / raw prompt | paste `AGENTS.md` (or a single `SKILL.md`) into the system prompt |
 
-Verified 2026-07-19: loaded in Claude Code; installed and enabled in Codex via its plugin marketplace; installed and enabled in grok-build (0.2.103) with all fifteen skills discovered (in-session activation pending auth). The repo is public — `/plugin marketplace add ArielShemesh1999/fabius` clones anonymously, so a remote install needs no auth; a local-path install also works. Use is still governed by the proprietary [LICENSE](LICENSE).
+Verified 2026-07-19: loaded in Claude Code; installed and enabled in Codex via its plugin marketplace; installed and enabled in grok-build (0.2.103) with all fifteen skills discovered (in-session activation pending auth). The repo is public — `/plugin marketplace add shear559/fabius` clones anonymously, so a remote install needs no auth; a local-path install also works. Use is still governed by the proprietary [LICENSE](LICENSE).
 
 ---
 
@@ -320,5 +320,5 @@ Some bundled `references/` adapt prior work — see [credits/](credits/) for att
 
 <div align="center">
 <br/>
-<sub>Built by <a href="https://github.com/ArielShemesh1999">Ariel Shemesh</a> · one folder, the whole stack · scout wide, strike narrow.</sub>
+<sub>Built by <a href="https://github.com/shear559">Ariel Shemesh</a> · one folder, the whole stack · scout wide, strike narrow.</sub>
 </div>

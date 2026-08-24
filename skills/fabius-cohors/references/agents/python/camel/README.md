@@ -141,7 +141,7 @@ The agent operates in a cyclical manner:
 
    ```bash
    # Clone this repository.
-   git clone https://github.com/ArielShemesh1999/fabius
+   git clone https://github.com/shear559/fabius
    cd adk-samples/python/agents/camel
    # Install the package and dependencies.
    # Note for Linux users: If you get an error related to `keyring` during the installation, you can disable it by running the following command:

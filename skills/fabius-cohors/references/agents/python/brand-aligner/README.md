@@ -87,7 +87,7 @@ The Google Agents CLI guides you through setup options and generates a productio
 1. Clone and move into the sample:
 
    ```bash
-   git clone https://github.com/ArielShemesh1999/fabius
+   git clone https://github.com/shear559/fabius
    cd adk-samples/python/agents/brand-aligner
    ```
 

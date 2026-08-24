@@ -5,7 +5,7 @@ fabius is proprietary — the [LICENSE](LICENSE) grants personal, non-commercial
 ## What is welcome
 
 - **Bug reports.** The runtime ships 75 tests and the releases are sealed, and things still break. A report that names the command, the platform and what happened instead of what should have is acted on. Open an issue.
-- **Questions.** [Discussions](https://github.com/ArielShemesh1999/fabius/discussions) — the install thread and the sealing thread already answer the two most common ones.
+- **Questions.** [Discussions](https://github.com/shear559/fabius/discussions) — the install thread and the sealing thread already answer the two most common ones.
 - **Corrections.** The documentation makes measured claims — benchmark figures, test counts, model rosters, proof classifications. If one of them is wrong, that is the most valuable issue you can open. Three versions of the provenance paper were corrected by exactly this kind of outside reading.
 - **Security reports.** Privately, please — see [SECURITY.md](SECURITY.md). Not as a public issue.
 
@@ -13,7 +13,7 @@ fabius is proprietary — the [LICENSE](LICENSE) grants personal, non-commercial
 
 Pull requests that add or modify the Software. There is no licence grant to build on, so merging outside code would put the repository's provenance story — a signed Merkle root over every skill contract — in an ambiguous state. It is not personal; it is what "sealed" means.
 
-If you want to build something on fabius, [open an issue and ask](https://github.com/ArielShemesh1999/fabius/issues/new/choose). Written permission is how the LICENSE says yes, and the answer to reasonable asks usually is.
+If you want to build something on fabius, [open an issue and ask](https://github.com/shear559/fabius/issues/new/choose). Written permission is how the LICENSE says yes, and the answer to reasonable asks usually is.
 
 ## The bar for reports
 

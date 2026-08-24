@@ -1,4 +1,4 @@
-<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/shear559/fabius -->
 # Council protocol — the depth
 
 The runnable reference is [`council.mjs`](council.mjs) (Node ≥18, zero dependencies). This doc is the spec it implements: the exact stage prompts, the anonymization scheme, and the aggregation math, so the protocol is reproducible by hand or in any other runtime (a harness, a Worker, a notebook). `SKILL.md` is the lean contract; this is the playbook.

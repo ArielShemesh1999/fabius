@@ -96,7 +96,7 @@ set up the data sources to be used with the agent.
 1.  **Clone the Repository:**
 
     ```bash
-    git clone https://github.com/ArielShemesh1999/fabius
+    git clone https://github.com/shear559/fabius
     cd adk-samples/python/agents/data-science
     ```
 

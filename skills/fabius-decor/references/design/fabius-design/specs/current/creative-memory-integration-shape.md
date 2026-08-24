@@ -16,16 +16,16 @@ option space, names a working lean, and flags the decision that needs an
 explicit product/pipeline call. The intent is to react against this doc rather
 than against committed code, so reversing a decision costs a doc edit instead
 of a refactor. The doc is written to apply to either implementation that
-might land — PR [#1746](https://github.com/ArielShemesh1999/fabiuspull/1746)'s
+might land — PR [#1746](https://github.com/shear559/fabiuspull/1746)'s
 RFC/prototype package or a team-internal implementation — per the resolved
 foundation-vs-reference question on the parent issue.
 
 Anchor threads:
 
-- Issue [#1637](https://github.com/ArielShemesh1999/fabiusissues/1637) — the
+- Issue [#1637](https://github.com/shear559/fabiusissues/1637) — the
   product-direction thread; carries the Section 11 raw-events contract
   discussion in line.
-- PR [#1746](https://github.com/ArielShemesh1999/fabiuspull/1746) — the
+- PR [#1746](https://github.com/shear559/fabiuspull/1746) — the
   RFC/prototype engine package, parked while this doc is reviewed.
 
 ## Background
@@ -33,7 +33,7 @@ Anchor threads:
 This section inlines just enough of the engine's external shape that the
 later sections do not depend on any file outside `main`. Anyone who wants
 the full simulation suite, lifecycle rationale, or open-questions ledger
-can read PR [#1746](https://github.com/ArielShemesh1999/fabiuspull/1746); the
+can read PR [#1746](https://github.com/shear559/fabiuspull/1746); the
 material below is what this doc itself relies on.
 
 ### Engine external API (current shape, subject to integration)
@@ -82,7 +82,7 @@ data written?".
 
 The current engine is **write-time-derivation**: `ingestSignal` mutates
 preference records directly. Two failure modes were identified during PR
-[#1746](https://github.com/ArielShemesh1999/fabiuspull/1746) review:
+[#1746](https://github.com/shear559/fabiuspull/1746) review:
 
 1. **Attribution.** A unary accept/reject is one bit; without contrastive
    context, an extractor will attribute rejections to whatever it finds

@@ -10,7 +10,7 @@ report tips off attackers before a fix is available.
 
 Instead, report it privately through GitHub:
 
-1. Go to the [**Security** tab](https://github.com/ArielShemesh1999/fabiussecurity)
+1. Go to the [**Security** tab](https://github.com/shear559/fabiussecurity)
    of this repository.
 2. Click **"Report a vulnerability"** to open a private advisory visible only
    to the maintainers.

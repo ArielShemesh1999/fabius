@@ -36,7 +36,7 @@ reason about land cover change and report back to the user.
 
 2. **Installation**
    ```bash
-   git clone https://github.com/ArielShemesh1999/fabius
+   git clone https://github.com/shear559/fabius
    cd adk-samples/python/agents/earth-engine-geospatial
    uv sync
    ```

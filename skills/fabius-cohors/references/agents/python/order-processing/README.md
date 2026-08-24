@@ -79,7 +79,7 @@ Follow the instructions in this GCP Cloud Shell tutorial.
 1.  Clone the repository:
 
     ```bash
-    git clone https://github.com/ArielShemesh1999/fabius
+    git clone https://github.com/shear559/fabius
     cd python/agents/order-processing
     ```
 

@@ -86,7 +86,7 @@ to implement this workflow.
 
     Clone this repository and change to the repo directory:
     ```
-    git clone https://github.com/ArielShemesh1999/fabius
+    git clone https://github.com/shear559/fabius
     cd adk-samples/python/agents/fomc-research
     ```
 

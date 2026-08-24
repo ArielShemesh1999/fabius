@@ -1418,7 +1418,7 @@ ADK supports real-time, bidirectional communication for interactive experiences 
 *   **Handle `None` & `Optional`**: Always check for `None` or `Optional` values when accessing nested properties (e.g., `event.content and event.content.parts and event.content.parts[0].text`).
 *   **Immutability of Events**: Events are immutable records. If you need to change something *before* it's processed, do so in a `before_*` callback and return a *new* modified object.
 *   **Understand `output_key` vs. direct `state` writes**: `output_key` is for the agent's *final conversational* output. Direct `tool_context.state['key'] = value` is for *any other* data you want to save.
-*   **Example Agents**: Find practical examples and reference implementations in the [ADK Samples repository](https://github.com/ArielShemesh1999/fabius).
+*   **Example Agents**: Find practical examples and reference implementations in the [ADK Samples repository](https://github.com/shear559/fabius).
 
 
 ### Testing the output of an agent

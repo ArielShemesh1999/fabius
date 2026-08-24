@@ -88,7 +88,7 @@ Then select `story-teller-agent` from the dropdown menu.
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/ArielShemesh1999/fabius
+   git clone https://github.com/shear559/fabius
    cd adk-samples/python/agents/story_teller
    ```
 

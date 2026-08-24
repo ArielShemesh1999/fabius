@@ -1,4 +1,4 @@
-<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/shear559/fabius -->
 # Fabius — system architecture
 
 Fabius is **one agent**, not a bundle of plugins. A router (`fabius` itself) coordinates fourteen capability layers over a thin supporting spine — fifteen layers in all, counting the router — composing the agent's end-to-end engineering capability. The router dispatches on three axes together: **which layer(s)**, **how much machinery**, and **which model tier**. This document is the system's own architecture and its capability matrix.

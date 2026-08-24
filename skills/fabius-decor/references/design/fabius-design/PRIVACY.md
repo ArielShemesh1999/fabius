@@ -67,4 +67,4 @@ providers directly. They are never sent to the Open Design team.
 
 This document tracks the data handling of the shipped app. When the telemetry
 behavior changes, this page is updated alongside it. For questions, open a
-[GitHub Discussion](https://github.com/ArielShemesh1999/fabiusdiscussions).
+[GitHub Discussion](https://github.com/shear559/fabiusdiscussions).

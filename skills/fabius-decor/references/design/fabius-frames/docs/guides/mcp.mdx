@@ -6,7 +6,7 @@ description: "Author, preview, and render Fabius-Frames videos directly inside C
 The Fabius-Frames MCP is a hosted [Model Context Protocol](https://modelcontextprotocol.io) server that lets you create, edit, preview, and render Fabius-Frames video compositions from inside Claude.ai, ChatGPT, or Grok.
 
 <Note>
-  **In beta.** Features and pricing may change. Found a bug or have feedback? [File an issue on GitHub](https://github.com/ArielShemesh1999/fabiusissues).
+  **In beta.** Features and pricing may change. Found a bug or have feedback? [File an issue on GitHub](https://github.com/shear559/fabiusissues).
 </Note>
 
 ## What you can do
@@ -248,7 +248,7 @@ If progress stops mid-flow, the run failed. The agent's next message should expl
 
     1. Start a new chat thread
     2. Run `compose("regenerate this composition")` — the underlying composition may reference an asset that's failing to load
-    3. If the issue persists, file an issue at [github.com/heygen-com/fabius-frames/issues](https://github.com/ArielShemesh1999/fabiusissues) including the `job_id` from `render_video`
+    3. If the issue persists, file an issue at [github.com/heygen-com/fabius-frames/issues](https://github.com/shear559/fabiusissues) including the `job_id` from `render_video`
   </Accordion>
 
   <Accordion title='"Composition not found" error'>
@@ -281,7 +281,7 @@ If progress stops mid-flow, the run failed. The agent's next message should expl
 
 ### Reporting issues
 
-For bugs or feature requests, file an issue at [github.com/heygen-com/fabius-frames/issues](https://github.com/ArielShemesh1999/fabiusissues). Include:
+For bugs or feature requests, file an issue at [github.com/heygen-com/fabius-frames/issues](https://github.com/shear559/fabiusissues). Include:
 
 - The prompt you used
 - The `composition_id` and `job_id` (if applicable) — these are visible in the tool response details
@@ -299,7 +299,7 @@ For bugs or feature requests, file an issue at [github.com/heygen-com/fabius-fra
 
 ## How this relates to the open-source framework
 
-[Fabius-Frames itself is open source](https://github.com/ArielShemesh1999/fabius) — the HTML composition format, CLI, renderer, and player. You can use Fabius-Frames locally without the MCP.
+[Fabius-Frames itself is open source](https://github.com/shear559/fabius) — the HTML composition format, CLI, renderer, and player. You can use Fabius-Frames locally without the MCP.
 
 The MCP is a HeyGen-hosted product that wraps:
 

@@ -1,4 +1,4 @@
-<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/ArielShemesh1999/fabius -->
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/shear559/fabius -->
 # The fabius benchmark
 
 One benchmark: **fabius improves every model it runs on — blind-judged across four Claude tiers, objectively verified by executed tests and factual checks, demoed across external families — on 20–35% less output.**
@@ -156,7 +156,7 @@ Separate from "does the stance help," a deterministic suite proves the *system* 
 | Progressive disclosure — every `SKILL.md` ≤ 12000 B (depth lives in `references/`) | **PASS** (max 11597 B — `fabius-archivum`; 403 B headroom) |
 | Provenance `fab1-` fingerprint embedded in all 15 contracts | **PASS** |
 | Reference integrity — every linked **and backtick-quoted** `references/` path resolves | **PASS** |
-| Plugin manifest skill list == skills on disk; version 2.6.0 | **PASS** |
+| Plugin manifest skill list == skills on disk; version 2.6.1 | **PASS** |
 | No sealed-set drift — seal-manifest file list == skills on disk + ARCHITECTURE/CORPUS/AGENTS | **PASS** |
 | Content-bound seal — 18 sealed files hash-match + Merkle root recomputes | **PASS** |
 | Count coherence — README / ARCHITECTURE / AGENTS all state "fifteen" | **PASS** |

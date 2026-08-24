@@ -1221,9 +1221,9 @@ tl.to("#s5-headline", { backgroundSize: "100% 30%", duration: 0.6, ease: "power2
 
 Everything critical is inlined above. These are for edge cases:
 
-- Core composition contract (data attributes, sub-comp wiring): https://github.com/ArielShemesh1999/fabiusblob/main/skills/fabius-frames/SKILL.md
-- Motion theory (easing as emotion, direction rules): https://github.com/ArielShemesh1999/fabiusblob/main/skills/fabius-frames/references/motion-principles.md
-- Typography (full banned list, weight contrast, OpenType): https://github.com/ArielShemesh1999/fabiusblob/main/skills/fabius-frames/references/typography.md
-- Transitions (shader catalog, CSS transition patterns): https://github.com/ArielShemesh1999/fabiusblob/main/skills/fabius-frames/references/transitions.md
-- Captions synced to audio: https://github.com/ArielShemesh1999/fabiusblob/main/skills/fabius-frames/references/captions.md
+- Core composition contract (data attributes, sub-comp wiring): https://github.com/shear559/fabiusblob/main/skills/fabius-frames/SKILL.md
+- Motion theory (easing as emotion, direction rules): https://github.com/shear559/fabiusblob/main/skills/fabius-frames/references/motion-principles.md
+- Typography (full banned list, weight contrast, OpenType): https://github.com/shear559/fabiusblob/main/skills/fabius-frames/references/typography.md
+- Transitions (shader catalog, CSS transition patterns): https://github.com/shear559/fabiusblob/main/skills/fabius-frames/references/transitions.md
+- Captions synced to audio: https://github.com/shear559/fabiusblob/main/skills/fabius-frames/references/captions.md
 - Full docs: https://fabius-frames.heygen.com/

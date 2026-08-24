@@ -50,7 +50,7 @@ This diagram outlines the agent's workflow, designed to provide informed and con
 1.  **Clone the Repository:**
 
     ```bash
-    git clone https://github.com/ArielShemesh1999/fabius
+    git clone https://github.com/shear559/fabius
     cd adk-samples/python/agents/RAG
     ```
 

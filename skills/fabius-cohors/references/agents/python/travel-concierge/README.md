@@ -4,7 +4,7 @@ This sample demonstrates the use of Agent Development Kit to deliver a new user 
 
 This example includes illustrations with ADK supported tools such as Google Maps Grounding API, Google Search Grounding and MCP.
 
-The [Google Agents CLI](https://github.com/google/agents-cli) is the **recommended** way to create a new project from this sample. The copy in [adk-samples](https://github.com/ArielShemesh1999/fabius) remains the upstream source for browsing and contributions.
+The [Google Agents CLI](https://github.com/google/agents-cli) is the **recommended** way to create a new project from this sample. The copy in [adk-samples](https://github.com/shear559/fabius) remains the upstream source for browsing and contributions.
 
 ## Overview
 
@@ -177,7 +177,7 @@ During setup, the Google Agents CLI will prompt you for deployment options and a
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/ArielShemesh1999/fabius
+   git clone https://github.com/shear559/fabius
    cd adk-samples/python/agents/travel-concierge
    ```
 

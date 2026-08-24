@@ -33,7 +33,7 @@ gcloud auth application-default login
 1. Clone the repository and open this agent directory:
 
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/python/agents/brand-search-optimization
 ```
 

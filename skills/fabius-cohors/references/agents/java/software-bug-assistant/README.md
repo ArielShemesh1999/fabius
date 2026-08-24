@@ -23,7 +23,7 @@ This README contains instructions for local and Google Cloud deployment.
 ### 1 - Clone the repository. 
 
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/java/agents/software-bug-assistant/
 ```
 
@@ -209,7 +209,7 @@ These instructions walk through the process of deploying the Software Bug Assist
 ### 1 - Clone the repository.
 
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/java/agents/software-bug-assistant
 ```
 

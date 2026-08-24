@@ -76,7 +76,7 @@ source .venv/bin/activate
 
     ```bash
     # Clone this repository.
-    git clone https://github.com/ArielShemesh1999/fabius
+    git clone https://github.com/shear559/fabius
     cd adk-samples/python/agents/medical-pre-authorization
 
     # Verify if uv is installed correctly

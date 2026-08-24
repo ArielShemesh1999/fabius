@@ -83,7 +83,7 @@ Would you like me to continue reading the older documents?
 
 2.  **Clone the repository:**
     ```bash
-    git clone https://github.com/ArielShemesh1999/fabius
+    git clone https://github.com/shear559/fabius
     cd adk-samples/python/agents/high-volume-document-analyzer
     # Install the package and dependencies.
     uv sync

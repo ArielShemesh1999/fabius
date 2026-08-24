@@ -67,7 +67,7 @@ to implement this workflow.
 
     ```bash
     # Clone this repository.
-    git clone https://github.com/ArielShemesh1999/fabius
+    git clone https://github.com/shear559/fabius
     cd adk-samples/python/agents/financial-advisor
     # Install the package and dependencies.
     uv sync

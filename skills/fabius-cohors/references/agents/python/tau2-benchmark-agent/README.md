@@ -156,7 +156,7 @@ The starter pack will prompt you to select deployment options and provides addit
 ### Installation
 
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/python/agents/tau2-benchmark-agent
 
 # Sync dependencies (tau2-bench is pulled from GitHub automatically)

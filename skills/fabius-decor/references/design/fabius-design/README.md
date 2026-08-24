@@ -9,25 +9,25 @@
 >
 > **Iterating fast on `main`** — 0.8.0 is the next phase of Open Design. Ship a PR, drop a wild idea, file a bug — what you bring is what this movement becomes.
 >
-> → [**Read the announcement, grab the installer, join the movement**](https://github.com/ArielShemesh1999/fabiusdiscussions/1727) · runs side-by-side with your current 0.7.
+> → [**Read the announcement, grab the installer, join the movement**](https://github.com/shear559/fabiusdiscussions/1727) · runs side-by-side with your current 0.7.
 
 <p align="center">
   <img src="docs/assets/banner.png" alt="Open Design — editorial cover: design with the agent on your laptop" width="100%" />
 </p>
 
 <p align="center">
-  <a href="https://github.com/ArielShemesh1999/fabiusstargazers"><img alt="Stars" src="https://img.shields.io/github/stars/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=ffd700&logo=github&logoColor=white" /></a>
-  <a href="https://github.com/ArielShemesh1999/fabiusnetwork/members"><img alt="Forks" src="https://img.shields.io/github/forks/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=2ecc71&logo=github&logoColor=white" /></a>
-  <a href="https://github.com/ArielShemesh1999/fabiusissues"><img alt="Issues" src="https://img.shields.io/github/issues/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=ff6b6b&logo=github&logoColor=white" /></a>
-  <a href="https://github.com/ArielShemesh1999/fabiuspulls"><img alt="Pull Requests" src="https://img.shields.io/github/issues-pr/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=9b59b6&logo=github&logoColor=white" /></a>
-  <a href="https://github.com/ArielShemesh1999/fabiusgraphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=3498db&logo=github&logoColor=white" /></a>
-  <a href="https://github.com/ArielShemesh1999/fabiuscommits/main"><img alt="Commit activity" src="https://img.shields.io/github/commit-activity/m/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=e67e22&logo=git&logoColor=white" /></a>
-  <a href="https://github.com/ArielShemesh1999/fabiuscommits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=8e44ad&logo=git&logoColor=white" /></a>
+  <a href="https://github.com/shear559/fabiusstargazers"><img alt="Stars" src="https://img.shields.io/github/stars/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=ffd700&logo=github&logoColor=white" /></a>
+  <a href="https://github.com/shear559/fabiusnetwork/members"><img alt="Forks" src="https://img.shields.io/github/forks/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=2ecc71&logo=github&logoColor=white" /></a>
+  <a href="https://github.com/shear559/fabiusissues"><img alt="Issues" src="https://img.shields.io/github/issues/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=ff6b6b&logo=github&logoColor=white" /></a>
+  <a href="https://github.com/shear559/fabiuspulls"><img alt="Pull Requests" src="https://img.shields.io/github/issues-pr/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=9b59b6&logo=github&logoColor=white" /></a>
+  <a href="https://github.com/shear559/fabiusgraphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=3498db&logo=github&logoColor=white" /></a>
+  <a href="https://github.com/shear559/fabiuscommits/main"><img alt="Commit activity" src="https://img.shields.io/github/commit-activity/m/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=e67e22&logo=git&logoColor=white" /></a>
+  <a href="https://github.com/shear559/fabiuscommits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/nexu-io/fabius-design?style=for-the-badge&labelColor=0d1117&color=8e44ad&logo=git&logoColor=white" /></a>
 </p>
 
 <p align="center">
   <a href="https://fabius-design.ai/"><img alt="Download" src="https://img.shields.io/badge/download-open--design.ai-ff6b35?style=flat-square" /></a>
-  <a href="https://github.com/ArielShemesh1999/fabiusreleases"><img alt="Latest release" src="https://img.shields.io/github/v/release/nexu-io/fabius-design?style=flat-square&color=blueviolet&label=release&include_prereleases&display_name=tag" /></a>
+  <a href="https://github.com/shear559/fabiusreleases"><img alt="Latest release" src="https://img.shields.io/github/v/release/nexu-io/fabius-design?style=flat-square&color=blueviolet&label=release&include_prereleases&display_name=tag" /></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square" /></a>
   <a href="#supported-coding-agents"><img alt="Agents" src="https://img.shields.io/badge/agents-16%20CLIs%20%2B%20BYOK%20proxy-black?style=flat-square" /></a>
   <a href="#design-systems"><img alt="Design systems" src="https://img.shields.io/badge/design%20systems-150-orange?style=flat-square" /></a>
@@ -66,7 +66,7 @@ OD stands on four open-source shoulders:
 | **BYOK fallback** | Protocol-specific API proxy at `/api/proxy/{anthropic,openai,azure,google,ollama,senseaudio}/stream` — paste `baseUrl` + `apiKey` + `model`, choose Anthropic / OpenAI / Azure OpenAI / Google Gemini / Ollama Cloud / SenseAudio, and the daemon normalizes SSE back to the same chat stream. SenseAudio chat additionally exposes `generate_image` and `generate_video` tools so the model can write rendered artifacts straight into the active project's folder. Internal-IP/SSRF blocked at the daemon edge. |
 | **Design systems built-in** | **129** — 2 hand-authored starters + 70 product systems (Linear, Stripe, Vercel, Airbnb, Tesla, Notion, Anthropic, Apple, Cursor, Supabase, Figma, Xiaohongshu, …) from [`awesome-the design corpus`][acd2], plus 57 design skills from [`awesome-design-skills`][ads] added directly under `design-systems/` |
 | **Skills built-in** | **132** — 27 in `prototype` mode (web-prototype, saas-landing, dashboard, mobile-app, gamified-app, social-carousel, magazine-poster, dating-web, sprite-animation, motion-frames, critique, tweaks, wireframe-sketch, pm-spec, eng-runbook, finance-report, hr-onboarding, invoice, kanban-board, team-okrs, …) + 4 in `deck` mode (`guizang-ppt` · `simple-deck` · `replit-deck` · `weekly-update`). Grouped in the picker by `scenario`: design / marketing / operation / engineering / product / finance / hr / sale / personal. |
-| **Media generation** | Image · video · audio surfaces ship alongside the design loop. **gpt-image-2** (Azure / OpenAI) for posters, avatars, infographics, illustrated maps · **Seedance 2.0** (ByteDance) for cinematic 15s text-to-video and image-to-video · **Fabius-Frames** ([heygen-com/fabius-frames](https://github.com/ArielShemesh1999/fabius)) for HTML→MP4 motion graphics (product reveals, kinetic typography, data charts, social overlays, logo outros). Other image generators can already plug in through **Custom Image API** / **ImageRouter** when they expose an OpenAI-compatible image endpoint; workflow-first local runtimes such as **ComfyUI** are tracked separately as planned adapters. **93** ready-to-replicate prompts gallery — 43 gpt-image-2 + 39 Seedance + 11 Fabius-Frames — under [`prompt-templates/`](prompt-templates/), with preview thumbnails and source attribution. Same chat surface as code; outputs a real `.mp4` / `.png` chip into the project workspace. |
+| **Media generation** | Image · video · audio surfaces ship alongside the design loop. **gpt-image-2** (Azure / OpenAI) for posters, avatars, infographics, illustrated maps · **Seedance 2.0** (ByteDance) for cinematic 15s text-to-video and image-to-video · **Fabius-Frames** ([heygen-com/fabius-frames](https://github.com/shear559/fabius)) for HTML→MP4 motion graphics (product reveals, kinetic typography, data charts, social overlays, logo outros). Other image generators can already plug in through **Custom Image API** / **ImageRouter** when they expose an OpenAI-compatible image endpoint; workflow-first local runtimes such as **ComfyUI** are tracked separately as planned adapters. **93** ready-to-replicate prompts gallery — 43 gpt-image-2 + 39 Seedance + 11 Fabius-Frames — under [`prompt-templates/`](prompt-templates/), with preview thumbnails and source attribution. Same chat surface as code; outputs a real `.mp4` / `.png` chip into the project workspace. |
 | **Visual directions** | 5 curated schools (Editorial Monocle · Modern Minimal · Warm Soft · Tech Utility · Brutalist Experimental) — each ships a deterministic OKLch palette + font stack ([`apps/daemon/src/prompts/directions.ts`](apps/daemon/src/prompts/directions.ts)) |
 | **Device frames** | iPhone 15 Pro · Pixel · iPad Pro · MacBook · Browser Chrome — pixel-accurate, shared across skills under [`assets/frames/`](assets/frames/) |
 | **Agent runtime** | Local daemon spawns the CLI in your project folder — agent gets real `Read`, `Write`, `Bash`, `WebFetch` against a real on-disk environment, with Windows `ENAMETOOLONG` fallbacks (stdin / prompt-file) on every adapter |
@@ -74,7 +74,7 @@ OD stands on four open-source shoulders:
 | **Persistence** | SQLite at `.od/app.sqlite`: projects · conversations · messages · tabs · saved templates. Reopen tomorrow, todo card and open files are exactly where you left them. |
 | **Lifecycle** | One entry point: `pnpm tools-dev` (start / stop / run / status / logs / inspect / check) — boots daemon + web (+ desktop) under typed sidecar stamps |
 | **Desktop** | Optional Electron shell with sandboxed renderer + sidecar IPC (STATUS / EVAL / SCREENSHOT / CONSOLE / CLICK / SHUTDOWN) — drives `tools-dev inspect desktop screenshot` for E2E |
-| **Deployable to** | Local (`pnpm tools-dev`) · Vercel web layer · packaged Electron desktop app for macOS (Apple Silicon, plus Intel x64 ZIP builds verified on Monterey) and Windows (x64) — download from [fabius-design.ai](https://fabius-design.ai/) or the [latest release](https://github.com/ArielShemesh1999/fabiusreleases) |
+| **Deployable to** | Local (`pnpm tools-dev`) · Vercel web layer · packaged Electron desktop app for macOS (Apple Silicon, plus Intel x64 ZIP builds verified on Monterey) and Windows (x64) — download from [fabius-design.ai](https://fabius-design.ai/) or the [latest release](https://github.com/shear559/fabiusreleases) |
 | **License** | Apache-2.0 |
 
 Linux AppImage packaging is available through the optional release lane and is covered by the Linux packaged smoke workflow, but public stable downloads remain gated until the release maintainers enable the Linux stable lane.
@@ -318,7 +318,7 @@ Every layer is composable. Every layer is a file you can edit. Read [`apps/daemo
 The fastest way to try Open Design is the prebuilt desktop app — no Node, no pnpm, no clone:
 
 - **[fabius-design.ai](https://fabius-design.ai/)** — official download page
-- **[GitHub releases](https://github.com/ArielShemesh1999/fabiusreleases)**
+- **[GitHub releases](https://github.com/shear559/fabiusreleases)**
 
 
 ### Run with Docker
@@ -341,7 +341,7 @@ docker compose version
 1. Clone the repository, change to the deploy directory, and copy the environment template:
 
    ```bash
-   git clone https://github.com/ArielShemesh1999/fabius
+   git clone https://github.com/shear559/fabius
    cd fabius-design/deploy
    cp .env.example .env
    ```
@@ -390,7 +390,7 @@ For advanced Docker configuration and environment variables, see [`QUICKSTART.md
 ### Run from source
 
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd fabius-design
 corepack enable
 corepack pnpm --version   # should print 10.33.2
@@ -455,7 +455,7 @@ If you ran the repo first and only later installed the packaged Desktop app, the
 
 ##### Option A: one-shot auto-migration via `OD_LEGACY_DATA_DIR`
 
-Use this when the Desktop app's `data/` is still empty, which is the typical state right after the upgrade that surfaced [#710](https://github.com/ArielShemesh1999/fabiusissues/710). Quit the Desktop app first (so its daemon is not holding `app.sqlite`), then re-launch with `OD_LEGACY_DATA_DIR` pointed at your old repo `.od/`. The daemon stages your payload into a sibling tmp directory and only promotes it into `data/` on success; on any failure the staging directory is removed so the next boot retries cleanly.
+Use this when the Desktop app's `data/` is still empty, which is the typical state right after the upgrade that surfaced [#710](https://github.com/shear559/fabiusissues/710). Quit the Desktop app first (so its daemon is not holding `app.sqlite`), then re-launch with `OD_LEGACY_DATA_DIR` pointed at your old repo `.od/`. The daemon stages your payload into a sibling tmp directory and only promotes it into `data/` on success; on any failure the staging directory is removed so the next boot retries cleanly.
 
 The daemon refuses, with a visible startup error, when:
 
@@ -820,7 +820,7 @@ Three flagship paths carry the load today:
 |---|---|---|---|
 | **Image** | `gpt-image-2` | Azure / OpenAI | Posters, profile avatars, illustrated maps, infographics, magazine-style social cards, photo restoration, exploded-view product art |
 | **Video** | `seedance-2.0` | ByteDance Volcengine | 15s cinematic t2v + i2v with audio — narrative shorts, character close-ups, product films, MV-style choreography |
-| **Video** | `fabius-frames-html` | [HeyGen / OSS](https://github.com/ArielShemesh1999/fabius) | HTML→MP4 motion graphics — product reveals, kinetic typography, data charts, social overlays, logo outros, TikTok-style verticals with karaoke captions |
+| **Video** | `fabius-frames-html` | [HeyGen / OSS](https://github.com/shear559/fabius) | HTML→MP4 motion graphics — product reveals, kinetic typography, data charts, social overlays, logo outros, TikTok-style verticals with karaoke captions |
 
 Other generators are possible, but the path depends on the API shape:
 
@@ -860,7 +860,7 @@ Click any thumbnail to play the actual rendered MP4. Full set → [`prompt-templ
 
 ### Fabius-Frames — HTML→MP4 motion graphics (11 ready-to-replicate templates)
 
-[**`heygen-com/fabius-frames`**](https://github.com/ArielShemesh1999/fabius) is HeyGen's open-source agent-native video framework — you (or the agent) write HTML + CSS + GSAP, Fabius-Frames renders it to a deterministic MP4 via headless Chrome + FFmpeg. Open Design ships Fabius-Frames as a first-class video model (`fabius-frames-html`) wired into the daemon dispatch, plus the `skills/fabius-frames/` skill that teaches the agent the timeline contract, scene-transition rules, audio-reactive patterns, captions/TTS, and the catalog blocks (`npx fabius-frames add <slug>`).
+[**`heygen-com/fabius-frames`**](https://github.com/shear559/fabius) is HeyGen's open-source agent-native video framework — you (or the agent) write HTML + CSS + GSAP, Fabius-Frames renders it to a deterministic MP4 via headless Chrome + FFmpeg. Open Design ships Fabius-Frames as a first-class video model (`fabius-frames-html`) wired into the daemon dispatch, plus the `skills/fabius-frames/` skill that teaches the agent the timeline contract, scene-transition rules, audio-reactive patterns, captions/TTS, and the catalog blocks (`npx fabius-frames add <slug>`).
 
 Eleven fabius-frames prompts ship under [`prompt-templates/video/fabius-frames-*.json`](prompt-templates/video/), each one a concrete brief that produces a specific archetype:
 
@@ -1005,7 +1005,7 @@ Long-form provenance write-up — what we take from each, what we deliberately d
 - [ ] Vercel + tunnel deployment recipe (Topology B)
 - [ ] One-command `npx od init` to scaffold a project with `DESIGN.md`
 - [ ] Skill marketplace (`od skills install <github-repo>`) and `od skill add | list | remove | test` CLI surface (drafted in [`docs/skills-protocol.md`](docs/skills-protocol.md), implementation pending)
-- [x] Packaged Electron build out of `apps/packaged/` — macOS (Apple Silicon, with Intel x64 ZIP builds verified on Monterey) and Windows (x64) downloads on [fabius-design.ai](https://fabius-design.ai/) and the [GitHub releases page](https://github.com/ArielShemesh1999/fabiusreleases)
+- [x] Packaged Electron build out of `apps/packaged/` — macOS (Apple Silicon, with Intel x64 ZIP builds verified on Monterey) and Windows (x64) downloads on [fabius-design.ai](https://fabius-design.ai/) and the [GitHub releases page](https://github.com/shear559/fabiusreleases)
 
 Phased delivery → [`docs/roadmap.md`](docs/roadmap.md).
 
@@ -1020,10 +1020,10 @@ Follow **[@nexudotio](https://x.com/nexudotio)** on X for release notes, new ski
 ## Star us
 
 <p align="center">
-  <a href="https://github.com/ArielShemesh1999/fabius"><img src="docs/assets/star-us.png" alt="Star Open Design on GitHub — github.com/nexu-io/fabius-design" width="100%" /></a>
+  <a href="https://github.com/shear559/fabius"><img src="docs/assets/star-us.png" alt="Star Open Design on GitHub — github.com/nexu-io/fabius-design" width="100%" /></a>
 </p>
 
-If this saved you thirty minutes — give it a ★. Stars don't pay rent, but they tell the next designer, agent, and contributor that this experiment is worth their attention. One click, three seconds, real signal: [github.com/nexu-io/fabius-design](https://github.com/ArielShemesh1999/fabius).
+If this saved you thirty minutes — give it a ★. Stars don't pay rent, but they tell the next designer, agent, and contributor that this experiment is worth their attention. One click, three seconds, real signal: [github.com/nexu-io/fabius-design](https://github.com/shear559/fabius).
 
 ## Contributing
 
@@ -1039,11 +1039,11 @@ Full walkthrough, bar-for-merging, code style, and what we don't accept → [`CO
 
 Thanks to everyone who has helped move Open Design forward — through code, docs, feedback, new skills, new design systems, or even a sharp issue. Every real contribution counts, and the wall below is the easiest way to say so out loud.
 
-<a href="https://github.com/ArielShemesh1999/fabiusgraphs/contributors">
+<a href="https://github.com/shear559/fabiusgraphs/contributors">
   <img src="https://contrib.rocks/image?repo=nexu-io/fabius-design&cache_bust=2026-05-27" alt="Open Design contributors" />
 </a>
 
-If you've shipped your first PR — welcome. The [`good-first-issue`/`help-wanted`](https://github.com/ArielShemesh1999/fabiusissues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2C%22help+wanted%22) label is the entry point.
+If you've shipped your first PR — welcome. The [`good-first-issue`/`help-wanted`](https://github.com/shear559/fabiusissues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2C%22help+wanted%22) label is the entry point.
 
 ## Repository activity
 

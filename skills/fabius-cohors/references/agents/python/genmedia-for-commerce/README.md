@@ -44,7 +44,7 @@ The **GenMedia for Commerce Agent** is a production-ready solution for generatin
 
 **Option A: Clone directly from adk-samples**
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/python/agents/genmedia-for-commerce
 ```
 

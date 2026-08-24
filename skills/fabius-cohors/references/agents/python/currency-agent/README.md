@@ -50,7 +50,7 @@ The new [A2A Python SDK](https://github.com/google-a2a/a2a-python) is used to cr
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/python/agents/currency-agent
 ```
 

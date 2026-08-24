@@ -10,7 +10,7 @@ AI-driven agent designed to facilitate the exploration of the academic landscape
 
 This capability aims to provide researchers with valuable insights into the ongoing impact of seminal research and to highlight promising avenues for novel investigation, thereby accelerating the research discovery process.
 
-The [Google Agents CLI](https://github.com/google/agents-cli) is the **recommended** way to create a new project from this sample. The copy in [adk-samples](https://github.com/ArielShemesh1999/fabius) remains the upstream source for browsing and contributions.
+The [Google Agents CLI](https://github.com/google/agents-cli) is the **recommended** way to create a new project from this sample. The copy in [adk-samples](https://github.com/shear559/fabius) remains the upstream source for browsing and contributions.
 
 ## Agent Details
 
@@ -86,7 +86,7 @@ During setup, the Google Agents CLI will prompt you for deployment options and a
 Use this workflow when working against the upstream repository (for example to open a pull request). **New projects should still use the Google Agents CLI** as described above.
 
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/python/agents/academic-research
 uv sync --group dev
 ```

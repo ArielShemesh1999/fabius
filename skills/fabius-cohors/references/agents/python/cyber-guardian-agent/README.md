@@ -49,7 +49,7 @@ Follow these steps to set up the environment, authenticate, and run the agent.
 **1. Clone the Repository**
 This agent is part of the `adk-samples` repository. You can clone the repository and navigate to the agent directory:
 ```bash
-git clone https://github.com/ArielShemesh1999/fabius
+git clone https://github.com/shear559/fabius
 cd adk-samples/python/agents/cyber-guardian-agent
 ```
 *(Note: If you are already in this directory, you can skip this step).*

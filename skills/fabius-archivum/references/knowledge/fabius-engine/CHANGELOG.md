@@ -473,7 +473,7 @@ public API. No on-disk format change (still `.tv` / `.tvim` v3).
 #### Added
 
 - **Block-level early exit for selective mask searches** (closes
-  [#30](https://github.com/ArielShemesh1999/fabiusissues/30)). When a
+  [#30](https://github.com/shear559/fabiusissues/30)). When a
   search is issued with `Some(mask)` the SIMD kernels now check
   whether each 32-vector block contains any allowed slots before
   doing the LUT lookup + popcount + score-decode work for that
@@ -504,7 +504,7 @@ public API. No on-disk format change (still `.tv` / `.tvim` v3).
   run substantially faster (≈6–13× at 1% selectivity, scaling with
   index size — larger indices amortize fixed per-query cost more
   and see larger speedups). Closes
-  [#30](https://github.com/ArielShemesh1999/fabiusissues/30).
+  [#30](https://github.com/shear559/fabiusissues/30).
 
 ## the-vector-engine 0.5.0 (Python package) + the-vector-engine 0.4.0 (Rust crate) — 2026-05-18
 
@@ -616,7 +616,7 @@ the-vector-engine 0.4.4 or later.
 
 #### Added
 
-- **Windows x64 wheel** (closes [#31](https://github.com/ArielShemesh1999/fabiusissues/31)).
+- **Windows x64 wheel** (closes [#31](https://github.com/shear559/fabiusissues/31)).
   Prior releases shipped only Linux x86_64/aarch64, macOS aarch64, and an
   sdist — Windows users running `pip install the-vector-engine` fell through to
   the sdist and hit a `link.exe` build failure unless they had Rust + MSVC
@@ -624,11 +624,11 @@ the-vector-engine 0.4.4 or later.
   `cp39-abi3-win_amd64` wheel and validates it by installing and running
   the core pytest suite (`test_index.py`, `test_id_map.py`,
   `test_filtering.py`) on the build runner before upload. Implementation
-  in [#33](https://github.com/ArielShemesh1999/fabiuspull/33).
+  in [#33](https://github.com/shear559/fabiuspull/33).
 
   Intel Mac (macOS x86_64) was considered alongside Windows but blocked
   by GitHub's December 2025 deprecation of free-tier `macos-13` runners;
-  tracked separately in [#34](https://github.com/ArielShemesh1999/fabiusissues/34).
+  tracked separately in [#34](https://github.com/shear559/fabiusissues/34).
 
   No library changes in this release — same Python API, same on-disk
   format, same recall and throughput as 0.4.2. Pure platform-coverage
@@ -696,7 +696,7 @@ the-vector-engine 0.4.4 or later.
   fewer-than-`k` from an over-fetch pass. Output shape shrinks to
   `min(k, n_allowed)` — consistent with the existing `k > len(idx)`
   contract; no sentinel padding.
-  ([#21](https://github.com/ArielShemesh1999/fabiusissues/21))
+  ([#21](https://github.com/shear559/fabiusissues/21))
   - `TurboQuantIndex::search_with_mask(queries, k, mask: Option<&[bool]>)`
     — slot bitmask, length equal to `len(idx)`.
   - `IdMapIndex::search_with_allowlist(queries, k, allowlist: Option<&[u64]>)`
@@ -750,7 +750,7 @@ the-vector-engine 0.4.4 or later.
   - Pre-validates shape, dtype, emptiness and unknown ids and raises
     `ValueError` / `KeyError` rather than letting the Rust panic
     surface as `pyo3.PanicException`.
-  ([#21](https://github.com/ArielShemesh1999/fabiusissues/21))
+  ([#21](https://github.com/shear559/fabiusissues/21))
 
 - **Lazy construction.** `TurboQuantIndex(dim=None, bit_width=4)` and
   `IdMapIndex(dim=None, bit_width=4)` now accept an optional `dim`.
@@ -868,6 +868,6 @@ the-vector-engine 0.4.4 or later.
   `schema_version` field; loaders reject unknown versions instead of
   silently misinterpreting bytes.
 
-[Unreleased]: https://github.com/ArielShemesh1999/fabiuscompare/v0.8.1...HEAD
-[py-v0.4.2]: https://github.com/ArielShemesh1999/fabiuscompare/py-v0.4.1...py-v0.4.2
-[py-v0.4.1]: https://github.com/ArielShemesh1999/fabiuscompare/py-v0.4.0...py-v0.4.1
+[Unreleased]: https://github.com/shear559/fabiuscompare/v0.8.1...HEAD
+[py-v0.4.2]: https://github.com/shear559/fabiuscompare/py-v0.4.1...py-v0.4.2
+[py-v0.4.1]: https://github.com/shear559/fabiuscompare/py-v0.4.0...py-v0.4.1
