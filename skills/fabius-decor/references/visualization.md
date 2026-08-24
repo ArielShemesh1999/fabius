@@ -1,6 +1,6 @@
 # Fabius Figura — data-visualization playbook (entry)
 
-The on-demand depth for `fabius-decor`'s visualization concern. Lean entry doc; the full chart-recipe library (the **fabius-figura** library of the fabius corpus, [CORPUS.md](../../../CORPUS.md)) is paged in on demand. **Maximize data-ink, strike narrow.** A chart obeys every `fabius-decor` law — one accent, tokens not inline values, type-led hierarchy, restraint — plus the rules here.
+The on-demand depth for `fabius-decor`'s visualization concern. Lean entry doc; the full chart-recipe library (the **fabius-figura** library of the fabius corpus, [CORPUS.md](../../../CORPUS.md)) is paged in on demand. The presentation compositions built on these chart rules — decks (`slides.create`), infographics (`visual.infographic`), and measured visual reports — live in [`decks-and-infographics.md`](decks-and-infographics.md). **Maximize data-ink, strike narrow.** A chart obeys every `fabius-decor` law — one accent, tokens not inline values, type-led hierarchy, restraint — plus the rules here.
 
 ---
 

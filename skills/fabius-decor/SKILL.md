@@ -70,7 +70,7 @@ A chart is a design artifact, not a different discipline — the same tokens and
 4. **Label directly, title with the takeaway.** The title states the finding ("Signups doubled after launch"), not the dimensions ("Signups by month").
 5. **Reproducible, tokenized SVG.** Prefer generated SVG from data over a screenshot — versionable, themeable, crisp. The repo's `assets/charts/` (`svgplot.py` · `render_figures.py`) is the numpy→SVG path; figures re-render from source, never hand-edited.
 
-Depth — chart-type decision table, the data-ink checklist, accessible color ramps, and the SVG recipes (the **fabius-figura** corpus library) → `references/visualization.md`, paged in on demand (R9 · M9). The diagram-as-code path (flowcharts, architecture) pairs with `fabius-disciplina`.
+Depth — chart-type table, data-ink checklist, color ramps, SVG recipes (**fabius-figura**) → `references/visualization.md`, paged in on demand (R9 · M9). Decks, infographics, and measured visual reports → `references/decks-and-infographics.md`. The diagram-as-code path (flowcharts, architecture) pairs with `fabius-disciplina`.
 
 ## Explanatory diagrams — teach the system, don't just draw it
 

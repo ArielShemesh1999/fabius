@@ -59,6 +59,9 @@ Same model, one concentrated set of operating rules. The stance changes the *sha
 | An ML system | a model that rots in prod | held-out leakage-free eval, the smallest serving stack, tracked + reproducible |
 | A stock / market | a confident prediction | risk sized first, evidence over narrative, backtests proven out-of-sample (analysis, not advice) |
 | A shipped artifact | invisible Unicode and vendor metadata ride along | deterministic invisible-character strip + metadata hygiene before ship, on content you own |
+| A meeting transcript | a summary that loses the decisions | decisions with owners and dates, quoted numbers, filed into memory, a draft follow-up |
+| A deck / infographic | a slide-wall of bullets | outline-first, one idea per slide, one message per graphic, every number sourced |
+| Outbound sales | generic blasts | ICP-first research, honest qualification, personalization that is true — drafts only, you send |
 
 **One benchmark: fabius improves every model it runs on** — blind-judged on the four Claude models current at the 2026-07-01 run, objectively verified by executed tests and factual checks, demoed across external families — on **20–35% less output**. One test, four panels, one receipt.
 

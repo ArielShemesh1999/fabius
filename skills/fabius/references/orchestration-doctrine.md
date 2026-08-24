@@ -28,7 +28,8 @@ one expands it — the spine flexes, the gates on it never do.
 
 Never architect around a tool's name. Name the *capability* the task needs —
 `research.web` · `research.deep` · `data.analyze` · `code.execute` · `document.create` ·
-`visual.diagram` · `image.generate` · `browser.execute` · `memory.recall` · `message.draft` —
+`slides.create` · `visual.diagram` · `visual.infographic` · `image.generate` ·
+`meeting.capture` · `sales.gtm` · `browser.execute` · `memory.recall` · `message.draft` —
 then fill it with whatever the harness actually exposes: an MCP server, a CLI, an API the user
 connected, or the model's own native ability. The provider behind a capability can change
 without touching a single routing decision; that indirection is what keeps the doctrine stable

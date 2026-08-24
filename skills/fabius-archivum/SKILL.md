@@ -64,7 +64,7 @@ Then the pattern is **hybrid**: narrow symbolically by id or metadata first (pro
 ingest (write) → index (catalog/embed) → query (read, cite, file back) → lint (maintain) → ↺
 ```
 
-The agent does all the bookkeeping — summarize, cross-reference, file, consistency-check. The human only curates sources and asks questions. Concrete directory schema, page frontmatter, and the index/log line formats live in `references/memory-schema.md`. When the corpus outgrows grep, the engine — vector store, wiki layout, RAG pipeline — is in `references/knowledge/`, **as design, not dependency**: the naming pass rewrote its package and import names, so its pins do not resolve. Take the shape; wire a store from `references/retrieval-stack.md`. The best-in-class retrieval stack — vector stores, RAG frameworks, and HF embedding/reranker models (Hebrew/multilingual, license-honest) → `references/retrieval-stack.md`.
+The agent does all the bookkeeping — summarize, cross-reference, file, consistency-check. The human only curates sources and asks questions. Concrete directory schema, page frontmatter, and the index/log line formats live in `references/memory-schema.md`. When the corpus outgrows grep, the engine — vector store, wiki layout, RAG pipeline — is in `references/knowledge/`, **as design, not dependency**: the naming pass rewrote its package and import names, so its pins do not resolve. Take the shape; wire a store from the best-in-class stack — vector stores, RAG frameworks, HF embedder/rerankers (license-honest) → `references/retrieval-stack.md`. A meeting transcript → a filed record (decisions · actions · numbers) + the pre-meeting brief → `references/meeting-capture.md`.
 
 ## Cross-session memory — autonomous, per project
 
@@ -93,7 +93,7 @@ Reading the index on start (above) is recall you *choose*. The stronger habit is
 - **Compress** — turn the raw capture into a small, *typed and titled* record (a title + a type + a compact body), not a transcript dump. Typed-and-titled is what makes later filtering and progressive disclosure cheap.
 - **Re-inject** — at the **start** of the next session, surface a compact index of the recent records (titles grouped by type, last-N sessions) into context *before* acting. That single step is what turns memory from opt-in to automatic.
 
-Retrieve under **progressive disclosure**: inject the small index (titles/ids) by default; pull a record's full body only on demand. This is `fabius-parcus`'s progressive-disclosure rule applied to memory — the same reason a SKILL.md is lean and its `references/` page in on demand. (Check the harness first — Claude Code keeps a per-repo **auto memory** on by default, its index loaded every session and its topic files on demand; adopt that rather than wiring a parallel store beside it. Hand-wire the hook loop where a harness ships nothing — the *pattern* is what ports. `references/external-recall.md`.)
+Retrieve under **progressive disclosure**: inject the small index (titles/ids) by default; pull a record's full body only on demand. This is `fabius-parcus`'s progressive-disclosure rule applied to memory — the same reason a SKILL.md is lean and its `references/` page in on demand. (Check the harness first — Claude Code keeps a per-repo **auto memory** on by default — index always loaded, topic files on demand; adopt it rather than wiring a parallel store beside it. Hand-wire the hook loop where a harness ships nothing — the *pattern* is what ports. `references/external-recall.md`.)
 
 ## Ground in an external corpus — ask, don't guess
 
@@ -102,7 +102,7 @@ When an answer must be **source-true** (a domain spec, a contract, a curated bod
 - **Keep a source registry.** Store each external corpus as `{ name, description, topics }` and select by topic at query time — the connector remembers *which* corpus answers *which* question. To register an unknown corpus, ask it to summarize *itself* first, then use that as its metadata; never tag it generically.
 - **Loop until complete, then synthesize.** After each retrieved answer, diff it against the *original* request, identify the gaps, and re-query — only synthesize once nothing is missing. A single lookup is rarely the whole answer.
 
-Stay provider-agnostic (the connector pattern outlives any one product) and keep credentials and the registry **out of the repo**. Connector recipe and the decision table for *when to reach for an external corpus vs read local files* → `references/external-recall.md`.
+Stay provider-agnostic (the connector pattern outlives any one product) and keep credentials and the registry **out of the repo**. Connector recipe + the when-to-reach-external decision table → `references/external-recall.md`.
 
 ## Memory discipline — page, don't stuff
 

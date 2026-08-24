@@ -67,14 +67,17 @@ Task shape                                  → Layer
 Any output, any code change                 → fabius-parcus      (always-on, underneath)
 "build X" · "fix the bug" · "refactor"       → fabius-disciplina  (brainstorm/plan/TDD/debug)
 UI · landing page · component · brand look · → fabius-decor
-  generate an image · imagery
+  generate an image · deck / slides ·
+  infographic · visual report
 chart · graph · diagram · visualize data     → fabius-decor       (the figura visualization concern)
 "build an agent" · subagent · swarm ·        → fabius-cohors
   orchestration · multi-agent · evaluate
   an agent · agent benchmark · durability
 "remember this" · a growing knowledge base · → fabius-archivum
-  "stop re-deriving this"
-copy · launch · positioning · ads · funnel   → fabius-mercatus
+  "stop re-deriving this" · meeting
+  transcript/notes into a filed record
+copy · launch · positioning · ads · funnel · → fabius-mercatus
+  outreach / leads (draft-only)
 "is this secure?" · threat-model · audit ·   → fabius-praesidium  (defensive only)
   harden · review for vulns
 "make a game" · loop · juice · playable      → fabius-ludus

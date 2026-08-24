@@ -156,7 +156,7 @@ Separate from "does the stance help," a deterministic suite proves the *system* 
 | Progressive disclosure — every `SKILL.md` ≤ 12000 B (depth lives in `references/`) | **PASS** (max 11597 B — `fabius-archivum`; 403 B headroom) |
 | Provenance `fab1-` fingerprint embedded in all 15 contracts | **PASS** |
 | Reference integrity — every linked **and backtick-quoted** `references/` path resolves | **PASS** |
-| Plugin manifest skill list == skills on disk; version 2.5.0 | **PASS** |
+| Plugin manifest skill list == skills on disk; version 2.6.0 | **PASS** |
 | No sealed-set drift — seal-manifest file list == skills on disk + ARCHITECTURE/CORPUS/AGENTS | **PASS** |
 | Content-bound seal — 18 sealed files hash-match + Merkle root recomputes | **PASS** |
 | Count coherence — README / ARCHITECTURE / AGENTS all state "fifteen" | **PASS** |

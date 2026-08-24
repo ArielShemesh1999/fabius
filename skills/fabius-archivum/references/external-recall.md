@@ -2,7 +2,7 @@
 
 The on-demand depth for `fabius-archivum`'s two reflexes: surfacing memory without being asked, and grounding answers in an external source-of-truth. The skill is the contract; this is how you run it. Scout wide, strike narrow.
 
-`fabius-archivum`'s SKILL.md already gives you write + retrieve + when-to-vector. This file deepens the two *automatic* halves: re-injection (Part A) and source-grounded lookup (Part B).
+`fabius-archivum`'s SKILL.md already gives you write + retrieve + when-to-vector. This file deepens the two *automatic* halves: re-injection (Part A) and source-grounded lookup (Part B). The commonest external capture — a meeting transcript into a filed, linked record with a pre-meeting brief (`meeting.capture`) — has its own doctrine in [`meeting-capture.md`](meeting-capture.md).
 
 ---
 
