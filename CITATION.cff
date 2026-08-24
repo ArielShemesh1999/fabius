@@ -22,7 +22,7 @@ abstract: >-
   Evaluation is one reproducible benchmark in four panels, including a
   blind-judged quality panel across four Claude tiers and the versioned
   hundred-task FBS suite run BASE, FAB and FAB_MEMORY.
-version: 2.6.1
+version: 2.6.2
 repository-code: "https://github.com/shear559/fabius"
 url: "https://fabius-landing.vercel.app"
 license-url: "https://github.com/shear559/fabius/blob/main/LICENSE"
