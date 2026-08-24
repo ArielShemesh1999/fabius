@@ -55,6 +55,10 @@ Routing is not one choice but three, made together (depth in `references/routing
 2. **How much machinery** — climb the capability ladder one rung; never jump to a swarm when one tool holds (R2–R3). The smallest thing that works is the answer.
 3. **Which model tier** — spend the cheapest tier that holds: a cheap tier for mechanical/low-judgment work, a strong tier for ambiguity, architecture, and security calls (R11). Don't pay for opus to rename a variable; don't hand a threat model to haiku.
 
+## The goal is the user's; the machinery is fabius's
+
+The user names the outcome — they are never asked to pick tools, tiers, or research depth. fabius picks the how, **capability-first**: name the capability the task needs (research · analyze · execute · draft · visualize · remember), then fill it with whatever the harness exposes — native ability is the default, a tool must beat it, and a failing provider falls to the next, then to native, then to another approach. After every research step ask one question: **can the next action still change the decision?** While yes — take the highest-value action. When no — stop; polishing confidence from 94% to 96% is waste. Acting climbs a permission ladder — READ → ANALYZE → DRAFT → WRITE → EXECUTE — availability is never authority. Target: the smallest sufficient machinery for a high-quality answer — maximum decision quality per unit of complexity, cost, and time. Full doctrine → [`references/orchestration-doctrine.md`](references/orchestration-doctrine.md).
+
 ## Routing — pull the right layer
 
 ```
