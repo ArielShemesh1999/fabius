@@ -29,3 +29,13 @@ runtime/test/vectors/
 
 # ots upgrade writes a .bak beside the proof — an artifact, not a record
 *.ots.bak
+
+# Internal working notes, unpublished by design.
+# Both files are titled "synapse (on the fabius rules) -> ... roadmap" and describe a
+# SEPARATE project's worker internals, commit SHAs, env-var names and file paths.
+# fabius is a plugin, not a platform: no fabius surface links to or describes synapse.
+# They were tracked in the public repo until 2026-08-26. Neither is in the 18-file
+# content seal, neither is referenced by README/ARCHITECTURE/AGENTS/CORPUS or any gate,
+# so removing them changes no shipped contract. They remain on disk for the owner.
+FRONTIER-ROADMAP.md
+VOICE-ROADMAP.md
