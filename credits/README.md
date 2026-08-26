@@ -4,7 +4,7 @@ The fabius **system** — the fifteen skills, the router/dispatch policy, `AGENT
 
 What we owe to the open community is the **learning**: the on-demand depth under each skill's `references/` was **informed by and adapted from** the open work below. We studied these projects and wrote our own version; credit where it's due. Two honest rules govern this file:
 
-1. **Inspiration vs. bundling.** Most rows below are *informed-by* — concepts re-expressed in fabius's own words, no upstream files copied. Where actual upstream **files are bundled** under a `references/` tree, that project's original `LICENSE` travels with them, and for Apache-2.0 sources a `NOTICE` stating our changes travels with them too. Eleven trees are genuinely bundled rather than merely studied, and each is scoped by its own licence file:
+1. **Inspiration vs. bundling.** Most rows below are *informed-by* — concepts re-expressed in fabius's own words, no upstream files copied. Where actual upstream **files are bundled** under a `references/` tree, that project's original `LICENSE` travels with them, and for Apache-2.0 sources a `NOTICE` stating our changes travels with them too. Eleven bundled-source rows cover sixteen license-scoped directories; the Google ADK row spans six language trees. Each directory is scoped by its own licence file:
 
    | bundled tree | upstream | terms |
    |---|---|---|

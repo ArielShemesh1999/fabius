@@ -1,6 +1,6 @@
 {
   "name": "fabius-runtime",
-  "version": "2.6.3",
+  "version": "2.6.4",
   "private": true,
   "description": "Repo-local runtime component for fabius. It is not a standalone npm CLI: run it from a full fabius checkout so sibling skills/ and provenance/ are present.",
   "type": "module",

@@ -1,4 +1,4 @@
-<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: ../../PROVENANCE.md · github.com/shear559/fabius -->
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · release evidence: ../../PROVENANCE.md · github.com/shear559/fabius -->
 # Fabius Benchmark Suite (FBS) — v1.0
 
 **The agentic-control-layer evaluation framework.** The executable form of [IDENTITY.md](../../IDENTITY.md): fabius is not a standalone model — it is an intelligence amplification layer on top of existing LLMs — so benchmarking it is fundamentally different from benchmarking an LLM. We are not evaluating intelligence. We are evaluating **orchestration**: behavioral optimization, decision quality, and whether the layer produces better outputs, better decisions, fewer mistakes, fewer retries, and fewer wasted tokens — while preserving correctness.

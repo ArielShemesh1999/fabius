@@ -1,27 +1,53 @@
 #!/usr/bin/env node
-// Development/release integrity gate.
+// Development/release/proof-upgrade integrity gate.
 // dev: the worktree may be dirty, but every owned version field must describe the
 //      exact next patch after the newest signed release.
 // release: additionally requires a clean HEAD exactly at that signed tag and binds
 //          the anchor record's commit/tree to the tagged repository state.
+// proof-upgrade: permits only a tracked proof modification at the tagged anchor or
+//                one clean direct proof-only child; trusted Bitcoin confirmation is
+//                separately required by verify-all.sh.
 
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { execFileSync, spawnSync } from "node:child_process";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
+import { verifyOtsBinding } from "./verify-ots-binding.mjs";
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const ROOT = process.env.FABIUS_VERIFY_ROOT
+  ? resolve(process.env.FABIUS_VERIFY_ROOT)
+  : join(dirname(fileURLToPath(import.meta.url)), "..");
+const TRUST_BOOTSTRAP_TAG = "v1.0.0-sealed";
+const TRUST_BOOTSTRAP_OBJECT = "87b0e8d3458bc21a6e231cfaa63b3f14c128435f";
+const TRUST_ROOT_SHA256 = "a3e825409eb5abe1030632fd414d95eb481fc93cf1a546ed692e83df3e6278bd";
 const args = process.argv.slice(2);
 const modeArg = args.find((a) => a.startsWith("--mode="))?.split("=")[1] || (args[args.indexOf("--mode") + 1]) || "dev";
-if (!["dev", "release"].includes(modeArg)) throw new Error("usage: node scripts/verify-release.mjs --mode=dev|release");
+if (!["dev", "release", "proof-upgrade"].includes(modeArg)) {
+  throw new Error("usage: node scripts/verify-release.mjs --mode=dev|release|proof-upgrade");
+}
 const mode = modeArg;
 const text = (p) => readFileSync(join(ROOT, p), "utf8");
 const json = (p) => JSON.parse(text(p));
 const git = (...argv) => execFileSync("git", argv, { cwd: ROOT, encoding: "utf8" }).trim();
+const gitBytes = (...argv) => execFileSync("git", argv, { cwd: ROOT });
 const sha256 = (p) => createHash("sha256").update(readFileSync(join(ROOT, p))).digest("hex");
 const checks = [];
 const check = (name, pass, detail = "") => checks.push({ name, pass: !!pass, detail });
+const exactPaths = (actual, expected) => {
+  const a = [...new Set(actual.filter(Boolean))].sort();
+  const e = [...expected].sort();
+  return a.length === e.length && a.every((value, index) => value === e[index]);
+};
+const commitChanges = (commit) => {
+  if (!commit) return [];
+  const fields = gitBytes("diff-tree", "--no-commit-id", "-r", "--no-renames", "--name-status", "-z", commit)
+    .toString("utf8").split("\0").filter(Boolean);
+  const changes = [];
+  for (let i = 0; i < fields.length; i += 2) changes.push({ status: fields[i], path: fields[i + 1] || "" });
+  return changes;
+};
 
 const plugin = json(".claude-plugin/plugin.json");
 const marketplace = json(".claude-plugin/marketplace.json");
@@ -33,12 +59,51 @@ const parsed = semver(version);
 check("plugin version is strict semver", !!parsed, version || "missing");
 
 const tags = git("tag", "--list", "v*-sealed*", "--sort=-version:refname").split("\n").filter(Boolean);
-const newestTag = tags.find((tag) => /^v\d+\.\d+\.\d+-sealed$/.test(tag)) || "";
+const canonicalTags = tags.filter((tag) => /^v\d+\.\d+\.\d+-sealed$/.test(tag));
+const newestTag = canonicalTags[0] || "";
 const releasedVersion = newestTag.match(/^v(\d+\.\d+\.\d+)-sealed$/)?.[1] || "";
 check("a canonical sealed release tag exists", !!newestTag, newestTag || "none");
-const signature = newestTag ? spawnSync("git", ["-c", "gpg.ssh.allowedSignersFile=provenance/allowed_signers", "verify-tag", newestTag],
-  { cwd: ROOT, encoding: "utf8" }) : { status: 1, stderr: "no tag" };
-check("newest canonical sealed tag has an allowed signature", signature.status === 0, newestTag || "none");
+let currentSigners = Buffer.alloc(0);
+try { currentSigners = readFileSync(join(ROOT, "provenance/allowed_signers")); } catch {}
+let bootstrapObject = "";
+let bootstrapSigners = Buffer.alloc(0);
+try { bootstrapObject = git("rev-parse", `refs/tags/${TRUST_BOOTSTRAP_TAG}`); } catch {}
+try { bootstrapSigners = gitBytes("show", `${TRUST_BOOTSTRAP_TAG}:provenance/allowed_signers`); } catch {}
+const bootstrapDigest = bootstrapSigners.length
+  ? createHash("sha256").update(bootstrapSigners).digest("hex")
+  : "";
+check("historical signing bootstrap tag object and key digest are pinned",
+  bootstrapObject === TRUST_BOOTSTRAP_OBJECT && bootstrapDigest === TRUST_ROOT_SHA256,
+  `${bootstrapObject || "missing"} / ${bootstrapDigest || "missing"}`);
+check("working trust root is byte-identical to the pinned historical root",
+  currentSigners.length > 0 && currentSigners.equals(bootstrapSigners),
+  TRUST_BOOTSTRAP_TAG);
+
+let chainValid = canonicalTags.length > 0 && bootstrapSigners.length > 0;
+const chainFailures = [];
+if (chainValid) {
+  const trustDir = mkdtempSync(join(tmpdir(), "fabius-release-trust-"));
+  const trustFile = join(trustDir, "allowed_signers");
+  try {
+    writeFileSync(trustFile, bootstrapSigners, { mode: 0o600 });
+    for (const tag of [...canonicalTags].reverse()) {
+      let type = "";
+      let signers = Buffer.alloc(0);
+      try { type = git("cat-file", "-t", `refs/tags/${tag}`); } catch {}
+      try { signers = gitBytes("show", `${tag}:provenance/allowed_signers`); } catch {}
+      const signature = spawnSync("git", ["-c", `gpg.ssh.allowedSignersFile=${trustFile}`, "verify-tag", tag],
+        { cwd: ROOT, encoding: "utf8" });
+      if (type !== "tag") chainFailures.push(`${tag}:not-annotated`);
+      if (!signers.equals(bootstrapSigners)) chainFailures.push(`${tag}:trust-root-drift`);
+      if (signature.status !== 0) chainFailures.push(`${tag}:bad-signature`);
+    }
+  } finally {
+    rmSync(trustDir, { recursive: true, force: true });
+  }
+}
+chainValid = chainValid && chainFailures.length === 0;
+check("every canonical sealed tag preserves and verifies against the pinned historical trust root",
+  chainValid, chainFailures.join(", ") || `${canonicalTags.length} tags / ${TRUST_BOOTSTRAP_TAG}`);
 
 const citationVersion = text("CITATION.cff").match(/^version:\s*([^\s]+)\s*$/m)?.[1] || "";
 const benchmarkVersion = text("BENCHMARKS.md").match(/<!--\s*fabius-release:\s*([^\s]+)\s*-->/)?.[1] || "";
@@ -80,6 +145,19 @@ const actualPages = (pdfBytes.match(/\/Type\s*\/Page\b/g) || []).length;
 check("paper artifact page count matches the PDF", artifact.pages === actualPages && actualPages > 0,
   `${artifact.pages} / ${actualPages}`);
 
+let otsBinding = null;
+let otsBindingError = "";
+try {
+  otsBinding = verifyOtsBinding(
+    readFileSync(join(ROOT, "provenance/sealed-commit.txt")),
+    readFileSync(join(ROOT, "provenance/sealed-commit.txt.ots")),
+  );
+} catch (error) {
+  otsBindingError = error.message;
+}
+check("detached OTS proof is structurally valid and bound to the exact release record",
+  !!otsBinding, otsBinding?.digest || otsBindingError || "missing proof");
+
 const head = git("rev-parse", "HEAD");
 const tagCommit = newestTag ? git("rev-parse", `${newestTag}^{}`) : "";
 if (mode === "dev") {
@@ -92,10 +170,10 @@ if (mode === "dev") {
   check("dev HEAD descends from the newest signed release", !!descends, `${head.slice(0, 12)} from ${tagCommit.slice(0, 12)}`);
   check("dev target has not already been tagged as released", !tags.includes(`v${version}-sealed`), `v${version}-sealed`);
 } else {
-  const dirty = git("status", "--porcelain=v1", "--untracked-files=all");
-  check("release worktree is clean", dirty === "", dirty ? `${dirty.split("\n").length} changes` : "clean");
+  const statusEntries = gitBytes("status", "--porcelain=v1", "-z", "--untracked-files=all")
+    .toString("utf8").split("\0").filter(Boolean);
+  const dirty = statusEntries.join("\n");
   check("release version equals newest signed tag", releasedVersion === version, `${version} / ${releasedVersion}`);
-  check("release HEAD equals newest signed tag commit", head === tagCommit, `${head.slice(0, 12)} / ${tagCommit.slice(0, 12)}`);
   const record = text("provenance/sealed-commit.txt");
   const sealedCommit = record.match(/^commit:\s+([0-9a-f]{40})$/m)?.[1] || "";
   const sealedTree = record.match(/^tree:\s+([0-9a-f]{40})$/m)?.[1] || "";
@@ -107,9 +185,48 @@ if (mode === "dev") {
   check("release anchor record binds the tag's single immediate content parent",
     tagParents.length === 1 && sealedCommit === tagParents[0],
     `${sealedCommit.slice(0, 12) || "missing"} / parent ${tagParents.map((p) => p.slice(0, 12)).join(",") || "missing"}`);
+  let anchorChanges = [];
+  try { anchorChanges = commitChanges(tagCommit); } catch {}
+  const expectedAnchorPaths = ["provenance/sealed-commit.txt", "provenance/sealed-commit.txt.ots"];
+  check("release anchor commit changes exactly the record and detached proof",
+    anchorChanges.every((entry) => entry.status === "M")
+      && exactPaths(anchorChanges.map((entry) => entry.path), expectedAnchorPaths),
+    anchorChanges.map((entry) => `${entry.status} ${entry.path}`).join(", ") || "none");
   let taggedRecordMatches = false;
   try { taggedRecordMatches = git("show", `${newestTag}:provenance/sealed-commit.txt`) === record.trim(); } catch {}
   check("signed tag contains the current anchor record", taggedRecordMatches, newestTag);
+
+  if (mode === "release") {
+    check("release worktree is clean", dirty === "", dirty ? `${dirty.split("\n").length} changes` : "clean");
+    check("release HEAD equals newest signed tag commit", head === tagCommit, `${head.slice(0, 12)} / ${tagCommit.slice(0, 12)}`);
+  } else {
+    const proofPath = "provenance/sealed-commit.txt.ots";
+    const atTaggedAnchor = head === tagCommit;
+    const proofStatus = statusEntries.length === 1 ? statusEntries[0].slice(0, 2) : "";
+    // The proof must be staged with no divergent worktree bytes. Accepting MM
+    // would verify one blob and let a plain commit record another; accepting an
+    // unstaged-only delta would not bind any commit candidate at all.
+    const preCommitUpgrade = atTaggedAnchor && statusEntries.length === 1
+      && statusEntries[0].slice(3) === proofPath && proofStatus === "M ";
+    const headParents = git("show", "-s", "--format=%P", head).split(/\s+/).filter(Boolean);
+    let headChanges = [];
+    try { headChanges = commitChanges(head); } catch {}
+    const committedUpgrade = dirty === "" && headParents.length === 1 && headParents[0] === tagCommit
+      && headChanges.length === 1 && headChanges[0].status === "M" && headChanges[0].path === proofPath;
+    const headTags = git("tag", "--points-at", head, "--list", "v*-sealed")
+      .split("\n").filter((tag) => /^v\d+\.\d+\.\d+-sealed$/.test(tag));
+    check("committed proof-upgrade HEAD is not itself a sealed release tag",
+      preCommitUpgrade || headTags.length === 0,
+      preCommitUpgrade ? "pre-commit upgrade at tagged anchor" : headTags.join(", ") || "untagged");
+    check("proof upgrade is exactly one pre-commit or committed proof-only delta",
+      preCommitUpgrade !== committedUpgrade && (preCommitUpgrade || committedUpgrade),
+      preCommitUpgrade ? "proof-only worktree delta" : committedUpgrade ? "proof-only immediate child" : "invalid state");
+    let proofChanged = false;
+    try {
+      proofChanged = git("hash-object", proofPath) !== git("rev-parse", `${newestTag}:${proofPath}`);
+    } catch {}
+    check("proof upgrade changes the detached proof bytes", proofChanged, proofChanged ? "changed" : "unchanged or missing");
+  }
 }
 
 console.log(`== fabius ${mode} integrity ==\n`);
@@ -117,5 +234,6 @@ for (const c of checks) console.log(`  ${c.pass ? "PASS" : "FAIL"}  ${c.name}${c
 const failed = checks.filter((c) => !c.pass).length;
 console.log(`\n== ${checks.length - failed} passed · ${failed} failed ==`);
 if (mode === "dev") console.log("  NOTE  dev mode permits a dirty worktree; it does not authorize tagging, stamping, releasing or pushing.");
-else console.log("  NOTE  release mode verifies a release that already exists; it never creates a tag, stamp, proof, release or push.");
+else if (mode === "release") console.log("  NOTE  release mode verifies a release that already exists; it never creates a tag, stamp, proof, release or push.");
+else console.log("  NOTE  proof-upgrade mode permits only one confirmed detached-proof delta; it never stages, commits or pushes it.");
 process.exitCode = failed ? 1 : 0;

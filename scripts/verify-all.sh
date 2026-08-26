@@ -5,9 +5,9 @@ cd "$(git rev-parse --show-toplevel 2>/dev/null || (cd "$(dirname "$0")/.." && p
 
 mode=dev
 case "${1:-}" in
-  --mode=dev|--mode=release) mode=${1#--mode=} ;;
+  --mode=dev|--mode=release|--mode=proof-upgrade) mode=${1#--mode=} ;;
   "") ;;
-  *) echo "usage: bash scripts/verify-all.sh [--mode=dev|--mode=release]"; exit 2 ;;
+  *) echo "usage: bash scripts/verify-all.sh [--mode=dev|--mode=release|--mode=proof-upgrade]"; exit 2 ;;
 esac
 
 passed=0
@@ -28,8 +28,16 @@ run_gate "portable eval harness selftest" python3 evals/portable_eval.py --selft
 run_gate "runtime unit/integration tests" node --test runtime/test/*.test.mjs
 run_gate "Concilium deterministic protocol selftest" node skills/fabius-concilium/references/council.mjs --selftest
 run_gate "repo-local package truth" node scripts/verify-package.mjs
-run_gate "provenance bundle" bash provenance/verify.sh
+run_gate "paper artifact oracle" node scripts/verify-paper-artifact.mjs
+run_gate "paper artifact adversarial regression" node scripts/test-verify-paper-artifact.mjs
+run_gate "OpenTimestamps detached-proof binding" node scripts/test-verify-ots-binding.mjs
+if [ "$mode" = proof-upgrade ]; then
+  run_gate "provenance bundle (Bitcoin confirmation required)" bash provenance/verify.sh --require-confirmed
+else
+  run_gate "provenance bundle" bash provenance/verify.sh
+fi
 run_gate "provenance adversarial regression" bash provenance/test-verify.sh
+run_gate "release-state adversarial regression" node scripts/test-verify-release.mjs
 run_gate "$mode release integrity" node scripts/verify-release.mjs "--mode=$mode"
 
 printf '\n===== aggregate =====\n'

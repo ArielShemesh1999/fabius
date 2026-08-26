@@ -19,21 +19,35 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      # actions/checkout v4.2.2, pinned to the official tag commit.
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
+          fetch-tags: true
           persist-credentials: false
 
-      # actions/setup-node v4.4.0, pinned to the official tag commit.
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      # checkout dereferences a tag event's SHA and may replace the local
+      # annotated tag with a lightweight ref. Restore the signed tag object
+      # before any signature or release-integrity check.
+      - name: Restore annotated release tag
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-sealed$ ]] || {
+            echo "refusing non-canonical release tag: $GITHUB_REF_NAME" >&2
+            exit 1
+          }
+          git fetch --force --no-tags origin \
+            "refs/tags/${GITHUB_REF_NAME}:refs/tags/${GITHUB_REF_NAME}"
+          test "$(git cat-file -t "refs/tags/${GITHUB_REF_NAME}")" = tag
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
 
-      - name: Verify unreleased development tree
-        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
-        run: bash scripts/verify-all.sh --mode=dev
-
-      - name: Verify signed release tree
-        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
-        run: bash scripts/verify-all.sh --mode=release
+      - name: Select and verify repository state
+        shell: bash
+        run: |
+          set -euo pipefail
+          mode=$(bash scripts/select-verify-mode.sh)
+          bash scripts/verify-all.sh "--mode=$mode"

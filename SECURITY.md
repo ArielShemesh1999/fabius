@@ -24,6 +24,16 @@ fabius is a set of skill contracts, a plugin manifest and a zero-dependency loca
 - Anything requiring an already-compromised machine, since the runner holds the user's own API keys by design.
 - The fact that a public repository can be cloned. [PROVENANCE.md](PROVENANCE.md) states this plainly: the design defends provenance and enforcement, not access.
 
+## Bundled reference projects
+
+The active `runtime/` has no third-party package dependencies. Files below `skills/*/references/**` are inert, vendored research and example-project snapshots: the plugin does not install their manifests, resolve their lockfiles, or execute their build scripts. Dependency alerts on those paths therefore are not dependencies of the Fabius runner or release tooling.
+
+They are still real upstream dependency warnings for anyone who deliberately extracts and runs an example. Treat such a directory as a separate untrusted project: review and update its manifest and lockfile before installing or executing it. Bundling a snapshot is not a support claim for its historical dependency versions.
+
+Dependabot proposes weekly updates for pinned GitHub Actions references only. It does not update the zero-dependency runtime or the bundled reference snapshots, and its pull requests are reviewed rather than auto-merged.
+
+Release verification does not rely on an optional OpenTimestamps installation for detached-proof integrity. `scripts/verify-ots-binding.mjs` parses the bounded proof structure and binds its embedded SHA-256 to the exact sealed record using Node built-ins; the external OTS client is used only to classify and trusted-verify attestations. The historical signing tag object and key digest are pinned, every canonical tag must verify with that root, and an in-release or recent-tag signing-key replacement is rejected.
+
 ## Supported versions
 
 The current sealed release, and that release only. Each release uses an Ed25519-signed `vX.Y.Z-sealed` tag and a content-bound OpenTimestamps proof. Bitcoin confirmation is asynchronous and may still be pending; `bash provenance/verify.sh` must report the actual state and must never treat “contains an attestation” as proof that the file or release matches.

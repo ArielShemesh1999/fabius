@@ -26,7 +26,7 @@ import { listen, identity, send } from './src/channel.mjs';
 import { DEFAULT_RELAYS } from './src/nostr.mjs';
 import { say, paint, die, warn } from './src/util.mjs';
 
-const VERSION = '2.6.3';
+const VERSION = '2.6.4';
 
 const HELP = `
 ${paint('violet', 'fabius')} ${paint('dim', VERSION)} — the agent, on your machine

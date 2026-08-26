@@ -1,35 +1,37 @@
 fabius
 Copyright (c) 2026 Ariel Shemesh — github.com/shear559/fabius
 
-This software and its accompanying research, prose, figures, and skill
-definitions are the original work of Ariel Shemesh.
+Copyright is claimed by Ariel Shemesh in the original software, research,
+prose, figures, and skill definitions in this repository.
 
 LICENSE & ATTRIBUTION
 --------------------
-fabius is private and proprietary — all rights reserved (see LICENSE). No
-license or permission to use, copy, fork, redistribute, or create derivatives
-is granted to anyone. Because no permission is granted, any reproduction of a
-verbatim or substantial part of this work is copyright infringement from the
-first copy. (You still must show they copied substantial protected expression;
-there is simply no license defense available to them.)
+fabius is publicly readable and proprietary — all rights reserved (see
+LICENSE). The LICENSE grants a narrow personal, non-commercial plugin-use
+permission; it grants no broader permission to copy, fork, redistribute,
+modify, commercialize, or create derivatives. Applicable statutory exceptions
+remain applicable. Copying protected expression may infringe absent permission
+or an applicable exception; that assessment is fact-specific.
 
-The copyright notice above MUST NOT be removed from any copy. Materials under
-skills/**/references/ that adapt third-party work retain their own upstream
-licenses and are attributed in credits/.
+Any copy made under the LICENSE permission must retain the copyright notice
+above. Materials under skills/**/references/ that adapt third-party work retain
+their own upstream licenses and are attributed in credits/.
 
 PROVENANCE
 ----------
-Authorship and the priority date of this work are independently provable
-without trusting GitHub, the author, or any single party:
+The release apparatus lets anyone inspect exact-byte integrity, release-key
+attribution, and timestamp status without relying only on repository prose:
 
   * provenance/sealed-commit.txt      — the sealed git commit + tree hash
-  * provenance/sealed-commit.txt.ots  — OpenTimestamps proof anchoring that
-                                        hash into the Bitcoin blockchain
+  * provenance/sealed-commit.txt.ots  — detached OpenTimestamps proof; pending
+                                        until trusted Bitcoin verification
   * a cryptographically SSH-signed git tag (provenance/allowed_signers)
   * an embedded provenance fingerprint in every skill file
 
-See PROVENANCE.md for the full threat model, what each layer does and does
-NOT prove, and the verification + enforcement procedure.
+These artifacts do not by themselves prove originality, legal authorship,
+ownership, first creation, or infringement. See PROVENANCE.md for the full
+threat model, what each layer does and does NOT prove, and the verification
+procedure.
 
 To verify everything from a clean clone:
 

@@ -2,15 +2,15 @@ fabius — Proprietary License
 
 Copyright (c) 2026 Ariel Shemesh. All rights reserved.
 
-This repository and its contents — the software, research, prose, figures, and
-skill definitions (the "Software") — are private and proprietary, the original
-work of Ariel Shemesh.
+This repository is publicly readable and proprietary. Copyright is claimed in
+its original software, research, prose, figures, and skill definitions (the
+"Software") by Ariel Shemesh.
 
 No license or permission is granted to any person to use, copy, modify, merge,
 publish, distribute, sublicense, or sell any part of the Software, in whole or
 in substantial part, without the prior written permission of the copyright
-holder, except as stated in the next paragraph. Possessing or accessing a copy
-conveys no further rights.
+holder, except as stated in the next paragraph or as otherwise permitted by
+applicable law. Possessing or accessing a copy conveys no further licence.
 
 One narrow permission is granted: personal, non-commercial installation and use
 of fabius as an agent plugin, obtained via the published marketplace command,
@@ -19,11 +19,12 @@ redistribution, modification, derivative works, commercial use, or offering the
 Software (or any service built on it) to third parties, and it may be revoked
 by the copyright holder at any time.
 
-The Software is provenance-sealed; its authorship and integrity are
-independently verifiable (see PROVENANCE.md). Because no license is granted, any
-unauthorized reproduction of substantial protected expression is copyright
-infringement from the first copy — there is no license condition to satisfy or
-forfeit.
+The Software is provenance-sealed (see PROVENANCE.md). The seal lets a verifier
+bind exact bytes to a signed release key and, after trusted Bitcoin
+verification, place an upper bound on when the sealed record existed. It does
+not by itself prove originality, authorship, ownership, or infringement.
+Copying protected expression may infringe absent permission or an applicable
+exception; that assessment is fact-specific.
 
 Some materials under `skills/**/references/` adapt third-party works that retain
 their own upstream licenses; those works remain governed by their original terms

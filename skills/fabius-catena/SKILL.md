@@ -18,7 +18,7 @@ license: UNLICENSED
 metadata:
   author: Ariel Shemesh
 ---
-<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · authenticity proof: PROVENANCE.md · github.com/shear559/fabius -->
+<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · release evidence: PROVENANCE.md · github.com/shear559/fabius -->
 
 # Fabius Catena — build on the chain, prove with the chain
 
@@ -27,7 +27,7 @@ metadata:
 ## 1. The two jobs, and the line between them
 
 - **Build on-chain.** Contracts, programs, wallet and transaction flows, on-chain reads. The risk is money and irreversibility, so the bar is higher than ordinary code.
-- **Prove with the chain.** Seal an artifact (a file, a release, a dataset) so its existence-date and authorship are checkable by anyone, with no trusted party. This is `fabius`'s own provenance mechanism (see [PROVENANCE.md](../../PROVENANCE.md)) made reusable.
+- **Prove with the chain.** Seal an artifact (a file, a release, a dataset) so its existence bound and release-key attribution are independently checkable under stated trust assumptions. This is `fabius`'s own provenance mechanism (see [PROVENANCE.md](../../PROVENANCE.md)) made reusable.
 
 `fabius-praesidium` owns *application* defensive security; `fabius-catena` owns the *on-chain* surface (account validation, transaction safety) and *cryptographic provenance*. Both stand on `fabius-parcus`'s never-trim floor and never drop below it.
 

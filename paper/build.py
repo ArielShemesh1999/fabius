@@ -3,12 +3,124 @@
 group them into section 4, inject the coherence capstone. Writes fabius-system.html.
 
     python3 paper/build.py        # from the repo root
+    python3 paper/build.py --write-artifact  # after rendering the PDF
 """
-import json, os, re
+import hashlib, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAPER = os.path.join(ROOT, "paper")
 ASSETS = os.path.join(ROOT, "assets")
+
+# Every repository file that can change the rendered PDF. Keep this list in
+# lockstep with scripts/verify-paper-artifact.mjs: the verifier owns an
+# independent allowlist so an accidentally omitted input cannot bless itself.
+ARTIFACT_SOURCES = (
+    "assets/architecture.svg",
+    "assets/charts/render_figures.py",
+    "assets/charts/svgplot.py",
+    "assets/fabius-pixel.svg",
+    "assets/fig-branching-accuracy.svg",
+    "assets/fig-capability-ladder.svg",
+    "assets/fig-plan-then-bind.svg",
+    "assets/fig-recall-context.svg",
+    "assets/fig-reflection-iteration.svg",
+    "assets/fig-tool-value-gate.svg",
+    "paper/build.py",
+    "paper/build.sh",
+    "paper/coherence-ext.html",
+    "paper/coherence.html",
+    "paper/proofs.json",
+    "paper/template.html",
+)
+PDF_FILE = "paper/fabius-as-a-system.pdf"
+ARTIFACT_FILE = "paper/artifact.json"
+
+
+def _sha256(path):
+    digest = hashlib.sha256()
+    with open(os.path.join(ROOT, path), "rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _source_entries():
+    return [{"file": path, "sha256": _sha256(path)}
+            for path in ARTIFACT_SOURCES]
+
+
+def _source_digest(entries):
+    payload = "".join("%s\0%s\n" % (entry["file"], entry["sha256"])
+                      for entry in entries).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _paper_version_and_markers():
+    template = open(os.path.join(PAPER, "template.html"), encoding="utf-8").read()
+    patterns = (
+        r"Whitepaper · v(\d+\.\d+\.\d+)",
+        r'<div class="meta-row">Version (\d+\.\d+\.\d+)',
+        r'<div class="footer-tag">Fabius v(\d+\.\d+\.\d+)',
+    )
+    versions = [re.search(pattern, template) for pattern in patterns]
+    if any(match is None for match in versions):
+        raise SystemExit("paper template is missing a canonical version marker")
+    values = [match.group(1) for match in versions]
+    if len(set(values)) != 1:
+        raise SystemExit("paper template version markers disagree: " + ", ".join(values))
+    version = values[0]
+    return version, [
+        "Whitepaper · v" + version,
+        "Version " + version,
+        "Fabius v" + version,
+    ]
+
+
+def _mathjax_source():
+    build = open(os.path.join(PAPER, "build.sh"), encoding="utf-8").read()
+    version = re.search(r"^MATHJAX_VERSION=([^\s]+)$", build, re.M)
+    digest = re.search(r"^MATHJAX_SHA256=([0-9a-f]{64})$", build, re.M)
+    if not version or not digest:
+        raise SystemExit("paper/build.sh is missing the pinned MathJax version or digest")
+    return {
+        "name": "MathJax tex-svg.js",
+        "version": version.group(1),
+        "sha256": digest.group(1),
+    }
+
+
+def _pdf_page_count(data):
+    return len(re.findall(rb"/Type\s*/Page\b", data))
+
+
+def write_artifact():
+    pdf_path = os.path.join(ROOT, PDF_FILE)
+    data = open(pdf_path, "rb").read()
+    if not data.startswith(b"%PDF-") or not re.search(rb"%%EOF\s*$", data):
+        raise SystemExit(PDF_FILE + " is not a complete PDF")
+    pages = _pdf_page_count(data)
+    if pages < 1:
+        raise SystemExit(PDF_FILE + " contains no pages")
+    version, markers = _paper_version_and_markers()
+    sources = _source_entries()
+    artifact = {
+        "schema": "fabius-paper-artifact/v1",
+        "version": version,
+        "file": PDF_FILE,
+        "sha256": hashlib.sha256(data).hexdigest(),
+        "pages": pages,
+        "source_sha256": _source_digest(sources),
+        "sources": sources,
+        "external_sources": [_mathjax_source()],
+        "rendered_markers": markers,
+    }
+    destination = os.path.join(ROOT, ARTIFACT_FILE)
+    temporary = destination + ".tmp"
+    with open(temporary, "w", encoding="utf-8") as handle:
+        json.dump(artifact, handle, ensure_ascii=False, indent=2)
+        handle.write("\n")
+    os.replace(temporary, destination)
+    print("wrote", destination, "(%d sources, %d pages)" % (len(sources), pages))
 
 # ---- math-safe: literal <,> inside \(...\) / \[...\] break the HTML parser ----
 _INLINE = re.compile(r"\\\(.*?\\\)", re.S)
@@ -132,4 +244,9 @@ def main():
     print("proofs inlined:", len(proofs), "| figures:", 2 + sum(len(g[3]) for g in GROUPS))
 
 if __name__ == "__main__":
-    main()
+    if sys.argv[1:] == ["--write-artifact"]:
+        write_artifact()
+    elif sys.argv[1:]:
+        raise SystemExit("usage: python3 paper/build.py [--write-artifact]")
+    else:
+        main()

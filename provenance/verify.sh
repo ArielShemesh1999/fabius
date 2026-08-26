@@ -4,10 +4,16 @@
 # reports a digest-bound OTS proof as pending or Bitcoin-confirmed, and verifies
 # the signature against a key in the repo.
 #
-#   bash provenance/verify.sh
+#   bash provenance/verify.sh [--require-confirmed]
 #
 set -uo pipefail
 cd "$(git rev-parse --show-toplevel 2>/dev/null || (cd "$(dirname "$0")/.." && pwd))"
+require_confirmed=0
+case "${1:-}" in
+  "") ;;
+  --require-confirmed) require_confirmed=1 ;;
+  *) echo "usage: bash provenance/verify.sh [--require-confirmed]"; exit 2 ;;
+esac
 ok=0; warn=0; fail=0
 say(){ printf '%s\n' "$*"; }
 pass(){ say "  PASS  $*"; ok=$((ok+1)); }
@@ -43,7 +49,27 @@ fi
 OTS=$(command -v ots || ls "$HOME"/Library/Python/*/bin/ots 2>/dev/null | head -1)
 ots_bound=0
 ots_confirmed=0
-if [ -n "${OTS:-}" ] && [ -f provenance/sealed-commit.txt.ots ]; then
+if [ -f provenance/sealed-commit.txt ] && [ -f provenance/sealed-commit.txt.ots ]; then
+  # Binding and structural validity are release invariants, not optional
+  # conveniences supplied by the external OTS client. The dependency-free
+  # parser rejects malformed envelopes, wrong digests and trailing garbage.
+  binding_output=$(node scripts/verify-ots-binding.mjs \
+    provenance/sealed-commit.txt provenance/sealed-commit.txt.ots 2>&1)
+  binding_code=$?
+  if [ "$binding_code" -eq 0 ]; then
+    ots_bound=1
+    record_hash=$(shasum -a 256 provenance/sealed-commit.txt 2>/dev/null | awk '{print $1}')
+    pass "OpenTimestamps proof is structurally valid and embeds the exact sealed-record SHA-256 ($record_hash)"
+  else
+    bad "OpenTimestamps detached proof is malformed or not bound to provenance/sealed-commit.txt — $binding_output"
+  fi
+elif [ -f provenance/sealed-commit.txt.ots ]; then
+  bad "OpenTimestamps proof exists without provenance/sealed-commit.txt"
+else
+  note "OpenTimestamps detached proof absent — release not sealed yet"
+fi
+
+if [ "$ots_bound" -eq 1 ] && [ -n "${OTS:-}" ]; then
   # The Bitcoin attestation is embedded IN the proof file — `ots info` reads it
   # with no Bitcoin node. (`ots verify` additionally cross-checks the block
   # header against a node/explorer; absence of a node is not "unconfirmed".)
@@ -55,8 +81,7 @@ if [ -n "${OTS:-}" ] && [ -f provenance/sealed-commit.txt.ots ]; then
   elif [ "$proof_hash" != "$record_hash" ]; then
     bad "OpenTimestamps proof digest MISMATCH — proof covers $proof_hash, sealed-commit.txt is $record_hash"
   else
-    ots_bound=1
-    pass "OpenTimestamps detached digest matches provenance/sealed-commit.txt ($record_hash)"
+    pass "external OTS parser independently reports the same detached digest"
     info_blocks=$(printf '%s' "$info" | grep -oiE "BitcoinBlockHeaderAttestation\([0-9]+\)" | grep -oE "[0-9]+")
     block=$(printf '%s\n' "$info_blocks" | head -1)
     if [ -n "$block" ]; then
@@ -85,18 +110,59 @@ if [ -n "${OTS:-}" ] && [ -f provenance/sealed-commit.txt.ots ]; then
       note "digest-bound OTS proof present but no recognizable attestation — inspect: $OTS info provenance/sealed-commit.txt.ots"
     fi
   fi
-else
-  note "ots client or .ots proof absent — install opentimestamps-client, or release not sealed yet"
+elif [ "$ots_bound" -eq 1 ]; then
+  note "digest-bound OTS proof is structurally valid, but the external ots client is unavailable — attestation status not evaluated"
+fi
+if [ "$require_confirmed" -eq 1 ] && [ "$ots_confirmed" -ne 1 ]; then
+  bad "Bitcoin confirmation is required for a provenance-only proof upgrade"
 fi
 
-# 4) Signed tag (authorship) ----------------------------------------------
+# 4) Signed tag (key attribution + release-to-release continuity) ---------
 if [ -f provenance/allowed_signers ]; then
-  tag=$(git tag --list 'v*-sealed*' --sort=-creatordate | head -1)
-  if [ -n "$tag" ] && git -c gpg.ssh.allowedSignersFile=provenance/allowed_signers verify-tag "$tag" 2>&1 | grep -qi "Good .*signature"; then
-    pass "release tag '$tag' carries a valid signature from the committed key"
+  bootstrap_tag=v1.0.0-sealed
+  bootstrap_object_expected=87b0e8d3458bc21a6e231cfaa63b3f14c128435f
+  bootstrap_key_sha_expected=a3e825409eb5abe1030632fd414d95eb481fc93cf1a546ed692e83df3e6278bd # gitleaks:allow — public-key digest, not a credential
+  canonical_tags=$(git tag --list 'v*-sealed*' --sort=-version:refname \
+    | awk '/^v[0-9]+\.[0-9]+\.[0-9]+-sealed$/')
+  tag=$(printf '%s\n' "$canonical_tags" | sed -n '1p')
+  trust_file=$(mktemp "${TMPDIR:-/tmp}/fabius-signers.XXXXXX") || trust_file=""
+  if [ -z "$tag" ]; then
+    note "no canonical *-sealed tag found locally (fetch tags: git fetch --tags), or release not sealed yet"
+  elif [ -z "$trust_file" ]; then
+    bad "could not create a temporary historical trust file"
   else
-    note "no verified *-sealed tag found locally (fetch tags: git fetch --tags), or release not sealed yet"
+    git show "$bootstrap_tag:provenance/allowed_signers" > "$trust_file" 2>/dev/null || :
+    bootstrap_object=$(git rev-parse "refs/tags/$bootstrap_tag" 2>/dev/null || :)
+    bootstrap_key_sha=$(shasum -a 256 "$trust_file" 2>/dev/null | awk '{print $1}')
+    if [ "$bootstrap_object" != "$bootstrap_object_expected" ] \
+       || [ "$bootstrap_key_sha" != "$bootstrap_key_sha_expected" ]; then
+      bad "historical signing bootstrap object or key digest does not match the pinned trust root"
+    elif ! cmp -s "$trust_file" provenance/allowed_signers; then
+      bad "current allowed_signers differs from the pinned historical trust root"
+    else
+      chain_ok=1
+      chain_failures=""
+      for candidate in $canonical_tags; do
+        candidate_type=$(git cat-file -t "refs/tags/$candidate" 2>/dev/null || :)
+        if [ "$candidate_type" != tag ]; then
+          chain_ok=0; chain_failures="$chain_failures $candidate:not-annotated"
+        fi
+        if ! git show "$candidate:provenance/allowed_signers" 2>/dev/null | cmp -s - "$trust_file"; then
+          chain_ok=0; chain_failures="$chain_failures $candidate:trust-root-drift"
+        fi
+        if ! git -c "gpg.ssh.allowedSignersFile=$trust_file" verify-tag "$candidate" 2>&1 | grep -qi "Good .*signature"; then
+          chain_ok=0; chain_failures="$chain_failures $candidate:bad-signature"
+        fi
+      done
+      if [ "$chain_ok" -eq 1 ]; then
+        tag_count=$(printf '%s\n' "$canonical_tags" | grep -c . | tr -d ' ')
+        pass "all $tag_count canonical release tags preserve and verify against the pinned historical trust root"
+      else
+        bad "canonical release signature chain failed:$chain_failures"
+      fi
+    fi
   fi
+  [ -z "$trust_file" ] || rm -f "$trust_file"
 else
   bad "provenance/allowed_signers missing"
 fi

@@ -1,7 +1,86 @@
 {
   "schema": "fabius-paper-artifact/v1",
-  "version": "2.6.3",
+  "version": "2.6.4",
   "file": "paper/fabius-as-a-system.pdf",
-  "sha256": "abcd41a64edb6c1cbc1355147b132e146eba7bacd1d841ac59359065ffc8314f",
-  "pages": 50
+  "sha256": "c4240c7ffc6924df5b30d3771ea50dc76865567f4883e40cfd61af5cfcdb86b8",
+  "pages": 50,
+  "source_sha256": "b5e03ef2267f14c7ef698ba249a2f19a643ebfebf12729462f1e8962b31cb943",
+  "sources": [
+    {
+      "file": "assets/architecture.svg",
+      "sha256": "47c82ec4e7768dc93150f317d64321c646890c9357679c0ab475d9990228e9c1"
+    },
+    {
+      "file": "assets/charts/render_figures.py",
+      "sha256": "e5206b664299d2c0af3bdea5a88d7de30dbf8c5dcb8067d686645face233f9bd"
+    },
+    {
+      "file": "assets/charts/svgplot.py",
+      "sha256": "239af649771acf0efd33a5439112ed6d816fe5d048561a05289686200b3e9d47"
+    },
+    {
+      "file": "assets/fabius-pixel.svg",
+      "sha256": "c6956fac7a758e1c1642253d627c24d761c82d76b38050a43e6f06afcb790412"
+    },
+    {
+      "file": "assets/fig-branching-accuracy.svg",
+      "sha256": "bbf418cbcd17be87d04a4f6c24ff2a47da395ba445554dc4e3d2c846bcbee2d8"
+    },
+    {
+      "file": "assets/fig-capability-ladder.svg",
+      "sha256": "de62a46ddbfae83cf23ef971a96cdd244a979a4d236c7b3e689e6f0d357b69ec"
+    },
+    {
+      "file": "assets/fig-plan-then-bind.svg",
+      "sha256": "1e750594fe15b698fbaa501fea3972ec50b30e833f5d3acfd2cf10663d058cef"
+    },
+    {
+      "file": "assets/fig-recall-context.svg",
+      "sha256": "362ae29ddfd4c8949f292bf450666f2cb8a67550f1cc109f74d5343f9bfb42d8"
+    },
+    {
+      "file": "assets/fig-reflection-iteration.svg",
+      "sha256": "6cb98b0da02eee6d6809c262899ed7a6803322a77f533f1f9850c04138e25c65"
+    },
+    {
+      "file": "assets/fig-tool-value-gate.svg",
+      "sha256": "e70beaf81edc70658614862b06c6d936d3d6c59cde8602924462e6c609ced5d2"
+    },
+    {
+      "file": "paper/build.py",
+      "sha256": "24b7c54cd56f468c7066e9e1c8b13ce98673490ff05b68c0f6fcbf8207a5da9e"
+    },
+    {
+      "file": "paper/build.sh",
+      "sha256": "f976f86eb7b7a54ac3a8929d2f95dd785cd3f4ff7692cdb32cefbefe5eaea92e"
+    },
+    {
+      "file": "paper/coherence-ext.html",
+      "sha256": "7d7cbeb2f2ed9673554111d16137ef8568bd21430f32236760ec92859eb687b2"
+    },
+    {
+      "file": "paper/coherence.html",
+      "sha256": "7d7548d22bf8c08faa3f528a8884e5622837bde2843f44f0c81b772c6f547301"
+    },
+    {
+      "file": "paper/proofs.json",
+      "sha256": "f6d774058b6b37aa2218e5ec077ae7146a9d88594eb0119a3dbe757de145325e"
+    },
+    {
+      "file": "paper/template.html",
+      "sha256": "63e8a8c8f9d9c042991fe4db9507172b9157cfd654553bf56bba3598be5e9670"
+    }
+  ],
+  "external_sources": [
+    {
+      "name": "MathJax tex-svg.js",
+      "version": "3.2.2",
+      "sha256": "d4295dc33744836935c1399feece5159577b34c5c8ffb9f1c6324cd82e03a882"
+    }
+  ],
+  "rendered_markers": [
+    "Whitepaper · v2.6.4",
+    "Version 2.6.4",
+    "Fabius v2.6.4"
+  ]
 }
