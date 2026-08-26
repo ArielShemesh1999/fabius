@@ -12,9 +12,10 @@ A first response should arrive within 72 hours. If a report is accepted, a fix a
 
 fabius is a set of skill contracts, a plugin manifest and a zero-dependency local runner (`runtime/`) that hands the same sealed rules to a model through the user's own API key. The interesting surface is:
 
-- **The runtime's gates.** `--dangerously-approve-everything`, the ask posture, and the deny-list around the resolved config path. A path that releases an irreversible command without a prompt is a real finding — one such path was fixed in v2.3.1.
+- **The runtime's gates.** Canonical-path confinement, secret-path refusal, environment scrubbing, exact-origin egress grants, `--dangerously-approve-everything`, and the ask posture. A path that reaches a secret, an unapproved network origin, or an irreversible command without the required authority is a real finding.
 - **Secret redaction.** `redact()` is meant to cover every secret the runtime holds, the nostr identity key included. A secret that reaches a log or an artifact is in scope.
-- **The provenance apparatus.** `provenance/verify.sh`, the seal manifest and the signed tag. A way to make `verify.sh` report a valid seal over content that was not sealed is the highest-severity class of bug in this repository.
+- **Untrusted-content separation.** Tool, repository, web, retrieval, and memory output is data, never authority. A payload that can turn embedded text into a higher-priority instruction, permission, origin grant, or new task is in scope even when the capability gate later refuses the action.
+- **The provenance apparatus.** `provenance/verify.sh`, the seal manifest, the detached timestamp proof, and the signed tag. A way to swap a proof, mutate a released tree, or make `verify.sh` report a valid seal over content that was not sealed is the highest-severity class of bug in this repository.
 - **Skill contracts that instruct an agent to take an unsafe action.** The skills are executable instructions; treat them as code.
 
 ## What is not in scope
@@ -25,4 +26,4 @@ fabius is a set of skill contracts, a plugin manifest and a zero-dependency loca
 
 ## Supported versions
 
-The current sealed release, and that release only. Each is tagged `vX.Y.Z-sealed` with an Ed25519 signature and an OpenTimestamps proof anchoring it into Bitcoin; `bash provenance/verify.sh` reports the live state of every mechanism, including the ones that are legitimately pending.
+The current sealed release, and that release only. Each release uses an Ed25519-signed `vX.Y.Z-sealed` tag and a content-bound OpenTimestamps proof. Bitcoin confirmation is asynchronous and may still be pending; `bash provenance/verify.sh` must report the actual state and must never treat “contains an attestation” as proof that the file or release matches.

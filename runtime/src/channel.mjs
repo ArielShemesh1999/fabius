@@ -13,10 +13,10 @@
 //   the task string and nothing else — it cannot raise its own permissions, and the
 //   approval gate is upstream of every tool regardless of what the message says.
 
-import { writeFileSync, appendFileSync, existsSync, readFileSync } from 'node:fs';
+import { appendFileSync, existsSync, readFileSync, chmodSync } from 'node:fs';
 import { join } from 'node:path';
 import { run } from './loop.mjs';
-import { loadConfig, saveConfig, HOME, ensureDirs } from './config.mjs';
+import { loadConfig, saveConfig, HOME, ensureDirs, atomicWriteFile, redact } from './config.mjs';
 import {
   generateSecretKey, getPublicKey, npubEncode, toHexKey, hex,
   wrapDirectMessage, unwrapDirectMessage, publish, subscribe, DEFAULT_RELAYS,
@@ -38,24 +38,55 @@ export function identity() {
 const LOG = () => join(HOME, 'channel.log');
 function note(line) {
   ensureDirs();
-  const stamped = `${new Date().toISOString()} ${line}\n`;
-  try { appendFileSync(LOG(), stamped); } catch { /* logging must never break the listener */ }
+  const stamped = `${new Date().toISOString()} ${redact(String(line))}\n`;
+  try {
+    appendFileSync(LOG(), stamped, { mode: 0o600 });
+    chmodSync(LOG(), 0o600);
+  } catch { /* logging must never break the listener */ }
   return stamped.trimEnd();
 }
 
 // A message the listener has already handled must never run twice — a relay replays, and
 // two relays will hand you the same wrapper.
 function seenStore() {
+  ensureDirs();
   const path = join(HOME, 'channel-seen.json');
   let ids = [];
   try { ids = JSON.parse(readFileSync(path, 'utf8')); } catch { ids = []; }
+  if (!Array.isArray(ids)) ids = [];
+  ids = ids.filter((id) => typeof id === 'string' && id.length <= 128).slice(-500);
+  if (existsSync(path)) { try { chmodSync(path, 0o600); } catch { /* repaired on next write */ } }
   const set = new Set(ids);
   return {
     has: (id) => set.has(id),
     add(id) {
       set.add(id);
+      if (set.size > 500) set.delete(set.values().next().value);
       const trimmed = [...set].slice(-500);
-      try { writeFileSync(path, JSON.stringify(trimmed), { mode: 0o600 }); } catch { /* best effort */ }
+      try { atomicWriteFile(path, JSON.stringify(trimmed)); } catch { /* best effort */ }
+    },
+  };
+}
+
+export const MAX_CHANNEL_PENDING = 8;
+
+// Relay callbacks are concurrent, but runs are not: provider calls and memory compounding
+// are serialised in-process so two completed tasks cannot race a read→rewrite of the
+// memory index. The pending ceiling makes a relay flood fail closed instead of building
+// an unbounded promise/LLM queue in RAM.
+export function createSerialWorkQueue(maxPending = MAX_CHANNEL_PENDING) {
+  if (!Number.isSafeInteger(maxPending) || maxPending < 1) throw new Error('queue limit must be a positive integer');
+  let tail = Promise.resolve();
+  let pending = 0;
+  return {
+    get pending() { return pending; },
+    submit(work) {
+      if (pending >= maxPending) return null;
+      pending++;
+      const result = tail.then(() => work());
+      const settled = result.finally(() => { pending--; });
+      tail = settled.catch(() => {});
+      return settled;
     },
   };
 }
@@ -84,11 +115,13 @@ export async function listen({ owners, relays = DEFAULT_RELAYS, act = false, onL
   const FUZZ_WINDOW = 172800;                       // NIP-59's two days
   const since = Math.floor(Date.now() / 1000) - FUZZ_WINDOW - 600;
   const maxAgeSec = 900;                            // act on the last fifteen minutes only
-  const inFlight = new Set();
+  const outerInFlight = new Set();
+  const messageInFlight = new Set();
+  const workQueue = createSerialWorkQueue();
+  let lastBusyLog = 0;
 
-  const stop = subscribe({ kinds: [1059], '#p': [me.pub], since }, async (wrap) => {
-    if (seen.has(wrap.id) || inFlight.has(wrap.id)) return;
-    inFlight.add(wrap.id);
+  const handleWrap = async (wrap) => {
+    let replayId = '';
     try {
       let msg;
       try { msg = unwrapDirectMessage(wrap, me.sk); }
@@ -98,12 +131,22 @@ export async function listen({ owners, relays = DEFAULT_RELAYS, act = false, onL
         onLine(note(`ignored a message from ${npubEncode(msg.from)} — not on the allow-list`));
         return;
       }
-      seen.add(wrap.id);
+      replayId = messageReplayKey(msg);
+      if (seen.has(replayId) || messageInFlight.has(replayId)) return;
+      messageInFlight.add(replayId);
+      // Persist before execution: a crash after the tool acts must not make the relay's
+      // retry execute the same authenticated task again.
+      seen.add(replayId);
       // A relay replays history on connect. Without this, restarting the listener would
       // re-execute yesterday's instructions.
-      const age = Math.floor(Date.now() / 1000) - (msg.at || 0);
-      if (age > maxAgeSec) {
+      const freshness = messageFreshness(msg.at, { maxAgeSec });
+      if (!freshness.ok && freshness.age > maxAgeSec) {
+        const age = freshness.age;
         onLine(note(`skipped a replayed message (${Math.round(age / 60)} minutes old)`));
+        return;
+      }
+      if (!freshness.ok) {
+        onLine(note(`skipped a message dated ${Math.round(-freshness.age / 60)} minutes in the future`));
         return;
       }
       const task = String(msg.text || '').trim();
@@ -126,7 +169,7 @@ export async function listen({ owners, relays = DEFAULT_RELAYS, act = false, onL
         : `${res.output}\n\n— reviewed ${res.verdict?.score ?? '—'}/100 · $${res.cost.toFixed(4)}${res.changed?.length ? ` · changed ${res.changed.join(', ')}` : ''}`;
 
       // Nostr events are not chunk-aware; keep a reply inside what relays reliably accept.
-      for (const part of chunk(reply, 60000)) {
+      for (const part of chunk(reply, MAX_DM_CHUNK_BYTES)) {
         const ev = wrapDirectMessage(part, me.sk, msg.from);
         const sent = await publish(ev, relays);
         if (!sent.ok) onLine(note('reply was not accepted by any relay'));
@@ -135,24 +178,70 @@ export async function listen({ owners, relays = DEFAULT_RELAYS, act = false, onL
     } catch (e) {
       onLine(note(`listener error: ${String(e.message).slice(0, 200)}`));
     } finally {
-      inFlight.delete(wrap.id);
+      outerInFlight.delete(wrap.id);
+      if (replayId) messageInFlight.delete(replayId);
     }
+  };
+
+  const stop = subscribe({ kinds: [1059], '#p': [me.pub], since }, (wrap) => {
+    if (seen.has(wrap.id) || outerInFlight.has(wrap.id)) return; // includes pre-upgrade wrapper ids
+    outerInFlight.add(wrap.id);
+    const job = workQueue.submit(() => handleWrap(wrap));
+    if (!job) {
+      outerInFlight.delete(wrap.id);
+      // A flood should not turn the diagnostic log into a second denial-of-service.
+      if (Date.now() - lastBusyLog > 5000) {
+        lastBusyLog = Date.now();
+        onLine(note(`listener at capacity — dropped a relay wrapper (max pending ${MAX_CHANNEL_PENDING})`));
+      }
+      return;
+    }
+    job.catch((e) => onLine(note(`listener queue error: ${String(e.message).slice(0, 200)}`)));
   }, relays);
 
   return { stop, identity: me };
 }
 
-export function chunk(text, size) {
+export const MAX_DM_CHUNK_BYTES = 30000;
+
+export function messageFreshness(at, {
+  nowSec = Math.floor(Date.now() / 1000), maxAgeSec = 900, maxFutureSec = 300,
+} = {}) {
+  const age = nowSec - at;
+  return { ok: Number.isSafeInteger(at) && age <= maxAgeSec && age >= -maxFutureSec, age };
+}
+
+export function messageReplayKey(message) {
+  const id = String(message?.id || '');
+  if (!/^[0-9a-f]{64}$/.test(id)) throw new Error('an authenticated rumor id is required for replay protection');
+  return id;
+}
+
+export function chunk(text, maxBytes) {
   const s = String(text || '');
-  if (s.length <= size) return [s];
+  if (!Number.isSafeInteger(maxBytes) || maxBytes < 4) throw new Error('chunk size must be an integer of at least 4 UTF-8 bytes');
+  if (Buffer.byteLength(s) <= maxBytes) return [s];
   const out = [];
-  for (let i = 0; i < s.length; i += size) out.push(s.slice(i, i + size));
+  let part = '', bytes = 0;
+  for (const codePoint of s) {
+    const n = Buffer.byteLength(codePoint);
+    if (bytes + n > maxBytes) { out.push(part); part = ''; bytes = 0; }
+    part += codePoint; bytes += n;
+  }
+  if (part) out.push(part);
   return out;
 }
 
 export async function send(text, toNpub, { relays = DEFAULT_RELAYS } = {}) {
   const me = identity();
   const to = toHexKey(toNpub, 'npub');
-  const ev = wrapDirectMessage(text, me.sk, to);
-  return publish(ev, relays);
+  const results = [];
+  let ok = true;
+  const parts = chunk(text, MAX_DM_CHUNK_BYTES);
+  for (const part of parts) {
+    const sent = await publish(wrapDirectMessage(part, me.sk, to), relays);
+    ok = ok && sent.ok;
+    results.push(...sent.results);
+  }
+  return { ok, results, parts: parts.length };
 }

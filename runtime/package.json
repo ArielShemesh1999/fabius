@@ -1,10 +1,16 @@
 {
   "name": "fabius-runtime",
-  "version": "1.0.0",
+  "version": "2.6.3",
   "private": true,
-  "description": "A zero-dependency local runner for the fabius rules — the same sealed rule files handed to a model through your own API key, with a permission gate, on-disk memory, keyless external recon, and a serverless channel.",
+  "description": "Repo-local runtime component for fabius. It is not a standalone npm CLI: run it from a full fabius checkout so sibling skills/ and provenance/ are present.",
   "type": "module",
-  "bin": { "fabius": "./fabius.mjs" },
+  "files": [
+    "README.md",
+    "fabius.mjs",
+    "src/**/*.mjs",
+    "test/**/*.test.mjs",
+    "tools/fetch-vectors.sh"
+  ],
   "engines": { "node": ">=22" },
   "scripts": {
     "test": "node --test test/*.test.mjs",

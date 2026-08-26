@@ -50,6 +50,42 @@ export function normalizeTarget(input) {
 const resolver = () => { const r = new Resolver({ timeout: 4000, tries: 2 }); return r; };
 const safe = async (fn, dflt = null) => { try { return await fn(); } catch { return dflt; } };
 
+async function readTextBounded(res, maxBytes, timeoutMs = DEFAULT_TIMEOUT) {
+  if (!res.body?.getReader) {
+    const text = await withTimeout(res.text(), timeoutMs, 'response body');
+    return text.slice(0, maxBytes);
+  }
+  const reader = res.body.getReader();
+  const chunks = [];
+  let total = 0;
+  let timer;
+  try {
+    return await Promise.race([
+      (async () => {
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const room = maxBytes - total;
+          if (room > 0) {
+            const part = value.subarray(0, room);
+            chunks.push(Buffer.from(part));
+            total += part.length;
+          }
+          if (total >= maxBytes) { await reader.cancel('byte limit reached'); break; }
+        }
+        return Buffer.concat(chunks, total).toString('utf8');
+      })(),
+      new Promise((_, reject) => {
+        timer = setTimeout(() => {
+          reader.cancel('body timeout').catch(() => {});
+          reject(new Error(`response body timed out after ${timeoutMs}ms`));
+        }, timeoutMs);
+        timer.unref?.();
+      }),
+    ]);
+  } finally { if (timer) clearTimeout(timer); }
+}
+
 // Hosting platforms that own the parent zone. On `myapp.vercel.app` the DNS tree, the
 // certificate and the mail records belong to Vercel, not to you — so DNSSEC, CAA and
 // SPF/DMARC findings there are not work you can do. A report full of items the reader
@@ -226,7 +262,8 @@ async function fetchSurface(host, ctx) {
   const headers = {};
   for (const [k, v] of res.headers) headers[k.toLowerCase()] = v;
   const ct = headers['content-type'] || '';
-  const body = /text|html|json|xml/.test(ct) ? (await res.text()).slice(0, 400000) : '';
+  const body = /text|html|json|xml/.test(ct) ? await readTextBounded(res, 400000, ctx.timeoutMs) : '';
+  if (!body) await res.body?.cancel().catch(() => {});
   return { url, finalUrl, status: res.status, headers, body, chain, refused,
            setCookie: res.headers.getSetCookie ? res.headers.getSetCookie() : [] };
 }
@@ -282,27 +319,48 @@ export function parseCsp(header) {
   for (const part of String(header || '').split(';')) {
     const toks = part.trim().split(/\s+/).filter(Boolean);
     if (!toks.length) continue;
-    out[toks[0].toLowerCase()] = toks.slice(1);
+    const name = toks[0].toLowerCase();
+    // Browsers use the FIRST occurrence of a directive and ignore duplicates. Keeping
+    // the last made a permissive first directive disappear from the audit.
+    if (!(name in out)) out[name] = toks.slice(1);
   }
   return out;
 }
 // Which sources actually apply to a directive, following the default-src fallback.
 const effective = (csp, name) => csp[name] || csp['default-src'] || null;
+const onlyNone = (list) => Array.isArray(list)
+  && list.length === 1
+  && String(list[0]).toLowerCase() === "'none'";
+const broadSource = (source) => {
+  const s = String(source || '').toLowerCase();
+  return s === '*' || /^[a-z][a-z0-9+.-]*:$/.test(s)
+    || /^[a-z][a-z0-9+.-]*:\/\/\*(?::\*)?(?:\/|$)/.test(s);
+};
+const restrictiveSourceList = (list) => {
+  if (!Array.isArray(list) || !list.length) return false;
+  // CSP's 'none' is exclusive: mixed with another source it does not make that source
+  // disappear. Otherwise, reject wildcards and scheme-wide sources while permitting
+  // self and explicitly scoped host sources.
+  if (list.some((s) => String(s).toLowerCase() === "'none'")) return onlyNone(list);
+  return !list.some(broadSource);
+};
 
 export function auditCsp(header) {
   const csp = parseCsp(header);
   const f = [];
   const script = effective(csp, 'script-src');
   const has = (list, kw) => Array.isArray(list) && list.some((s) => s.toLowerCase() === kw);
-  const nonced = Array.isArray(script) && script.some((s) => /^'(nonce-|sha\d{3}-)/i.test(s));
+  const trustRoot = Array.isArray(script) && script.some((s) =>
+    /^'nonce-[A-Za-z0-9+/_-]+={0,2}'$/.test(s)
+    || /^'sha(?:256|384|512)-[A-Za-z0-9+/_-]+={0,2}'$/.test(s));
 
   if (!script) {
     f.push({ severity: 'medium', title: 'the CSP does not restrict scripts', detail: 'Neither script-src nor default-src is set, so script sources are unrestricted.', fix: "Add `script-src 'self'`." });
   } else {
     // 'strict-dynamic' with a nonce is the modern strict policy; there, host-source
     // keywords are ignored by the browser and flagging them would be wrong.
-    const strictDynamic = has(script, "'strict-dynamic'");
-    if (has(script, "'unsafe-inline'") && !nonced) {
+    const strictDynamic = has(script, "'strict-dynamic'") && trustRoot;
+    if (has(script, "'unsafe-inline'") && !trustRoot) {
       f.push({ severity: 'medium', title: "script-src allows 'unsafe-inline'", detail: 'An injected inline <script> executes, which is most of what CSP exists to stop.', fix: 'Move inline scripts to files, or adopt a nonce/hash policy.' });
     }
     if (has(script, "'unsafe-eval'")) {
@@ -313,16 +371,23 @@ export function auditCsp(header) {
     }
   }
   const obj = effective(csp, 'object-src');
-  if (!obj || !has(obj, "'none'")) {
+  if (!onlyNone(obj)) {
     f.push({ severity: 'low', title: "object-src is not 'none'", detail: 'Legacy plugin content (<object>, <embed>) can still be injected.', fix: "Add `object-src 'none'` — nothing modern needs it." });
   }
-  if (!csp['base-uri']) {
+  const base = csp['base-uri'];
+  if (!base) {
     f.push({ severity: 'low', title: 'no base-uri directive', detail: "An injected <base> tag can silently repoint every relative URL on the page, including scripts.", fix: "Add `base-uri 'none'` (or 'self')." });
+  } else if (!restrictiveSourceList(base)) {
+    f.push({ severity: 'low', title: 'base-uri is not restrictive', detail: `Sources: ${base.join(' ')}`, fix: "Use `base-uri 'none'`, 'self', or explicitly scoped origins — never a wildcard or whole scheme." });
+  }
+  const ancestors = csp['frame-ancestors'];
+  if (ancestors && !restrictiveSourceList(ancestors)) {
+    f.push({ severity: 'medium', title: 'frame-ancestors is not restrictive', detail: `Sources: ${ancestors.join(' ')}`, fix: "Use `frame-ancestors 'none'`, 'self', or explicitly scoped origins." });
   }
   return f;
 }
 
-async function checkSecurityHeaders(host, ctx, surface) {
+export async function checkSecurityHeaders(host, ctx, surface) {
   const h = surface.headers;
   const findings = [];
   const present = {};
@@ -333,8 +398,15 @@ async function checkSecurityHeaders(host, ctx, surface) {
   }
   // Clickjacking is covered by EITHER frame-ancestors or the legacy header.
   const csp = h['content-security-policy'] || '';
-  if (!/frame-ancestors/i.test(csp) && !h['x-frame-options']) {
-    findings.push({ severity: 'medium', title: 'nothing prevents framing', detail: 'Neither `frame-ancestors` in CSP nor X-Frame-Options is set, so the page can be embedded in an attacker\'s frame and clickjacked.', fix: "Add `frame-ancestors 'none'` to the CSP (and `X-Frame-Options: DENY` for old clients)." });
+  const parsedCsp = parseCsp(csp);
+  const hasAncestors = Object.hasOwn(parsedCsp, 'frame-ancestors');
+  const protectiveXfo = /^(DENY|SAMEORIGIN)$/i.test(String(h['x-frame-options'] || '').trim());
+  // When frame-ancestors is present, modern browsers prefer it over X-Frame-Options.
+  // A broad directive therefore remains a finding even beside `X-Frame-Options: DENY`;
+  // auditCsp emits that precise finding below. The legacy header is a valid fallback
+  // only when CSP omits frame-ancestors altogether.
+  if (!hasAncestors && !protectiveXfo) {
+    findings.push({ severity: 'medium', title: 'nothing prevents framing', detail: 'No restrictive `frame-ancestors` directive or valid X-Frame-Options fallback applies, so the page can be embedded in an attacker\'s frame and clickjacked.', fix: "Add `frame-ancestors 'none'` to the CSP (and `X-Frame-Options: DENY` for old clients)." });
   }
   if (csp) findings.push(...auditCsp(csp));
   // HSTS quality, not just presence.
@@ -344,7 +416,9 @@ async function checkSecurityHeaders(host, ctx, surface) {
     if (maxAge < 15552000) findings.push({ severity: 'low', title: `HSTS max-age is only ${maxAge}s`, detail: 'Below the 180-day floor the preload list requires.', fix: 'Raise max-age to 31536000 (one year).' });
     if (!/includeSubDomains/i.test(hsts)) findings.push({ severity: 'low', title: 'HSTS does not cover subdomains', detail: 'A subdomain can still be reached over plain HTTP and used to set cookies for the parent.', fix: 'Add `includeSubDomains`.' });
   }
-  return { id: 'headers', title: 'security headers', data: { present, raw: h }, findings };
+  const raw = Object.fromEntries(Object.entries(h).filter(([k]) =>
+    !['set-cookie', 'authorization', 'proxy-authorization'].includes(k.toLowerCase())));
+  return { id: 'headers', title: 'security headers', data: { present, raw }, findings };
 }
 
 function parseCookie(line) {
@@ -412,7 +486,7 @@ async function fetchText(url, ctx) {
   const { res } = await fetchHops(url, ctx, 5);
   if (!res.ok) return { ok: false, status: res.status, text: '' };
   const ct = res.headers.get('content-type') || '';
-  return { ok: true, status: res.status, contentType: ct, text: (await res.text()).slice(0, 200000) };
+  return { ok: true, status: res.status, contentType: ct, text: await readTextBounded(res, 200000, ctx.timeoutMs) };
 }
 
 async function checkWellKnown(host, ctx) {
@@ -560,7 +634,12 @@ export async function recon(target, options = {}) {
     timeoutMs: options.timeoutMs || DEFAULT_TIMEOUT,
     userAgent: options.userAgent || 'fabius-recon/1.0 (+https://fabius-landing.vercel.app)',
   };
-  const want = new Set(options.checks?.length ? options.checks : CHECKS.filter((c) => c !== 'ports'));
+  const requested = Array.isArray(options.checks) ? options.checks : CHECKS.filter((c) => c !== 'ports');
+  const unknown = requested.filter((c) => !CHECKS.includes(c));
+  if (unknown.length) throw new Error(`unknown check(s): ${unknown.join(', ')}`);
+  if (!requested.length) throw new Error('at least one check is required');
+  if (requested.includes('ports') && !options.ports) throw new Error('the ports check requires explicit options.ports=true authorization');
+  const want = new Set(requested);
   if (options.ports) want.add('ports');
   else want.delete('ports');
 
@@ -572,12 +651,21 @@ export async function recon(target, options = {}) {
     catch (e) { errors.push({ check: id, error: e.message }); return null; }
   };
 
-  // DNS first — mail reuses its records. The response surface is fetched once and
-  // shared by every header-derived check.
-  const dnsSec = await run('dns', () => checkDns(host, ctx));
+  // DNS first — mail reuses its records even when the DNS section itself was not
+  // requested. Prerequisite evidence is gathered silently; it never emits an unrelated
+  // section or finding.
+  let dnsSec = null;
+  if (want.has('dns')) dnsSec = await run('dns', () => checkDns(host, ctx));
+  else if (want.has('mail')) {
+    try { dnsSec = await checkDns(host, ctx); }
+    catch (e) { errors.push({ check: 'mail:dns-prerequisite', error: e.message }); }
+  }
   let surface = null;
-  try { surface = await fetchSurface(host, ctx); }
-  catch (e) { errors.push({ check: 'http', error: e.message }); }
+  const surfaceChecks = ['http', 'headers', 'cookies', 'fingerprint', 'meta'];
+  if (surfaceChecks.some((id) => want.has(id))) {
+    try { surface = await fetchSurface(host, ctx); }
+    catch (e) { errors.push({ check: 'surface', error: e.message }); }
+  }
 
   await Promise.all([
     run('dnssec', () => checkDnssec(host, ctx)),
@@ -595,10 +683,11 @@ export async function recon(target, options = {}) {
     ] : []),
   ]);
 
-  if (!surface) {
+  if (!surface && want.has('http')) {
     sections.push({ id: 'http', title: 'HTTP response', data: {}, findings: [{ severity: 'critical', title: 'the site did not answer over HTTPS', detail: `No usable response from https://${host}/.`, fix: 'Confirm the origin is up and serving TLS on 443.' }] });
   }
 
+  sections.sort((a, b) => CHECKS.indexOf(a.id) - CHECKS.indexOf(b.id));
   const platform = delegatedPlatform(host);
   const findings = sections.flatMap((s) => (s.findings || []).map((f) => {
     if (platform && ZONE_OWNED.has(s.id)) {

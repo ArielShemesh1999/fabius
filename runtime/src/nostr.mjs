@@ -138,9 +138,13 @@ export function calcPaddedLen(len) {
   return chunk * (Math.floor((len - 1) / chunk) + 1);
 }
 
+export const MAX_NIP44_PLAINTEXT_BYTES = 65535;
+export const MAX_NIP44_PAYLOAD_BYTES = 1 + 32 + 2 + calcPaddedLen(MAX_NIP44_PLAINTEXT_BYTES) + 32;
+export const MAX_NIP44_PAYLOAD_CHARS = Math.ceil(MAX_NIP44_PAYLOAD_BYTES / 3) * 4;
+
 function pad(plaintext) {
   const b = Buffer.from(plaintext, 'utf8');
-  if (b.length < 1 || b.length > 65535) throw new Error('NIP-44 plaintext must be 1..65535 bytes');
+  if (b.length < 1 || b.length > MAX_NIP44_PLAINTEXT_BYTES) throw new Error('NIP-44 plaintext must be 1..65535 bytes');
   const prefix = Buffer.alloc(2);
   prefix.writeUInt16BE(b.length);
   return Buffer.concat([prefix, b, Buffer.alloc(calcPaddedLen(b.length) - b.length)]);
@@ -168,7 +172,13 @@ export function nip44Encrypt(plaintext, convKey, nonce = randomBytes(32)) {
 
 export function nip44Decrypt(payload, convKey) {
   if (typeof payload !== 'string' || payload.startsWith('#')) throw new Error('unsupported NIP-44 version');
+  // Buffer.from(base64) allocates from the encoded length. A relay controls this string,
+  // so enforce the protocol's maximum before decoding rather than after an attacker has
+  // already bought the allocation. NIP-44 plaintext tops out at 65,535 bytes.
+  if (payload.length > MAX_NIP44_PAYLOAD_CHARS) throw new Error('NIP-44 payload is too large');
+  if (payload.length % 4 !== 0 || !/^[A-Za-z0-9+/]*={0,2}$/.test(payload)) throw new Error('malformed NIP-44 base64');
   const raw = Buffer.from(payload, 'base64');
+  if (raw.length > MAX_NIP44_PAYLOAD_BYTES) throw new Error('NIP-44 payload is too large');
   if (raw.length < 99 || raw[0] !== 2) throw new Error('malformed NIP-44 payload');
   const nonce = raw.subarray(1, 33);
   const ciphertext = raw.subarray(33, raw.length - 32);
@@ -239,7 +249,9 @@ export function bech32Encode(hrp, dataBytes) {
   return hrp + '1' + [...data, ...checksum].map((d) => CHARSET[d]).join('');
 }
 export function bech32Decode(str) {
-  const s = String(str).toLowerCase();
+  const raw = String(str);
+  if (raw !== raw.toLowerCase() && raw !== raw.toUpperCase()) throw new Error('mixed-case bech32 string');
+  const s = raw.toLowerCase();
   const pos = s.lastIndexOf('1');
   if (pos < 1 || pos + 7 > s.length) throw new Error('not a bech32 string');
   const hrp = s.slice(0, pos);
@@ -303,6 +315,14 @@ export function unwrapDirectMessage(giftWrap, recipientSecretKey) {
   // THE impersonation check. Without it, anyone could seal a rumor claiming any author.
   if (rumor.pubkey !== seal.pubkey) throw new Error('rumor author does not match the seal author — forged');
   if (rumor.kind !== 14) throw new Error(`expected a chat rumor (kind 14), got kind ${rumor.kind}`);
+  if (!/^[0-9a-f]{64}$/.test(String(rumor.pubkey || ''))) throw new Error('rumor author is malformed');
+  if (!Number.isSafeInteger(rumor.created_at)) throw new Error('rumor timestamp is malformed');
+  // The outer wrapper id is not authenticated here and relays may present the same
+  // authenticated rumor under modified wrapper metadata. Bind replay identity to the
+  // decrypted rumor bytes, and reject a sender-supplied id that does not name them.
+  if (!/^[0-9a-f]{64}$/.test(String(rumor.id || '')) || rumor.id !== eventId(rumor)) {
+    throw new Error('rumor id does not match its authenticated content');
+  }
   return { from: rumor.pubkey, text: rumor.content, at: rumor.created_at, id: rumor.id };
 }
 
@@ -315,20 +335,34 @@ export const DEFAULT_RELAYS = ['wss://relay.damus.io', 'wss://nos.lol', 'wss://r
 export function publish(event, relays = DEFAULT_RELAYS, { timeoutMs = 10000 } = {}) {
   return new Promise((resolve) => {
     const results = [];
+    const sockets = new Set();
     let settled = false;
-    const done = () => { if (!settled) { settled = true; resolve({ ok: results.some((r) => r.ok), results }); } };
-    const timer = setTimeout(done, timeoutMs);
+    let timer;
+    const done = () => {
+      if (settled) return;
+      settled = true; clearTimeout(timer);
+      for (const ws of sockets) { try { ws.close(); } catch { /* already closing */ } }
+      resolve({ ok: results.some((r) => r.ok), results });
+    };
+    timer = setTimeout(done, timeoutMs);
     let open = relays.length;
     for (const url of relays) {
       let ws;
       try { ws = new WebSocket(url); } catch (e) { results.push({ url, ok: false, error: e.message }); if (--open === 0) { clearTimeout(timer); done(); } continue; }
+      sockets.add(ws);
+      let finished = false;
       const finish = (r) => {
+        if (finished || settled) return;
+        finished = true;
         results.push({ url, ...r });
         try { ws.close(); } catch { /* already closing */ }
-        if (r.ok) { clearTimeout(timer); done(); }
-        else if (--open === 0) { clearTimeout(timer); done(); }
+        if (r.ok) done();
+        else if (--open === 0) done();
       };
-      ws.onopen = () => ws.send(JSON.stringify(['EVENT', event]));
+      ws.onopen = () => {
+        try { ws.send(JSON.stringify(['EVENT', event])); }
+        catch (e) { finish({ ok: false, error: `send failed: ${e.message}` }); }
+      };
       ws.onmessage = (m) => {
         try {
           const msg = JSON.parse(m.data);
@@ -336,6 +370,7 @@ export function publish(event, relays = DEFAULT_RELAYS, { timeoutMs = 10000 } = 
         } catch { /* a relay may send noise */ }
       };
       ws.onerror = () => finish({ ok: false, error: 'socket error' });
+      ws.onclose = () => finish({ ok: false, error: 'socket closed before acknowledgement' });
     }
     if (!relays.length) done();
   });
@@ -356,7 +391,11 @@ export function subscribe(filter, onEvent, relays = DEFAULT_RELAYS) {
         const msg = JSON.parse(m.data);
         if (msg[0] === 'EVENT' && msg[1] === subId) {
           const ev = msg[2];
-          if (!seen.has(ev.id)) { seen.add(ev.id); onEvent(ev, url); }
+          if (!seen.has(ev.id)) {
+            seen.add(ev.id);
+            if (seen.size > 5000) seen.delete(seen.values().next().value);
+            onEvent(ev, url);
+          }
         }
       } catch { /* ignore malformed relay traffic */ }
     };

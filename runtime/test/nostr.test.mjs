@@ -14,8 +14,10 @@ import { fileURLToPath } from 'node:url';
 import {
   schnorrSign, getPublicKey, conversationKey, messageKeys, calcPaddedLen,
   nip44Encrypt, nip44Decrypt, eventId, finalizeEvent, wrapDirectMessage, unwrapDirectMessage,
-  bech32Encode, bech32Decode, npubEncode, toHexKey, generateSecretKey, hex, unhex,
+  bech32Encode, bech32Decode, npubEncode, toHexKey, generateSecretKey, hex, unhex, publish,
+  MAX_NIP44_PAYLOAD_CHARS,
 } from '../src/nostr.mjs';
+import { chunk, messageFreshness, messageReplayKey, createSerialWorkQueue } from '../src/channel.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const VECTORS = process.env.FABIUS_VECTORS || join(HERE, 'vectors');
@@ -107,6 +109,11 @@ test('NIP-44: the invalid vectors are all refused', (t) => {
   }
 });
 
+test('NIP-44 rejects an oversized relay payload before base64 allocation', () => {
+  const oversized = 'A'.repeat(MAX_NIP44_PAYLOAD_CHARS + 4);
+  assert.throws(() => nip44Decrypt(oversized, Buffer.alloc(32)), /too large/);
+});
+
 test('an event id is the hash of the canonical serialisation', () => {
   const ev = { pubkey: 'a'.repeat(64), created_at: 1700000000, kind: 1, tags: [['p', 'b'.repeat(64)]], content: 'hello "world"\nsecond line' };
   const id = eventId(ev);
@@ -158,6 +165,30 @@ test('a forged rumor author is caught', () => {
   assert.throws(() => unwrapDirectMessage(wrap, bob), /forged/);
 });
 
+test('an authenticated rumor id must match its decrypted content', () => {
+  const alice = generateSecretKey(), bob = generateSecretKey();
+  const bobPub = hex(getPublicKey(bob));
+  const rumor = {
+    pubkey: hex(getPublicKey(alice)), created_at: Math.floor(Date.now() / 1000),
+    kind: 14, tags: [['p', bobPub]], content: 'same authenticated task', id: '0'.repeat(64),
+  };
+  const seal = finalizeEvent({ kind: 13, tags: [],
+    content: nip44Encrypt(JSON.stringify(rumor), conversationKey(alice, bobPub)) }, alice);
+  const eph = generateSecretKey();
+  const wrap = finalizeEvent({ kind: 1059, tags: [['p', bobPub]],
+    content: nip44Encrypt(JSON.stringify(seal), conversationKey(eph, bobPub)) }, eph);
+  assert.throws(() => unwrapDirectMessage(wrap, bob), /rumor id/);
+});
+
+test('replay identity comes from the authenticated rumor, not mutable wrapper metadata', () => {
+  const alice = generateSecretKey(), bob = generateSecretKey();
+  const wrap = wrapDirectMessage('run once', alice, hex(getPublicKey(bob)));
+  const a = unwrapDirectMessage(wrap, bob);
+  const b = unwrapDirectMessage({ ...wrap, id: 'f'.repeat(64), sig: '0'.repeat(128) }, bob);
+  assert.equal(messageReplayKey(a), messageReplayKey(b));
+  assert.equal(a.id, b.id);
+});
+
 test('bech32 round-trips and rejects a corrupted checksum', () => {
   const sk = generateSecretKey();
   const pub = hex(getPublicKey(sk));
@@ -169,6 +200,8 @@ test('bech32 round-trips and rejects a corrupted checksum', () => {
   const broken = npub.slice(0, -1) + (npub.endsWith('q') ? 'p' : 'q');
   assert.throws(() => bech32Decode(broken), /checksum/);
   assert.throws(() => toHexKey(npub, 'nsec'), /expected nsec/);
+  const mixed = npub.slice(0, 5).toUpperCase() + npub.slice(5);
+  assert.throws(() => bech32Decode(mixed), /mixed-case/);
 });
 
 test('bech32 matches the reference checksum on the BIP-173 vectors', () => {
@@ -184,4 +217,65 @@ test('bech32 matches the reference checksum on the BIP-173 vectors', () => {
   // 20 bytes in → the canonical BIP-173 string back out.
   const { bytes } = bech32Decode('abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw');
   assert.equal(bech32Encode('abcdef', bytes), 'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw');
+});
+
+test('DM chunking is byte-bounded and never splits a Unicode code point', () => {
+  const source = 'שלום🙂עולם🙂'.repeat(20);
+  const parts = chunk(source, 17);
+  assert.equal(parts.join(''), source);
+  assert.ok(parts.length > 1);
+  for (const part of parts) {
+    assert.ok(Buffer.byteLength(part) <= 17);
+    assert.doesNotMatch(part, /[\uD800-\uDBFF]$|^[\uDC00-\uDFFF]/);
+  }
+});
+
+test('channel freshness rejects stale and future-dated authenticated rumors', () => {
+  const nowSec = 2_000_000_000;
+  assert.equal(messageFreshness(nowSec - 30, { nowSec }).ok, true);
+  assert.equal(messageFreshness(nowSec - 901, { nowSec }).ok, false);
+  assert.equal(messageFreshness(nowSec + 301, { nowSec }).ok, false);
+});
+
+test('channel work is serial and refuses an unbounded pending flood', async () => {
+  const queue = createSerialWorkQueue(2);
+  let releaseFirst;
+  const blocker = new Promise((resolve) => { releaseFirst = resolve; });
+  const order = [];
+  const first = queue.submit(async () => { order.push('first:start'); await blocker; order.push('first:end'); });
+  const second = queue.submit(async () => { order.push('second'); });
+  assert.equal(queue.submit(async () => { order.push('overflow'); }), null);
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.deepEqual(order, ['first:start']);
+  releaseFirst();
+  await Promise.all([first, second]);
+  assert.deepEqual(order, ['first:start', 'first:end', 'second']);
+  assert.equal(queue.pending, 0);
+});
+
+test('relay publish closes every socket after first success and after timeout', async () => {
+  const original = globalThis.WebSocket;
+  const sockets = [];
+  class FakeWebSocket {
+    constructor(url) { this.url = url; this.closed = 0; sockets.push(this); queueMicrotask(() => this.onopen?.()); }
+    send(payload) {
+      const msg = JSON.parse(payload);
+      if (this.url.endsWith('/ok') && msg[0] === 'EVENT') {
+        queueMicrotask(() => this.onmessage?.({ data: JSON.stringify(['OK', msg[1].id, true, 'accepted']) }));
+      }
+    }
+    close() { this.closed++; queueMicrotask(() => this.onclose?.()); }
+  }
+  globalThis.WebSocket = FakeWebSocket;
+  try {
+    const event = { id: 'a'.repeat(64) };
+    const success = await publish(event, ['wss://relay.test/ok', 'wss://relay.test/pending'], { timeoutMs: 100 });
+    assert.equal(success.ok, true);
+    assert.ok(sockets.slice(0, 2).every((ws) => ws.closed > 0));
+
+    const start = sockets.length;
+    const timeout = await publish(event, ['wss://relay.test/one', 'wss://relay.test/two'], { timeoutMs: 10 });
+    assert.equal(timeout.ok, false);
+    assert.ok(sockets.slice(start).every((ws) => ws.closed > 0));
+  } finally { globalThis.WebSocket = original; }
 });

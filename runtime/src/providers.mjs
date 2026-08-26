@@ -5,7 +5,7 @@
 // released tier per provider; R11 reserves it for ambiguity, architecture, security
 // and irreversible work, and takes the cheap tier for mechanical work.
 
-import { ENV_KEY, providerKey, loadConfig } from './config.mjs';
+import { ENV_KEY, providerKey, loadConfig, redact } from './config.mjs';
 
 export const PROVIDERS = {
   anthropic: { label: 'Anthropic', tiers: { frontier: 'claude-fable-5', mid: 'claude-sonnet-5', fast: 'claude-haiku-4-5' } },
@@ -88,18 +88,55 @@ export function costMicro(provider, model, usage) {
   return Math.round(tin * rate[0] + tout * rate[1]);
 }
 
-export function availableProviders(cfg = loadConfig()) {
-  return PROVIDER_ORDER.filter((p) => !!providerKey(p, cfg));
+// Reserve the maximum a call can cost BEFORE dispatch. UTF-8 byte length is a safe
+// upper bound on tokenizer output for ordinary text (a token cannot represent less than
+// one encoded byte); the fixed envelope allowance covers provider message framing. The
+// output token ceiling is then reduced until the whole reservation fits. Missing usage
+// is charged at this reservation rather than at zero.
+export function reserveCallBudget({ provider, model, system = '', messages = [], maxTokens = 2048, remainingMicro }) {
+  const remaining = Math.max(0, Math.floor(Number(remainingMicro) || 0));
+  const requested = Math.max(1, Math.floor(Number(maxTokens) || 1));
+  if (provider === 'ollama') return { maxTokens: requested, reserveMicro: 0, inputTokenUpper: 0 };
+  const envelope = JSON.stringify({ system: String(system), messages });
+  const inputTokenUpper = Buffer.byteLength(envelope, 'utf8') + 256 + messages.length * 32;
+  const inputOnly = costMicro(provider, model, { input_tokens: inputTokenUpper, output_tokens: 0 });
+  if (inputOnly >= remaining) return null;
+  let lo = 1, hi = requested, fit = 0;
+  while (lo <= hi) {
+    const mid = Math.floor((lo + hi) / 2);
+    const cost = costMicro(provider, model, { input_tokens: inputTokenUpper, output_tokens: mid });
+    if (cost <= remaining) { fit = mid; lo = mid + 1; } else hi = mid - 1;
+  }
+  if (!fit) return null;
+  return {
+    maxTokens: fit,
+    reserveMicro: costMicro(provider, model, { input_tokens: inputTokenUpper, output_tokens: fit }),
+    inputTokenUpper,
+  };
+}
+
+function providerReady(provider, cfg, { requested = false } = {}) {
+  if (!PROVIDERS[provider]) return false;
+  if (provider !== 'ollama') return !!providerKey(provider, cfg);
+  // Ollama is keyless, but it must be CHOSEN. Silently falling back from an unkeyed
+  // cloud provider to whatever happens to answer on localhost changes both quality and
+  // privacy semantics. An explicit/configured Ollama choice is ready at its default
+  // localhost URL; OLLAMA_HOST merely overrides that URL.
+  return requested || cfg?.provider === 'ollama' || !!providerKey('ollama', cfg);
+}
+
+export function availableProviders(cfg = loadConfig(), requestedProvider = null) {
+  return PROVIDER_ORDER.filter((p) => providerReady(p, cfg, { requested: p === requestedProvider }));
 }
 
 // Resolve {provider, model, tier} honouring what is actually keyed; fall back along
 // PROVIDER_ORDER to the first keyed provider. null when NOTHING is keyed.
 export function resolveModel(provider, tier, cfg = loadConfig()) {
   const t = TIERS.includes(tier) ? tier : 'mid';
-  const tryP = (p) => (PROVIDERS[p] && providerKey(p, cfg)) ? { provider: p, model: PROVIDERS[p].tiers[t], tier: t } : null;
-  const first = tryP(provider);
+  const tryP = (p, requested = false) => providerReady(p, cfg, { requested }) ? { provider: p, model: PROVIDERS[p].tiers[t], tier: t } : null;
+  const first = tryP(provider, true);
   if (first) return first;
-  for (const p of PROVIDER_ORDER) { const r = tryP(p); if (r) return r; }
+  for (const p of PROVIDER_ORDER) { const r = tryP(p, false); if (r) return r; }
   return null;
 }
 
@@ -125,7 +162,7 @@ export async function callLLM({ provider, model, system, messages, maxTokens = 2
     return r;
   } catch (e) {
     // Never surface a provider's raw error body — it can echo the key back.
-    const msg = e?.name === 'AbortError' ? `timed out after ${Math.round(timeoutMs / 1000)}s` : (e?.message || 'unknown error');
+    const msg = e?.name === 'AbortError' ? `timed out after ${Math.round(timeoutMs / 1000)}s` : redact(e?.message || 'unknown error', cfg);
     return { ok: false, output: '', usage: ZERO, status: 'error: ' + String(msg).slice(0, 200) };
   } finally { clearTimeout(timer); }
 }
@@ -171,9 +208,9 @@ const CALLERS = {
   },
 
   google: async ({ model, key, system, messages, maxTokens, signal }) => {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`, {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
       method: 'POST', signal,
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: system }] },
         contents: messages.map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })),

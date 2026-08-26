@@ -10,6 +10,8 @@ const FAKE = { keys: { anthropic: 'sk-ant-test-000000000000000000' }, provider: 
 const { route } = await import('../src/route.mjs');
 const { parseAgentAction, parseVerdict, isStubDeliverable, extractCodeBlock } = await import('../src/util.mjs');
 const { stripHtml, walk, activeTools } = await import('../src/tools.mjs');
+const { decideMemoryWrite } = await import('../src/memory.mjs');
+const { contractsFor } = await import('../src/skills.mjs');
 
 test('the router sends security work to praesidium on the strong tier', () => {
   const r = route('audit the auth flow for injection vulnerabilities', { cfg: FAKE });
@@ -161,6 +163,21 @@ test('provider keys never survive into an observation', async () => {
   rmSync(home, { recursive: true, force: true });
 });
 
+test('memory write authority accepts only a literal per-run opt-in', () => {
+  const candidate = {
+    task: 'choose a durable datastore',
+    output: 'We decided to use Postgres because relational joins dominate this workload. ' + 'x'.repeat(240),
+    verdict: { pass: true, score: 90 },
+    route: { domains: ['fabius-doctrina'] },
+  };
+  for (const authorized of [undefined, false, null, 0, 1, 'true']) {
+    const proposal = decideMemoryWrite({ ...candidate, ...(authorized === undefined ? {} : { authorized }) });
+    assert.equal(proposal.write, false, `authority ${String(authorized)} must fail closed`);
+    assert.match(proposal.reason, /explicit opt-in/);
+  }
+  assert.equal(decideMemoryWrite({ ...candidate, authorized: true }).write, true);
+});
+
 test('the seal check notices an ADDED contract, not just a changed one', async () => {
   const { verifySeal, loadSkills } = await import('../src/skills.mjs');
   const { mkdtempSync, writeFileSync, mkdirSync, rmSync, cpSync, existsSync } = await import('node:fs');
@@ -181,4 +198,21 @@ test('the seal check notices an ADDED contract, not just a changed one', async (
   assert.deepEqual(dirty.unsealed, ['skills/zz-probe/SKILL.md'], 'an added contract must be reported');
   assert.equal(dirty.ok, false);
   rmSync(stage, { recursive: true, force: true });
+});
+
+test('a complex landing-page route keeps core, domain, and process contracts', () => {
+  const contracts = contractsFor({
+    domains: ['fabius-decor'],
+    layers: ['fabius-parcus', 'fabius-decor', 'fabius-disciplina'],
+  });
+  assert.deepEqual(contracts.included, ['fabius-parcus', 'fabius-decor', 'fabius-disciplina']);
+  assert.deepEqual(contracts.excluded, []);
+  assert.ok(contracts.bytes > 24000, 'the old 24KB truncation would have omitted the process contract');
+
+  const constrained = contractsFor({
+    domains: ['fabius-decor', 'missing-contract'],
+    layers: ['fabius-disciplina'],
+  }, { budget: 10000 });
+  assert.deepEqual(constrained.included, ['fabius-parcus']);
+  assert.deepEqual(constrained.excluded, ['fabius-decor', 'missing-contract', 'fabius-disciplina']);
 });

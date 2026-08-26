@@ -12,8 +12,7 @@ import { SKILLS_DIR, REPO_ROOT } from './config.mjs';
 
 let cache = null;
 
-export function loadSkills(dir = SKILLS_DIR) {
-  if (cache && cache.dir === dir) return cache;
+function scanSkills(dir) {
   const skills = new Map();
   if (existsSync(dir)) {
     for (const d of readdirSync(dir)) {
@@ -33,7 +32,12 @@ export function loadSkills(dir = SKILLS_DIR) {
       });
     }
   }
-  cache = { dir, skills };
+  return { dir, skills };
+}
+
+export function loadSkills(dir = SKILLS_DIR, { fresh = false } = {}) {
+  if (!fresh && cache && cache.dir === dir) return cache;
+  cache = scanSkills(dir);
   return cache;
 }
 
@@ -54,7 +58,7 @@ function flatten(fmText, key) {
 // Verify the loaded contracts against the repo's content-bound seal. A local run that
 // silently used a TAMPERED contract would be the whole provenance story undone, so the
 // runtime can say, on demand, exactly which files match the sealed manifest.
-export function verifySeal(dir = SKILLS_DIR) {
+export function verifySeal(dir = SKILLS_DIR, snapshot = loadSkills(dir, { fresh: true })) {
   const manifestPath = join(REPO_ROOT, 'provenance', 'seal-manifest.json');
   if (!existsSync(manifestPath)) return { available: false, reason: 'no seal-manifest.json' };
   let manifest;
@@ -62,8 +66,17 @@ export function verifySeal(dir = SKILLS_DIR) {
   catch (e) { return { available: false, reason: 'unreadable manifest: ' + e.message }; }
   const results = [];
   for (const [rel, want] of Object.entries(manifest.files || {})) {
+    // A caller-supplied skills directory is the contract source that will be loaded.
+    // Binding the repo copy instead would let custom/tampered bytes inherit the repo's
+    // valid seal. Non-contract manifest entries remain anchored at the repository root.
+    const contract = rel.match(/^skills\/([^/]+)\/SKILL\.md$/);
     const abs = join(REPO_ROOT, rel);
-    const got = existsSync(abs) ? createHash('sha256').update(readFileSync(abs)).digest('hex') : 'MISSING';
+    // For contracts, compare the exact snapshot that the caller will hand to the model.
+    // Re-reading the path here creates a check/use race in which different bytes can be
+    // verified and loaded. Non-contract manifest entries remain repository-anchored.
+    const got = contract
+      ? (snapshot.skills.get(contract[1])?.sha256 || 'MISSING')
+      : (existsSync(abs) ? createHash('sha256').update(readFileSync(abs)).digest('hex') : 'MISSING');
     results.push({ file: rel, ok: got === want });
   }
   // Hashing only what the manifest LISTS proves nothing listed changed — it cannot
@@ -71,7 +84,7 @@ export function verifySeal(dir = SKILLS_DIR) {
   // A dropped-in skill is exactly what this runtime would otherwise load and hand to
   // the model, so membership is checked separately from content.
   const listed = new Set(Object.keys(manifest.files || {}));
-  const unsealed = [...loadSkills(dir).skills.values()]
+  const unsealed = [...snapshot.skills.values()]
     .map((s) => `skills/${s.name}/SKILL.md`)
     .filter((rel) => !listed.has(rel));
   return {
@@ -89,21 +102,28 @@ export function verifySeal(dir = SKILLS_DIR) {
 // every run; the routed specialist comes next; a second domain is included only if it
 // still fits. Contracts are ≤12KB each by construction (progressive disclosure) — the
 // budget here bounds the WORST case, it is not expected to bite on a normal route.
-export function contractsFor(routeResult, { budget = 24000, dir = SKILLS_DIR, sealedOnly = false } = {}) {
-  const { skills } = loadSkills(dir);
+export const DEFAULT_CONTRACT_BUDGET = 48000;
+
+export function contractsFor(routeResult, { budget = DEFAULT_CONTRACT_BUDGET, dir = SKILLS_DIR, sealedOnly = false } = {}) {
+  if (!Number.isSafeInteger(budget) || budget < 1) throw new Error('contract budget must be a positive integer of bytes');
+  // Sealed mode takes one fresh snapshot and checks that same snapshot. This binds the
+  // bytes actually injected into the prompt, including for a caller-supplied directory.
+  const loaded = loadSkills(dir, { fresh: sealedOnly });
+  const { skills } = loaded;
   // `--sealed-only` turns the seal from a report into a gate: a contract that is not in
   // the manifest, or whose bytes drifted from it, is refused rather than handed to the
   // model. Off by default, because a working copy mid-edit is a normal state and
   // refusing to run in it would be theatre; on when the provenance claim has to hold.
-  let refused = [];
   if (sealedOnly) {
-    const seal = verifySeal(dir);
+    const seal = verifySeal(dir, loaded);
     if (!seal.available) throw new Error(`--sealed-only: no seal manifest to check against (${seal.reason})`);
-    refused = [...new Set([...(seal.unsealed || []), ...(seal.drift || [])])]
-      .map((rel) => rel.split('/')[1]).filter(Boolean);
+    if (!seal.ok) {
+      const bad = [...new Set([...(seal.unsealed || []), ...(seal.drift || [])])];
+      throw new Error(`--sealed-only: contract seal mismatch (${bad.join(', ') || 'unknown drift'})`);
+    }
   }
   const wanted = [];
-  const push = (n) => { if (skills.has(n) && !wanted.includes(n)) wanted.push(n); };
+  const push = (n) => { if (n && !wanted.includes(n)) wanted.push(n); };
   push('fabius-parcus');
   for (const d of routeResult.domains || []) push(d);
   for (const l of routeResult.layers || []) push(l);
@@ -113,11 +133,16 @@ export function contractsFor(routeResult, { budget = 24000, dir = SKILLS_DIR, se
   const included = [];
   const excluded = [];
   for (const n of wanted) {
-    if (refused.includes(n)) { excluded.push(n); continue; }
     const s = skills.get(n);
+    if (!s) { excluded.push(n); continue; }
     const block = `<<<CONTRACT ${s.name}>>>\n${s.body.trim()}\n<<<END CONTRACT ${s.name}>>>`;
-    if (used + block.length > budget && parts.length) break;
-    parts.push(block); used += block.length; included.push(s.name);
+    const blockBytes = Buffer.byteLength(block);
+    // Parcus is the invariant core and therefore always wins the first slot. At 48KB the
+    // largest observed core + domain + process trio fits with headroom; if an unusually
+    // broad route asks for more, keep considering later smaller contracts and account for
+    // every omission instead of silently truncating at the first overflow.
+    if (used + blockBytes > budget && parts.length) { excluded.push(n); continue; }
+    parts.push(block); used += blockBytes; included.push(s.name);
   }
   return { text: parts.join('\n\n'), included, excluded, bytes: used };
 }

@@ -7,36 +7,42 @@
 // be undone are held back even in autonomous mode.
 //
 //   read   — inside the working directory, minus the secret deny-list. Never prompts.
-//   net    — outbound HTTP GET. Never prompts (it reads; it does not change the world).
+//   net    — outbound HTTP GET. Exact-origin authority; first contact prompts or denies.
 //   write  — create/modify a file inside the working directory. Prompts by default.
 //   exec   — run a command on this machine. Prompts by default.
 //
 // Three postures: `ask` (default — a human decides each new class of action), `auto`
-// (approve write/exec, still hold irreversible actions), `never` (read-only; the agent
-// can look and reason but cannot touch anything).
+// (approve bounded in-jail writes plus a tiny read-only command set; ask for everything
+// else and still hold irreversible actions), `never` (read-only; the agent can look and
+// reason but cannot touch anything).
 //
 // The gate is a PURE decision function (`classify`) plus a thin prompting shell, so the
 // whole policy is testable with no TTY and no model.
 
 import { realpathSync, existsSync, lstatSync } from 'node:fs';
-import { resolve, relative, isAbsolute, sep } from 'node:path';
+import { resolve, relative, isAbsolute } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { homedir } from 'node:os';
-import { CONFIG_PATH } from './config.mjs';
+import { createHash } from 'node:crypto';
+import { CONFIG_PATH, redact } from './config.mjs';
 
 export const CAPS = ['read', 'net', 'write', 'exec'];
 
 // Files an agent has no business reading, whatever the task says. Matched against the
 // resolved path, so `../../.ssh/id_rsa` and a symlink pointing there both trip it.
 const SECRET_PATTERNS = [
-  /(^|\/)\.ssh(\/|$)/, /(^|\/)\.aws(\/|$)/, /(^|\/)\.gnupg(\/|$)/, /(^|\/)\.kube(\/|$)/,
-  /(^|\/)\.env(\.[\w-]+)?$/, /(^|\/)\.netrc$/, /(^|\/)\.npmrc$/, /(^|\/)\.pypirc$/,
-  /(^|\/)id_(rsa|ed25519|ecdsa)(\.pub)?$/, /(^|\/)\.git-credentials$/,
-  /(^|\/)credentials(\.json)?$/, /\.(pem|key|p12|pfx|keystore)$/,
-  /(^|\/)\.fabius\/config\.json$/, /Library\/Keychains(\/|$)/,
+  /(^|\/)\.ssh(\/|$)/i, /(^|\/)\.aws(\/|$)/i, /(^|\/)\.gnupg(\/|$)/i, /(^|\/)\.kube(\/|$)/i,
+  /(^|\/)\.docker\/config\.json$/i, /(^|\/)\.config\/gcloud\/application_default_credentials\.json$/i,
+  /(^|\/)\.env(?:\.[\w-]+)*$/i, /(^|\/)\.dev\.vars(?:\.[\w-]+)*$/i, /(^|\/)\.envrc$/i,
+  /(^|\/)\.netrc$/i, /(^|\/)\.npmrc$/i, /(^|\/)\.pypirc$/i,
+  /(^|\/)id_(rsa|dsa|ed25519|ecdsa)(\.pub)?$/i, /(^|\/)\.git-credentials$/i,
+  /(^|\/)\.git\/(config|hooks)(\/|$)/i,
+  /(^|\/)(credentials?|secrets?)(\.[\w-]+)?$/i, /(^|\/)terraform\.tfstate(?:\.backup)?$/i,
+  /\.(pem|key|p12|pfx|keystore)$/i,
+  /(^|\/)\.fabius\/config\.json$/i, /Library\/Keychains(\/|$)/i,
   // The RESOLVED config path — FABIUS_HOME can move the key file out from under the
   // literal .fabius/config.json pattern above, so the actual location is always denied.
-  new RegExp(CONFIG_PATH.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'),
+  new RegExp(CONFIG_PATH.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i'),
 ];
 
 // Commands whose effect cannot be walked back by re-running the agent. These are held
@@ -68,29 +74,22 @@ export function isIrreversible(command) {
 // run (`$(…)`, backticks, a pipe, a redirect, an escaped quote). A string carrying them
 // cannot be inspected honestly — the shell re-reads it after we have looked — so it is
 // never auto-approved; it goes to a human.
-const SHELL_META = /[|;&`$><\n\\]/;
+const SHELL_META = /[|;&`$><\n\\*?\[\]{}()~]/;
 
 // Interpreter flags that smuggle a program in as an argument: `node -e`, `python -c`,
 // `perl -e`. Inspecting the command name tells you nothing about what these run.
 const INLINE_CODE = /(^|\s)-{1,2}(e|c|p|eval|exec|command|print)(\s|=|$)/;
 
-// What autonomous mode may run WITHOUT asking. This is deliberately an allowlist: the old
-// policy — "auto-approve anything that does not match the irreversible denylist" — is
-// fail-open, because a regex denylist over a raw shell string is trivially evaded
-// (`rm --recursive --force`, `find . -delete`, `s''udo`, base64 | sh). The denylist is
-// kept below as a warn-layer, not as the boundary.
+// What autonomous mode may run WITHOUT asking. A shell, interpreter, package runner,
+// linter config and repository task are all executable programs, even when their command
+// line looks familiar. They therefore do not belong here. File reads use the built-in
+// jailed tools; this tiny list contains only commands whose arguments cannot name code or
+// recursively expand into a secret after the gate has inspected them.
 const AUTO_EXEC_ALLOW = [
-  /^(npm|pnpm|yarn|bun)\s+(test|run\s+[\w:.-]+|ls|list|why|outdated|audit)\b/,
-  /^(npx\s+)?(jest|vitest|mocha|ava|pytest|tsc|eslint|prettier|ruff|black|mypy|go\s+test|cargo\s+(test|check|build|clippy))\b/,
-  // Each argument group must start with whitespace and its body may not contain any, so
-  // a run of spaces has exactly one valid split. The earlier `(\s+[…]*)*` — a nestable
-  // quantifier over a body that can match empty — had 2^(n-1) of them, and a command of
-  // the form `node x` + 30 spaces + `#` froze this gate for minutes on the way in.
-  /^(node|python3?|deno|bun)(\s+[\w./@=:+-]+)+$/,
-  /^git\s+(status|diff|log|show|branch|remote|rev-parse|describe|ls-files|blame)\b/,
-  /^(ls|pwd|whoami|date|echo|which|uname|wc|head|tail|cat|file|stat|du|df|tree|sort|uniq|cut|basename|dirname|realpath)\b/,
-  /^(grep|rg|jq|diff|md5|shasum|sha256sum)\b/,
-  /^(make)\s+(test|check|lint|build)\b/,
+  /^pwd(?:\s+-[LP])?$/,
+  /^whoami$/,
+  /^uname(?:\s+-[amnrsvpio]+)?$/,
+  /^date$/,
 ];
 
 export function autoApprovable(command) {
@@ -152,11 +151,48 @@ export function insideJail(p, jail) {
 }
 
 export function isSecretPath(p) {
-  const s = String(p || '').replace(new RegExp('\\' + sep, 'g'), '/');
+  const s = String(p || '').replace(/\\/g, '/');
   const home = homedir().replace(/\\/g, '/');
   const candidates = [s, s.startsWith(home) ? s.slice(home.length) : s];
   return SECRET_PATTERNS.some((re) => candidates.some((c) => re.test(c)));
 }
+
+// Repository control data is not an ordinary artifact. Allowing an autonomous write to
+// `.git/HEAD`, refs, the index or objects can rewrite history or corrupt the repository
+// without ever spelling an irreversible shell command.
+export function isProtectedWritePath(p) {
+  return /(^|\/)\.git(\/|$)/i.test(String(p || '').replace(/\\/g, '/'));
+}
+
+export function networkOrigin(target) {
+  try {
+    const u = new URL(String(target || '').trim());
+    if (!['http:', 'https:'].includes(u.protocol) || u.username || u.password) return null;
+    return u.origin;
+  } catch { return null; }
+}
+
+// Approval text is model-controlled. Render terminal controls and bidi overrides as
+// visible escapes so a payload cannot clear/reorder the screen or counterfeit the prompt
+// the operator is being asked to approve. Newlines remain newlines for full visibility.
+export function visibleForApproval(value) {
+  return [...String(value ?? '')].map((ch) => {
+    if (ch === '\n') return ch;
+    const cp = ch.codePointAt(0);
+    if (ch === '\t') return '\\t';
+    if (cp < 0x20 || (cp >= 0x7f && cp <= 0x9f)
+        || cp === 0x061c || cp === 0x200e || cp === 0x200f
+        || (cp >= 0x202a && cp <= 0x202e) || (cp >= 0x2066 && cp <= 0x2069)) {
+      return `\\u{${cp.toString(16).padStart(4, '0')}}`;
+    }
+    return ch;
+  }).join('');
+}
+
+const allowedOriginSet = (origins) => {
+  const values = typeof origins === 'string' ? [origins] : [...(origins || [])];
+  return new Set(values.map(networkOrigin).filter(Boolean));
+};
 
 // The pure decision. Returns { decision: 'allow' | 'ask' | 'deny', reason }.
 //   posture   'ask' | 'auto' | 'never'
@@ -164,14 +200,17 @@ export function isSecretPath(p) {
 //   target    a path (write/read) or a command line (exec)
 //   oracle    true when the target is the delivered artifact the verification oracle wants
 //             to run, rather than a command the model composed
-export function classify({ posture = 'ask', cap, target, jail, dangerous = false, oracle = false }) {
+export function classify({ posture = 'ask', cap, target, jail, dangerous = false, oracle = false, allowedOrigins = [] }) {
   if (!CAPS.includes(cap)) return { decision: 'deny', reason: `unknown capability "${cap}"` };
 
   if (cap === 'read' || cap === 'write') {
     if (isSecretPath(target)) return { decision: 'deny', reason: 'secret-bearing path — the deny-list is not negotiable' };
+    if (cap === 'write' && isProtectedWritePath(target)) return { decision: 'deny', reason: 'repository control data under .git is not writable by an agent tool' };
     if (jail) {
       const j = insideJail(target, jail);
       if (!j.ok) return { decision: 'deny', reason: `outside the working directory (${j.resolved})` };
+      if (isSecretPath(j.resolved)) return { decision: 'deny', reason: 'path resolves to a secret-bearing file — aliases do not bypass the deny-list' };
+      if (cap === 'write' && isProtectedWritePath(j.resolved)) return { decision: 'deny', reason: 'path resolves to repository control data under .git' };
     }
   }
 
@@ -180,16 +219,25 @@ export function classify({ posture = 'ask', cap, target, jail, dangerous = false
   if (cap === 'exec') {
     for (const p of commandPaths(target)) {
       if (isSecretPath(p)) return { decision: 'deny', reason: `secret-bearing path in the command (${p}) — the deny-list is not negotiable` };
+      if (jail) {
+        const j = insideJail(p, jail);
+        if (j.ok && isSecretPath(j.resolved)) {
+          return { decision: 'deny', reason: `command path resolves to a secret-bearing file (${j.resolved}) — aliases do not bypass the deny-list` };
+        }
+      }
     }
   }
 
   if (cap === 'read') return { decision: 'allow', reason: 'read-only capability' };
 
-  // `net` observes rather than changes, so it never prompts — but a read-only run means
-  // read-only: no outbound request either.
+  // Outbound GET is still egress: it can carry workspace data in a path/query, and many
+  // servers violate GET's "safe" semantics. Authority is exact-origin and session-scoped.
   if (cap === 'net') {
     if (posture === 'never') return { decision: 'deny', reason: 'read-only run (--approve never) — no outbound request' };
-    return { decision: 'allow', reason: 'read-only capability' };
+    const origin = networkOrigin(target);
+    if (!origin) return { decision: 'deny', reason: 'network target is not an http(s) origin without embedded credentials' };
+    if (allowedOriginSet(allowedOrigins).has(origin)) return { decision: 'allow', reason: `origin allowed for this run (${origin})` };
+    return { decision: 'ask', reason: `first contact with network origin ${origin} — a human or explicit allow-list decides` };
   }
 
   if (posture === 'never') return { decision: 'deny', reason: 'read-only run (--approve never)' };
@@ -240,24 +288,27 @@ export function classify({ posture = 'ask', cap, target, jail, dangerous = false
 
 // The prompting shell. Non-interactive runs (no TTY, e.g. cron) must never hang waiting
 // for a human — an `ask` there resolves to DENY, and the run continues without the tool.
-export async function requestApproval({ cap, target, reason, autoNo = false }) {
+export async function requestApproval({ cap, target, payload = '', reason, autoNo = false }) {
   const interactive = !!(process.stdin.isTTY && process.stdout.isTTY);
   if (autoNo || !interactive) {
     return { approved: false, why: interactive ? 'declined' : 'no terminal to ask (non-interactive run) — denied' };
   }
   const rl = createInterface({ input: process.stdin, output: process.stdout });
   try {
-    const head = cap === 'exec' ? 'run this command' : `write ${target}`;
+    const head = cap === 'exec' ? 'run this command' : cap === 'net' ? `contact ${networkOrigin(target) || target}` : `write ${target}`;
     process.stdout.write(`\n  \x1b[33m⚠ fabius wants to ${head}\x1b[0m\n`);
     if (cap === 'exec') {
-      const t = String(target);
-      // A multi-line target is a delivered artifact: print it IN FULL — a human
-      // approves only what they can read. Single-line commands keep a sane cap.
-      if (t.includes('\n')) process.stdout.write(t.split('\n').map(l => `    \x1b[2m|\x1b[0m ${l}`).join('\n') + '\n');
-      else process.stdout.write(`    \x1b[2m$\x1b[0m ${t.slice(0, 600)}\n`);
+      const t = visibleForApproval(target);
+      process.stdout.write(t.split('\n').map((l, i) => `    \x1b[2m${i ? '|' : '$'}\x1b[0m ${l}`).join('\n') + '\n');
+    } else if (cap === 'write') {
+      const body = visibleForApproval(payload);
+      process.stdout.write(body.split('\n').map(l => `    \x1b[2m|\x1b[0m ${l}`).join('\n') + '\n');
+    } else if (cap === 'net') {
+      process.stdout.write(`    ${visibleForApproval(target)}\n`);
     }
-    process.stdout.write(`    \x1b[2m${reason}\x1b[0m\n`);
-    const a = (await rl.question('    approve? [y/N/a=approve all this run] ')).trim().toLowerCase();
+    process.stdout.write(`    \x1b[2m${visibleForApproval(reason)}\x1b[0m\n`);
+    const choices = cap === 'net' ? 'y/N/a=allow this origin this run' : 'y/N/a=approve all this run';
+    const a = (await rl.question(`    approve? [${choices}] `)).trim().toLowerCase();
     if (a === 'a' || a === 'all') return { approved: true, why: 'approved (all, this run)', all: true };
     return { approved: a === 'y' || a === 'yes', why: a === 'y' || a === 'yes' ? 'approved' : 'declined' };
   } finally { rl.close(); }
@@ -265,22 +316,37 @@ export async function requestApproval({ cap, target, reason, autoNo = false }) {
 
 // A live gate bound to one run: holds the posture, the jail, and the "approve all"
 // escalation, and records every decision for the run's audit trail.
-export function makeGate({ posture = 'ask', jail = process.cwd(), dangerous = false, autoNo = false } = {}) {
+export function makeGate({ posture = 'ask', jail = process.cwd(), dangerous = false, autoNo = false, allowedOrigins = [] } = {}) {
   const log = [];
   let approveAll = false;
+  const origins = allowedOriginSet(allowedOrigins);
   return {
     log,
     get posture() { return approveAll ? 'auto' : posture; },
-    async check(cap, target, { oracle = false } = {}) {
-      const d = classify({ posture: approveAll ? 'auto' : posture, cap, target, jail, dangerous, oracle });
+    get allowedOrigins() { return [...origins]; },
+    async check(cap, target, { oracle = false, payload = '', allowedOrigins: suppliedOrigins = [] } = {}) {
+      for (const origin of allowedOriginSet(suppliedOrigins)) origins.add(origin);
+      const d = classify({ posture: approveAll ? 'auto' : posture, cap, target, jail, dangerous, oracle, allowedOrigins: origins });
       let approved = d.decision === 'allow';
       let why = d.reason;
       if (d.decision === 'ask') {
-        const r = await requestApproval({ cap, target, reason: d.reason, autoNo });
+        const r = await requestApproval({ cap, target, payload, reason: d.reason, autoNo });
         approved = r.approved; why = r.why;
-        if (r.all) approveAll = true;
+        if (r.all && cap !== 'net') approveAll = true;
       }
-      log.push({ at: new Date().toISOString(), cap, target: String(target).slice(0, 300), decision: d.decision, approved, why });
+      const targetText = String(target);
+      const payloadText = String(payload || '');
+      const digest = (s) => createHash('sha256').update(s).digest('hex');
+      if (approved && cap === 'net') {
+        const origin = networkOrigin(target);
+        if (origin) origins.add(origin);
+      }
+      log.push({
+        at: new Date().toISOString(), cap, target: redact(targetText.slice(0, 300)),
+        targetSha256: digest(targetText), payloadSha256: digest(payloadText),
+        payloadBytes: Buffer.byteLength(payloadText), actionSha256: digest(`${cap}\0${targetText}\0${payloadText}`),
+        decision: d.decision, approved, why: redact(why), dangerous,
+      });
       return { approved, why, decision: d.decision };
     },
   };

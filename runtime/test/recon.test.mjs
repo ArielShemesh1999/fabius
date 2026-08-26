@@ -3,7 +3,10 @@
 // whether a finding is real. Every assertion here is offline.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { normalizeTarget, parseCsp, auditCsp, grade, delegatedPlatform, CHECKS, SEVERITY } from '../src/recon.mjs';
+import {
+  normalizeTarget, parseCsp, auditCsp, checkSecurityHeaders,
+  grade, delegatedPlatform, recon, CHECKS, SEVERITY,
+} from '../src/recon.mjs';
 
 test('a target is reduced to a bare hostname', () => {
   for (const [input, want] of [
@@ -44,6 +47,24 @@ test('a nonce plus strict-dynamic is treated as the strict policy it is', () => 
   assert.deepEqual(auditCsp("script-src 'nonce-r4nd0m' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; base-uri 'none'"), []);
 });
 
+test('invalid or empty CSP trust roots cannot suppress real script findings', () => {
+  for (const trust of ["'nonce-'", "'sha999-'", "'sha256-'"]) {
+    const titles = auditCsp(`script-src ${trust} 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; base-uri 'none'`)
+      .map((f) => f.title);
+    assert.ok(titles.some((t) => /unsafe-inline/.test(t)), trust);
+    assert.ok(titles.some((t) => /anywhere/.test(t)), trust);
+  }
+});
+
+test('duplicate CSP directives preserve the browser-effective first occurrence', () => {
+  const csp = parseCsp("script-src * 'unsafe-inline'; script-src 'self'; object-src 'none'; base-uri 'none'");
+  assert.deepEqual(csp['script-src'], ['*', "'unsafe-inline'"]);
+  const titles = auditCsp("script-src * 'unsafe-inline'; script-src 'self'; object-src 'none'; base-uri 'none'")
+    .map((f) => f.title);
+  assert.ok(titles.some((t) => /unsafe-inline/.test(t)));
+  assert.ok(titles.some((t) => /anywhere/.test(t)));
+});
+
 test('a wide-open policy is caught on every axis', () => {
   const titles = auditCsp("default-src *; script-src * 'unsafe-inline' 'unsafe-eval'").map((f) => f.title);
   assert.ok(titles.some((t) => /unsafe-inline/.test(t)));
@@ -51,6 +72,48 @@ test('a wide-open policy is caught on every axis', () => {
   assert.ok(titles.some((t) => /anywhere/.test(t)));
   assert.ok(titles.some((t) => /object-src/.test(t)));
   assert.ok(titles.some((t) => /base-uri/.test(t)));
+});
+
+test("'none' must be exclusive and broad base/frame sources are not protective", () => {
+  for (const policy of [
+    "script-src 'self'; object-src 'none' https:; base-uri 'none'",
+    "script-src 'self'; object-src 'none' 'self'; base-uri 'none'",
+  ]) {
+    assert.ok(auditCsp(policy).some((f) => /object-src/.test(f.title)), policy);
+  }
+  for (const source of ['*', 'https:', 'http:', "'none' https:"]) {
+    const findings = auditCsp(`script-src 'self'; object-src 'none'; base-uri ${source}`);
+    assert.ok(findings.some((f) => /base-uri is not restrictive/.test(f.title)), source);
+  }
+  for (const source of ['*', 'https:', 'http:', "'none' https:"]) {
+    const findings = auditCsp(`script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors ${source}`);
+    assert.ok(findings.some((f) => /frame-ancestors is not restrictive/.test(f.title)), source);
+  }
+  assert.deepEqual(auditCsp("script-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self' https://embed.example.com"), []);
+});
+
+test('clickjacking protection requires an effective directive or valid legacy header', async () => {
+  const surface = (csp, xfo = null) => ({
+    headers: {
+      'strict-transport-security': 'max-age=31536000; includeSubDomains',
+      'content-security-policy': csp,
+      'x-content-type-options': 'nosniff',
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'permissions-policy': 'camera=()',
+      ...(xfo ? { 'x-frame-options': xfo } : {}),
+    },
+  });
+  const titles = async (csp, xfo) => (await checkSecurityHeaders('example.com', {}, surface(csp, xfo)))
+    .findings.map((f) => f.title);
+
+  assert.ok((await titles("default-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors *", 'DENY'))
+    .some((t) => /frame-ancestors is not restrictive/.test(t)), 'broad CSP overrides protective XFO');
+  assert.ok((await titles("default-src 'self'; object-src 'none'; base-uri 'none'", 'ALLOWALL'))
+    .some((t) => /nothing prevents framing/.test(t)), 'an arbitrary XFO value is not protection');
+  assert.ok(!(await titles("default-src 'self'; object-src 'none'; base-uri 'none'", 'DENY'))
+    .some((t) => /framing|frame-ancestors/.test(t)), 'valid XFO covers a missing CSP directive');
+  assert.ok(!(await titles("default-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"))
+    .some((t) => /framing|frame-ancestors/.test(t)), 'restrictive CSP is sufficient');
 });
 
 test('script-src falls back to default-src, as the spec says', () => {
@@ -75,4 +138,10 @@ test('the grade tracks severity, and the floor holds', () => {
 test('the check list is stable and ports stay out of the default scan', () => {
   assert.ok(CHECKS.includes('ports'));
   assert.deepEqual(SEVERITY, ['critical', 'high', 'medium', 'low', 'info']);
+});
+
+test('unknown, empty, and implicitly authorised active check selections fail closed', async () => {
+  await assert.rejects(() => recon('example.com', { checks: ['bogus'] }), /unknown check/);
+  await assert.rejects(() => recon('example.com', { checks: [] }), /at least one/);
+  await assert.rejects(() => recon('example.com', { checks: ['ports'] }), /explicit.*ports/i);
 });

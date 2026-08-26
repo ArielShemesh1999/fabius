@@ -16,8 +16,8 @@ import { join, resolve, relative, dirname } from 'node:path';
 import { spawn } from 'node:child_process';
 import { lookup } from 'node:dns/promises';
 import { isIP } from 'node:net';
-import { redact } from './config.mjs';
-import { isSecretPath } from './approve.mjs';
+import { redact, scrubEnvironment } from './config.mjs';
+import { insideJail, isSecretPath, isProtectedWritePath } from './approve.mjs';
 import { clamp } from './util.mjs';
 import { memoryContext } from './memory.mjs';
 import { route } from './route.mjs';
@@ -26,7 +26,11 @@ import { recon, formatReport, normalizeTarget } from './recon.mjs';
 const MAX_OBS = 8000;      // an observation longer than this teaches nothing extra
 const MAX_READ = 200000;
 
-const rel = (p, jail) => relative(jail, resolve(jail, p)) || '.';
+const rel = (p, jail) => {
+  const base = insideJail('.', jail).resolved;
+  const target = insideJail(p, jail);
+  return relative(base, target.ok ? target.resolved : resolve(jail, p)) || '.';
+};
 
 // The network the agent may reach is the PUBLIC internet. Loopback, RFC1918, link-local
 // (which is where cloud instance metadata lives), CGNAT and multicast are not "a URL" —
@@ -47,10 +51,35 @@ export function isBlockedAddress(ip) {
     return false;
   }
   const s = String(ip).toLowerCase().split('%')[0];
-  const m4 = s.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);
-  if (m4) return isBlockedAddress(m4[1]);
-  if (s === '::' || s === '::1') return true;
+  const words = ipv6Words(s);
+  if (words) {
+    const mapped = words.slice(0, 5).every((n) => n === 0) && (words[5] === 0 || words[5] === 0xffff);
+    if (mapped) {
+      const hi = words[6], lo = words[7];
+      return isBlockedAddress(`${hi >>> 8}.${hi & 255}.${lo >>> 8}.${lo & 255}`);
+    }
+    if (words.slice(0, 7).every((n) => n === 0) && words[7] <= 1) return true;
+  }
   return /^(f[cd]|fe[89ab]|ff)/.test(s);                                // ULA, link-local, multicast
+}
+
+function ipv6Words(input) {
+  let s = String(input || '').toLowerCase();
+  const dotted = s.match(/^(.*:)(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
+  if (dotted) {
+    const octets = dotted.slice(2).map(Number);
+    if (octets.some((n) => !Number.isInteger(n) || n < 0 || n > 255)) return null;
+    s = `${dotted[1]}${((octets[0] << 8) | octets[1]).toString(16)}:${((octets[2] << 8) | octets[3]).toString(16)}`;
+  }
+  const halves = s.split('::');
+  if (halves.length > 2) return null;
+  const parse = (part) => part ? part.split(':').map((x) => /^[0-9a-f]{1,4}$/.test(x) ? Number.parseInt(x, 16) : NaN) : [];
+  const left = parse(halves[0]), right = parse(halves[1] || '');
+  if ([...left, ...right].some(Number.isNaN)) return null;
+  if (halves.length === 1) return left.length === 8 ? left : null;
+  const fill = 8 - left.length - right.length;
+  if (fill < 1) return null;
+  return [...left, ...Array(fill).fill(0), ...right];
 }
 
 const LOCAL_NAME = /(^|\.)(localhost|local|internal|intranet|home\.arpa)$/i;
@@ -76,10 +105,52 @@ export async function assertPublicHostname(hostname) {
 
 const assertPublicHost = (u) => assertPublicHostname(u.hostname);
 
-async function httpGetText(url, { timeoutMs = 15000, maxBytes = 120000, userAgent = 'fabius/1.0', maxHops = 5 } = {}) {
+async function cancelBody(res) {
+  try { await res?.body?.cancel(); } catch { /* already consumed, locked, or closed */ }
+}
+
+// Read at most `maxBytes` from a WHATWG response stream, then cancel it. `res.text()`
+// cannot enforce a memory bound because it buffers the entire hostile response before a
+// caller can slice the string. Copy only the retained prefix of each chunk so one
+// over-sized chunk is not kept alive by a view into its backing buffer.
+async function readTextBounded(res, maxBytes) {
+  const limit = Number.isSafeInteger(maxBytes) && maxBytes >= 0 ? maxBytes : 0;
+  if (!res.body) return '';
+  const reader = res.body.getReader();
+  const chunks = [];
+  let total = 0;
+  try {
+    while (total < limit) {
+      const { done, value } = await reader.read();
+      if (done) return Buffer.concat(chunks, total).toString('utf8');
+      const bytes = value instanceof Uint8Array ? value : new Uint8Array(value);
+      const take = Math.min(bytes.byteLength, limit - total);
+      if (take) {
+        chunks.push(Buffer.from(bytes.subarray(0, take)));
+        total += take;
+      }
+      if (take < bytes.byteLength || total === limit) {
+        try { await reader.cancel(); } catch { /* stream already closed */ }
+        return Buffer.concat(chunks, total).toString('utf8');
+      }
+    }
+    try { await reader.cancel(); } catch { /* zero-byte limit or already closed */ }
+    return '';
+  } catch (e) {
+    try { await reader.cancel(); } catch { /* preserve the original read error */ }
+    throw e;
+  } finally {
+    try { reader.releaseLock(); } catch { /* an errored reader may already be detached */ }
+  }
+}
+
+async function httpGetText(url, {
+  timeoutMs = 15000, maxBytes = 120000, userAgent = 'fabius/1.0', maxHops = 5,
+  gate = null, allowedOrigins = [],
+} = {}) {
   let u;
   try { u = new URL(String(url).trim()); } catch { return '(not a URL)'; }
-  if (!['http:', 'https:'].includes(u.protocol)) return '(only http and https are fetchable)';
+  if (!['http:', 'https:'].includes(u.protocol) || u.username || u.password) return '(only http and https URLs without embedded credentials are fetchable)';
   const ac = new AbortController();
   const t = setTimeout(() => ac.abort(), timeoutMs);
   try {
@@ -87,6 +158,13 @@ async function httpGetText(url, { timeoutMs = 15000, maxBytes = 120000, userAgen
     // Redirects are followed by hand so every hop is re-validated: an allowlist that is
     // only checked on the first URL is bypassed by a 302 to 169.254.169.254.
     for (;;) {
+      // Authorise BEFORE DNS resolution: even a lookup discloses the destination. The
+      // gate remembers an approved origin for this run, while every new redirect origin
+      // parks here again and is denied automatically when no terminal is present.
+      if (gate) {
+        const decision = await gate.check('net', target.href, { allowedOrigins });
+        if (!decision.approved) return `(denied: ${decision.why})`;
+      }
       const bad = await assertPublicHost(target);
       if (bad) return bad;
       res = await fetch(target, { signal: ac.signal, redirect: 'manual', headers: { 'user-agent': userAgent, accept: 'text/html,text/plain,application/json;q=0.9,*/*;q=0.8' } });
@@ -94,20 +172,23 @@ async function httpGetText(url, { timeoutMs = 15000, maxBytes = 120000, userAgen
       const loc = res.headers.get('location');
       // Nothing reads a redirect's body, and the socket stays held until it is consumed
       // or cancelled — release it before moving to the next hop.
-      await res.body?.cancel().catch(() => {});
+      await cancelBody(res);
       if (!loc) return `(${res.status} redirect with no location)`;
       if (++hops > maxHops) return '(too many redirects)';
       let next;
       try { next = new URL(loc, target); } catch { return '(bad redirect target)'; }
-      if (!['http:', 'https:'].includes(next.protocol)) return '(only http and https are fetchable)';
+      if (!['http:', 'https:'].includes(next.protocol) || next.username || next.password) return '(only http and https URLs without embedded credentials are fetchable)';
       target = next;
     }
     const ct = res.headers.get('content-type') || '';
-    if (!/text|json|xml|javascript/.test(ct)) return `(${res.status} ${ct || 'unknown type'} — not text, nothing to read)`;
-    const body = (await res.text()).slice(0, maxBytes);
+    if (!/text|json|xml|javascript/i.test(ct)) {
+      await cancelBody(res);
+      return `(${res.status} ${ct || 'unknown type'} — not text, nothing to read)`;
+    }
+    const body = await readTextBounded(res, maxBytes);
     return `[${res.status}] ${stripHtml(body)}`;
   } catch (e) {
-    return `(fetch failed: ${e.name === 'AbortError' ? 'timed out' : e.message})`;
+    return redact(`(fetch failed: ${e.name === 'AbortError' ? 'timed out' : e.message})`);
   } finally { clearTimeout(t); }
 }
 
@@ -144,15 +225,50 @@ export function walk(dir, { maxFiles = 400, maxDepth = 6 } = {}) {
   return out;
 }
 
-function runCommand(cmd, { cwd, timeoutMs = 120000, maxBytes = 40000, env = process.env }) {
+function safeOperationalPath(path, jail, { write = false } = {}) {
+  const checked = insideJail(path, jail);
+  if (!checked.ok || isSecretPath(path) || isSecretPath(checked.resolved)
+      || (write && (isProtectedWritePath(path) || isProtectedWritePath(checked.resolved)))) return null;
+  return checked.resolved;
+}
+
+function runCommand(cmd, { cwd, timeoutMs = 120000, maxBytes = 40000, env = scrubEnvironment(process.env) }) {
   return new Promise((res) => {
-    const child = spawn(cmd, { cwd, shell: true, env: { ...env, FABIUS_RUNTIME: '1' } });
+    const grouped = process.platform !== 'win32';
     let out = '', err = '', killed = false;
-    const t = setTimeout(() => { killed = true; child.kill('SIGKILL'); }, timeoutMs);
-    child.stdout.on('data', (d) => { if (out.length < maxBytes) out += d.toString(); });
-    child.stderr.on('data', (d) => { if (err.length < maxBytes) err += d.toString(); });
-    child.on('error', (e) => { clearTimeout(t); res({ code: -1, out, err: String(e.message), killed }); });
-    child.on('close', (code) => { clearTimeout(t); res({ code, out, err, killed }); });
+    let settled = false;
+    let t;
+    let child;
+    const limit = Number.isSafeInteger(maxBytes) && maxBytes >= 0 ? maxBytes : 40000;
+    const appendBounded = (current, data) => {
+      const remaining = limit - Buffer.byteLength(current);
+      return remaining > 0 ? current + Buffer.from(data).subarray(0, remaining).toString('utf8') : current;
+    };
+    const finish = (result) => {
+      if (settled) return;
+      settled = true; clearTimeout(t);
+      res({ ...result, out: redact(out), err: redact(result.err ?? err) });
+    };
+    try {
+      child = spawn(cmd, {
+        cwd, shell: true, detached: grouped, stdio: ['ignore', 'pipe', 'pipe'],
+        env: { ...scrubEnvironment(env), FABIUS_RUNTIME: '1' },
+      });
+    } catch (e) {
+      finish({ code: -1, err: String(e.message), killed });
+      return;
+    }
+    t = setTimeout(() => {
+      killed = true;
+      try {
+        if (grouped && child.pid) process.kill(-child.pid, 'SIGKILL');
+        else child.kill('SIGKILL');
+      } catch { try { child.kill('SIGKILL'); } catch { /* already gone */ } }
+    }, timeoutMs);
+    child.stdout.on('data', (d) => { out = appendBounded(out, d); });
+    child.stderr.on('data', (d) => { err = appendBounded(err, d); });
+    child.on('error', (e) => finish({ code: -1, err: String(e.message), killed }));
+    child.on('close', (code) => finish({ code, err, killed }));
   });
 }
 
@@ -168,7 +284,10 @@ export const TOOLS = {
       if (!statSync(target).isDirectory()) return `(${rel(target, ctx.jail)} is a file, not a directory)`;
       // The directory-level approval is not a licence to enumerate deny-listed files: a
       // name like `deploy.key` or `credentials.json` is itself a finding for an attacker.
-      const files = walk(target).filter((f) => !isSecretPath(f)).map((f) => rel(f, ctx.jail));
+      const files = walk(target)
+        .map((f) => safeOperationalPath(f, ctx.jail))
+        .filter(Boolean)
+        .map((f) => rel(f, ctx.jail));
       return files.length ? files.join('\n') : '(empty)';
     },
   },
@@ -180,11 +299,13 @@ export const TOOLS = {
       const target = resolve(ctx.jail, String(input || '').trim());
       const gate = await ctx.gate.check('read', target);
       if (!gate.approved) return `(denied: ${gate.why})`;
-      if (!existsSync(target)) return `(no such file: ${rel(target, ctx.jail)})`;
-      const st = statSync(target);
+      const safe = safeOperationalPath(target, ctx.jail);
+      if (!safe) return '(denied: path changed or resolves outside the safe working tree)';
+      if (!existsSync(safe)) return `(no such file: ${rel(target, ctx.jail)})`;
+      const st = statSync(safe);
       if (st.isDirectory()) return `(${rel(target, ctx.jail)} is a directory — use list)`;
       if (st.size > MAX_READ) return `(${rel(target, ctx.jail)} is ${Math.round(st.size / 1024)}KB — too large to read whole; grep it instead)`;
-      return readFileSync(target, 'utf8');
+      return readFileSync(safe, 'utf8');
     },
   },
 
@@ -204,11 +325,16 @@ export const TOOLS = {
         // One gate on the directory is not enough: grep opens every file, so the same
         // per-file deny-list `read` enforces has to be applied here or `grep "PRIVATE
         // KEY"` becomes the way around it.
-        if (isSecretPath(f)) continue;
+        const safe = safeOperationalPath(f, ctx.jail);
+        if (!safe) continue;
         let text;
-        try { if (statSync(f).size > MAX_READ) continue; text = readFileSync(f, 'utf8'); } catch { continue; }
+        try {
+          const st = statSync(safe);
+          if (!st.isFile() || st.size > MAX_READ) continue;
+          text = readFileSync(safe, 'utf8');
+        } catch { continue; }
         text.split('\n').forEach((line, i) => {
-          if (hits.length < 80 && re.test(line)) hits.push(`${rel(f, ctx.jail)}:${i + 1}: ${line.trim().slice(0, 200)}`);
+          if (hits.length < 80 && re.test(line)) hits.push(`${rel(safe, ctx.jail)}:${i + 1}: ${line.trim().slice(0, 200)}`);
         });
       }
       return hits.length ? hits.join('\n') : '(no matches)';
@@ -224,13 +350,15 @@ export const TOOLS = {
       const path = String(input).slice(0, i).trim();
       const body = String(input).slice(i + 5);
       const target = resolve(ctx.jail, path);
-      const gate = await ctx.gate.check('write', target);
+      const gate = await ctx.gate.check('write', target, { payload: body });
       if (!gate.approved) return `(denied: ${gate.why})`;
-      mkdirSync(dirname(target), { recursive: true });
-      const existed = existsSync(target);
-      writeFileSync(target, body);
-      ctx.changed?.add(rel(target, ctx.jail));
-      return `${existed ? 'replaced' : 'created'} ${rel(target, ctx.jail)} (${Buffer.byteLength(body)} bytes)`;
+      const safe = safeOperationalPath(target, ctx.jail, { write: true });
+      if (!safe) return '(denied: path changed or resolves outside the safe working tree)';
+      mkdirSync(dirname(safe), { recursive: true });
+      const existed = existsSync(safe);
+      writeFileSync(safe, body);
+      ctx.changed?.add(rel(safe, ctx.jail));
+      return `${existed ? 'replaced' : 'created'} ${rel(safe, ctx.jail)} (${Buffer.byteLength(body)} bytes)`;
     },
   },
 
@@ -242,16 +370,18 @@ export const TOOLS = {
       const m = s.match(/^(.+?)\n<<<OLD\n([\s\S]*?)\nOLD>>>\n<<<NEW\n([\s\S]*?)\nNEW>>>\s*$/);
       if (!m) return '(edit expects "<path>\\n<<<OLD\\n…\\nOLD>>>\\n<<<NEW\\n…\\nNEW>>>")';
       const target = resolve(ctx.jail, m[1].trim());
-      const gate = await ctx.gate.check('write', target);
+      const gate = await ctx.gate.check('write', target, { payload: `<<<OLD\n${m[2]}\nOLD>>>\n<<<NEW\n${m[3]}\nNEW>>>` });
       if (!gate.approved) return `(denied: ${gate.why})`;
-      if (!existsSync(target)) return `(no such file: ${rel(target, ctx.jail)})`;
-      const cur = readFileSync(target, 'utf8');
+      const safe = safeOperationalPath(target, ctx.jail, { write: true });
+      if (!safe) return '(denied: path changed or resolves outside the safe working tree)';
+      if (!existsSync(safe)) return `(no such file: ${rel(target, ctx.jail)})`;
+      const cur = readFileSync(safe, 'utf8');
       const count = cur.split(m[2]).length - 1;
       if (count === 0) return '(the OLD text does not appear in the file — read it first)';
       if (count > 1) return `(the OLD text appears ${count} times — make it unique)`;
-      writeFileSync(target, cur.replace(m[2], m[3]));
-      ctx.changed?.add(rel(target, ctx.jail));
-      return `edited ${rel(target, ctx.jail)}`;
+      writeFileSync(safe, cur.replace(m[2], m[3]));
+      ctx.changed?.add(rel(safe, ctx.jail));
+      return `edited ${rel(safe, ctx.jail)}`;
     },
   },
 
@@ -277,14 +407,16 @@ export const TOOLS = {
     cap: 'net',
     desc: 'GET a URL and read it as text (input = the full http(s) URL)',
     run: async (input, ctx) => {
-      const gate = await ctx.gate.check('net', input);
-      if (!gate.approved) return `(denied: ${gate.why})`;
-      return httpGetText(String(input || '').trim());
+      return httpGetText(String(input || '').trim(), {
+        gate: ctx.gate,
+        allowedOrigins: ctx.opts?.allowedOrigins || [],
+      });
     },
   },
 
   recon: {
     cap: 'net',
+    operatorOnly: true,
     desc: 'audit a domain you own: DNS, TLS, security headers, cookies, mail authentication, exposed files (input = the hostname)',
     run: async (input, ctx) => {
       const gate = await ctx.gate.check('net', input);
@@ -307,7 +439,15 @@ export const TOOLS = {
   recall: {
     cap: 'read',
     desc: 'search your own memory for prior decisions and facts (input = the query)',
-    run: async (input, ctx) => memoryContext(input || ctx.task, { scope: ctx.scope }) || '(no matching memory)',
+    run: async (input, ctx) => {
+      const mode = ctx?.route?.recall;
+      // The tool executor is a second boundary behind the menu. A stale/model-forged
+      // action cannot turn an operator no-memory run or a fresh-eyes route back on.
+      if (ctx?.opts?.noMemory || !['normal', 'dampened'].includes(mode)) {
+        return '(denied: memory recall is disabled for this run)';
+      }
+      return memoryContext(input || ctx.task, { scope: ctx.scope, mode }) || '(no matching memory)';
+    },
   },
 
   route: {
@@ -326,21 +466,24 @@ export const TOOL_NAMES = Object.keys(TOOLS);
 // Which tools may fire this run. `read` is always on. `net` unless the caller asks for
 // an offline run. `write`/`exec` only when the caller opted into acting — a default run
 // can look at the machine and reason about it, and change nothing.
-export function activeTools({ act = false, offline = false } = {}) {
+export function activeTools({ act = false, offline = false, recall = false } = {}) {
   const caps = new Set(['read']);
   if (!offline) caps.add('net');
   if (act) { caps.add('write'); caps.add('exec'); }
-  return TOOL_NAMES.filter((n) => caps.has(TOOLS[n].cap));
+  return TOOL_NAMES.filter((n) => !TOOLS[n].operatorOnly
+    && caps.has(TOOLS[n].cap)
+    && (n !== 'recall' || recall === true));
 }
 
 export async function runTool(name, input, ctx) {
   const tool = TOOLS[name];
   if (!tool) return `(unknown tool "${name}")`;
+  if (tool.operatorOnly && !ctx?.operator) return `(${name} is operator-only and is not exposed to the model)`;
   try {
     const out = await tool.run(input, ctx);
     return clamp(redact(String(out ?? '')), MAX_OBS);
   } catch (e) {
-    return `(the ${name} tool errored: ${String(e.message).slice(0, 200)})`;
+    return redact(`(the ${name} tool errored: ${String(e.message).slice(0, 200)})`);
   }
 }
 

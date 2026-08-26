@@ -14,56 +14,42 @@
 
 import { createInterface } from 'node:readline/promises';
 import { readFileSync } from 'node:fs';
+import { parseArgs, validateCommandFlags, positiveNumber } from './src/cli-args.mjs';
 import { run } from './src/loop.mjs';
 import { route } from './src/route.mjs';
 import { recon, formatReport, CHECKS } from './src/recon.mjs';
-import { loadConfig, saveConfig, providerKey, ENV_KEY, HOME, ensureDirs, redact } from './src/config.mjs';
-import { PROVIDERS, PROVIDER_ORDER, availableProviders } from './src/providers.mjs';
+import { loadConfig, saveConfig, providerKey, ENV_KEY, HOME, redact } from './src/config.mjs';
+import { PROVIDERS, PROVIDER_ORDER, availableProviders, resolveModel } from './src/providers.mjs';
 import { loadSkills, verifySeal, skillSummary } from './src/skills.mjs';
-import { listMemory, recallMemory, writeMemory, deleteMemory, initMemory } from './src/memory.mjs';
+import { listMemory, recallMemory, writeMemory, deleteMemory } from './src/memory.mjs';
 import { listen, identity, send } from './src/channel.mjs';
 import { DEFAULT_RELAYS } from './src/nostr.mjs';
 import { say, paint, die, warn } from './src/util.mjs';
 
-const VERSION = '1.0.0';
-
-// ── argv ────────────────────────────────────────────────────────────────────────
-function parseArgs(argv) {
-  const flags = {}; const positional = [];
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i];
-    if (a.startsWith('--')) {
-      const [k, inline] = a.slice(2).split('=');
-      const next = argv[i + 1];
-      let v;
-      if (inline !== undefined) v = inline;
-      else if (next && !next.startsWith('--')) { v = next; i++; }
-      else v = true;
-      // repeatable flags (--relay, --owner) accumulate; consumers already [].concat()
-      flags[k] = k in flags ? [].concat(flags[k], v) : v;
-    } else positional.push(a);
-  }
-  return { flags, positional };
-}
+const VERSION = '2.6.3';
 
 const HELP = `
 ${paint('violet', 'fabius')} ${paint('dim', VERSION)} — the agent, on your machine
 
   ${paint('bold', 'fabius run')} "<task>"        run one task end to end
       --act                    let it write files and run commands (asks before each)
-      --yes                    approve writes and commands automatically
-                               (irreversible actions are still held for you)
+      --yes                    auto-approve bounded in-directory writes and a tiny set
+                               of read-only system probes; code and other commands ask
+      --read-only              refuse egress, writes, commands, and durable memory writes
       --dir <path>             the working directory it is confined to (default: cwd)
       --provider <name>        ${PROVIDER_ORDER.join(' · ')}
       --model <id>             a specific model, e.g. any HuggingFace repo
       --tier frontier|mid|fast  override the router's choice
       --budget <usd>           stop rather than spend more (default 2.00)
       --offline                no network tools
+      --allow-origin <origin>  permit agent fetches to this exact origin (repeatable)
       --sealed-only            refuse any contract the seal does not cover
-      --no-memory              do not compound anything from this run
+      --remember               allow this verified run to write a memory record
+      --no-memory              disable both recall and memory writes for this run
       --json                   machine-readable result
 
-  ${paint('bold', 'fabius chat')}                 keep talking; memory and directory persist
+  ${paint('bold', 'fabius chat')}                 keep talking; conversation and directory persist
+                               (durable memory writes still require --remember)
   ${paint('bold', 'fabius recon')} <domain>       audit DNS · TLS · headers · cookies · mail · exposed files
       --ports                  also probe common service ports (authorised targets only)
       --json                   full findings as JSON
@@ -76,7 +62,8 @@ ${paint('violet', 'fabius')} ${paint('dim', VERSION)} — the agent, on your mac
   ${paint('bold', 'fabius whoami')}                print this machine's agent address
 
   ${paint('bold', 'fabius doctor')}               providers, skills, seal, paths
-  ${paint('bold', 'fabius keys')} set <provider> <key>   |   keys list
+  ${paint('bold', 'fabius keys')} set <provider>         read the key privately from TTY/stdin
+  ${paint('bold', 'fabius keys')} list                   report configured providers without printing key fragments
 
   state lives in ${paint('dim', HOME)}
 `;
@@ -95,7 +82,7 @@ async function cmdRun(positional, flags) {
 
   if (flags.json) {
     say(JSON.stringify({ output: res.output, verdict: res.verdict, route: { layers: res.route.layers, tier: res.route.tier, model: res.route.model },
-      cost: res.cost, usage: res.usage, changed: res.changed, fired: res.fired }, null, 2));
+      cost: res.cost, budget: res.budget, usage: res.usage, changed: res.changed, fired: res.fired }, null, 2));
     return;
   }
   say('');
@@ -115,20 +102,27 @@ async function cmdRun(positional, flags) {
 
 function runOptions(flags) {
   const cfg = loadConfig();
+  if (flags.remember && flags['no-memory']) throw new Error('--remember and --no-memory cannot be combined');
+  const provider = flags.provider ? String(flags.provider) : undefined;
+  if (provider && !PROVIDERS[provider]) throw new Error(`--provider must be one of ${PROVIDER_ORDER.join(', ')}`);
+  const tier = flags.tier ? String(flags.tier) : undefined;
+  if (tier && !['frontier', 'mid', 'fast'].includes(tier)) throw new Error('--tier must be frontier, mid, or fast');
   return {
     cfg,
     act: !!flags.act,
     approve: flags.yes ? 'auto' : (flags['read-only'] ? 'never' : cfg.approve),
     dangerous: !!flags['dangerously-approve-everything'],
     jail: flags.dir ? String(flags.dir) : (cfg.workdir || process.cwd()),
-    provider: flags.provider ? String(flags.provider) : undefined,
+    provider,
     model: flags.model ? String(flags.model) : undefined,
-    tier: flags.tier ? String(flags.tier) : undefined,
-    budgetUsd: flags.budget ? Number(flags.budget) : undefined,
+    tier,
+    budgetUsd: positiveNumber(flags.budget, 'budget'),
     offline: !!flags.offline,
-    remember: !flags['no-memory'],
+    remember: !!flags.remember,
+    noMemory: !!flags['no-memory'],
     sealedOnly: !!flags['sealed-only'],
-    maxSteps: flags.steps ? Number(flags.steps) : undefined,
+    maxSteps: positiveNumber(flags.steps, 'steps', { integer: true }),
+    allowedOrigins: [].concat(flags['allow-origin'] || []).map((v) => String(v)),
   };
 }
 
@@ -179,7 +173,13 @@ async function cmdRecon(positional, flags) {
   if (flags.ports && !flags.json) {
     warn('  port probing is an active check — run it only against hosts you are authorised to test.');
   }
-  const checks = flags.checks ? String(flags.checks).split(',').map((s) => s.trim()).filter((c) => CHECKS.includes(c)) : null;
+  let checks = null;
+  if (flags.checks) {
+    checks = String(flags.checks).split(',').map((s) => s.trim()).filter(Boolean);
+    const unknown = checks.filter((c) => !CHECKS.includes(c));
+    if (unknown.length) throw new Error(`unknown recon check(s): ${unknown.join(', ')}; choose from ${CHECKS.join(', ')}`);
+    if (!checks.length) throw new Error('--checks requires at least one check name');
+  }
   const r = await recon(target, { ports: !!flags.ports, checks });
   if (flags.json) say(JSON.stringify(r, null, 2));
   else say(formatReport(r));
@@ -199,20 +199,23 @@ function cmdRoute(positional, flags) {
 }
 
 function cmdDoctor() {
-  ensureDirs(); initMemory();
   const cfg = loadConfig();
   say('');
   say(paint('violet', `  fabius ${VERSION}`) + paint('dim', `  · node ${process.version} · ${process.platform}`));
   say('');
   say(paint('bold', '  providers'));
-  for (const p of PROVIDER_ORDER) {
-    const has = !!providerKey(p, cfg);
-    const mark = has ? paint('green', '✓') : paint('dim', '·');
-    say(`   ${mark} ${p.padEnd(13)} ${paint('dim', has ? `keyed (${ENV_KEY[p]})` : `set ${ENV_KEY[p]}`)}  ${paint('dim', Object.values(PROVIDERS[p].tiers).join(' / '))}`);
-  }
   const avail = availableProviders(cfg);
+  for (const p of PROVIDER_ORDER) {
+    const ready = avail.includes(p);
+    const mark = ready ? paint('green', '✓') : paint('dim', '·');
+    const state = p === 'ollama'
+      ? (ready ? (providerKey(p, cfg) ? `endpoint set (${ENV_KEY[p]})` : 'local default selected') : 'select --provider ollama or set OLLAMA_HOST')
+      : (ready ? `keyed (${ENV_KEY[p]})` : `set ${ENV_KEY[p]}`);
+    say(`   ${mark} ${p.padEnd(13)} ${paint('dim', state)}  ${paint('dim', Object.values(PROVIDERS[p].tiers).join(' / '))}`);
+  }
+  const selected = resolveModel(PROVIDERS[cfg.provider] ? cfg.provider : 'anthropic', 'mid', cfg);
   say('');
-  say(avail.length ? paint('green', `   ${avail.length} provider(s) ready — default ${cfg.provider}`)
+  say(avail.length ? paint('green', `   ${avail.length} provider(s) ready — effective default ${selected?.provider || 'none'}`)
                    : paint('yellow', '   nothing is keyed — fabius can route and recon, but cannot think'));
 
   say('');
@@ -227,6 +230,7 @@ function cmdDoctor() {
     // A contract the manifest never listed is invisible to a hash check — it has to be
     // looked for separately, or a dropped-in skill reaches the model unsealed.
     if (seal.unsealed.length) say(paint('red', `   seal: ${seal.unsealed.length} UNSEALED contract(s) present — ${seal.unsealed.join(', ')}  (run with --sealed-only to refuse them)`));
+    if (!seal.ok) process.exitCode = 1;
   }
 
   say('');
@@ -240,7 +244,6 @@ function cmdDoctor() {
 
 function cmdMemory(positional, flags) {
   const [sub, ...rest] = positional;
-  initMemory();
   if (!sub || sub === 'list') {
     const all = listMemory();
     if (!all.length) return say(paint('dim', '  memory is empty — it fills as verified runs compound.'));
@@ -272,23 +275,53 @@ function cmdMemory(positional, flags) {
   die('  fabius memory list|search <q>|add <title>|rm <name>');
 }
 
-function cmdKeys(positional) {
-  const [sub, provider, key] = positional;
+async function readSecret(prompt) {
+  if (!process.stdin.isTTY) return readFileSync(0, 'utf8').trim();
+  if (typeof process.stdin.setRawMode !== 'function') throw new Error('cannot hide terminal input here; pipe the key on stdin instead');
+  process.stdout.write(prompt);
+  return await new Promise((resolve, reject) => {
+    let value = '';
+    const wasRaw = !!process.stdin.isRaw;
+    const done = (err) => {
+      process.stdin.off('data', onData);
+      process.stdin.setRawMode(wasRaw);
+      process.stdin.pause();
+      process.stdout.write('\n');
+      err ? reject(err) : resolve(value.trim());
+    };
+    const onData = (buf) => {
+      for (const ch of buf.toString('utf8')) {
+        if (ch === '\r' || ch === '\n') return done();
+        if (ch === '\u0003') return done(new Error('cancelled'));
+        if (ch === '\u007f' || ch === '\b') value = value.slice(0, -1);
+        else if (ch >= ' ') value += ch;
+      }
+    };
+    process.stdin.setRawMode(true);
+    process.stdin.resume();
+    process.stdin.on('data', onData);
+  });
+}
+
+async function cmdKeys(positional) {
+  const [sub, provider, positionalSecret, ...extra] = positional;
   if (sub === 'list' || !sub) {
     const cfg = loadConfig();
     for (const p of PROVIDER_ORDER) {
       const k = providerKey(p, cfg);
-      say(`  ${p.padEnd(13)} ${k ? paint('green', 'keyed  ') + paint('dim', k.slice(0, 6) + '…' + k.slice(-4)) : paint('dim', 'not set')}`);
+      say(`  ${p.padEnd(13)} ${k ? paint('green', 'configured') : paint('dim', 'not set')}`);
     }
     return;
   }
   if (sub === 'set') {
     if (!PROVIDERS[provider]) die(`  unknown provider "${provider}" — one of ${PROVIDER_ORDER.join(', ')}`);
-    if (!key) die(`  fabius keys set ${provider} <key>`);
+    if (positionalSecret || extra.length) die('  secrets are never accepted in argv; run `fabius keys set <provider>` and enter it privately');
+    const key = await readSecret(`  ${provider === 'ollama' ? 'endpoint' : 'key'}: `);
+    if (!key) die('  no value received');
     saveConfig({ keys: { [provider]: key } });
     return say(`  stored ${provider} in ${paint('dim', HOME + '/config.json')} ${paint('dim', '(0600)')}`);
   }
-  die('  fabius keys set <provider> <key>   |   fabius keys list');
+  die('  fabius keys set <provider>   |   fabius keys list');
 }
 
 async function cmdListen(flags) {
@@ -330,11 +363,19 @@ function cmdWhoami() {
   say('');
 }
 
-// ── entry ───────────────────────────────────────────────────────────────────────
-const { flags, positional } = parseArgs(process.argv.slice(2));
-const cmd = positional.shift();
-
 try {
+  const { flags, positional } = parseArgs(process.argv.slice(2));
+  if (flags.version) {
+    if (positional.length) throw new Error('--version cannot be combined with a command');
+    say(VERSION);
+    process.exit(0);
+  }
+  if (flags.help) {
+    say(HELP);
+    process.exit(0);
+  }
+  const cmd = positional.shift();
+  validateCommandFlags(cmd, flags);
   switch (cmd) {
     case 'run': await cmdRun(positional, flags); break;
     case 'chat': await cmdChat(flags); break;
@@ -344,12 +385,12 @@ try {
     case 'listen': await cmdListen(flags); break;
     case 'send': await cmdSend(positional); break;
     case 'whoami': cmdWhoami(); break;
-    case 'keys': cmdKeys(positional); break;
+    case 'keys': await cmdKeys(positional); break;
     case 'doctor': cmdDoctor(); break;
     case 'version': case '--version': say(VERSION); break;
     case undefined: case 'help': case '--help': case '-h': say(HELP); break;
     default: say(HELP); die(`  unknown command "${cmd}"`);
   }
 } catch (e) {
-  die('  ' + redact(String(e?.stack || e?.message || e)));
+  die('  ' + redact(String(e?.message || e)));
 }
