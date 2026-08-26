@@ -1,12 +1,13 @@
 fabius — sealed provenance record
 author:       Ariel Shemesh <arielshemesh1999@gmail.com>
 repository:   github.com/shear559/fabius
-sealed (UTC): 2026-08-24T20:01:21Z
-commit:       066cabc7d1fc637c59fb739f125d9021ad12ae31
-tree:         f3892eff079268bed187e44ba9a209883cde309a
+sealed (UTC): 2026-08-26T12:45:05Z
+commit:       35fd0388110c9a8aa4fd36c43a6bca7eecbc215d
+tree:         05267a9d3b23d1cff96a65e780e43de10af56e47
 object-format: sha1 (git) · the .ots anchor over this file is sha256
 fingerprint:  fab1-6bbf82d118bce2cee9d7ac71f034fa26
 
-This file's SHA-256 is anchored to the Bitcoin blockchain via the adjacent
-.ots proof. The commit hash above Merkle-commits every tracked file in the
-sealed release. Verify with:  bash provenance/verify.sh
+This file's SHA-256 has a detached OpenTimestamps proof in the adjacent .ots
+file. A fresh proof begins pending and is Bitcoin-confirmed only when trusted
+verification succeeds. The commit hash above Merkle-commits every tracked file
+in the sealed release. Verify with:  bash provenance/verify.sh
