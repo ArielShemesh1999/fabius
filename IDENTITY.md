@@ -13,7 +13,7 @@ fabius is an **intelligence amplification layer** — an agentic control layer t
 
 It does not change model weights. It changes **behavior, process, and execution** — it helps a model find, organize, and apply capabilities it already has but does not naturally deploy. Latent capability → practical capability.
 
-Concretely, fabius provides: reusable skills · workflows · heuristics · operational patterns · validation systems · execution strategies · memory practices · planning approaches · optimization mechanisms. Fifteen coordinated, zero-overlap layers ([ARCHITECTURE.md](ARCHITECTURE.md)), one stance: **scout wide, strike narrow.**
+Concretely, fabius provides: reusable skills · workflows · heuristics · operational patterns · validation systems · execution strategies · memory practices · planning approaches · optimization mechanisms. Fifteen coordinated, zero-overlap public layers ([ARCHITECTURE.md](ARCHITECTURE.md)); deeper bundled source material is reference data, not a second skill surface. One stance: **scout wide, strike narrow.**
 
 ## Core objective
 
@@ -55,7 +55,7 @@ Same model, same task, fresh context, no context leakage. Only the orchestration
 |---|---|
 | **BASE** | the bare model — no fabius, no skills, no memory |
 | **FAB** | the same model + the fabius stance and the routed skill contract, shipped files verbatim — no persistent memory |
-| **FAB_MEMORY** | FAB + persistent memory enabled — knowledge reuse, retrieval, lesson recall (`fabius-archivum`) |
+| **FAB_MEMORY** | FAB + policy-permitted persistent recall (`fabius-archivum`); fresh-eyes routes still suppress it |
 
 If outcomes improve while waste decreases as you move BASE → FAB → FAB_MEMORY, fabius is succeeding.
 
@@ -63,7 +63,7 @@ If outcomes improve while waste decreases as you move BASE → FAB → FAB_MEMOR
 
 Output quality · instruction obedience · scope control · token efficiency · hallucination reduction · skill utilization · capability amplification · tool discipline · memory usage · security preservation · error recovery · agent coordination · task-completion reliability.
 
-The executable form of this contract is the **Fabius Benchmark Suite** (`FBS v1`) — 100 neutral tasks in three tiers across ten categories, a fixed 0–4 rubric on seven dimensions, versioned and reproducible: [`evals/suite/`](evals/suite/). Measured results live in [BENCHMARKS.md](BENCHMARKS.md); nothing there is estimated.
+The executable form of this contract is the **Fabius Benchmark Suite** (`FBS v1`) — 100 neutral tasks in three tiers across ten categories, a fixed 0–4 rubric on seven dimensions, and three controlled modes: [`evals/suite/`](evals/suite/). [BENCHMARKS.md](BENCHMARKS.md) labels executed checks, model-graded checklist scores, committed receipts, and replay limitations separately; an uncommitted artifact is not called reproducible.
 
 ## Success definition
 

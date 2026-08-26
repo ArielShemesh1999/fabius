@@ -19,7 +19,7 @@ A premium Swiss-editorial user research template for narrative-heavy live artifa
 
 ```text
 swiss-user-research-video-template/
-├── SKILL.md
+├── REFERENCE.md
 ├── assets/
 │   └── template.html
 ├── references/

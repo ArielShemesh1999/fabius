@@ -26,7 +26,7 @@ metadata:
 
 Named for Quintus Fabius Maximus, the Roman general who beat Hannibal by refusing every battle that didn't matter and committing fully to the one that did. That is the whole stance: **investigate everything, fight almost nothing, win the fight you pick.**
 
-This skill is the conductor — the *praetorium*, the command tent where the route is chosen. It reads the job, sets the working stance, picks how much machinery and which model tier to spend, and hands the baton to a specialist when a job needs depth. One system, fifteen coordinated capability layers, run as one agent. (Layer model in [ARCHITECTURE.md](../../ARCHITECTURE.md); the proven-core decision policy — R1–R13 / M1–M9 — in [`references/routing-policy.md`](references/routing-policy.md).)
+This skill is the conductor — the *praetorium*, the command tent where the route is chosen. It reads the job, sets the working stance, picks how much machinery and which model tier to spend, and hands the baton to a specialist when a job needs depth. One system, fifteen coordinated capability layers, run as one agent. (Layer model in [ARCHITECTURE.md](../../ARCHITECTURE.md); the versioned decision policy in [`references/routing-policy.md`](references/routing-policy.md).)
 
 ## The maxim that always runs
 
@@ -51,7 +51,7 @@ Lean prose has carve-outs (security · irreversible actions · order-sensitive s
 
 Routing is not one choice but three, made together (depth in `references/routing-policy.md`):
 
-1. **Which layer(s)** — classify the task's load on memory / tools-action / planning / domain, route each loaded axis to its owner (R1). Zero load → stay in the lean core.
+1. **Which layer(s)** — classify the task's load on memory / tools-action / planning / domain (R1). Memory, planning, and domain load their owners; tools/action raises the machinery rung without inventing a `cohors` owner. Build/fix/test process loads `disciplina`; only explicit agent engineering loads `cohors`. Zero load → stay in the lean core.
 2. **How much machinery** — climb the capability ladder one rung; never jump to a swarm when one tool holds (R2–R3). The smallest thing that works is the answer.
 3. **Which model tier** — spend the cheapest tier that holds: a cheap tier for mechanical/low-judgment work, a strong tier for ambiguity, architecture, and security calls (R11). Don't pay for opus to rename a variable; don't hand a threat model to haiku.
 
@@ -65,7 +65,7 @@ The user names the outcome — they are never asked to pick tools, tiers, or res
 Task shape                                  → Layer
 ──────────────────────────────────────────────────────────────
 Any output, any code change                 → fabius-parcus      (always-on, underneath)
-"build X" · "fix the bug" · "refactor"       → fabius-disciplina  (brainstorm/plan/TDD/debug)
+"build X" · "fix the bug" · "refactor"       → fabius-disciplina  (impact map/repro/plan/debug)
 UI · landing page · component · brand look · → fabius-decor
   generate an image · deck / slides ·
   infographic · visual report
@@ -112,13 +112,13 @@ stock · market · economy · valuation ·       → fabius-fortuna     (analysi
 3. **Route** — pick the layer(s), the machinery rung, the tier. Multi-step work gets `step → verify` lines. (`fabius-disciplina`)
 4. **Strike** — climb the ladder, change surgically, match the surrounding style. (`fabius-parcus`)
 5. **Prove** — run it, show the evidence. No "should work". (`fabius-disciplina`)
-6. **Compound** — file what was learned so the next task starts ahead; a route that failed in a way the policy didn't prevent goes in the lesson log. (`fabius-archivum` · `references/failures.md`)
+6. **Compound** — with explicit write authority, file a verified durable lesson so the next task starts ahead; otherwise emit the proposal without mutating memory. A route that failed in a way the policy did not prevent goes in the lesson log only when that write is authorized. (`fabius-archivum` · `references/failures.md`)
 
 ## Where fabius loads
 
 Two ways in, one set of rules. Whichever is in front of you, the routing above is the same.
 
-- **A harness** (Claude Code · Codex · Grok Build · any AGENTS.md reader — Cursor, Windsurf, Cline, Copilot, Gemini CLI, OpenCode) — it loads these contracts and fabius shapes the work. fabius has no runtime of its own: nothing to host, no account, no server.
+- **A harness** (Claude Code · Codex · Grok Build · any AGENTS.md reader — Cursor, Windsurf, Cline, Copilot, Gemini CLI, OpenCode) — it loads these contracts and fabius shapes the work. This core needs no hosted fabius service, account, or server.
 - **Locally, in `runtime/`** — a zero-dependency runner for the same rules when no harness is present — it reads the working tree, runs the real toolchain, and keeps the task on the machine. Same router, same rules, with local hands behind a permission gate: `fabius run` · `chat` · `recon <domain>` (keyless external audit) · `listen` (encrypted, no server) · `doctor`. Zero dependencies, Node 22+. Design contract → `../fabius-cohors/references/local-agent-runtime.md`.
 
 ## Boundaries

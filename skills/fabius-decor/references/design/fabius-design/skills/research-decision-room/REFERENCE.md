@@ -20,7 +20,7 @@ Produce a single-page HTML decision artifact that turns messy evidence into a cl
 
 ```text
 research-decision-room/
-├── SKILL.md
+├── REFERENCE.md
 ├── example.html
 └── references/
     ├── checklist.md

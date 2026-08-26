@@ -17,7 +17,7 @@ A premium three-slide live-artifact template for data storytelling in a Swiss gr
 
 ```text
 digits-fintech-swiss-template/
-├── SKILL.md
+├── REFERENCE.md
 ├── assets/
 │   └── template.html
 ├── references/

@@ -22,7 +22,7 @@ keywords, and a reading persona into a shareable 9:16 video.
 
 ```text
 weread-year-in-review-video-template/
-├── SKILL.md
+├── REFERENCE.md
 ├── assets/
 │   ├── template.html
 │   └── default-showcase.mp4

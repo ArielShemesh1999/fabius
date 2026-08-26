@@ -20,6 +20,10 @@ Five keys, each earning its bytes:
 
 Everything else the body can say, the body says — frontmatter is the part every harness parses on *every* discovery scan, so it stays byte-minimal.
 
+## Discovery boundary — fifteen contracts, no nested skills
+
+Only `skills/<contract>/SKILL.md` is a public plugin skill. Any vendored or supporting instruction below a contract — even when its upstream project called it a skill — is stored as `REFERENCE.md` and paged explicitly through the owning root contract. Do not rely on `.gitignore` or an index omission to hide a nested `SKILL.md`: recursive scanners still discover it. The structural gate must compare the manifest against the **recursive** `SKILL.md` set and fail on any nested file.
+
 ## Per-harness field matrix — 2026-07 snapshot
 
 | Harness | Behavior |

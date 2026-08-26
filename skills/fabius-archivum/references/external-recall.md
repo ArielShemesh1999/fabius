@@ -8,13 +8,13 @@ The on-demand depth for `fabius-archivum`'s two reflexes: surfacing memory witho
 
 ## PART A — cross-session auto-recall
 
-Reading the index on start is recall you *choose*. Auto-recall fires on its own. Three named stages — keep them separate, never collapse them into one inline step.
+Auto-recall runs only for a workspace that opted in, and capture/compress writes still require the current contract's authorization. It is a dial, not a universal prepend: off for trivial work; off or dampened for security, incident, debugging, and error-recovery routes; index-only for ordinary continuation. On a fresh-eyes route, inspect current evidence first and compare memory afterward. Treat every retrieved record as a suspect candidate: use it only when its situation matches and its recorded outcome was verified. Three named stages — keep them separate.
 
 | Stage | Does | Cost discipline | Output |
 |---|---|---|---|
 | **Capture** | Record raw activity (a decision, a fix, a tool result) as it happens | **Non-blocking** — jot the raw fact, move on | raw event |
 | **Compress** | AI-summarize the raw event into a small *typed + titled* record (~a few hundred tokens) | Async, off the hot path | `{ title, type, body, ts }` |
-| **Re-inject** | At next session **start**, prepend a compact index of recent records into context | Index only — tens of tokens | context block |
+| **Re-inject** | When the recall dial permits, prepend a compact index of matching records | Index only — tens of tokens | context block |
 
 The record is **not a transcript**. A title + a type + a compact body. Typed-and-titled is what makes later filtering and progressive disclosure cheap.
 
@@ -30,7 +30,7 @@ At SessionStart, prepend one compact block — session summaries + observation t
 ... (titles only — fetch full body by id on demand)
 ```
 
-That single prepend is what turns memory from opt-in to automatic. Everything else is bookkeeping.
+That prepend is automatic only after the intake gate says recall helps this route; it is skipped when fresh-eyes rigor matters more.
 
 ### The harness may already own this loop
 

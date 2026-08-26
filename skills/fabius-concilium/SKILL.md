@@ -2,14 +2,14 @@
 name: fabius-concilium
 description: >
   fabius's cross-model deliberation layer — convene a COUNCIL of heterogeneous models on ONE
-  question, then aggregate their answers into a single better one: each model answers
-  independently (first opinions) → each ranks the others' answers blind, with identities stripped
-  (anonymized peer-review) → a chairman model synthesizes the ranked field into the final answer.
-  This is ensemble epistemics — it spends model diversity to cut the single-model error and bias a
-  lone answer carries. Use when the user says "council" / "llm-council" / "ask several models" /
+  question, then aggregate their answers into one evidence-aware synthesis: each model answers
+  independently (first opinions) → each ranks ALL anonymized answers blind, its own included, while
+  the backend removes its self-score (anonymized peer-review) → a chairman synthesizes the field.
+  This is ensemble epistemics — it uses model diversity to expose possible single-model error and
+  bias; whether it improves an answer must be measured for the task. Use when the user says "council" / "llm-council" / "ask several models" /
   "panel of models", or when a high-stakes question has already survived N samples of the single
   strongest model and they failed the SAME way — correlated error, not mere disagreement, is what
-  earns the N+N+1 calls (M10). Distinct from fabius-cohors (which splits the WORK across
+  earns at most 3N+1 completion calls including retries (M10). Distinct from fabius-cohors (which splits the WORK across
   task-specialist agents); concilium aggregates one ANSWER across whole models.
 when_to_use: >
   "get a second opinion from other models", "cross-check this answer", "have the models vote",
@@ -22,11 +22,11 @@ metadata:
 
 # Fabius Concilium — convene the council, synthesize one answer
 
-*Concilium* — the summoned assembly, the council called to deliberate before the decision is taken. fabius's whole identity is *one set of rules above every model*; concilium is the layer that turns that into an epistemic advantage — instead of routing a question to the single best model, it seats several, lets them answer and judge each other blind, and has a chairman fuse the field. The product is one answer that is more accurate and less idiosyncratic than any single seat produced. Patterned on karpathy's *llm-council*.
+*Concilium* — the summoned assembly, the council called to deliberate before the decision is taken. fabius's whole identity is *one set of rules above every model*; concilium seats several models, lets them answer and judge each other blind, and has a chairman fuse the field. Its aim is to expose disagreement and reduce idiosyncratic error; it does not guarantee superiority over the best single seat, so measure that on the task. Patterned on karpathy's *llm-council*.
 
 ## The lean gate first — does this need a council at all? (`fabius-parcus`)
 
-A council is the **heaviest** thing in this whole system on cost and latency: **N + N + 1** model calls (N first opinions, N reviews, one chairman) where a single strike is one call. So the question comes before the council does:
+A council is the **heaviest** thing in this whole system on cost and latency. With N configured seats, M surviving first opinions, and R malformed-ballot retries, it makes exactly **N + M + R + 1** completion calls: N first-opinion attempts, M initial reviews, R retries, and one chairman. Because `0 ≤ M ≤ N` and `0 ≤ R ≤ M`, reserve at most **3N + 1** calls; the clean all-live/no-retry path is `2N + 1`. So the question comes before the council does:
 
 - **Convene when** the answer is high-stakes and a wrong one is expensive (a design/architecture call, a medical/legal/financial *analysis*, a contested factual claim, a research synthesis) **and** rung one below has already failed the *same* way, **or** the user explicitly asks for a panel.
 - **Don't convene when** the task is mechanical, has one correct answer a single model reliably gets (arithmetic, a rename, boilerplate), is latency-sensitive, or when *one strong model + an independent verifier* (`fabius-disciplina`) already covers the risk. A council is not a substitute for running the code.
@@ -41,7 +41,7 @@ Rung one is **self-samples of the strongest seat**, not a panel: N samples of on
 
 ## Seating the council
 
-- **Set the admission bar before the seating chart.** A council's accuracy tracks the **average quality of its seats** far harder than it tracks their variety, and a seat admitted for provider spread alone drags the aggregate down faster than its disagreement lifts it. The bar: every seat must be a model you would have been willing to ask *alone* for this question. Mixing pays only among near-equals, and there by fractions of a point — buying diversity below the bar measurably loses (M10). If only one model clears the bar, don't pad the table: that *is* rung one — sample that model N times and aggregate its own answers.
+- **Set the admission bar before the seating chart.** A weak seat can lower the aggregate even when it adds provider variety. Every seat must be a model you would have been willing to ask *alone* for this question, and the roster must be evaluated on the target task. If only one model clears the bar, don't pad the table: that *is* rung one — sample that model N times and aggregate its own answers.
 - **Then pull diversity across providers**, not three checkpoints of one family — Claude · GPT · Gemini · DeepSeek · Mistral · Grok and the rest of the field fabius already runs above. Cross-provider disagreement is what the panel is buying — but only from seats that already cleared the bar; same-family seats correlate and waste the spend.
 - **3–5 seats** is the working band. Two can't break a tie; past five, cost climbs and rankings flatten. Odd counts ease tie-breaks.
 - **The chairman is a strong-tier model** (it does the hardest reasoning — the merge) and **may be a seat** or a separate model; `fabius` (R11) picks the tier. Seats all sit at **one** tier and only the chair may sit above it — never mix capability tiers inside the pool, and never seat a weaker model for *diversity* (M10).
@@ -49,7 +49,7 @@ Rung one is **self-samples of the strongest seat**, not a panel: N samples of on
 
 ## Aggregation — how rankings become an order
 
-- Convert each reviewer's ranking to points (e.g. Borda: top of K seats scores K−1, next K−2, … last 0), **sum across reviewers**, present the leaderboard. A model **never ranks its own** answer (it can't see which is its own — that's what anonymization buys, but exclude-self on the back end too).
+- Convert each reviewer's ranking to points (e.g. Borda: top of K seats scores K−1, next K−2, … last 0), **sum across reviewers**, present the leaderboard. Every model ranks **all K anonymized answers exactly once, its own included** because it cannot reliably identify itself; after de-shuffling, the backend discards the score in its self-slot so no seat can lift itself.
 - The leaderboard **informs** the chairman; it does not *override* it. Majority-wrong is a real failure mode — if four weak seats converge on a plausible error and one strong seat is right, a pure vote loses. The chairman's job is to catch that, which is why the chair reasons over the *content*, not just the tally.
 - **Ties / near-ties** → hand both to the chairman as a live disagreement to resolve, don't coin-flip.
 
@@ -64,19 +64,19 @@ Rung one is **self-samples of the strongest seat**, not a panel: N samples of on
 
 ## Single-owner boundary
 
-concilium owns exactly one concern: **cross-model deliberation — convening whole models on one question and aggregating their answers into a better single answer.** It is not the others:
+concilium owns exactly one concern: **cross-model deliberation — convening whole models on one question and aggregating their answers into one synthesized answer.** It is not the others:
 
 - **`fabius-cohors`** splits the *work* across task-specialist agents (architect / coder / reviewer), each a different role on a different slice, then merges sub-results. concilium runs the *same* question through whole *models* and merges *answers*. cohors' "parallel fan-out → reduce" is the mechanical cousin; the difference is division-of-labor vs aggregation-of-judgment. A council member is not an agent with tools and a role — it's a model giving an opinion.
 - **`fabius-doctrina`** owns LLM-evaluation rigor (held-out sets, blind judges, regression gates). concilium *borrows* the blind-judge discipline for stage 2 and points at doctrina for why it's honest; it doesn't own evaluation.
-- **`fabius-disciplina`** still owns proving. A council produces a better *answer*; disciplina turns "answer" into "verified".
+- **`fabius-disciplina`** still owns proving. A council produces a synthesized *answer*; disciplina turns "answer" into "verified".
 - **`fabius`** (router) picks which seats and which tiers; **`fabius-parcus`** owns the gate above (convene at all?).
 
 ## Output contract
 
-A council run returns, in order: **(1)** the seats + chairman named; **(2)** each first opinion (tabbed/collapsible, one per seat); **(3)** the anonymized ranking leaderboard with per-reviewer reasons; **(4)** the chairman's synthesized final answer, with the disagreements it had to resolve called out. The final answer leads when the user wants the result; the rest stays one expand away (progressive disclosure).
+A council run returns, in order: **(1)** the seats + chairman named; **(2)** exact call accounting (configured/live seats, retries, actual, cap); **(3)** each first opinion (tabbed/collapsible, one per seat); **(4)** the anonymized ranking leaderboard with per-reviewer reasons; **(5)** the chairman's synthesized final answer, with the disagreements it had to resolve called out. The final answer leads when the user wants the result; the rest stays one expand away (progressive disclosure).
 
 ## Run it
 
-The exact stage prompts, the anonymization + shuffling scheme, the Borda aggregation, the de-anonymization-for-chair step, and a **zero-dependency runnable reference** — `references/council.mjs` (Node ≥18, every model through one OpenRouter key; `node references/council.mjs --selftest` checks the wiring with no key, no cost) — are in [`references/council-protocol.md`](references/council-protocol.md). The live tier is one API key the user configures; the protocol, prompts, and aggregation are pure.
+The exact stage prompts, strict ballot schema, retry/drop policy, roster preflight, Borda aggregation, and a **zero-dependency runnable reference** — `references/council.mjs` (Node ≥18, every model through one OpenRouter key; `node references/council.mjs --selftest` checks the wiring with no key, no cost) — are in [`references/council-protocol.md`](references/council-protocol.md). The live tier is one API key the user configures; the protocol, prompts, and aggregation are pure.
 
 Pairs with: `fabius-parcus` (the convene-at-all gate), `fabius` (seat + tier selection), `fabius-doctrina` (the blind-judge discipline it borrows), `fabius-cohors` (the orchestration cousin it's distinct from), `fabius-disciplina` (prove the final answer, don't just trust the consensus).

@@ -103,7 +103,16 @@ Split by configuration: **search / validate / template / docs need no API.** CRU
 
 Run autofix in **preview** (`applyFixes: false`) *before* the verify pass, never after: it rewrites expression formats, typeVersions, error outputs, webhook paths and node types, and you want to read that diff rather than inherit it. `n8n_test_workflow` makes gate four mechanical — it auto-detects the trigger kind (webhook / form / chat) — so a first real run in production is no longer an excuse, and `n8n_workflow_versions` is the rollback that makes a bad surgical edit cheap.
 
-**The first-party bridge covers the same gates under different names.** n8n's built-in instance-level MCP server maps: discovery → `search_nodes` / `get_node_types` / `explore_node_resources`; checking → `validate_node_config` / `validate_workflow`; build → `create_workflow_from_code`; edit → `update_workflow`; test → `test_workflow` + `prepare_test_pin_data`; activate → `publish_workflow` / `unpublish_workflow`; forensics → `get_execution` / `search_executions`; state → the data-table tools. It ships in every edition and authenticates by OAuth or a personal MCP access token rather than the public API key; each workflow must be opted into MCP individually, and self-hosted can shut the whole surface off with `N8N_DISABLED_MODULES=mcp`. Take it when the instance is current; take `n8n-mcp` when you need community-node coverage, autofix, or discovery with no instance at all.
+**The first-party bridge is version-gated.** Check the installed n8n version before promising a tool or access path:
+
+| Version floor | First-party instance-level MCP capability |
+|---|---|
+| **2.13.0** | build and edit workflows |
+| **2.24.0** | project and folder access |
+| **2.33.0** | per-client connection UI and callback controls |
+| **2.36.0** | rolling optional auto-expose-new-workflows setting, **off by default** |
+
+Individual workflow opt-in remains the default path, but is not the only path when a 2.36.0+ instance has auto-expose enabled. OAuth is recommended; a personal access token is supported. The bridge maps discovery → `search_nodes` / `get_node_types` / `explore_node_resources`; checking → `validate_node_config` / `validate_workflow`; build → `create_workflow_from_code`; edit → `update_workflow`; test → `test_workflow` + `prepare_test_pin_data`; activate → `publish_workflow` / `unpublish_workflow`; forensics → `get_execution` / `search_executions`; state → data-table tools. Self-hosted can disable the surface with `N8N_DISABLED_MODULES=mcp`. Take `n8n-mcp` for community-node coverage, autofix, or discovery with no instance. Source: [n8n's first-party MCP documentation](https://docs.n8n.io/connect/connect-to-n8n-mcp-server/) (checked 2026-08-26).
 
 ## The silent-failure catalog (n8n) — fail with NO error, just wrong data
 

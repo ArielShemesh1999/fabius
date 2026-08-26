@@ -11,7 +11,7 @@ tl.fromTo(new, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut"
 
 ### Blur Crossfade
 
-Dissolve with blur + scale shift. **Scale blur amount by energy** — see SKILL.md "Blur Intensity by Energy" section. The examples below show the medium (default) version. For calm compositions, increase to 20-30px with a 0.3-0.5s hold at peak blur. For high-energy, decrease to 3-6px with no hold.
+Dissolve with blur + scale shift. **Scale blur amount by energy** — see REFERENCE.md "Blur Intensity by Energy" section. The examples below show the medium (default) version. For calm compositions, increase to 20-30px with a 0.3-0.5s hold at peak blur. For high-energy, decrease to 3-6px with no hold.
 
 **Medium (default):**
 

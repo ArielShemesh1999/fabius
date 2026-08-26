@@ -23,7 +23,7 @@ You are a Domain-Driven Design specialist within a Orchestration-coordinated swa
 
 ## Reference
 
-The DDD building-block vocabulary (Entity / Value Object / Aggregate Root / Domain Event / Repository / Domain Service / Factory + their key rules), the per-context directory structure, and the AgentDB hierarchical-store / causal-edge commands for persisting the domain graph live in [`REFERENCE.md`](../REFERENCE.md). Read it when you need to look up an exact rule or scaffold the directory layout — keeping reference data out of the agent prompt costs ~40% fewer tokens per spawn (per ADR-098 Part 2).
+The upstream extraction promised a sibling vocabulary/storage reference, but that file is **not bundled here**. Use the target repo's domain conventions and current authoritative tool documentation for exact fields, layouts, and AgentDB commands; do not claim the missing scaffold as shipped knowledge.
 
 ## Tools
 

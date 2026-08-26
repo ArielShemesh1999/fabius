@@ -2,6 +2,8 @@
 
 Loaded on demand by `fabius-archivum`. The skill has the loop; this file has the concrete directory schema, the page conventions, and the line formats for the two navigation files.
 
+**Write authorization precedes this schema.** Create or mutate these files only when the workspace opted into Archivum memory and the current request/contract authorizes the write. A read-only query returns a proposed record/diff instead. Preserve history: append log/decision events and supersede stale records; delete only a recoverable, unambiguous duplicate created in the current run.
+
 ## Directory schema
 
 ```
@@ -43,7 +45,7 @@ Read the index before reading any page. Index-based retrieval scales to hundreds
 ```
 2026-06-21 INGEST  added entities/vector-index.md; revised concepts/retrieval.md
 2026-06-21 QUERY   "how does X scale" → filed syntheses/x-scaling.md
-2026-06-21 LINT    removed 2 orphans; fixed 3 stale claims
+2026-06-21 LINT    archived 2 duplicate orphans; superseded 3 stale claims
 ```
 
 One prefix per operation (INGEST / QUERY / LINT), one line per event. Grep the log to reconstruct what happened and when, with no tooling beyond `grep` and `tail`.
@@ -59,11 +61,11 @@ Symbolic-first keeps the dense search cheap and the results scoped; pure vector 
 
 ## Why maintenance stays near zero
 
-The agent does the bookkeeping — summarize the source, cross-reference the touched pages, file the answer back, lint for contradictions. The human only curates which sources come in and asks the questions. That division is the whole point: the knowledge base is the agent's job, not the human's chore.
+Inside an authorized, opted-in store, the agent does the bookkeeping — summarize, cross-reference, file back, and lint. Outside it, offer the record without mutation.
 
-## Per-project autonomous memory (the cross-session contract)
+## Per-project opted-in memory (the cross-session contract)
 
-For a working project (a code repo, a client engagement), the memory lives *with the project* and fabius tends it on its own:
+For a project that opted in, memory lives *with the project* and fabius tends it within the authorized contract:
 
 ```
 <project>/
@@ -77,7 +79,7 @@ For a working project (a code repo, a client engagement), the memory lives *with
 
 Small project → collapse `wiki/` into a flat folder beside `MEMORY.md`. Don't build the tree before the pages exist.
 
-### `MEMORY.md` template (scaffold this on a fresh project)
+### `MEMORY.md` template (scaffold only after opt-in)
 
 ```markdown
 # <Project> — memory
@@ -95,12 +97,12 @@ Small project → collapse `wiki/` into a flat folder beside `MEMORY.md`. Don't 
 - [Log](wiki/log.md) — chronological
 ```
 
-### The autonomous loop, applied to a project
+### The authorized loop, applied to a project
 
-1. **Session start** — read `MEMORY.md`. It exists? Start from it, don't re-derive. It doesn't? Scaffold the template above (one file), keep working.
-2. **On a milestone** — a decision made, a bug rooted out, an integration wired, a goal reached: write/update the page, append one `log.md` line. No prompt needed.
-3. **Session end** — refresh `Goal now` + `Open threads` so the next session opens mid-stride.
-4. **Periodic lint** — fold contradictions, drop stale claims, link orphans (the `LINT` operation above).
+1. **Session start** — if the index exists and the recall dial permits, read it. If absent, offer setup once; do not scaffold implicitly.
+2. **On a milestone** — when ongoing memory writes are authorized, update current state and append one `log.md` line. Supersede old decisions; never erase their reason or event history.
+3. **Session end** — under the same authorization, refresh `Goal now` + `Open threads` so the next session opens mid-stride.
+4. **Periodic lint** — link orphans, mark contradictions, and supersede stale claims; do not silently rewrite history.
 
 ### Three session-memory hygiene rules
 

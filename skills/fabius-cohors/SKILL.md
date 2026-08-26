@@ -6,8 +6,8 @@ description: >
   patterns (sequential / parallel / hierarchical / human-in-the-loop / swarm). Use when the user wants to
   build an agent, a subagent, a tool-using assistant, a multi-agent system, a swarm, or an
   orchestration workflow. A copy-from schema and proven agent shapes live in
-  references/agent-patterns.md; the full production agent catalog (200+ agents across 17 domains
-  + Python/Go/Java/Kotlin/Android/TypeScript packs, with a fabius-vec.db memory index) lives in
+  references/agent-patterns.md; the full agent reference catalog (200+ agents across 17 domains
+  + Python/Go/Java/Kotlin/Android/TypeScript packs, with an archived fabius-vec.db artifact) lives in
   references/agents/, indexed by references/agent-catalog.md. (Deterministic service-to-service
   wiring — n8n/Zapier-class "build a workflow" — is fabius-machina, not here.)
 when_to_use: >
@@ -85,7 +85,7 @@ When the work is too big for one context window **and** splits into many paralle
 
 - **Coordinator** — decomposes the goal into a shared task list, assigns each task to the right specialist, integrates results, reassigns stalled work. Owns the plan; writes no code itself.
 - **A small, specialized team** — each worker gets ONE non-overlapping role: `architect` (contracts + boundaries first), `coder` (implements one slice), `reviewer` (independent — didn't write it), `researcher` (locates prior art). Keep it **6–8 workers max** — past that, coordination cost eats the parallelism.
-- **Shared memory** — workers don't re-derive each other's context: the coordinator files the spec and decisions into a `fabius-archivum` memory namespace; each worker reads it before starting and writes its result back. The wiki is the shared blackboard.
+- **Shared memory** — when the run has authorized a `fabius-archivum` namespace, the coordinator files the spec and decisions; each worker reads it before starting and writes its result back. The wiki is the shared blackboard.
 - **Isolation for parallel writes** — when workers edit files at once, give each its own git **worktree** so they don't collide; merge on completion. Read-only fan-out needs no isolation.
 
 **Run it with the native tools — nothing to install:**
@@ -107,7 +107,7 @@ Still lean: if the task list is short and serial, it's a pipeline, not a swarm. 
 
 - **Adversarial verify** — for a finding or a claim, spawn an independent skeptic prompted to *refute* it. Majority-refute kills it. This is what stops plausible-but-wrong output from surviving.
 
-More shapes — grounded/cited RAG, a safety guard that screens for prompt injection before execution, cross-session memory, an eval harness that scores skill-vs-baseline — are in `references/agent-patterns.md`. The full catalog of production agents to copy and adapt (by domain and by language) is in `references/agents/`; start from `references/agent-catalog.md`. Grounding and memory lean on `fabius-archivum`. The operational tier — scoring an agent on a ground-truth benchmark, surviving long-horizon runs (checkpoint + dual exit gate), acquiring tools via MCP at least privilege, and sandboxing agent-written code — is in `references/agent-evaluation-and-durability.md`. The framework + tool-caller map — agent frameworks per orchestration pattern, the function-calling eval (BFCL / τ²), and open tool-callers with the Llama-community-license trap flagged → `references/agent-frameworks.md`.
+More shapes — grounded/cited RAG, a safety guard that screens for prompt injection before execution, cross-session memory, an eval harness that scores skill-vs-baseline — are in `references/agent-patterns.md`. The full catalog of agent references to copy and adapt (by domain and language) is in `references/agents/`; start from `references/agent-catalog.md`. Grounding and memory lean on `fabius-archivum`. The operational tier — scoring an agent on a ground-truth benchmark, surviving long-horizon runs (checkpoint + dual exit gate), acquiring tools via MCP at least privilege, and sandboxing agent-written code — is in `references/agent-evaluation-and-durability.md`. The framework + tool-caller map — agent frameworks per orchestration pattern, the function-calling eval (BFCL / τ²), and open tool-callers with the Llama-community-license trap flagged → `references/agent-frameworks.md`.
 
 **Running an agent on the user's own machine** is a different design: the blast radius stops being a container and becomes their laptop. Capability-per-tool over a working-directory jail (symlink-resolved) and an unconditional secret deny-list; read-only default, acting opt-in, autonomy a second flag — with irreversible actions (`git push`, `--prod`, `rm -rf`, `sudo`) held even under autonomy; no TTY means an approval prompt DENIES rather than hangs; the model call is injectable so the whole loop tests with no key; verification runs the artifact locally and a non-zero exit overrules the judge; a money wall beside the step wall. Also how the agent is REACHED — the three channel-ownership models and the allow-list/opt-in-acting/untrusted-inbound rules → `references/local-agent-runtime.md`. Working implementation: `runtime/` in this repository.
 

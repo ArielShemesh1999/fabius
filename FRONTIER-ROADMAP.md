@@ -1,6 +1,6 @@
 # synapse (on the fabius rules) → frontier agent — roadmap
 
-> Scope note: fabius is a plugin — one set of rules above every model, with no runtime of its own. The console features recorded below were built in the separate synapse project (not part of fabius) and are kept here only as design history for the rules.
+> Scope note: fabius is a plugin — one set of rules above every model. Its core needs no runtime; the repository now also ships an optional local CLI. The console features recorded below were built in the separate synapse project (not part of fabius) and are kept here only as design history for the rules.
 
 *Research-backed plan to take an agent running the fabius rules from "disciplined advisor" to a frontier-class autonomous operator (built in the separate synapse project) in the league of Manus, OpenAI (Operator/CUA + Agents SDK), and Nous Hermes. Synthesized from a 7-agent research sweep (2026-06-26) and an adversarial feasibility review. Honest by design — fabius's own ethos is "structure beats brevity, measured."*
 
@@ -82,7 +82,7 @@ Not raw capability — **trust**. Items 1, 3 and 5 are mechanics of the separate
 1. **Auditability** — the dispatch decision is inspectable, and the synapse project shows it can be called **token-free** before spend. No competitor exposes this.
 2. **Multi-model freedom** — one set of rules above every model, incl. open-weights (the separate synapse project's own gateway spans 5 providers), for owner-controlled, neutral-aligned, self-hostable runs. Manus/OpenAI are locked to their own brain; Hermes has no product.
 3. **Verification honesty** — in the synapse project, once Phase 1 lands, memory gates on whether code actually *ran*, vs the frontier's documented "confident hallucination."
-4. **Provenance** — content-bound SSH + Bitcoin-anchored seal on skills (and, later, run transcripts): authenticated, owner-attributed agent work. Unique.
+4. **Provenance** — content-bound SSH signature + OpenTimestamps proof on skills (and, later, run transcripts), with pending/confirmed state reported rather than assumed: authenticated, owner-attributed agent work.
 5. **Disciplined cost** — cheapest-tier-that-holds (a fabius rule) + the synapse project's per-run caps, vs Manus's prefill-heavy ~100:1 unpredictable-credit loop.
 
 Where it only reaches **parity** (no hand-waving): CodeAct, web tools, MCP, sub-agents, computer-use — all ride the same external tech as everyone. Raw model IQ is **not** a fabius lever. The edge is entirely harness + discipline + control, and it isn't real until the Phase 2 eval numbers publish.
@@ -97,4 +97,4 @@ Where it only reaches **parity** (no hand-waving): CodeAct, web tools, MCP, sub-
 - **Provider/model drift** — the `PROVIDERS` tier ids move fast; needs a maintenance cadence.
 
 ---
-*Sources: first-party Manus context-engineering writeup + E2B Firecracker notes; OpenAI Operator/CUA/Agents-SDK/Responses docs; Nous Hermes 3/4 + Hermes Agent runtime; the agent-research literature (ReAct, Toolformer, ToT, Reflexion, MemGPT, DSPy, Voyager, CodeAct) + 2025-26 surveys, read for the frontier landscape above — the 22 routing rules themselves are fabius's own research; the UC-Berkeley/RDI Apr-2026 benchmark-integrity finding. Grounded in line refs into the separate synapse project's `synapse/worker/src/index.js` (not part of fabius). Internal working note — proprietary (see LICENSE), not part of the README-indexed doc set and not covered by the content seal.*
+*Sources: first-party Manus context-engineering writeup + E2B Firecracker notes; OpenAI Operator/CUA/Agents-SDK/Responses docs; Nous Hermes 3/4 + Hermes Agent runtime; the agent-research literature (ReAct, Toolformer, ToT, Reflexion, MemGPT, DSPy, Voyager, CodeAct) + 2025-26 surveys, read for the frontier landscape above — the 22 routing rules themselves are fabius's own research; the UC-Berkeley/RDI Apr-2026 benchmark-integrity finding. Grounded in line refs into the separate synapse project's `synapse/worker/src/index.js` (not part of fabius). Repository-visible working note under the proprietary LICENSE; not part of the README-indexed doc set and not covered by the content seal.*

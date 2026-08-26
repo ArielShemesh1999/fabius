@@ -23,7 +23,7 @@ A high-contrast, print-inspired quarterly review template with three cinematic s
 
 ```text
 html-ppt-retro-quarterly-review/
-├── SKILL.md
+├── REFERENCE.md
 ├── assets/
 │   └── template.html
 ├── references/

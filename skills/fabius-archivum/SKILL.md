@@ -37,9 +37,11 @@ Two navigation files keep hundreds of pages tractable:
 
 ## The three operations
 
-**Ingest (WRITE).** A new source arrives → read it under `fabius-disciplina` discipline → write a summary page → update the index → revise the handful of cross-referenced pages it touches → append one line to the log. Keep the mutations surgical (`fabius-parcus`); keep the claims proven (`fabius-disciplina`). One source richer.
+**Write boundary.** Archivum never turns a read-only task into a mutation. Ingest, capture, file-back, scaffold, and lint writes run only when the workspace has opted into Archivum memory **and** its contract authorizes those writes. Otherwise return a proposed record or diff without touching the store.
 
-**Query (READ).** A question arrives → narrow through the index and symbolic filters to the right slice (project, layer, date range) → read only that slice → synthesize a **cited** answer → file the good answer back as a new page. Each query starts from more knowledge than the last.
+**Ingest (WRITE).** A new source arrives → read it under `fabius-disciplina` → write a summary page → update the index and touched cross-references → append one log line. Mutate surgically; prove claims.
+
+**Query (READ).** Narrow through the index and symbolic filters → read the matching slice → synthesize a **cited** answer. File it back only under the write boundary above.
 
 **Lint (MAINTAIN).** Periodically self-heal: contradictions, stale claims, orphan pages, missing cross-references, data gaps. Post-mortems and architecture write-ups become new pages.
 
@@ -47,7 +49,7 @@ Two navigation files keep hundreds of pages tractable:
 
 - One page = one entity, concept, or decision. Link liberally with `[[other-page]]` — a link to a not-yet-written page is a valid forward marker, not an error.
 - Frontmatter for retrievability: a stable id/name, a one-line description (this is what the index shows), a type, and **absolute** dates (`2026-06-21`, never "last week").
-- Don't duplicate — update the existing page. A wrong page → delete it. Don't transcribe what the source already records verbatim; record what was non-obvious.
+- Don't duplicate — update or supersede the existing page. Preserve decision history: tombstone/archive a wrong record and link its replacement; delete only an unambiguous current-run duplicate when the authorized scope and recovery path make that safe. Don't transcribe the source verbatim; record what was non-obvious.
 
 ## When to add vector retrieval
 
@@ -64,14 +66,14 @@ Then the pattern is **hybrid**: narrow symbolically by id or metadata first (pro
 ingest (write) → index (catalog/embed) → query (read, cite, file back) → lint (maintain) → ↺
 ```
 
-The agent does all the bookkeeping — summarize, cross-reference, file, consistency-check. The human only curates sources and asks questions. Concrete directory schema, page frontmatter, and the index/log line formats live in `references/memory-schema.md`. When the corpus outgrows grep, the engine — vector store, wiki layout, RAG pipeline — is in `references/knowledge/`, **as design, not dependency**: the naming pass rewrote its package and import names, so its pins do not resolve. Take the shape; wire a store from the best-in-class stack — vector stores, RAG frameworks, HF embedder/rerankers (license-honest) → `references/retrieval-stack.md`. A meeting transcript → a filed record (decisions · actions · numbers) + the pre-meeting brief → `references/meeting-capture.md`.
+Inside the write boundary, the agent handles summarizing, cross-referencing, filing, and consistency checks. Schema and line formats → `references/memory-schema.md`. When the corpus outgrows grep, `references/knowledge/` is **design, not dependency**: renamed packages/imports leave its pins unresolved. Take the shape; wire a tested store from `references/retrieval-stack.md`. Meeting capture → `references/meeting-capture.md`.
 
-## Cross-session memory — autonomous, per project
+## Cross-session memory — authorized, per project
 
-The point of a record office: the next session starts where the last one ended. Keep a **per-project memory** and tend it without being asked.
+The next session should start where the last one ended, but only inside a project that opted into a **per-project memory**.
 
-- **Read on start.** Beginning work on a project, read its memory index (`MEMORY.md` / `index.md`) *before* acting — the cheapest way to not re-derive last session's decisions. No memory yet → that's the signal to set one up.
-- **Write on milestone.** After a decision, a fix, an architecture choice, a "why we did it this way", or at session end — update the page it touches and append one `log.md` line. Surgical (`fabius-parcus`), proven (`fabius-disciplina`). You don't wait to be told; the bookkeeping is your job.
+- **Read on start when recall is enabled.** Read the existing index (`MEMORY.md` / `index.md`) before acting, subject to the fresh-eyes gate below. No memory yet → offer setup once; never create it implicitly.
+- **Write on milestone when authorized.** In an opted-in store whose contract authorizes ongoing memory writes, update current state and append one `log.md` line after a durable decision/fix. Preserve prior decisions and reasons; supersede them, never rewrite history.
 - **One layout, scaled to size.** Small project: a flat `MEMORY.md` index + `log.md` + a handful of topic pages. Large one: the full `wiki/` (entities / concepts / syntheses). Same conventions either way — schema in `references/memory-schema.md`.
 
 What goes in: the things the *code doesn't say* — decisions and their why, rejected approaches, gotchas, live URLs, current goals, open threads. Not a transcript; the non-obvious and retrievable. One page = one thing, linked with `[[slug]]`.
@@ -80,20 +82,22 @@ What goes in: the things the *code doesn't say* — decisions and their why, rej
 
 The wiki is plain markdown — works in any editor, best browsed in Obsidian (backlinks, graph, Dataview). On a project with no memory yet, offer the choice once:
 
-1. **Obsidian** (richer) — guide them: install from obsidian.md → *Open folder as vault* on the project's `wiki/` dir → enable Graph + Dataview. fabius writes the pages; they browse and follow links live. *(Obsidian is the IDE, the LLM is the programmer, the wiki is the codebase.)*
+1. **Obsidian** (richer) — install from obsidian.md → *Open folder as vault* on `wiki/` → enable Graph + Dataview. After opt-in, fabius writes; they browse links live.
 2. **Plain md** (zero install) — just the `wiki/` dir of markdown. Same retrieval (`index.md` + grep), no app.
 
-Either way the human curates sources and asks; fabius writes and maintains. Never block work to set this up — scaffold the minimal `MEMORY.md` + `log.md` and keep going.
+Either way the human curates sources and asks; fabius maintains only after opt-in. Never block work for setup or scaffold without authorization.
 
 ## Auto-recall — surface memory without being asked
 
-Reading the index on start (above) is recall you *choose*. The stronger habit is recall that fires **automatically**, so the agent never re-derives what a past session already settled. The loop has three named stages — keep them separate:
+Auto-recall is a dial, not a universal prepend. **Off** for trivial work; **off or dampened** for security, incident, debugging, and error-recovery fresh-eyes routes; index-only for ordinary continuation; deeper only when the task truly matches. On fresh-eyes routes, inspect current evidence first and compare memory afterward. Every retrieved record is a suspect candidate: verify that its situation matches and its outcome was proven before using it; prefer the newest verified value when records conflict.
 
-- **Capture** — record what happened (a decision, a fix, a result) as it happens. Capture must be **non-blocking**: never stop the work to summarize; jot the raw fact and move on.
+When recall is enabled, keep its three stages separate:
+
+- **Capture** — in an authorized opted-in store, record a durable decision/fix/result without blocking the work.
 - **Compress** — turn the raw capture into a small, *typed and titled* record (a title + a type + a compact body), not a transcript dump. Typed-and-titled is what makes later filtering and progressive disclosure cheap.
-- **Re-inject** — at the **start** of the next session, surface a compact index of the recent records (titles grouped by type, last-N sessions) into context *before* acting. That single step is what turns memory from opt-in to automatic.
+- **Re-inject** — when the recall dial permits, surface a compact index of matching recent records; do not dump it blindly into every task.
 
-Retrieve under **progressive disclosure**: inject the small index (titles/ids) by default; pull a record's full body only on demand. This is `fabius-parcus`'s progressive-disclosure rule applied to memory — the same reason a SKILL.md is lean and its `references/` page in on demand. (Check the harness first — Claude Code keeps a per-repo **auto memory** on by default — index always loaded, topic files on demand; adopt it rather than wiring a parallel store beside it. Hand-wire the hook loop where a harness ships nothing — the *pattern* is what ports. `references/external-recall.md`.)
+Retrieve under **progressive disclosure**: when recall is on, inject titles/ids first and pull a full record only on demand. Check the harness before wiring anything; adopt its native per-repo index/topic pattern instead of a parallel store. Hand-wire only where the harness ships nothing (`references/external-recall.md`).
 
 ## Ground in an external corpus — ask, don't guess
 
@@ -108,9 +112,9 @@ Stay provider-agnostic (the connector pattern outlives any one product) and keep
 
 The memory rules from the routing policy (MemGPT, Voyager, the memory surveys; full set in [routing-policy.md](../fabius/references/routing-policy.md)):
 
-- **Retrieve on demand (R9).** Read the index, page in only the matching slice; if it still exceeds the budget, summarize-then-link — never cat a whole page or directory "just in case." *(MemGPT)*
-- **Write only decision-changing facts (M7).** `write = EVICT` (flush durable facts to a page + log line under window pressure / at session end); `read = RECALL` (index→page on a miss, logged as QUERY). Everything addressable by `[[slug]]`.
-- **Promote verified solutions to skills (M6).** After a self-contained sub-problem is solved *and verified*, file it as a named reusable skill page; query archivum and compose existing skills before planning from scratch; supersede, don't duplicate. Failures leave an anti-pattern note. *(Voyager)*
+- **Retrieve on demand (R9).** Read the index, then the matched page fully when exact evidence requires it; never load an unrelated whole page or directory "just in case." If the matched set exceeds budget, summarize-then-link. *(MemGPT)*
+- **Write only decision-changing facts (M7).** Authorized `write = EVICT` (durable fact → page + log); `read = RECALL` (index→page on a miss, logged as QUERY). Everything addressable by `[[slug]]`.
+- **Promote verified solutions to skills (M6).** When skill writes are authorized, file a solved-and-verified sub-problem as a named reusable page; supersede, don't duplicate, and retain failed approaches as anti-pattern history. *(Voyager)*
 - **Tie-break by recency + load-bearingness (M8).** When index entries tie on relevance, surface the freshest decision-bearing pages first; fold a grown batch of log lines up into a synthesis page. *(Generative Agents, analogy)*
 
 **Live tier (optional).** The markdown index + log + grep needs nothing; auto-recall rides the harness's own memory where it has one and lifecycle hooks where it doesn't; where memory must be a *tool*, the Messages API ships a GA one (`memory_20250818`) whose handler you own — and must path-validate. An external-corpus connector is provider-agnostic (NotebookLM / `notebooklm-mcp` / a vector store) — you configure it. fabius bundles the *pattern*, not the service — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).

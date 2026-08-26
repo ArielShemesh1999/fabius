@@ -17,7 +17,7 @@ The full proof under each rule — statement · proof · boundary, each adversar
 
 ## 1 · Route by classification, then climb one rung
 
-Specialist selection should be reproducible, not vibes. fabius opens every non-trivial task by naming its load on three axes — **Memory, Tools/Action, Planning** — the three loads that, in our own work, decide which layer a task actually needs. Memory→`archivum`, Tools→`cohors`, Planning→`disciplina`, none→the lean `parcus` core. A task in a named vertical also routes on a **Domain** axis to its owner — design/data-viz→`decor`, go-to-market→`mercatus`, defensive-security→`praesidium`, games→`ludus`, on-chain/provenance→`catena`, automation→`machina`, science→`scientia`, ML engineering→`doctrina`, markets/finance→`fortuna`, cross-model council→`concilium` — where domain picks *what* and the three load axes pick *how* (run as a studio, R13). The classification *is* the routing rationale **(R1).**
+Specialist selection should be reproducible, not vibes. fabius opens every non-trivial task by naming its load on three axes — **Memory, Tools/Action, Planning** — the three loads that, in our own work, decide which layer and machinery a task actually needs. Memory→`archivum`; Planning→`disciplina`; Tools/Action raises `fabius`'s capability ladder to one tool while the domain owner still governs the task. `cohors` enters only for agent engineering or work that genuinely splits across agents; no loaded axis→the lean `parcus` core. A task in a named vertical also routes on a **Domain** axis to its owner — design/data-viz→`decor`, go-to-market→`mercatus`, defensive-security→`praesidium`, games→`ludus`, on-chain/provenance→`catena`, automation→`machina`, science→`scientia`, ML engineering→`doctrina`, markets/finance→`fortuna`, cross-model council→`concilium` — where domain picks *what* and the three load axes pick *how* (run as a studio, R13). The classification *is* the routing rationale **(R1).**
 
 Then it climbs a capability ladder one rung at a time — `inline → one tool → retrieval → plan → single subagent → swarm` — adding the smallest rung the classification demands and stopping **(R2).** Along the cost–capability frontier, machinery buys capability with steep diminishing returns; fabius operates at the *knee*, not the tail.
 
@@ -91,7 +91,7 @@ fabius treats the model as an **operating system over a memory hierarchy**: a sm
 
 > **Figure 6 — derived shape.** Paging beats stuffing once the corpus exceeds the window: recall rises as the matching slice loads and plateaus, while stuffing degrades past the window (R9 · M7). The inflection is the model's prediction; measure recall on your own corpus.
 
-Two more memory rules compound it: solved-and-**verified** sub-problems are promoted to a reusable named skill and **retrieved before planning** the next task (M6 — a verified skill is a memoized sub-solution), and index entries rank by probability of relevance weighted by load-bearingness, ties breaking toward recency, with grown logs folded up into synthesis pages when the summary is shorter than the lines (M8 · M8b · M8c — the recency tie-break is an operational heuristic: order-only, never a scoring stage).
+Two more memory rules compound it when the user has opted into the store and the route permits recall: solved-and-**verified** sub-problems can be promoted to a reusable named skill and retrieved before planning a matching task (M6 — a verified skill is a memoized sub-solution). Index entries rank by probability of relevance weighted by load-bearingness, ties breaking toward recency, with grown logs folded into synthesis pages when the summary is shorter than the lines (M8 · M8b · M8c — the recency tie-break is an operational heuristic: order-only, never a scoring stage). Security, incident, rollback, outage, and error-recovery routes apply M12 first and begin from fresh evidence.
 
 ---
 
@@ -158,7 +158,7 @@ Each rule → its formal statement → its mathematical domain → whether the m
 
 ### Composition — the 22 rules are one pipeline
 
-They don't merely coexist; they compose in a strict, **acyclic** firing order — each gate consumes the previous decision and emits a strictly narrower commitment, so the pipeline always terminates (at `parcus`-inline when zero axes load, or at a shipped-and-recorded artifact):
+They don't merely coexist; they compose in a strict, **acyclic** firing order — each gate consumes the previous decision and emits a strictly narrower commitment, so the pipeline always terminates (at `parcus`-inline when zero axes load, or at a shipped artifact). Recording is a conditional branch: it fires only when an opted-in store and explicit write authority permit it.
 
 ```
 parcus  (lean floor — always on, never competes for a task verb)
@@ -170,8 +170,8 @@ parcus  (lean floor — always on, never competes for a task verb)
   ≺ R5   reason → act → observe  (per-edge execution invariant)
   ≺ R7 · M2   search topology     (branch only if scorable · tree vs graph)
   ≺ R8 · M3 · M4   refine budget   (signal-typed loop · verify depth · retry-stop)
-  ≺ M5 · M6   learning layer        (metric-gated rewrite · skill cache, queried first)
-  ≺ R9* · M7 · M8* · M9   memory substrate (retrieve-under-budget · evict/recall · rank · externalize)
+  ≺ M5 · M6   learning layer        (metric-gated rewrite · authorized write / policy-permitted skill-cache recall)
+  ≺ R9* · M7 · M8* · M9   memory branch (only when opt-in + recall/write gates permit; fresh-eyes/trivial routes bypass it)
 ```
 
 **The full composition — 22 rules.** With the four §4.7 proofs (R11 · R12 · R13 · M9 — all real-math), the coherence audit is established over the full set. Placement: `R1 ≺ (R4 if ambiguous) ≺ R13 ≺ R2 ≺ R11 ≺ R3·M1 ≺ … ≺ R9*·M7·M8*·M9`, with R11 re-entering dispatch on a verified miss (≤ K−1 escalations per sub-task) and R12 wrapping the whole chain as the externally capped outer loop (≤ N cycles) when work is multi-cycle. **Verdict: coheres, with exceptions printed in full** in the whitepaper §5 — the honest ones include: R13 fits the threshold family in form only (structural at heart); the "visit each rule once" clause weakens to "once per pass, boundedly many passes" (R11's ≤K−1 escalations, R12's ≤N cycles); R8's verifier verdict becomes a shared read-only single point of trust for three rules; and M9's gate is one-sided sufficient. The frontier layer (R14–R16 · M10–M13) stays outside the theorem by construction.
@@ -180,7 +180,7 @@ parcus  (lean floor — always on, never competes for a task verb)
 
 - **Consistent** (zero contradictions found). Nearly every routing gate is the *same* mathematical object — an expected-loss / value-of-information threshold `E[L | don't] − E[L | do] > cost` — applied to a *different* capability (a tool, a second agent, a branch, a refine loop, a corrector). A single sign-consistent inequality cannot contradict itself: where one rule says *engage*, the others (on a different capability) are silent. The apparent "R2 minimize machinery vs R7 branch wide" tension dissolves — R2 sets *whether* to add a rung, R7 sets *how wide* once admitted (distinct variables). Execution invariants (R5, R6) constrain *order*, not *whether*; memory rules (R9\*/M7/M8\*) operate on a disjoint variable (the store); M8 → M8b is lexicographic (recency breaks ties only among equal-relevance pages). No rule writes a variable another writes with the opposite sign on a shared input.
 - **Complete** (no routing gap). R1's label space `{0,1}³` is a measurable partition — every task lands in exactly one of 8 cells, and R2's total-ordered ladder gives a defined action for each, including the empty cell (`000 → parcus inline`). No task shape is unrouted; no cell is actionless.
-- **Composable + model-applicable.** The firing order is a DAG with `parcus` as floor — no back-edge, no circularity, and an LLM can execute all 18 directly from the policy text in context.
+- **Composable + model-applicable.** The firing order is a DAG with `parcus` as floor — no back-edge, no circularity, and an LLM can execute all 22 core rules directly from the policy text in context.
 
 **The one honest caveat.** Four rules are **operational heuristics**, not theorems — R5 (reason → act → observe: a control-flow invariant, not an optimization), R4 (scout wide), R10 (the emphasis dial), and M8b (the recency tie-break). They carry that label inline and never *govern* the routing decision the way the real-math rules do. Every equation above was adversarially verified for correctness (the review corrected an EVPI sign claim, an EVSI-vs-EVPI slip, a missing completeness hypothesis in the contraction argument, an over-stated submodular-knapsack bound, and a mis-credited step in the ranking-principle proof before they shipped).
 

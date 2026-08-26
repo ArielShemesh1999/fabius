@@ -106,6 +106,6 @@ The source repo is heavily culture-specific (Chinese directors, traditional-make
 
 Element counts the repo reports (e.g. ~1,246 elements, early-2026 snapshot) are *its* database size, not fabius rules — treat them as upstream metadata, never fabius's own numbers. The technique transfers; the table contents are point-in-time and parochial.
 
-Pairs with `fabius-parcus` (no padded slots — the smallest prompt that lands the image) and the corpus index ([../../../CORPUS.md](../../../CORPUS.md)) for the brand-matched palettes shared with `fabius-figura`.
+Pairs with `fabius-parcus` (no padded slots — the smallest prompt that lands the image) and [`visualization.md`](visualization.md) for the tokenized color rules shared with charts. No separate Figura palette library is bundled.
 
 Adapted from huangserva/skill-prompt-generator (MIT) — re-expressed in fabius's own voice.

@@ -17,7 +17,7 @@ A three-slide editorial deck for culture narratives, strategy storytelling, and 
 
 ```text
 editorial-burgundy-principles-template/
-├── SKILL.md
+├── REFERENCE.md
 ├── assets/
 │   └── template.html
 ├── references/

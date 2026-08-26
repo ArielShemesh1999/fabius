@@ -70,7 +70,7 @@ A chart is a design artifact, not a different discipline — the same tokens and
 4. **Label directly, title with the takeaway.** The title states the finding ("Signups doubled after launch"), not the dimensions ("Signups by month").
 5. **Reproducible, tokenized SVG.** Prefer generated SVG from data over a screenshot — versionable, themeable, crisp. The repo's `assets/charts/` (`svgplot.py` · `render_figures.py`) is the numpy→SVG path; figures re-render from source, never hand-edited.
 
-Depth — chart-type table, data-ink checklist, color ramps, SVG recipes (**fabius-figura**) → `references/visualization.md`, paged in on demand (R9 · M9). Decks, infographics, and measured visual reports → `references/decks-and-infographics.md`. The diagram-as-code path (flowcharts, architecture) pairs with `fabius-disciplina`.
+Figura depth — chart table, data-ink, color, and shipped SVG helpers — is `references/visualization.md`; no separate recipe library ships. Decks and reports → `references/decks-and-infographics.md`; diagram-as-code pairs with `fabius-disciplina`.
 
 ## Explanatory diagrams — teach the system, don't just draw it
 
@@ -92,7 +92,7 @@ The slot schema, the lighting/era mapping tables, the conflict-resolution rules,
 
 ## Using a brand spec as a target
 
-1. Pick the closest brand in `references/design/` (69 systems — `DESIGN-apple.md`, `DESIGN-stripe.md`, `DESIGN-linear.app.md` …) as the visual DNA; the token contract is `references/design-tokens.md`. The fabius-design entry doc CORPUS.md designates — token vocabulary plus three worked brand reference points — is `references/design-system.md`; the bundled animation and component libraries (`fabius-design`, `fabius-motion`, `fabius-frames`, `fabius-uiux`, `uiverse`) sit with the teardowns in `references/design/`.
+1. Pick the closest brand in `references/design/` (69 systems — `DESIGN-apple.md`, `DESIGN-stripe.md`, `DESIGN-linear.app.md` …) as the visual DNA; the token contract is `references/design-tokens.md`. The fabius-design entry doc CORPUS.md designates — token vocabulary plus three worked brand reference points — is `references/design-system.md`; bundled libraries (`fabius-design`, `fabius-motion`, `fabius-frames`, `fabius-uiux`, `uiverse`) are reference corpora there, not public skills.
 2. Lift its **principles**, not its pixels — the type ratios, the accent discipline, the spacing rhythm, the do/don'ts.
 3. Re-map to the project's own brand color and font. Keep the structure, swap the identity.
 4. Substitute fonts honestly: name the closest open-source match (Inter for SF Pro, Manrope for Gilroy) and nudge tracking and leading to match.
@@ -110,6 +110,6 @@ Before calling UI done:
 - [ ] Motion calm, one language, transform/opacity only.
 - [ ] Verified **live** in a browser, not just read in the code (`fabius-disciplina`'s prove rule).
 
-When a design is declared final, accessibility work is **ARIA-attribute-only** — don't swap tags (div→table, h4→fieldset), which pulls in UA default styles and breaks the design even with no CSS change.
+After final design, use ARIA-only repairs only when semantics and keyboard behavior already exist. ARIA creates no behavior. If conformance needs a semantic element or interaction, preserve the look with CSS or surface that change for owner sign-off.
 
 Pairs with: `fabius-disciplina` (brainstorm the layout, prove it live), `fabius-parcus` (the smallest CSS that holds the look), `fabius-mercatus` (on a landing page, the message and copy are mercatus's; this layer owns the visual execution).

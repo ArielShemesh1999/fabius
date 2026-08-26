@@ -2,12 +2,12 @@
 name: fabius-disciplina
 description: >
   fabius's engineering-discipline layer — one repeatable procedure for HOW the agent builds,
-  debugs, and finishes: brainstorm → plan → test-first → prove, plus grilling ambiguity and
+  debugs, and finishes: scope → plan → source/test impact map → strengthen the oracle → prove, plus grilling ambiguity and
   root-cause debugging. Use before building any feature, fixing any bug, or refactoring — any
   task bigger than a one-line edit. Also use when the user says "plan this", "grill me",
   "debug this", "find the root cause", or "is this actually done?". Worked debug walkthrough and
-  test anti-patterns live in references/process-playbook.md; the full process library — the craft
-  skills (prototype, TDD, grill, handoff, writing) and the discipline skills (brainstorming,
+  test anti-patterns live in references/process-playbook.md; the full process reference library — craft
+  material (prototype, TDD, grill, handoff, writing) and discipline material (brainstorming,
   systematic-debugging, writing-plans, verification-before-completion, parallel agents) — lives in
   references/process/. The on-device prove loop for a UI app — build + assert state on a simulator,
   semantic-tree-first and token-cheap — lives in references/simulator-verify.md.
@@ -24,16 +24,15 @@ metadata:
 
 *Disciplina* — training, the drilled habit. Discipline beats guessing. Six phases; each leaves something durable behind so the next task starts further along.
 
-## 1. Brainstorm — before any creative work
+## 1. Scope in proportion to the decision
 
-Don't open with code. Turn the idea into a design through dialogue:
+Start with enough context to make the next safe move; ceremony is not evidence:
 
 - **Scout the context first** — read the files, the recent commits, the pattern already in use.
 - **Scope check** — if the request is really several independent subsystems, say so and split it before refining any detail.
-- **Ask clarifying questions one at a time**, multiple-choice where you can. Hunt for purpose, constraints, the definition of done.
-- **Offer 2–3 approaches with trade-offs**, lead with your recommendation and the reason.
-- **Present the design in sections sized to the complexity**; get a nod per section.
-- **Gate:** no implementation until the design is shown and approved — even on "simple" jobs, because simple is exactly where an unexamined assumption costs the most rework.
+- **Proceed on clear, reversible work.** State any small assumption and implement; never demand a design approval for a trivial edit whose result is easy to inspect and undo.
+- **Ask one question at a time only when the answer materially changes the artifact**, crosses an authorization boundary, or commits to an irreversible/high-risk choice.
+- **Offer alternatives only when a real trade-off exists.** Lead with a recommendation. For a large or genuinely branching design, checkpoint at the decision boundary that changes the implementation.
 
 ## 2. Grill the ambiguity
 
@@ -53,17 +52,17 @@ Two rules keep a plan working past the first few steps. **Re-state the remaining
 
 Strong, checkable criteria are what let you run the loop without a human in it. Keep each unit small and single-purpose — you reason better about code you can hold in your head at once, and a file growing fat is the signal it's doing too much.
 
-## 4. Build test-first — the iron law
+## 4. Map impact, strengthen the oracle, then patch
 
-**No production code for non-trivial logic until a test fails first.**
+A changed source file is protected only by a test that reaches the changed behavior and can fail for the regression. Before editing non-trivial behavior, build a compact **source → covering-test impact map**:
 
-Red → Green → Refactor:
+1. **Map the blast radius** — use imports/build graph, symbol search, test names, and coverage where available to list each touched source unit and its direct covering tests. Read those tests before the patch; proximity is not coverage.
+2. **Audit the oracle** — identify the exact assertion that would catch the requested behavior. If none does, strengthen the nearest behavior-level test or add the smallest executable repro.
+3. **Prove red on the intended behavior** — run the targeted check and observe the expected failure. A failure in setup, fixture, or unrelated code is not red.
+4. **Patch the cause, then prove green** — make the smallest coherent change, run every mapped covering test, and refactor only while the same set remains green.
+5. **Expand by impact** — run the broader suite/build/lint gate justified by the dependency map, not an arbitrary favorite command.
 
-1. **Red** — write the smallest test that fails for the right reason. Run it. Watch it fail.
-2. **Green** — the minimum code that passes (climb the `fabius-parcus` ladder). Run it. Watch it pass.
-3. **Refactor** — clean up with the test as your net. Green before, green after.
-
-Cut vertical tracer-bullet slices: one thin end-to-end path that works beats five half-built layers that don't. The exceptions are narrow — throwaway prototypes, generated code, pure config — and each needs the human's sign-off. "Too simple to test" is a rationalization, not an exception.
+Cut vertical tracer-bullet slices: one thin end-to-end path that works beats five half-built layers that don't. Pure config, generated artifacts, throwaway prototypes, or a codebase with no viable test seam use the closest executable validator (schema/compiler/render/repro) and say what coverage is absent; they do **not** require approval theater or a boilerplate unit test. A generic “TDD” slogan never substitutes for the concrete impact map and oracle.
 
 ## 5. Debug by root cause — never patch the symptom
 
@@ -84,9 +83,12 @@ A **performance** regression runs the same six steps with a different instrument
 
 A claim of success needs evidence. Before reporting complete:
 
+- Re-read the source → covering-test map. Run the mapped tests plus the broader gate justified by the blast radius; name both.
+- **Prove the oracle can catch the defect.** Where safe, make the targeted assertion fail by reverting/mutating the changed behavior, then restore it and show green. A test that stays green under the old behavior is not coverage.
 - Run the thing. Show the passing check, the output, the live behavior — not "should work".
 - Every acceptance criterion from the plan: demonstrably met.
-- Skipped a step? say so. Tests failing? show the output. Report outcomes faithfully.
+- Treat suspicious test-runner output as a hypothesis: inspect the runner/config and reproduce the verdict before trusting it.
+- Skipped a mapped test or could not strengthen an oracle? say so. Tests failing? show the output. Report outcomes faithfully.
 
 "Almost works" and a code-only answer don't count. Hit the real path and watch it.
 
@@ -97,7 +99,7 @@ For a **UI app**, "hit the real path" means **run it on a device/simulator and a
 - **The loop:** health-check the environment → build + test → boot/launch → assert state via the tree → screenshot only for visual confirmation → capture the full state (screenshot + hierarchy + logs) on failure.
 - **Prove with a number where you can.** A before/after task-success rate beats "it built." (iOS `simctl`/`xcodebuild` workflow, the troubleshooting table, and the test recipes → `references/simulator-verify.md`.)
 
-The full process library — craft skills (prototype, TDD, grill, handoff, writing) and discipline skills (brainstorming, systematic-debugging, writing-plans, verification-before-completion, parallel agents) — is in `references/process/`; the worked debug walkthrough, the performance-regression loop, and the test anti-patterns in `references/process-playbook.md`. The on-demand depth for the *scout* and *prove* steps when the unknown is a large codebase, a current-world fact, or a UI in a browser — a local code graph for surgical context, live-web fact-checking, plan-as-files, real-browser (Playwright) verification, and a TDD-enforcement gate — is in `references/codebase-and-proof.md`. The verified tool stack — test frameworks, property/mutation testing, coverage, debuggers/profilers, and correctness linters → `references/testing-toolkit.md`.
+The full process reference library — prototype, TDD, grill, handoff, writing, debugging, planning, verification, and parallel-agent material — is in `references/process/`; those vendored pages are background patterns, while this root contract decides the active procedure. The worked debug walkthrough, performance-regression loop, and test anti-patterns are in `references/process-playbook.md`. On-demand depth for a large codebase, current-world fact, or browser UI — code graph, live-web checking, plan-as-files, real-browser verification, and test enforcement — is in `references/codebase-and-proof.md`. The tool stack — test frameworks, property/mutation testing, coverage, debuggers/profilers, and correctness linters → `references/testing-toolkit.md`.
 
 ## Routing the reasoning — when to branch, when to reflect
 

@@ -13,7 +13,7 @@ You are an Architecture Decision Record specialist. Your responsibilities:
 
 ## Reference
 
-The full ADR markdown template, the AgentDB graph-storage commands for persisting the ADR tree + relationships, and the code-ADR linking workflow live in [`REFERENCE.md`](../REFERENCE.md). Read it when you need an exact field, a hierarchical-store path, or the violation-detection grep pattern — keeping reference data out of the agent prompt costs ~40% fewer tokens per spawn (per ADR-098 Part 2).
+The upstream extraction promised a sibling reference, but that file is **not bundled here**. Do not invent its ADR fields or AgentDB commands: use the target repo's ADR convention and the current authoritative tool documentation, or state that the exact template/storage path is unavailable.
 
 ## Tools
 

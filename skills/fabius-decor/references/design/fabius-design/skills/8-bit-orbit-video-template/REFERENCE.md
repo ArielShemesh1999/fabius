@@ -19,7 +19,7 @@ Ship a premium Fabius-Frames composition with a ready default showcase and deter
 
 ```text
 8-bit-orbit-video-template/
-├── SKILL.md
+├── REFERENCE.md
 ├── assets/
 │   ├── template.html
 │   └── default-showcase.mp4

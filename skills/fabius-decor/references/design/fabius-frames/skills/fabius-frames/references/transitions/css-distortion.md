@@ -42,4 +42,4 @@ tl.to(old, { x: -25, scale: 0.98, filter: "blur(4px)", duration: 0.04, ease: "no
 
 Clone scene into 20 horizontal strips (each 54px, clip-path'd). Each strip shifts x independently with seeded pseudo-random offsets at per-bar random intervals. Add red+blue chromatic offset copies on each strip (z-index above main, 35% opacity). Make strips wider than frame (2020px at left:-50px) so edges never show.
 
-See SKILL.md for clone-based implementation pattern.
+See REFERENCE.md for clone-based implementation pattern.

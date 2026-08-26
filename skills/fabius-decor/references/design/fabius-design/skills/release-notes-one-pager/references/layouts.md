@@ -193,7 +193,7 @@ Editorial layout for a list of dated entries. Date in mono on the left, title + 
 
 ### Layout 7 note — Release-note sections (Added, Fixed, Breaking, Known issues)
 
-When Layout 7 is used for release-note Added/Fixed/Breaking/Known issues sections, **remove the header CTA row** (the `row-between` div with "View all" button). Release-note sections typically have no per-section destination; leaving a placeholder violates SKILL.md Step 2. Replace the entire row:
+When Layout 7 is used for release-note Added/Fixed/Breaking/Known issues sections, **remove the header CTA row** (the `row-between` div with "View all" button). Release-note sections typically have no per-section destination; leaving a placeholder violates REFERENCE.md Step 2. Replace the entire row:
 
 ```html
 <!-- REMOVE THIS from Layout 7 when used in release notes: -->

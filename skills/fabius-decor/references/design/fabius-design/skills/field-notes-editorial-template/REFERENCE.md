@@ -18,7 +18,7 @@ Produce a premium editorial data report in a single self-contained HTML file.
 
 ```text
 field-notes-editorial-template/
-├── SKILL.md
+├── REFERENCE.md
 ├── assets/
 │   └── template.html
 ├── references/

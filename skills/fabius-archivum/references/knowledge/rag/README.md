@@ -1,8 +1,8 @@
-# rag — the vector engine retrieval over the Obsidian vault
+# rag — archived design for vector retrieval over an Obsidian vault
 
-Step 3 of the system loop: **retrieval**. Indexes the Obsidian vault (source of
-truth) into a the vector engine vector index so any agent or CLI can pull relevant context
-on demand — fully local, offline, private.
+> **Design reference only — not runnable as vendored.** The package/import naming pass intentionally left this snapshot without resolvable dependencies. The commands below document the original shape; they are not installation or execution instructions for this plugin. Use index + `rg` now, or wire and test a compatible vector adapter explicitly.
+
+This snapshot describes a local retrieval design: markdown-heading chunks → embeddings → quantized index → top-k context.
 
 ```
 vault (~/Documents/ObsidianVault)
@@ -12,7 +12,7 @@ vault (~/Documents/ObsidianVault)
    -> query.py "question"  ->  top-k chunks (file + heading + text)
 ```
 
-## Use
+## Historical command shape (does not run as shipped)
 
 ```bash
 python -m venv .venv && . .venv/bin/activate
@@ -30,23 +30,17 @@ VAULT=/path/to/other/vault python indexer.py   # index a different vault
 - **Index** — the vector engine `IdMapIndex`, bit_width 4. External id = chunk index. Persisted to `.index/vault.tvim`; `meta.json` maps id -> {file, heading, text}.
 - **Privacy** — `.index/` and `.venv/` are gitignored. The index embeds personal vault content and never leaves this machine.
 
-## Open: auto-wiring
+## Open: adapter and auto-wiring
 
-Today this is a manual CLI. To make it a live part of the loop, a skill or hook
-should run `query.py` on each task and inject the returned chunks as context
-(steps 4->5->6: context -> skills -> orchestration/agents). Not yet wired.
+This snapshot has neither a working adapter nor auto-wiring. After replacing the unresolved engine dependency, validate indexing and querying on a disposable corpus before any hook injects returned chunks (steps 4→5→6: context → skills → orchestration/agents).
 
-## Cost model — $0 extra
+## Intended local cost shape
 
-- **Embedding** runs **locally** (fastembed/ONNX). No API, no token cost, fully offline. One-time ~130MB model download, then free forever.
-- **Index + search** are local (the vector engine). $0.
+- **Embedding** was designed to run locally (fastembed/ONNX), with no inference API charge after the model download; compute, storage, and maintenance still have cost.
+- **Index + search** were designed to stay local once a compatible engine is supplied.
 - **Retrieval is on-demand**, NOT injected into every prompt. You only spend Claude tokens when context is actually pulled — never a per-message tax. (A per-prompt injection hook `vault-rag-hook.sh` exists but is OFF by design: it would add input tokens to every message.)
-- **`reindex.sh`** is local-only ($0). It also **skips** when no vault markdown changed since the last index, so it never burns CPU for nothing.
+- **`reindex.sh`** illustrates freshness skipping, but is not an executable plugin workflow until the adapter is repaired or replaced.
 
-## Automation (optional, $0)
+## Automation design (not wired)
 
-`reindex.sh` keeps the index fresh after the vault's wiki/log pages are updated.
-To run it automatically at the end of every Claude Code session, add a **SessionEnd**
-hook to `~/.claude/settings.json` (you add it — the agent is blocked from editing
-that file). The intelligent part — summarizing a session and writing the wiki/log/
-memory pages — stays LLM-driven per the vault's own `CLAUDE.md` schema.
+`reindex.sh` records the intended freshness workflow, but cannot maintain an index until a compatible adapter is supplied and tested. Only then should a user-authorized **SessionEnd** hook invoke it; memory writes still follow the vault's own contract and authorization boundary.

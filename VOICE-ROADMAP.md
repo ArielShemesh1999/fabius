@@ -1,6 +1,6 @@
 # synapse (on the fabius rules) → voice agent — roadmap
 
-> Scope note: fabius is a plugin — one set of rules above every model, with no runtime of its own. The console features recorded below were built in the separate synapse project (not part of fabius) and are kept here only as design history for the rules.
+> Scope note: fabius is a plugin — one set of rules above every model. Its core needs no runtime; the repository now also ships an optional local CLI. The console features recorded below were built in the separate synapse project (not part of fabius) and are kept here only as design history for the rules.
 
 *Research-backed plan to give the separate synapse project (an agent on the fabius rules) a natural voice — talk to it, it talks back, interruptibly (ChatGPT-Voice class). Synthesized from a 7-agent sweep of the open-source TTS / voice-cloning / realtime / cloud landscape (2026) + an adversarial feasibility review, grounded in the synapse project's real stack. Honors the owner cost rule: **FREE = build it; PAID/INFRA = flag it, OFF by default.***
 

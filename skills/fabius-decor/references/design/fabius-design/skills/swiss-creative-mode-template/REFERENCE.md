@@ -18,7 +18,7 @@ Produce a premium Swiss/editorial-style HTML template with strong visual rhythm 
 
 ```text
 swiss-creative-mode-template/
-├── SKILL.md
+├── REFERENCE.md
 ├── assets/
 │   └── template.html
 ├── references/

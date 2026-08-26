@@ -74,15 +74,9 @@ The newest surface — model, prompt, and agent, not just code.
 
 ---
 
-## Israeli market — the legal surface a security review must cover
+## Israeli market — consume the owning localization layer
 
-When the product serves the **Israeli market**, three *live, enforceable* obligations sit inside the threat model — a review that skips them is incomplete. The full layer (governing statutes, thresholds, data formats — all config-driven, verify current) is **Fabius Yisrael** (`fabius-decor` → `references/israel-localization.md`); pull only the obligation that bears on the surface you're reviewing:
-
-- **Privacy — חוק הגנת הפרטיות + Amendment 13 (תיקון 13, in force 14 Aug 2025).** GDPR-adjacent and enforceable now: breach-notification duties, a DPO where triggered, administrative fines with a per-data-subject component. Fold it into the data-handling threat-model exactly as you would GDPR/CCPA.
-- **Accessibility is statutory — IS 5568 (ת"י 5568 = WCAG 2.0 AA legal floor).** A missing/non-compliant הצהרת נגישות is grounds for immediate suit with no cure period — treat the accessibility statement + רכז נגישות as a compliance control, not a nicety.
-- **Anti-spam — Chok HaSpam (§30א).** Commercial messaging is opt-in by law; each message labeled **"פרסומת"**, sender identified, free **הסרה** on the same channel. The *message* is `fabius-mercatus`'s; the *legal frame* is Yisrael's.
-
-Defensive framing only — this hardens an Israeli product against its own compliance risk. Reach for it **only when the target is Israeli**.
+Praesidium owns technical threat-model controls, not mutable Israeli legal/localization facts. When the target is Israeli, load [`fabius-decor/references/israel-localization.md`](../../fabius-decor/references/israel-localization.md), re-verify the current requirement there, and map only its security-bearing consequences (data handling, access, incident response, consent enforcement, auditability) into this review. Accessibility presentation stays with `fabius-decor`; message wording stays with `fabius-mercatus`. Do not duplicate dates, thresholds, or statutory claims here: two owners drift.
 
 ## EU market — the Cyber Resilience Act reporting clock (from 11 September 2026)
 
@@ -118,4 +112,4 @@ Defensive framing only — this hardens an Israeli product against its own compl
 
 - Metrics **verified 2026-07-03** via the GitHub API; treat as point-in-time. The §7 runtime-guardrail slot and the red-team **license and archive flags** were re-verified **2026-08-06** against the GitHub API and the repositories' own LICENSE text. That re-check covered the flags only — **every star count on this page is still the 2026-07-03 reading** and several have since drifted upward. Take the licence and maintenance flags as fresh; take the popularity numbers as a floor, not a figure. Adoption ≠ fit — choose by threat model and license (LGPL/AGPL/`NOASSERTION` licenses carry obligations; read before shipping).
 - **A license flag is a finding, and it rots in both directions.** Re-read the LICENSE text, never the badge: a repo can relicense *toward* permissive as easily as away from it, and `NOASSERTION` means the classifier failed — not that the terms are mild. Under-flagging ships you a compliance breach; over-flagging costs you a tool you were entitled to use. Both are defects; verify the text.
-- Cross-links: audit **method** → [security-playbook.md](security-playbook.md) · deep **how-to** → [hardening-guides.md](hardening-guides.md) · third-party **AI artifacts** → [supply-chain-and-ai-artifacts.md](supply-chain-and-ai-artifacts.md) · **Israeli-market** legal obligations (privacy Amendment 13 · IS-5568 · Chok HaSpam) → **Fabius Yisrael** in `fabius-decor` · smart-contract / on-chain audit gate (Slither / Echidna / Foundry) is `fabius-catena`'s, not here.
+- Cross-links: audit **method** → [security-playbook.md](security-playbook.md) · deep **how-to** → [hardening-guides.md](hardening-guides.md) · third-party **AI artifacts** → [supply-chain-and-ai-artifacts.md](supply-chain-and-ai-artifacts.md) · mutable **Israeli-market** requirements → [`fabius-decor/references/israel-localization.md`](../../fabius-decor/references/israel-localization.md) · smart-contract / on-chain audit gate → `fabius-catena`.

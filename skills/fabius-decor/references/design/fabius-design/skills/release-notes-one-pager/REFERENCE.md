@@ -18,7 +18,7 @@ Produce a single-page release notes document in HTML.
 
 ```
 release-notes-one-pager/
-├── SKILL.md                    ← this file
+├── REFERENCE.md                ← this file
 ├── example.html                ← quality bar and style reference
 ├── assets/
 │   └── template.html           ← seed file to copy to project index.html

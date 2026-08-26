@@ -360,4 +360,4 @@ After re-export, confirm all five layers:
 If all five pass and the user still reports "the type looks wrong",
 ask for a screenshot pointing at the specific glyph or word — the
 remaining bugs are usually license-restricted fonts not embedded into
-the file (see `SKILL.md` Step 5 verification).
+the file (see `REFERENCE.md` Step 5 verification).

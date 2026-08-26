@@ -18,7 +18,7 @@ Produce a self-contained HTML editorial motion artifact in a dark luxury style �
 
 ```text
 after-hours-editorial-template/
-├── SKILL.md
+├── REFERENCE.md
 ├── assets/
 │   └── template.html
 ├── references/

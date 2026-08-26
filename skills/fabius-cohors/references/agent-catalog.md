@@ -1,6 +1,6 @@
 # Fabius Cohors — agent catalog index
 
-Loaded on demand by `fabius-cohors`. The skill has the decision rules; `agent-patterns.md` has the copy-from schema and the recurring shapes; this file maps the production agent catalog under `references/agents/`. Counts are measured from disk. Page in one slice — never the whole tree.
+Loaded on demand by `fabius-cohors`. The skill has the decision rules; `agent-patterns.md` has the copy-from schema and recurring shapes; this file maps the catalog under `references/agents/`. Counts are measured from disk. Nested skill bundles are deliberately quarantined as `REFERENCE.md`, so the plugin exposes only its 15 root contracts. To adapt one elsewhere, copy it explicitly into the target project's own `SKILL.md`; do not make it discoverable inside this plugin. Page in one slice — never the whole tree.
 
 ## fabius-agency — 248 role/persona agents across 17 divisions
 
@@ -26,9 +26,9 @@ Each agent is a self-contained markdown definition (YAML frontmatter + full syst
 | `agents/fabius-agency/support/` | 6 | support analytics, reporting, finance tracking, infrastructure |
 | `agents/fabius-agency/testing/` | 8 | accessibility, API, performance testing, evidence collection |
 
-## Language packs — 85 runnable ADK sample agents
+## Language packs — 85 ADK sample-agent reference projects
 
-Full agent projects (code, not just prompts), one directory per agent:
+Full sample projects (code, not just prompts), one directory per agent. Treat them as adaptation references, not plug-and-play plugin skills; some upstream loaders expect the quarantined file to be named `SKILL.md` in a separate target project.
 
 | Pack | Projects | Scope |
 |---|---|---|
@@ -45,6 +45,6 @@ Full agent projects (code, not just prompts), one directory per agent:
 
 `agents/opencode/README.md` — how to import any catalog agent as an OpenCode per-project specialist (permissions, model override, system prompt).
 
-## Semantic lookup — fabius-vec.db
+## Lookup — symbolic now, archived vector artifact
 
-When browsing by name or division isn't enough, use dense retrieval: `agents/fabius-vec.db` (a copy also ships inside `agents/fabius-agency/`). Query it through `fabius-archivum`'s RAG tooling — `skills/fabius-archivum/references/knowledge/rag/query.py` — the same `fabius-vec` retrieval contract CORPUS.md defines for every library.
+Use the tables above and symbolic search first, for example `rg -n "<role-or-capability>" skills/fabius-cohors/references/agents/`. `agents/fabius-vec.db` (also copied under `agents/fabius-agency/`) is an archived index artifact, but this plugin does **not** ship a compatible runnable query adapter: Archivum's vendored RAG is design-only after its package/import naming pass. Do not invoke `query.py` as if it worked; wire a compatible vector adapter explicitly if dense lookup becomes necessary.

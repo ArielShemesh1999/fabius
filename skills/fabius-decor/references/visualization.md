@@ -1,6 +1,6 @@
 # Fabius Figura — data-visualization playbook (entry)
 
-The on-demand depth for `fabius-decor`'s visualization concern. Lean entry doc; the full chart-recipe library (the **fabius-figura** library of the fabius corpus, [CORPUS.md](../../../CORPUS.md)) is paged in on demand. The presentation compositions built on these chart rules — decks (`slides.create`), infographics (`visual.infographic`), and measured visual reports — live in [`decks-and-infographics.md`](decks-and-infographics.md). **Maximize data-ink, strike narrow.** A chart obeys every `fabius-decor` law — one accent, tokens not inline values, type-led hierarchy, restraint — plus the rules here.
+The shipped depth for `fabius-decor`'s visualization concern. This page is the current Figura knowledge surface; no separate pageable chart-recipe library is bundled. The presentation compositions built on these rules — decks (`slides.create`), infographics (`visual.infographic`), and measured reports — live in [`decks-and-infographics.md`](decks-and-infographics.md). **Maximize data-ink, strike narrow.** A chart obeys every `fabius-decor` law — one accent, tokens not inline values, type-led hierarchy, restraint — plus the rules here.
 
 ---
 
@@ -50,6 +50,6 @@ Generate charts as **tokenized SVG from data**, not screenshots: versionable, th
 
 Flowcharts, architecture, sequence, and state diagrams: prefer a text-defined source (Mermaid / Graphviz / hand-built SVG) committed alongside the code, so the diagram is diffable and regenerable. State machines pair with `fabius-ludus`; pipelines and plans pair with `fabius-disciplina`.
 
-## The recipe library (corpus — indexed, not bundled)
+## Current recipe surface
 
-The deep library — per-library chart recipes, the SVG component kit, and brand-matched palettes (the **fabius-figura** library) — lives in the fabius corpus ([CORPUS.md](../../../CORPUS.md)). Query the index for the **one** recipe the task needs and page it in; never load the library wholesale (`fabius-parcus`; routing-policy R9 · M9).
+Use the decision table and checklists above plus the deterministic helpers at [`assets/charts/`](../../../assets/charts/). Per-library recipes, a standalone SVG component kit, and brand-matched Figura palettes are not bundled; consult authoritative library documentation for the one missing recipe rather than claiming a phantom corpus page.

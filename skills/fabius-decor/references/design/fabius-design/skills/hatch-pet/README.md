@@ -19,7 +19,7 @@ snapshot, not a live dependency.
 ## Provenance
 
 - Skill: `hatch-pet`
-- Pinned upstream reference (declared in `SKILL.md` frontmatter): see the
+- Pinned upstream reference (declared in `REFERENCE.md` frontmatter): see the
   `upstream:` field — at vendoring time this pointed to the Codex curated
   `skills/.curated/hatch-pet` tree. That URL was not publicly resolvable
   at the time this README was written; treat the vendored snapshot in this
@@ -40,8 +40,8 @@ When the upstream skill changes:
    superseding location).
 2. Replace the contents of this directory with the upstream snapshot,
    preserving only this `README.md` and any Fabius-Design-specific notes
-   inside `SKILL.md`'s `> **Open Design integration.**` blockquote.
-3. Update the `upstream:` field in `SKILL.md` frontmatter with the exact
+   inside `REFERENCE.md`'s `> **Open Design integration.**` blockquote.
+3. Update the `upstream:` field in `REFERENCE.md` frontmatter with the exact
    commit SHA / tag of the snapshot.
 4. Update `LICENSE.txt` and add a `NOTICE` file if upstream now ships
    attribution metadata.
