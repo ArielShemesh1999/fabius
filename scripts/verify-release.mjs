@@ -1,7 +1,14 @@
 #!/usr/bin/env node
 // Development/release/proof-upgrade integrity gate.
-// dev: the worktree may be dirty, but every owned version field must describe the
-//      exact next patch after the newest signed release.
+// dev: the worktree may be dirty. Every owned version field must agree with each
+//      other and must never regress below the newest signed release. It is NOT
+//      required to be the next unreleased patch: `.claude-plugin/marketplace.json`
+//      on main is the public install pin, so main carries the LAST RELEASED version
+//      between releases and the release commit performs the bump. Advertising an
+//      unreleased "next patch" on main would hand every installer unreleased content
+//      under a version string the real release would then reuse -- so that release
+//      could never reach them. Release mode enforces the bump where it matters, by
+//      requiring the tagged tree's version to equal the tag.
 // release: additionally requires a clean HEAD exactly at that signed tag and binds
 //          the anchor record's commit/tree to the tagged repository state.
 // proof-upgrade: permits only a tracked proof modification at the tagged anchor or
@@ -158,17 +165,31 @@ try {
 check("detached OTS proof is structurally valid and bound to the exact release record",
   !!otsBinding, otsBinding?.digest || otsBindingError || "missing proof");
 
+let devPending = "";
 const head = git("rev-parse", "HEAD");
 const tagCommit = newestTag ? git("rev-parse", `${newestTag}^{}`) : "";
 if (mode === "dev") {
-  if (semver(releasedVersion) && parsed) {
-    const [, major, minor, patch] = semver(releasedVersion);
-    const expected = `${major}.${minor}.${Number(patch) + 1}`;
-    check("dev version is exactly the next unreleased patch", version === expected, `${version} / expected ${expected}`);
-  } else check("dev version is exactly the next unreleased patch", false, "unparseable release version");
+  const order = (() => {
+    const a = semver(version), b = semver(releasedVersion);
+    if (!a || !b) return null;
+    for (let i = 1; i <= 3; i += 1) {
+      const d = Number(a[i]) - Number(b[i]);
+      if (d) return d < 0 ? -1 : 1;
+    }
+    return 0;
+  })();
+  check("dev version never regresses below the newest signed release",
+    order !== null && order >= 0, `${version} / released ${releasedVersion}`);
   const descends = newestTag && spawnSync("git", ["merge-base", "--is-ancestor", tagCommit, head], { cwd: ROOT }).status === 0;
   check("dev HEAD descends from the newest signed release", !!descends, `${head.slice(0, 12)} from ${tagCommit.slice(0, 12)}`);
-  check("dev target has not already been tagged as released", !tags.includes(`v${version}-sealed`), `v${version}-sealed`);
+  // A bump on main is allowed but must not name a version that has already shipped.
+  // Sitting at the released version is the normal between-releases state, not a defect.
+  const bumpedAhead = order === 1;
+  check("dev version, when already bumped, does not name an existing release",
+    !bumpedAhead || !tags.includes(`v${version}-sealed`),
+    bumpedAhead ? `v${version}-sealed` : `at released ${releasedVersion}; bump is due with the release commit`);
+  const unreleased = newestTag ? git("rev-list", "--count", `${tagCommit}..${head}`) : "";
+  devPending = order === 0 && unreleased !== "" && unreleased !== "0" ? unreleased : "";
 } else {
   const statusEntries = gitBytes("status", "--porcelain=v1", "-z", "--untracked-files=all")
     .toString("utf8").split("\0").filter(Boolean);
@@ -233,7 +254,10 @@ console.log(`== fabius ${mode} integrity ==\n`);
 for (const c of checks) console.log(`  ${c.pass ? "PASS" : "FAIL"}  ${c.name}${c.detail ? ` — ${c.detail}` : ""}`);
 const failed = checks.filter((c) => !c.pass).length;
 console.log(`\n== ${checks.length - failed} passed · ${failed} failed ==`);
-if (mode === "dev") console.log("  NOTE  dev mode permits a dirty worktree; it does not authorize tagging, stamping, releasing or pushing.");
+if (mode === "dev") {
+  console.log("  NOTE  dev mode permits a dirty worktree; it does not authorize tagging, stamping, releasing or pushing.");
+  if (devPending) console.log(`  NOTE  ${devPending} unreleased commit(s) sit above ${newestTag} at the same version — the release commit must bump every owned version field.`);
+}
 else if (mode === "release") console.log("  NOTE  release mode verifies a release that already exists; it never creates a tag, stamp, proof, release or push.");
 else console.log("  NOTE  proof-upgrade mode permits only one confirmed detached-proof delta; it never stages, commits or pushes it.");
 process.exitCode = failed ? 1 : 0;
