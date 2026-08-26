@@ -4,7 +4,7 @@ fabius is proprietary — the [LICENSE](LICENSE) grants personal, non-commercial
 
 ## What is welcome
 
-- **Bug reports.** The runtime ships 75 tests and the releases are sealed, and things still break. A report that names the command, the platform and what happened instead of what should have is acted on. Open an issue.
+- **Bug reports.** The runtime has an offline regression suite and releases are sealed, and things still break. A report that names the command, platform, expected behavior, and observed behavior is actionable. Open an issue.
 - **Questions.** [Discussions](https://github.com/shear559/fabius/discussions) — the install thread and the sealing thread already answer the two most common ones.
 - **Corrections.** The documentation makes measured claims — benchmark figures, test counts, model rosters, proof classifications. If one of them is wrong, that is the most valuable issue you can open. Three versions of the provenance paper were corrected by exactly this kind of outside reading.
 - **Security reports.** Privately, please — see [SECURITY.md](SECURITY.md). Not as a public issue.

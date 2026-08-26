@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Verify the fabius provenance package from a clean clone.
 # Read-only: trusts no single party and mutates nothing — the timestamp
-# anchors to Bitcoin and the signature verifies against a key in the repo.
+# reports a digest-bound OTS proof as pending or Bitcoin-confirmed, and verifies
+# the signature against a key in the repo.
 #
 #   bash provenance/verify.sh
 #
@@ -38,20 +39,51 @@ else
   note "provenance/sealed-commit.txt missing — release not sealed yet"
 fi
 
-# 3) OpenTimestamps proof (Bitcoin priority date) -------------------------
+# 3) OpenTimestamps detached proof ----------------------------------------
 OTS=$(command -v ots || ls "$HOME"/Library/Python/*/bin/ots 2>/dev/null | head -1)
+ots_bound=0
+ots_confirmed=0
 if [ -n "${OTS:-}" ] && [ -f provenance/sealed-commit.txt.ots ]; then
   # The Bitcoin attestation is embedded IN the proof file — `ots info` reads it
   # with no Bitcoin node. (`ots verify` additionally cross-checks the block
   # header against a node/explorer; absence of a node is not "unconfirmed".)
   info=$("$OTS" info provenance/sealed-commit.txt.ots 2>&1)
-  block=$(printf '%s' "$info" | grep -oiE "BitcoinBlockHeaderAttestation\([0-9]+\)" | grep -oE "[0-9]+" | head -1)
-  if [ -n "$block" ]; then
-    pass "OpenTimestamps proof anchored to Bitcoin block $block (cross-check its merkle root on any explorer, or 'ots verify' with a node)"
-  elif printf '%s' "$info" | grep -qi "PendingAttestation"; then
-    note "OTS proof present but still pending Bitcoin confirmation — run: $OTS upgrade provenance/sealed-commit.txt.ots"
+  proof_hash=$(printf '%s\n' "$info" | sed -n 's/^File sha256 hash: \([0-9a-fA-F]\{64\}\)$/\1/p' | head -1 | tr 'A-F' 'a-f')
+  record_hash=$(shasum -a 256 provenance/sealed-commit.txt 2>/dev/null | awk '{print $1}')
+  if [ -z "$proof_hash" ]; then
+    bad "OpenTimestamps proof does not expose a detached file digest — refusing attestation claims"
+  elif [ "$proof_hash" != "$record_hash" ]; then
+    bad "OpenTimestamps proof digest MISMATCH — proof covers $proof_hash, sealed-commit.txt is $record_hash"
   else
-    note "OTS proof present but no recognizable attestation — inspect: $OTS info provenance/sealed-commit.txt.ots"
+    ots_bound=1
+    pass "OpenTimestamps detached digest matches provenance/sealed-commit.txt ($record_hash)"
+    info_blocks=$(printf '%s' "$info" | grep -oiE "BitcoinBlockHeaderAttestation\([0-9]+\)" | grep -oE "[0-9]+")
+    block=$(printf '%s\n' "$info_blocks" | head -1)
+    if [ -n "$block" ]; then
+      # `ots info` only parses bytes supplied by the proof. A forged proof can
+      # contain a syntactically valid BitcoinBlockHeaderAttestation, so parsing
+      # it is never confirmation. Require the OTS verifier to validate the
+      # attestation against its trusted Bitcoin source and the exact record.
+      verify_code=0
+      verify_out=$("$OTS" verify -f provenance/sealed-commit.txt provenance/sealed-commit.txt.ots 2>&1) || verify_code=$?
+      if [ "$verify_code" -eq 0 ]; then
+        trusted_block=$(printf '%s\n' "$verify_out" | sed -n 's/^Success! Bitcoin block \([0-9][0-9]*\) attests existence.*$/\1/p' | head -1)
+        if [ -n "$trusted_block" ] && printf '%s\n' "$info_blocks" | grep -Fxq "$trusted_block"; then
+          ots_confirmed=1
+          pass "OpenTimestamps proof trusted-verifies against Bitcoin block $trusted_block"
+        else
+          bad "OpenTimestamps verifier success did not bind a parsed Bitcoin attestation — NOT confirmed"
+        fi
+      elif printf '%s\n' "$verify_out" | grep -qiE 'Could not connect to (local )?Bitcoin node|No Bitcoin node (is |was )?(available|configured)|Not checking Bitcoin attestation; Bitcoin disabled|Connection refused'; then
+        note "proof contains a digest-bound Bitcoin block attestation for block $block, but trusted verification is unavailable — NOT confirmed"
+      else
+        bad "OpenTimestamps Bitcoin attestation failed trusted verification — NOT confirmed (ots verify exit $verify_code)"
+      fi
+    elif printf '%s' "$info" | grep -qi "PendingAttestation"; then
+      note "digest-bound OTS proof present but still pending Bitcoin confirmation — run: $OTS upgrade provenance/sealed-commit.txt.ots"
+    else
+      note "digest-bound OTS proof present but no recognizable attestation — inspect: $OTS info provenance/sealed-commit.txt.ots"
+    fi
   fi
 else
   note "ots client or .ots proof absent — install opentimestamps-client, or release not sealed yet"
@@ -115,13 +147,25 @@ else
   note "provenance/seal-manifest.json missing — create the content-bound seal: bash provenance/seal-skills.sh"
 fi
 
-# 6) Seal freshness — the Bitcoin anchor must cover the CURRENT manifest ----
+# 6) Seal freshness — the release anchor/proof must cover the CURRENT manifest --
 if [ -f provenance/seal-manifest.json ] && [ -n "${sealed:-}" ] && git cat-file -e "$sealed^{commit}" 2>/dev/null; then
   if git cat-file -e "$sealed:provenance/seal-manifest.json" 2>/dev/null \
      && git show "$sealed:provenance/seal-manifest.json" 2>/dev/null | cmp -s - provenance/seal-manifest.json; then
-    pass "anchored sealed commit contains the current seal manifest — the Bitcoin date covers every sealed file"
+    if [ "$ots_confirmed" -eq 1 ]; then
+      pass "Bitcoin-confirmed sealed commit contains the current seal manifest — the block date covers every sealed file"
+    elif [ "$ots_bound" -eq 1 ]; then
+      pass "digest-bound pending OTS record contains the current seal manifest — Bitcoin confirmation is not claimed yet"
+    else
+      note "sealed commit contains the current manifest, but no digest-bound OTS proof was verified"
+    fi
   else
-    note "current seal manifest postdates the Bitcoin anchor (anchor covers commit ${sealed:0:7} only) — re-tag and re-stamp per PROVENANCE.md §6"
+    if [ "$ots_confirmed" -eq 1 ]; then
+      note "current seal manifest postdates the Bitcoin-confirmed release anchor (anchor covers commit ${sealed:0:7} only) — re-tag and re-stamp per PROVENANCE.md §6"
+    elif [ "$ots_bound" -eq 1 ]; then
+      note "current seal manifest postdates the digest-bound pending release anchor (record covers commit ${sealed:0:7} only; no Bitcoin confirmation is claimed) — re-tag and re-stamp per PROVENANCE.md §6"
+    else
+      note "current seal manifest postdates the release anchor (record covers commit ${sealed:0:7} only; no digest-bound proof was verified) — re-tag and re-stamp per PROVENANCE.md §6"
+    fi
   fi
   freshtag=$(git tag --list 'v*-sealed*' --sort=-creatordate | head -1)
   if [ -n "$freshtag" ] && git show "$freshtag^{commit}:provenance/sealed-commit.txt" 2>/dev/null | cmp -s - provenance/sealed-commit.txt; then

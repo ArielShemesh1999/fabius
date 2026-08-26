@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: "Fabius: one set of operating rules above every model — a plugin, not a platform"
+title: "Fabius: one set of operating rules across supported agent harnesses — a plugin, not a platform"
 message: "If you cite this work, please cite the whitepaper in paper/fabius-as-a-system.pdf."
 type: software
 authors:
@@ -19,10 +19,11 @@ abstract: >-
   respectively) and every rule is fabius's own — derived and
   adversarially verified, proved where a proof is claimed and labelled
   heuristic where it is not.
-  Evaluation is one reproducible benchmark in four panels, including a
-  blind-judged quality panel across four Claude tiers and the versioned
-  hundred-task FBS suite run BASE, FAB and FAB_MEMORY.
-version: 2.6.2
+  Evaluation is one dated benchmark in four panels, including a blind-judged
+  quality panel across four Claude tiers, a mixed historical execution-score and
+  model-graded factual-check track, and the versioned hundred-task FBS suite
+  run BASE, FAB and FAB_MEMORY. Historical receipt limits are stated explicitly.
+version: 2.6.3
 repository-code: "https://github.com/shear559/fabius"
 url: "https://fabius-landing.vercel.app"
 license-url: "https://github.com/shear559/fabius/blob/main/LICENSE"

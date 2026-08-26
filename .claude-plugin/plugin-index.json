@@ -14,11 +14,11 @@
           },
           {
             "name": "fabius-catena",
-            "description": "On-chain: money-safe EVM and Solana code, plus cryptographic sealing — hash, signature, Bitcoin-anchored timestamp, verifiable offline."
+            "description": "On-chain: money-safe EVM and Solana code, plus cryptographic sealing — hash, signature, and digest-bound OpenTimestamps proof with explicit pending/confirmed state."
           },
           {
             "name": "fabius-cohors",
-            "description": "Agent engineering: definition schema, permission model, single-vs-multi decision, five orchestration patterns, a 200+ agent catalog."
+            "description": "Agent engineering: definition schema, permission model, single-vs-multi decision, five orchestration patterns, and a curated agent-reference corpus."
           },
           {
             "name": "fabius-concilium",

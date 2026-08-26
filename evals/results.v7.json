@@ -8,7 +8,7 @@
    "FAB": "shipped AGENTS.md + routed SKILL.md verbatim",
    "FAB_MEMORY": "FAB + the task's committed memory_snapshot (shipped lesson log as fallback) injected as recalled fabius-archivum memory"
   },
-  "scoring": "7 dimensions x 0-4 (/28) by two blind judges (opus + fable, averaged) + objective automatic checks (3-6 per task) by a strict grader; mean output chars as the bias-free waste metric",
+  "scoring": "7 dimensions x 0-4 (/28) by two blind judges (opus + fable, averaged) + fixed factual checks (3-6 per task) interpreted from answer text by a model grader; mean output chars as the deterministic waste metric",
   "method_note": "A provider session-limit window interrupted judge/grade calls mid-run; every generation completed and was recovered verbatim from the run journals, and only the missing judge/grade calls were re-issued with byte-identical prompts (healer). Cells judged by a single judge are marked via n_judges in perTask."
  },
  "sonnet_full": {

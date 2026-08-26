@@ -1,12 +1,13 @@
 import { execSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
 
 export const meta = {
   name: 'fabius-eval-v7-fbs',
-  description: 'FBS v1.0 run — BASE vs FAB vs FAB_MEMORY on the committed suite; 7-dimension 0–4 rubric by two blind judges + objective automatic-check graders',
+  description: 'FBS v1.0 run — BASE vs FAB vs FAB_MEMORY; two blind rubric judges + fixed factual checks interpreted by a model grader',
   phases: [
     { title: 'Load', detail: 'shipped stance + routed contracts + lesson-log memory, verbatim from disk' },
     { title: 'Generate', detail: 'tasks × 3 modes, fresh context, no tools' },
-    { title: 'Grade', detail: 'objective automatic checks per answer' },
+    { title: 'Grade', detail: 'model-graded fixed factual checks per answer' },
     { title: 'Judge', detail: 'two blind judges × 7 dimensions × 0–4' },
   ],
 }
@@ -34,6 +35,7 @@ const GRADE_SCHEMA = { type: 'object', properties: { checks: { type: 'array', it
 const JUDGE_SCHEMA = { type: 'object', properties: Object.fromEntries(DIMS.map(d => [d, { type: 'integer' }])), required: DIMS, additionalProperties: false }
 
 const NO_TOOLS = "Do NOT use any tools. Do NOT read files or explore anything. Produce your complete answer directly as text in the 'answer' field."
+const sha256 = (text) => createHash('sha256').update(text || '').digest('hex')
 
 const JUDGE_SYS = `You are a strict, BLIND evaluator for an agent benchmark. You are NEVER told which system, stance, mode, or model produced the answer — judge only the text against the task. Score SEVEN dimensions, each an integer 0-4:
  task_success            0 failed · 1 partial · 2 acceptable · 3 good · 4 excellent
@@ -96,7 +98,7 @@ const results = await pipeline(TASKS,
     const { task, answers } = prev
     const rows = await parallel(answers.map(a => async () => {
       const [grade, ...votes] = await parallel([
-        () => agent(`You are a strict OBJECTIVE grader. For each automatic check below, decide from the ANSWER TEXT ALONE whether it passes, with one line of evidence (quote or state what is absent). Be literal; no benefit of the doubt.\n\nTASK:\n${task.prompt}\n\nAUTOMATIC CHECKS:\n${task.automatic_checks.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\nANSWER:\n${a.answer || '(empty)'}`,
+        () => agent(`You are a strict FACTUAL-CHECK grader. You are still a model, not a deterministic oracle. For each fixed check below, decide from the ANSWER TEXT ALONE whether it passes, with one line of evidence (quote or state what is absent). Be literal; no benefit of the doubt.\n\nTASK:\n${task.prompt}\n\nFIXED FACTUAL CHECKS:\n${task.automatic_checks.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\nANSWER:\n${a.answer || '(empty)'}`,
           { label: `grade:${task.id}:${a.mode}`, phase: 'Grade', effort: 'low', schema: GRADE_SCHEMA }),
         ...JUDGES.map(j => () =>
           agent(`${JUDGE_SYS}\n\nTASK:\n${task.prompt}\n\nEXPECTED BEHAVIOR (author's intent):\n${task.expected_behavior}\n\nKNOWN FAILURE MODES:\n${task.failure_modes.join(' · ')}\n\nANSWER:\n${a.answer || '(empty)'}`,
@@ -117,6 +119,8 @@ const results = await pipeline(TASKS,
         checks_passed: passed, checks_total: task.automatic_checks.length,
         chars: (a.answer || '').length,
         byJudge: Object.fromEntries(good.map(v => [v.judge, v.total])),
+        answer: a.answer, answer_sha256: sha256(a.answer),
+        factual_check_votes: checks, judge_votes: good,
       }
     }))
     return rows
@@ -136,10 +140,11 @@ function agg(rows) {
 
 const out = { _meta: {
   run: RUN_LABEL, suite: 'FBS v1.0', model: GEN_MODEL, modes: MODES, judges: JUDGES, tasks: TASKS.length,
-  rubric: '7 dimensions × 0–4 (total /28) per the suite spec; two blind judges averaged; automatic checks graded objectively per task',
+  rubric: '7 dimensions × 0–4 (total /28) per the suite spec; two blind judges averaged; fixed factual checks interpreted by a model grader per task',
   fab_mode: 'shipped AGENTS.md + routed specialist SKILL.md loaded verbatim from the repo at run time — the actual files, not a paraphrase',
   fab_memory_mode: 'FAB + the task\'s committed memory_snapshot injected as recalled fabius-archivum memory (shipped lesson log as fallback)',
   blind: 'judges see only the task, the author\'s expected behavior / failure modes, and the answer — never the mode, model, or stance',
+  receipt_schema: 'fabius-panel-d/v2; preserves candidate answers/digests, factual-check evidence and full judge votes',
   load_ok: loadOk,
 }, byMode: {}, byTierMode: {}, byCatMode: {}, deltas: {}, judgeAgreement: {}, perTask: flat }
 

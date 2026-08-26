@@ -24,9 +24,17 @@ const sha256hex = (b) => createHash("sha256").update(b).digest("hex");
 const checks = [];
 const ok = (name, pass, detail) => checks.push({ name, pass: !!pass, detail });
 
+const walkFiles = (dir, rel = "") => readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+  const childRel = rel ? `${rel}/${entry.name}` : entry.name;
+  const childAbs = join(dir, entry.name);
+  return entry.isDirectory() ? walkFiles(childAbs, childRel) : [childRel];
+});
+
 // ---- load every skill contract --------------------------------------------------
 const skillDir = join(ROOT, "skills");
 const skillNames = readdirSync(skillDir).filter((d) => existsSync(join(skillDir, d, "SKILL.md")));
+const discoveredSkillFiles = walkFiles(skillDir).filter((p) => p.endsWith("/SKILL.md")).sort();
+const topLevelSkillFiles = skillNames.map((d) => `${d}/SKILL.md`).sort();
 // flatten a YAML frontmatter scalar (block scalar or inline) to a single-line string
 const flattenKey = (fmText, key) => {
   const lines = (fmText || "").split("\n");
@@ -55,6 +63,11 @@ const skills = skillNames.map((d) => {
 
 // ---- 1. shape: 15 skills, one router, one always-on core, names unique ----------
 ok("count: exactly fifteen skill contracts", skills.length === 15, `${skills.length} found`);
+const nestedSkillFiles = discoveredSkillFiles.filter((p) => !topLevelSkillFiles.includes(p));
+ok("discovery: recursive install surface is exactly the fifteen declared contracts",
+   discoveredSkillFiles.length === 15 && nestedSkillFiles.length === 0,
+   `${discoveredSkillFiles.length} recursive SKILL.md; ${nestedSkillFiles.length} nested` +
+   (nestedSkillFiles.length ? ` — ${nestedSkillFiles.join(", ")}` : ""));
 ok("naming: every skill is fabius-prefixed", skills.every((s) => s.name === "fabius" || s.name.startsWith("fabius-")),
    skills.map((s) => s.name).join(", "));
 ok("naming: frontmatter name matches its directory", skills.every((s) => s.name === s.dir),
@@ -171,7 +184,24 @@ const onDisk = skills.map((s) => s.name).sort();
 ok("manifest: plugin.json skill list == skills on disk",
    JSON.stringify(declared) === JSON.stringify(onDisk),
    declared.length === onDisk.length ? `${declared.length} skills, sets equal` : `declared ${declared.length} vs disk ${onDisk.length}`);
-ok("manifest: version is 2.6.2", plugin.version === "2.6.2", plugin.version);
+const declaredFiles = (plugin.skills || []).map((p) => `${p.replace(/^\.\/skills\//, "").replace(/\/$/, "")}/SKILL.md`).sort();
+ok("manifest: declared skill list == recursively discoverable SKILL.md set",
+   JSON.stringify(declaredFiles) === JSON.stringify(discoveredSkillFiles),
+   `${declaredFiles.length} declared vs ${discoveredSkillFiles.length} discovered`);
+const pluginIndex = JSON.parse(readFileSync(join(ROOT, ".claude-plugin", "plugin-index.json"), "utf8"));
+const indexed = (pluginIndex.plugins?.fabius?.components?.skills || []).map((s) => s.name).sort();
+ok("manifest: plugin-index skill list == recursively discovered contracts",
+   JSON.stringify(indexed) === JSON.stringify(onDisk),
+   `${indexed.length} indexed vs ${onDisk.length} discovered`);
+const marketplace = JSON.parse(readFileSync(join(ROOT, ".claude-plugin", "marketplace.json"), "utf8"));
+const marketplacePlugin = marketplace.plugins?.length === 1 ? marketplace.plugins[0] : null;
+ok("manifest: marketplace identity/source/version == plugin.json",
+   marketplace.metadata?.version === plugin.version
+     && marketplacePlugin?.name === plugin.name
+     && marketplacePlugin?.source === "./"
+     && marketplacePlugin?.version === plugin.version,
+   `${marketplacePlugin?.name || "missing"}@${marketplacePlugin?.version || "missing"}; metadata ${marketplace.metadata?.version || "missing"}`);
+ok("manifest: version is valid semver", /^\d+\.\d+\.\d+$/.test(plugin.version || ""), plugin.version);
 
 // ---- 6. content-bound seal: file hashes + Merkle root recompute & match ----------
 const manifest = JSON.parse(readFileSync(join(ROOT, "provenance", "seal-manifest.json"), "utf8"));

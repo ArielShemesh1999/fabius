@@ -1,4 +1,5 @@
 import { execSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
 
 export const meta = {
   name: 'fabius-eval-v5',
@@ -45,6 +46,7 @@ const JUDGE_SCHEMA = { type:'object', properties:{ correctness:{ type:'integer' 
 const LOAD_SCHEMA = { type:'object', properties:{ content:{ type:'string' } }, required:['content'], additionalProperties:false }
 
 const NO_TOOLS = "Do NOT use any tools. Do NOT read files or explore the repository. Produce your complete answer directly as text in the 'answer' field."
+const sha256 = (text) => createHash('sha256').update(text || '').digest('hex')
 
 const JUDGE_SYS = "You are a strict, BLIND code/answer-quality judge. You are NOT told which system, stance, or model produced the answer; judge only the text. Give three integer scores 0-5:\n correctness - does it correctly and completely solve the stated task?\n minimality - is it free of over-engineering, speculative abstraction, and bloat? (penalize a 40-line class for a one-line need)\n best_practice - does it keep what matters for THIS task: input validation, parameterized queries, security, accessibility, least privilege, multiple-testing correction (FDR), idempotency, fixed-timestep, design tokens, held-out/regression evaluation before shipping a model, risk-first + analysis-not-advice for a market question - as relevant? Reward keeping them, penalize dropping them.\nReturn only the three integers."
 
@@ -113,6 +115,7 @@ const results = await pipeline(UNITS,
         correctness:+avg(v=>v.correctness).toFixed(3), minimality:+avg(v=>v.minimality).toFixed(3), best_practice:+avg(v=>v.best_practice).toFixed(3),
         total:+avg(v=>v.total).toFixed(3), chars:(a.answer||'').length,
         byJudge: Object.fromEntries(good.map(v=>[v.judge, v.total])),
+        answer:a.answer, answer_sha256:sha256(a.answer), judge_votes:good,
       }
     }))
     return judged
@@ -132,6 +135,7 @@ const out = { _meta:{
   run:'Run 5', generated_models:TIERS, arms:ARMS, judges:JUDGES, tasks:TASKS.length,
   fabius_arm:'The shipped AGENTS.md stance loaded verbatim from the repo at run time, PLUS the routed specialist\'s shipped SKILL.md contract verbatim for the 12 specialist tasks. Not a paraphrase — the actual files.',
   blind:'Judges are told only the task and the answer text; never the model, arm, or stance. Two judges (opus + fable) per answer, averaged, so no single model grades only its own work.',
+  receipt_schema:'fabius-panel-a/v2; preserves candidate answers, answer digests and full judge votes',
   load_ok:loadOk,
 }, byModel:{}, byModelArm:{}, byCat:{}, judgeAgreement:{}, perTask:flat }
 

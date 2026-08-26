@@ -24,15 +24,15 @@
 
 ## one set of rules. above every model.
 
-fabius is a plugin — **fifteen coordinated skills and twenty-two proven routing rules**, loaded on top of whatever model you already run, inside the harness you already use. The model supplies the capability; fabius supplies the discipline. **You choose the goal; fabius chooses the machinery** — capability-first routing, research that stops the moment another step can no longer change the decision, verification before anything ships, and a memory that stops re-deriving. Nothing to host. Nothing to sign up for.
+fabius is a plugin — **fifteen coordinated public skills and twenty-two formally argued core routing rules**, loaded on top of whatever model you already run, inside the harness you already use. The model supplies the capability; fabius supplies the discipline. **You choose the goal; fabius chooses the machinery** — capability-first routing, research that stops the moment another step can no longer change the decision, verification before anything ships, and permissioned memory that stops re-deriving. Nothing to host. Nothing to sign up for.
 
-The contract is written down, not implied: the identity and how fabius must be judged (same model, better outcomes, less waste) is [IDENTITY.md](IDENTITY.md); the orchestration doctrine (the flow, provider selection, the stopping logic, the acting ladder) is [`skills/fabius/references/orchestration-doctrine.md`](skills/fabius/references/orchestration-doctrine.md); the site is **[fabius-landing.vercel.app](https://fabius-landing.vercel.app)**.
+The contract is written down, not implied: [IDENTITY.md](IDENTITY.md) defines the testable objective—whether the same model can produce a better outcome with less waste—not a universal result claimed in advance. The orchestration doctrine (the flow, provider selection, stopping logic, and acting ladder) is [`skills/fabius/references/orchestration-doctrine.md`](skills/fabius/references/orchestration-doctrine.md); the site is **[fabius-landing.vercel.app](https://fabius-landing.vercel.app)**.
 
 ---
 
 ## Runs above every model. Exactly the same rules.
 
-fabius has no model roster and no runtime of its own — it is a set of rules the harness hands to whichever model you choose. Frontier or open-weight, hosted, routed or local: the contract is identical. Thirty-six of the families it already runs above:
+fabius has no required model roster, hosted service, or external runtime: its core is a set of rules the harness hands to whichever model you choose. The repository also includes an optional zero-dependency local runner for use without a harness. Frontier or open-weight, hosted, routed or local: the contract is identical. Thirty-six compatible model families are shown below; compatibility is not a benchmark claim:
 
 <table align="center"><tr>
 <td align="center" title="Anthropic"><img src="assets/brands/s/anthropic.webp" width="30" /><br/><sub><b>Claude</b></sub></td>
@@ -128,10 +128,10 @@ grok plugin enable fabius
 |---|---|
 | `fabius` | the router — reads the job, picks the layers, the machinery rung, the model tier |
 | `fabius-parcus` | the always-on lean core — terse output, the YAGNI ladder, surgical change |
-| `fabius-disciplina` | engineering process — brainstorm → plan → TDD → prove, root-cause debugging |
+| `fabius-disciplina` | engineering process — impact map → failing reproduction → minimal fix → prove, root-cause debugging |
 | `fabius-decor` | ship-grade design — tokens, one accent, data-viz, decks + infographics, RTL |
 | `fabius-cohors` | agent engineering — least privilege, orchestration up to a swarm |
-| `fabius-archivum` | persistent memory — the LLM-wiki, auto-recall, meeting transcripts into records |
+| `fabius-archivum` | permissioned memory — typed records, gated recall, append-only history, fresh-eyes routes |
 | `fabius-mercatus` | go-to-market — positioning, converting copy, SEO, draft-only outreach |
 | `fabius-praesidium` | defensive security — STRIDE, OWASP, severity → fix → regression test |
 | `fabius-ludus` | game craft — core loop first, deliberate juice, jam-sized scope |
@@ -148,13 +148,13 @@ Depth on demand: [ARCHITECTURE.md](ARCHITECTURE.md) · [CORPUS.md](CORPUS.md) ·
 
 ## The proof
 
-One reproducible benchmark, four panels, every miss printed: blind-judged quality across four Claude tiers, objective executed tests + factual checklists, cross-family demos, and the 100-task FBS run of the identity contract — **every capable tier beats both the bare model and a "be concise" control, on 20–35% less output**. Numbers, receipts and method: [BENCHMARKS.md](BENCHMARKS.md) · the mathematics and the coherence proof: [the whitepaper](paper/fabius-as-a-system.pdf) (50 pp).
+One versioned benchmark, four panels, every miss printed: blind-judged quality, a mixed track of executed checks and explicitly model-graded factual checklists, cross-family demonstrations, and the 100-task FBS run of the identity contract. Results are reported per model, panel, and task; they do not establish that every model or domain improves. Reproducibility is limited to the artifacts actually committed, and those limits are printed beside the numbers. Method and receipts: [BENCHMARKS.md](BENCHMARKS.md) · formal arguments and coherence analysis: [the whitepaper](paper/fabius-as-a-system.pdf) (50 pp).
 
 ---
 
 ## Provenance
 
-The fifteen contracts are cryptographically sealed — SHA-256 per file, a Merkle root, an OpenTimestamps anchor to Bitcoin, and a signed release tag. Verify offline: `bash provenance/verify.sh`. Details: [PROVENANCE.md](PROVENANCE.md).
+The fifteen public contracts are content-sealed with SHA-256 and a Merkle root; releases use a signed tag and an OpenTimestamps proof whose verifier reports whether Bitcoin confirmation is complete or still pending. Verify the exact state with `bash provenance/verify.sh`. Details: [PROVENANCE.md](PROVENANCE.md).
 
 ---
 

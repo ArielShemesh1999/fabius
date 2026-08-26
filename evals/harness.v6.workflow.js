@@ -1,13 +1,15 @@
-import { execSync } from 'node:child_process'
+import { execSync, spawnSync } from 'node:child_process'
 import { tmpdir } from 'node:os'
+import { createHash } from 'node:crypto'
+import { mkdirSync, writeFileSync } from 'node:fs'
 
 export const meta = {
   name: 'fabius-eval-v6',
-  description: 'Objective deliverable tests: EXECUTE generated code against hidden test suites + grade research/domain deliverables against a factual checklist, across all four internal models',
+  description: 'Mixed verification: a deterministic local runner executes generated code against hidden suites; two model graders score fixed factual checklists',
   phases: [
     { title: 'Load', detail: 'read the shipped stance + specialist contracts verbatim' },
     { title: 'Generate', detail: '4 models x 9 tasks x 3 arms' },
-    { title: 'Verify', detail: 'run the code (real tests) / grade against a factual checklist' },
+    { title: 'Verify', detail: 'deterministic local code execution / model-graded fixed factual checklist' },
   ],
 }
 
@@ -16,8 +18,41 @@ const SCRATCH = process.env.FABIUS_SCRATCH || `${tmpdir()}/fabius-eval-run6`
 
 const TERSE = 'Be concise. Write minimal code. Skip unnecessary explanation.'
 const NO_TOOLS = "Do NOT use any tools. Do NOT read files or explore the repository. Produce your complete answer directly as text in the 'answer' field."
+const sha256 = (text) => createHash('sha256').update(text || '').digest('hex')
 
-// ---------- EXEC tasks: the deliverable is code we actually run against hidden tests ----------
+function extractCandidate(answer, lang) {
+  const blocks = [...String(answer || '').matchAll(/```([^\n]*)\n([\s\S]*?)```/g)]
+    .map((m) => ({ tag: m[1].trim().toLowerCase(), code: m[2] }))
+  const aliases = lang === 'js' ? new Set(['js', 'javascript', 'mjs', 'node']) : new Set(['py', 'python', 'python3'])
+  const picked = blocks.find((b) => aliases.has(b.tag)) || blocks.find((b) => !b.tag) || blocks[0]
+  const code = picked ? picked.code : String(answer || '')
+  return code.split('\n').filter((line) => !/^\s*(?:module\.exports\s*=|exports\.[A-Za-z_$][\w$]*\s*=|export\s+default\b|export\s*\{)/.test(line)).join('\n').trim()
+}
+
+function executeCandidate(task, answer, uid) {
+  mkdirSync(SCRATCH, { recursive: true })
+  const code = extractCandidate(answer, task.lang)
+  const source = task.tmpl.replace('__CANDIDATE__', code)
+  const file = `${SCRATCH}/${uid}.${task.ext}`
+  writeFileSync(file, source, 'utf8')
+  const env = { PATH: process.env.PATH || '/usr/bin:/bin', LANG: 'C.UTF-8', LC_ALL: 'C.UTF-8',
+    HOME: SCRATCH, TMPDIR: SCRATCH, NO_COLOR: '1' }
+  const run = spawnSync(task.runner, [file], { cwd: SCRATCH, env, encoding: 'utf8', timeout: 10_000, maxBuffer: 1024 * 1024 })
+  const stdout = run.stdout || '', stderr = run.stderr || ''
+  const resultLines = [...stdout.matchAll(/^RESULT\s+(\d+)\/(\d+)\s*$/gm)]
+  const match = resultLines[0]
+  const validResult = run.status === 0 && resultLines.length === 1 && !!match && Number(match[2]) === task.total
+  const passed = validResult ? Math.max(0, Math.min(task.total, Number(match[1]))) : 0
+  return {
+    ran: validResult, tests_total: task.total, tests_passed: passed,
+    command: `${task.runner} ${file}`, exit_code: Number.isInteger(run.status) ? run.status : -1,
+    signal: run.signal || null, error: run.error ? String(run.error.message || run.error) : '',
+    stdout, stderr, extracted_code_sha256: sha256(code), test_file_sha256: sha256(source),
+    note: validResult ? `RESULT ${passed}/${task.total}` : 'process did not emit the exact expected RESULT line',
+  }
+}
+
+// ---------- EXEC tasks: a deterministic local runner executes hidden tests ----------
 const JS_OFFBY1 = `__CANDIDATE__
 ;(function(){
 let p=0,m=0; const eq=(a,b,msg)=>{m++; if(a===b)p++; else console.error('FAIL '+msg+' got '+a);};
@@ -135,7 +170,6 @@ const ARMS = ['baseline','terse','fabius']
 const GRADERS = ['opus','fable']
 
 const GEN_SCHEMA = { type:'object', properties:{ answer:{ type:'string' } }, required:['answer'], additionalProperties:false }
-const RUN_SCHEMA = { type:'object', properties:{ ran:{type:'boolean'}, tests_total:{type:'integer'}, tests_passed:{type:'integer'}, note:{type:'string'} }, required:['ran','tests_total','tests_passed','note'], additionalProperties:false }
 const GRADE_SCHEMA = { type:'object', properties:{ results:{ type:'array', items:{ type:'boolean' } } }, required:['results'], additionalProperties:false }
 const LOAD_SCHEMA = { type:'object', properties:{ content:{ type:'string' } }, required:['content'], additionalProperties:false }
 
@@ -186,26 +220,9 @@ const results = await pipeline(UNITS,
     const graded = await parallel(answers.map((a) => async () => {
       if (task.kind === 'exec'){
         const uid = `${unit.tier}_${task.id}_${a.arm}`
-        const file = `${SCRATCH}/${uid}.${task.ext}`
-        const runner = await agent(
-`You are a deterministic TEST RUNNER. Do not judge quality; run the code and report the numbers.
-Steps, exactly:
-1. mkdir -p ${SCRATCH}
-2. Take the CANDIDATE answer below and extract ONLY the ${task.lang} code that implements the required function (strip markdown fences and any prose). Do NOT fix or improve the candidate's logic — test it exactly as written; you may only remove non-code text and, if the candidate wrapped everything in a markdown block, unwrap it. ALSO remove any top-level module-export line (\`module.exports = ...\`, \`export default ...\`, \`export { ... }\`, \`exports.x = ...\`) — the harness calls the function in the same file scope, so an export statement is irrelevant to the tested logic and would crash on a module-system mismatch; removing it is required and neutral.
-3. Build the test file by substituting the candidate code for the token __CANDIDATE__ in this TEMPLATE, and write it to ${file} :
---- TEMPLATE START ---
-${task.tmpl}
---- TEMPLATE END ---
-4. Run:  ${task.runner} ${file}
-5. Read the line beginning with "RESULT p/m". Report tests_passed=p, tests_total=m. If the process errored before printing RESULT (syntax error / crash), set ran=false, tests_passed=0, tests_total=${task.total}, and put the error in note. Otherwise ran=true. Keep note under 200 chars.
-Return ONLY the structured result.
-
-CANDIDATE answer:
-${a.answer || '(empty)'}`,
-          { label:`run:${uid}`, phase:'Verify', effort:'medium', schema:RUN_SCHEMA, agentType:'general-purpose' })
-        const rr = runner || { ran:false, tests_total:task.total, tests_passed:0, note:'runner died' }
-        const total = rr.tests_total || task.total
-        return { arm:a.arm, cat:task.cat, kind:'exec', tier:unit.tier, task:task.id, ran:!!rr.ran, passed:Math.max(0,Math.min(total, rr.tests_passed||0)), total, frac:total? Math.max(0,Math.min(total, rr.tests_passed||0))/total : 0, chars:(a.answer||'').length, note:rr.note||'' }
+        const rr = executeCandidate(task, a.answer, uid)
+        const total = rr.tests_total
+        return { arm:a.arm, cat:task.cat, kind:'exec', tier:unit.tier, task:task.id, ran:rr.ran, passed:rr.tests_passed, total, frac:total ? rr.tests_passed/total : 0, chars:(a.answer||'').length, note:rr.note, answer:a.answer, answer_sha256:sha256(a.answer), execution_receipt:rr }
       } else {
         const n = task.checklist.length
         const votes = await parallel(GRADERS.map((g) => async () => {
@@ -226,7 +243,7 @@ ${a.answer || '(empty)'}`,
         // per-checkpoint mean across graders, then sum
         let satisfied = 0
         for (let i=0;i<n;i++){ const s = good.reduce((acc,v)=>acc+(v[i]?1:0),0)/(good.length||1); satisfied += s }
-        return { arm:a.arm, cat:task.cat, kind:'rubric', tier:unit.tier, task:task.id, passed:+satisfied.toFixed(3), total:n, frac:n? satisfied/n : 0, chars:(a.answer||'').length, graders:good.length }
+        return { arm:a.arm, cat:task.cat, kind:'rubric', tier:unit.tier, task:task.id, passed:+satisfied.toFixed(3), total:n, frac:n? satisfied/n : 0, chars:(a.answer||'').length, graders:good.length, answer:a.answer, answer_sha256:sha256(a.answer), checklist_votes:good }
       }
     }))
     return graded
@@ -239,9 +256,10 @@ const flat = results.flat().filter(Boolean)
 function pct(rows){ const t=rows.reduce((a,r)=>a+r.total,0), p=rows.reduce((a,r)=>a+r.passed,0); return { pts:+p.toFixed(2), total:t, pct: t? +(100*p/t).toFixed(1):0, chars: rows.length? Math.round(rows.reduce((a,r)=>a+r.chars,0)/rows.length):0 } }
 
 const out = { _meta:{
-  run:'Run 6 — objective deliverable tests', generated_models:TIERS, arms:ARMS, graders:GRADERS,
-  method:'EXEC tasks: the generated code is written to a file and RUN against a hidden test suite; the score is real tests passed / total. RUBRIC tasks (research/security/on-chain/automation): the deliverable is graded against a fixed factual checklist by two strict graders (opus+fable), averaged per checkpoint. No LLM "quality" score — pass/fail facts only.',
+  run:'Run 6 — mixed deterministic execution and model-graded factual checks', generated_models:TIERS, arms:ARMS, graders:GRADERS,
+  method:'EXEC tasks: deterministic in-process extraction + local spawnSync execution against hidden tests, with answer/code/test-file digests, command, exit, stdout and stderr retained. RUBRIC tasks: two model graders (opus+fable) score fixed factual checklists, averaged per checkpoint, with individual votes retained. The historical v6 receipt predates this evidence schema.',
   fabius_arm:'Shipped AGENTS.md verbatim + the routed specialist SKILL.md verbatim (rubric tasks). Real files, not a paraphrase.',
+  receipt_schema:'fabius-panel-b/v2; preserves candidate answers/digests, deterministic execution receipts and individual checklist votes',
   exec_tasks:TASKS.filter(t=>t.kind==='exec').map(t=>t.id), rubric_tasks:TASKS.filter(t=>t.kind==='rubric').map(t=>t.id), load_ok:loadOk,
 }, byModel:{}, byModelArm:{}, byTask:{}, perItem:flat }
 

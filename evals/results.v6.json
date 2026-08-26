@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "run": "Run 6 — objective deliverable tests",
+    "run": "Run 6 — mixed deliverable verification",
     "generated_models": [
       "haiku",
       "sonnet",
@@ -16,7 +16,7 @@
       "opus",
       "fable"
     ],
-    "method": "EXEC tasks: the generated code is written to a file and RUN against a hidden test suite; the score is real tests passed / total. RUBRIC tasks (research/security/on-chain/automation): the deliverable is graded against a fixed factual checklist by two strict graders (opus+fable), averaged per checkpoint. No LLM \"quality\" score — pass/fail facts only.",
+    "method": "EXEC tasks: a tool-using Workflow agent extracts the generated code, writes and runs a hidden test file, then returns bounded pass counts; raw files/stdout were not retained. RUBRIC tasks: two model graders (opus+fable) score fixed factual checklists, averaged per checkpoint. This is model-mediated factual grading, not a judge-free deterministic oracle.",
     "fabius_arm": "Shipped AGENTS.md verbatim + the routed specialist SKILL.md verbatim (rubric tasks). Real files, not a paraphrase.",
     "exec_tasks": [
       "offby1",

@@ -1,13 +1,19 @@
 {
- "_meta": {
-  "name": "The fabius benchmark",
-  "claim": "One test, four panels, one receipt: fabius improves every model it runs on — measured blind on the four Claude models current at the 2026-07-01 run with the shipped files verbatim, verified objectively by executing the generated code against hidden tests and checking domain deliverables against factual checklists, and demoed blind across external model families — while cutting output on every model.",
+  "_meta": {
+    "name": "The fabius benchmark",
+    "claim": "One dated benchmark in four panels: on Panel A fabius improved three of four Claude tiers and reduced output on all four; Panel B's mixed, model-mediated historical receipt records model-graded factual-checklist gains while its reported executed-code scores tied at ceiling; Panel C recorded positive blind-judge demos across four external families; Panel D printed both gains and regressions. These measurements do not support a universal every-model claim.",
+    "receipt_schema": "fabius-benchmark-receipt/v2",
+    "receipt_limitations": [
+      "Historical v5/v6/v7 score receipts do not contain candidate answer text, so the original generations cannot be independently re-judged from the repository.",
+      "Historical Panel B receipts do not contain generated execution artifacts or raw stdout/stderr; only bounded scores and short runner notes remain.",
+      "Panel C has aggregate numbers only; its raw portable receipt was not committed and an exact replay is impossible on moving model endpoints."
+    ],
   "arms": [
    "baseline",
    "terse (a generic 'be concise' control — the real test)",
    "fabius (the shipped AGENTS.md + routed SKILL.md, verbatim)"
   ],
-  "honest_misses": "Printed, not hidden: on the objective panel every one of the four models gains (+3.5 to +17.4); on the quality panel three of the four tiers gain — Sonnet 5 +0.43, Fable 5 +0.23, Opus 4.8 +0.20 — and the single miss is Haiku dipping -0.33 on trivial one-liners under a full verbatim contract (-4.50 on those three tasks) while gaining +0.71 on its specialist tasks — the empirical case for model-tier routing and the lean gate.",
+    "honest_misses": "Printed, not hidden: Panel B's mixed score rises on four models, entirely in its model-graded checklist track; historical model-operated executed-code score records tie. On Panel A three tiers gain, Haiku falls -0.33 overall (-1.03 vs terse), and pooled build/accessibility/game categories regress. Panel D includes core-tier and memory regressions.",
   "models": "Panel A/B generated on the four Claude models current at the 2026-07-01 run, each via per-agent model override: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (claude-haiku-4-5).",
   "modes_panelD": "Panel D executes the IDENTITY.md evaluation contract on the versioned Fabius Benchmark Suite (evals/suite/, FBS v1.0): BASE (bare model) / FAB (shipped AGENTS.md + routed SKILL.md verbatim) / FAB_MEMORY (FAB + the task's committed memory_snapshot as recalled fabius-archivum memory)."
  },
@@ -149,14 +155,14 @@
    }
   },
   "judgeAgreement": {
-   "mean_abs_total_diff": 0.69,
+      "mean_abs_total_diff": 0.72,
    "n": 180,
    "scale": "0-15 total"
   },
   "raw": "evals/results.v5.json"
  },
- "panelB_objective": {
-  "method": "9 deliverables x 3 arms x the same four models. Generated code is written to a file and RUN against a hidden test suite; research/security/on-chain/automation deliverables are graded against a fixed factual checklist by two strict graders. No LLM taste in the loop.",
+ "panelB_mixed_verification": {
+    "method": "9 deliverables x 3 arms x the same four models. Four code tasks were extracted, written, executed and reported by a tool-using Workflow agent against hidden tests; five domain deliverables were scored against fixed factual checklists by two model graders. This is a mixed model-mediated verification track, not a judge-free deterministic oracle. All executed-code arms tied at 100%; the measured lift comes from the model-graded checklist tasks.",
   "byModel": {
    "haiku": {
     "baseline_pct": 75.6,
@@ -306,7 +312,7 @@
   },
   "raw": "evals/results.v6.json"
  },
- "panelC_external_demos": {
+  "panelC_external_demos": {
   "method": "Blind cross-family demo on external providers via the portable harness (evals/portable_eval.py; 6 tasks, 3 categories, measured 2026-06-22 with live provider keys). Lift = fabius minus the 'be concise' control on genuine-build tasks, /15.",
   "lift_vs_control_genuine_build": {
    "grok": 8.5,
@@ -314,11 +320,13 @@
    "claude": 7.0,
    "mistral": 2.5
   },
-  "note": "Every family gains. Gemini wired in the harness (Google OpenAI-compatible endpoint) — no number committed without a key. Re-run any family: OPENAI_API_KEY/GEMINI_API_KEY/MISTRAL_API_KEY=... python evals/portable_eval.py"
+    "note": "Every measured family gained in the historical run. Gemini is wired in the harness (Google OpenAI-compatible endpoint), but no Gemini number was committed without a key. A new run creates a new dated measurement; it cannot reconstruct the missing historical raw receipt.",
+    "raw": null,
+    "receipt_status": "aggregate-only; not independently replayable"
  },
- "structural": "23/23 — node evals/structural.mjs (deterministic, no key)",
+  "structural": "node evals/structural.mjs — deterministic, no key; invariant count is derived at run time",
  "panelD_fbs_run": {
-  "method": "100 neutral production-shaped tasks (20 smoke / 50 core / 30 stress, categories A-J, toy problems banned, 3-6 objective automatic_checks per task) x 3 modes; scored /28 on a 7-dimension 0-4 rubric by TWO blind judges (opus+fable; inter-judge gap 1.05/28 sonnet, 0.83/28 haiku) + a strict objective grader per answer. Run 2026-07-05.",
+    "method": "100 neutral production-shaped tasks (20 smoke / 50 core / 30 stress, categories A-J, toy problems banned, 3-6 fixed factual checks per task) x 3 modes; scored /28 on a 7-dimension 0-4 rubric by TWO blind judges (opus+fable; inter-judge gap 1.05/28 sonnet, 0.83/28 haiku) + one model grader interpreting the factual checks from answer text. Run 2026-07-05.",
   "suite": "evals/suite/ (FBS v1.0, committed; validator node evals/suite/validate.mjs = 9/9)",
   "sonnet5_full_suite": {
    "byMode": {

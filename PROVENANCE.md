@@ -6,29 +6,30 @@
 
 </div>
 
-fabius is original work. This document is the apparatus that lets anyone — a court, a maintainer, a stranger — confirm **when it existed**, anchored to Bitcoin with no trusted party, and **who made it**, as strongly as the custody of one signing key allows. Six mechanisms back that up: three are plain repository facts — the fingerprint (§3), the proprietary copyright notice (§4), and GitHub's retained push history (§4); one is a **content-bound seal** recomputable from the files themselves (§3·b); and two are cryptographic artifacts generated when the release is **sealed**: the Bitcoin timestamp (§1) and the signed release tag (§2). `bash provenance/verify.sh` reports the live state of each. Every mechanism is paired with exactly what it does *and does not* prove, in the same measured-not-claimed spirit as [RESEARCH.md](RESEARCH.md).
+fabius is original work. This document is the apparatus that lets anyone inspect **what was sealed**, **which key signed it**, and whether its detached OpenTimestamps proof is merely calendar-attested or actually Bitcoin-confirmed. Six mechanisms back that up: three repository facts — the fingerprint (§3), proprietary copyright notice (§4), and GitHub history (§4); one recomputable content-bound seal (§3·b); and two release artifacts — the digest-bound OpenTimestamps proof (§1) and signed tag (§2). `bash provenance/verify.sh` reports the live state. A pending proof is not called Bitcoin-confirmed.
 
 **The honesty stance, up front.** A public git repository **cannot be made uncloneable.** That is not a missing setting — it is how git works: anyone who can read the repo can `git clone` it in full, history included. Disabling forks does not stop it. No code, license, or watermark changes this. Anyone who promises a "clone-proof" public repo is selling a fiction.
 
-So this package does not attempt prevention. It does three things that are real:
+So this package does not attempt prevention. It combines three kinds of evidence:
 
-1. **Priority** — proves this exact work existed, in your hands, *before any copy could*. An un-forgeable date.
-2. **Authorship** — binds the work to your cryptographic key.
-3. **Detection & enforcement** — makes a lazy or automated clone *findable*, and gives you a clean, evidence-backed path to a takedown.
+1. **Priority** — after Bitcoin confirmation, places an independently checkable upper bound on when the exact digest-bound record existed. It does not prove that no earlier copy existed.
+2. **Key attribution** — binds a release tag to the holder of the committed signing key; key custody determines the strength of that attribution.
+3. **Detection & enforcement support** — makes some public verbatim clones searchable and preserves evidence useful to a fact-specific enforcement process.
 
 The one true way to keep an *idea* from being copied is to not publish it. Once it is public, ownership is defended by **provenance and enforcement, not by a lock.** This document is that defense.
 
 ---
 
-## 1 · Priority — an un-forgeable date (OpenTimestamps → Bitcoin)
+## 1 · Priority evidence (OpenTimestamps → Bitcoin)
 
 The strongest evidence of ownership is a timestamp no one can backdate. A thief can copy your files; they cannot copy a date that predates their copy.
 
-At seal time, `provenance/sealed-commit.txt` records the full git commit hash and tree hash of the sealed release. A commit hash is the SHA over the root of a Merkle (hash) tree covering every tracked file, *plus* the commit metadata and parent links — so that one 40-character hash commits every file **and** the full ancestor history; change a single byte anywhere and the hash changes. (Git's object hash is SHA-1 by default: collision-weakened but still second-preimage-secure, and the OpenTimestamps anchor over the file uses SHA-256 — so backdating requires breaking the timestamp, not just git.) `provenance/sealed-commit.txt.ots` is the **OpenTimestamps** proof that anchors the SHA-256 of that file into the **Bitcoin blockchain**.
+At seal time, `provenance/sealed-commit.txt` records the full git commit hash and tree hash of the sealed release. A commit hash covers the tracked tree, commit metadata and parent links. The adjacent `.ots` file is a detached proof over the record's SHA-256. `verify.sh` first compares the digest embedded in that proof with a fresh SHA-256 of the record; only a matching proof can be considered. Calendar attestations are the pending state. A `BitcoinBlockHeaderAttestation` is the confirmed state.
 
-- **What it proves.** That the sealed commit — and therefore every file it contains — existed no later than the timestamp's Bitcoin block. This is checkable by anyone, forever, with no trusted third party: the proof is math against the public chain.
+- **What it proves after Bitcoin confirmation.** That the digest-bound sealed record — and therefore the commit/tree it names — existed no later than the attested block. Before confirmation it proves only that calendar servers accepted the digest; it has no Bitcoin block date yet.
 - **What it does NOT prove.** Existence-by-a-date is not, by itself, authorship — it proves the *data* was there, not that *you* are the only one who had it. Its power is in combination (§2, §4): priority date **+** your signature **+** GitHub's retained push history (public and independently checkable, §4) makes "I had it first, signed, third-party-recorded" provable from three independent directions.
-- **Honest caveat.** A fresh OpenTimestamps proof is initially attested by calendar servers and *upgrades* to full Bitcoin confirmation within a few hours to a day. Run `ots upgrade provenance/sealed-commit.txt.ots` to pull the Bitcoin attestation once it is mined; `verify.sh` reports which state it is in.
+- **Honest caveat.** A fresh proof starts pending and may later upgrade to a Bitcoin attestation. Run `bash provenance/upgrade-seal.sh` when available; it checks detached-digest binding before the upgrade and never commits or pushes. Never infer confirmation from the file's presence or prose. `verify.sh` is the live state check.
+- **Legacy record wording.** The current v2.6.2 `sealed-commit.txt` is itself the immutable bytes covered by the detached proof, so changing its legacy sentence would invalidate that proof. The sentence uses “anchored” more broadly than this document does. Treat only the parsed attestation reported by `verify.sh` as status; today the bundled proof is digest-bound and pending, not Bitcoin-confirmed.
 
 ---
 
@@ -57,14 +58,14 @@ Every skill file carries a provenance marker:
 
 The fingerprint above is a *discovery* aid; it is not derived from the content. `provenance/seal-manifest.json` adds the **content-bound** half: a SHA-256 over every skill contract (`skills/*/SKILL.md`) and the core system docs (`ARCHITECTURE.md`, `CORPUS.md`, `AGENTS.md`), plus a **binary Merkle root** over those leaves and the algorithm identifier. `bash provenance/seal-skills.sh` builds it; `verify.sh` recomputes it.
 
-- **What it does.** Unlike the comment, every value here is **recomputable from the files themselves** — a verifier hashes the bytes and compares. Forging a seal for altered content requires a **hash collision**, which is a public, detectable event (the *detectability-by-construction* property). The Merkle root commits every sealed file at once (the exact count and list live in `provenance/seal-manifest.json`), so the OpenTimestamps anchor over the **latest sealed commit** (§1) — which contains this manifest — extends an **un-backdatable date to the exact bytes of every sealed skill contract and core doc**, not just to a comment. Between an edit and the next re-seal + re-tag + re-stamp (§6), the manifest stays recomputable but the new bytes are not yet Bitcoin-anchored — `verify.sh` reports that state explicitly.
+- **What it does.** Every value is recomputable from the files. The Merkle root commits the exact sealed file list at once. A digest-bound, Bitcoin-confirmed release record containing that manifest extends the block date to those exact bytes. A pending proof does not. Between an edit and the next re-seal + re-tag + re-stamp, new bytes are development state only.
 - **What it does NOT do.** It binds the **exact expression**: rewording a skill changes its hash, by design. So it strengthens detection of **verbatim or substantial** copies and gives integrity (tamper-evidence) for this repo's own files — it does not reach an idea-level reimplementation, the same honest limit as everything here. This is **boring cryptography only** (a hash and a Merkle tree — no trusted setup, no token), drawn from fabius's own SEAL research; the primitive and its rules are documented in [`skills/fabius-catena/references/sealing.md`](skills/fabius-catena/references/sealing.md).
 
 ---
 
 ## 4 · Two records you already hold for free
 
-- **No license granted (legal hook).** fabius is private and **proprietary — all rights reserved** (`LICENSE`; `NOTICE` restates it for visibility). No permission to use, copy, or redistribute is granted to anyone, so a verbatim or substantial copy is copyright infringement from the first copy — there is no license condition to satisfy or forfeit, and no license defense to raise. You still must show they copied substantial protected expression; the proprietary status removes any permission argument, it is not a standalone win.
+- **No broad license granted (legal hook).** fabius is **publicly readable and proprietary** (`LICENSE`; `NOTICE` restates it for visibility). Public visibility is not a grant to copy or redistribute. Apply the actual LICENSE terms; proprietary status is not a standalone infringement finding.
 - **GitHub's retained history (third-party record).** Every commit and push to this GitHub repo is timestamped and retained by a neutral third party (the repo is public, so this record is already openly visible and independently checkable by anyone, not merely producible on request). Your commit timeline is corroborating evidence of priority, independent of §1.
 
 ---
@@ -89,24 +90,25 @@ What this package **cannot** stop: a determined actor who rewrites fabius from s
 bash provenance/verify.sh
 ```
 
-It checks, in order: the fingerprint is intact in every skill; the sealed commit is in this branch's history; the OpenTimestamps proof (and whether it is Bitcoin-confirmed yet); the signed tag; the **content-bound seal** — recomputing every sealed file's SHA-256 and the Merkle root against `provenance/seal-manifest.json`; and **seal freshness** — that the Bitcoin-anchored commit actually contains the current manifest and the newest sealed tag matches the current anchor record (a stale anchor reports NOTE until you re-tag and re-stamp). The fingerprint and seal-manifest checks run today; the timestamp and signed-tag checks become meaningful **after the release is sealed** and report NOTE until then. Manual equivalents:
+It checks, in order: fingerprint coverage; anchor commit ancestry; **detached OTS digest binding before reading any attestation**; pending vs Bitcoin-confirmed state; allowed-signature tag; every sealed file hash and Merkle root; and whether the anchor record/tag contain the current manifest. A proof swap from another release is a failure even if that proof has a valid Bitcoin attestation. A pending proof remains a NOTE, never a Bitcoin PASS.
 
 ```bash
 shasum -a 256 skills/*/SKILL.md ARCHITECTURE.md CORPUS.md AGENTS.md                # content-bound seal — compare to provenance/seal-manifest.json
-ots verify provenance/sealed-commit.txt.ots                                       # priority date (Bitcoin)
+ots info provenance/sealed-commit.txt.ots                                         # compare File sha256 hash to: shasum -a 256 provenance/sealed-commit.txt
+ots verify provenance/sealed-commit.txt.ots                                       # then verify the matching proof's attestation
 git -c gpg.ssh.allowedSignersFile=provenance/allowed_signers \
     verify-tag "$(git tag --list 'v*-sealed*' --sort=-creatordate | head -1)"  # authorship
 grep -rl "provenance fab1-" skills/*/SKILL.md                                     # fingerprint coverage
 ```
 
-After editing any skill or core doc, rebuild the seal so it stays valid: `bash provenance/seal-skills.sh` (then re-tag and re-stamp to refresh §1–§2).
+After editing any top-level skill contract or core doc, rebuild the seal: `bash provenance/seal-skills.sh`. A new content release also needs a new version, release commit, anchor record/proof and signed tag. The human-gated sequence is in [`.github/RELEASE.md`](.github/RELEASE.md).
 
 ---
 
 ## 7 · If someone steals it — the enforcement playbook
 
 1. **Capture evidence.** Archive the offending repo/page (URL + screenshot + `git clone` of the copy). Note the date.
-2. **Establish your priority.** Run `ots verify` on your proof and export your GitHub commit history. Your date predates theirs — that is the whole case.
+2. **Assemble priority evidence.** First confirm the detached digest matches, then run `ots verify` and export the relevant Git history. If the proof has a Bitcoin attestation, its block date is one item of evidence; it is not by itself a complete authorship or infringement case.
 3. **File a DMCA takedown.** Use GitHub's copyright form at `https://github.com/contact/dmca` (fastest), email `copyright@github.com`, or postal mail. A valid notice must include: your original work (`github.com/shear559/fabius`) **and the specific infringing URLs/paths in the clone**; your name, email, and physical address; a good-faith-belief statement; a statement, **under penalty of perjury**, that the information is accurate and that you are the owner or authorized to act for them; and your signature; cite the retained-notice violation and your timestamp proof. GitHub reviews the notice for these required elements and, if complete, notifies the user and generally gives them about a day to act before disabling the content; the user may file a counter-notice that can restore it. GitHub recommends contacting the user first. A DMCA notice is sworn under penalty of perjury — a baseless or overbroad one can expose **you** to liability under 17 U.S.C. §512(f), so file only for an actual verbatim or substantial copy.
 4. **For non-GitHub hosts**, send the same notice to the host's abuse/DMCA contact and, if indexed, to the search engine.
 5. **Keep the key safe.** Your signing key and your `.ots` proof are the spine of every claim — back them up off-machine.

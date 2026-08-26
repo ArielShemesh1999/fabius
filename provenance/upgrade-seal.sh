@@ -1,44 +1,50 @@
 #!/usr/bin/env bash
-# Upgrade the OpenTimestamps proof from "pending" (calendar attestation) to a
-# confirmed Bitcoin-block attestation, and commit the upgraded proof.
-# Safe to run repeatedly: a no-op until the anchoring Bitcoin block is mined.
+# Upgrade the OpenTimestamps proof from a pending calendar attestation when a
+# stronger attestation is available. This script never stages, commits or pushes.
+# Safe to run repeatedly: a no-op until an upgrade is available.
 #
 #   bash provenance/upgrade-seal.sh
 #
 set -uo pipefail
 cd "$(git rev-parse --show-toplevel 2>/dev/null || (cd "$(dirname "$0")/.." && pwd))"
 PROOF=provenance/sealed-commit.txt.ots
+RECORD=provenance/sealed-commit.txt
+
+[ "$#" -eq 0 ] || { echo "usage: bash provenance/upgrade-seal.sh (never commits or pushes)"; exit 2; }
 
 OTS=$(command -v ots || ls "$HOME"/Library/Python/*/bin/ots 2>/dev/null | head -1)
 if [ -z "${OTS:-}" ]; then
   echo "ots client not found — install: pip3 install --user opentimestamps-client"; exit 1
 fi
 [ -f "$PROOF" ] || { echo "no proof at $PROOF — nothing to upgrade"; exit 1; }
+[ -f "$RECORD" ] || { echo "no sealed record at $RECORD — refusing detached proof upgrade"; exit 1; }
+
+# Bind the detached proof to the exact record before trusting or upgrading it.
+info=$("$OTS" info "$PROOF" 2>&1)
+proof_hash=$(printf '%s\n' "$info" | sed -n 's/^File sha256 hash: \([0-9a-fA-F]\{64\}\)$/\1/p' | head -1 | tr 'A-F' 'a-f')
+record_hash=$(shasum -a 256 "$RECORD" | awk '{print $1}')
+[ -n "$proof_hash" ] || { echo "proof does not expose a detached sha256 digest — refusing upgrade"; exit 1; }
+[ "$proof_hash" = "$record_hash" ] || {
+  echo "proof digest mismatch — refusing upgrade"; exit 1;
+}
 
 before=$(shasum -a 256 "$PROOF" | cut -d' ' -f1)
-"$OTS" upgrade "$PROOF" 2>&1 || true
+upgrade_code=0
+"$OTS" upgrade "$PROOF" 2>&1 || upgrade_code=$?
 after=$(shasum -a 256 "$PROOF" | cut -d' ' -f1)
 
-if [ "$before" != "$after" ]; then
-  echo "proof upgraded — committing the confirmed Bitcoin attestation"
-  git add "$PROOF"
-  # sign if a signing key is configured locally; fall back to unsigned
-  git commit -S -q -m "Provenance: upgrade OTS proof to confirmed Bitcoin attestation" 2>/dev/null \
-    || git commit -q -m "Provenance: upgrade OTS proof to confirmed Bitcoin attestation"
-  # Publishing is irreversible — never automatic. Opt in with --push, and a failed
-  # push must never masquerade as success: the public proof stays stale until it lands.
-  if [ "${1:-}" = "--push" ]; then
-    if git push origin HEAD; then
-      echo "pushed — the public repo now carries the confirmed attestation."
-    else
-      echo "COMMIT CREATED BUT NOT PUSHED — the public repo still serves the pending proof."
-      echo "Push manually: git push origin HEAD"
-      exit 1
-    fi
-  else
-    echo "committed — review and publish with: git push origin HEAD   (or re-run with --push)"
-  fi
+after_info=$("$OTS" info "$PROOF" 2>&1)
+after_hash=$(printf '%s\n' "$after_info" | sed -n 's/^File sha256 hash: \([0-9a-fA-F]\{64\}\)$/\1/p' | head -1 | tr 'A-F' 'a-f')
+[ "$after_hash" = "$record_hash" ] || { echo "upgraded proof lost record binding — FAIL"; exit 1; }
+block=$(printf '%s\n' "$after_info" | grep -oiE 'BitcoinBlockHeaderAttestation\([0-9]+\)' | grep -oE '[0-9]+' | head -1)
+
+if [ "$before" != "$after" ] && [ -n "$block" ]; then
+  echo "proof upgraded locally and remains digest-bound; Bitcoin block $block is present"
+  echo "working tree only — review, then commit/push solely with explicit owner approval"
+elif [ "$before" != "$after" ]; then
+  echo "proof changed locally and remains digest-bound, but no Bitcoin block attestation is present"
+  echo "working tree only — do not describe it as Bitcoin-confirmed"
 else
-  echo "no change yet — the anchoring Bitcoin block is not mined. Re-run later."
+  echo "no proof change available; current detached digest remains bound"
 fi
-"$OTS" verify "$PROOF" 2>&1 | tail -3
+[ "$upgrade_code" -eq 0 ] || echo "ots upgrade exited $upgrade_code; proof status above is authoritative"
