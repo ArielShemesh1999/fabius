@@ -97,4 +97,4 @@ A public git repo **cannot be made uncloneable** — that is how git works, and 
 
 ---
 
-Drawn from **SEAL** — *A Universal Cryptographic Sealing Primitive for Digital File Provenance in the Age of Generative AI* (v2.0), Ariel Shemesh's own research (`research/SEAL_Whitepaper_v2.0`). The findings are the author's; this doc re-expresses the buildable bit-exact spine in fabius's own voice.
+Drawn from **SEAL** — *A Universal Cryptographic Sealing Primitive for Digital File Provenance in the Age of Generative AI* (v2.0), shear559's own research (`research/SEAL_Whitepaper_v2.0`). The findings are the author's; this doc re-expresses the buildable bit-exact spine in fabius's own voice.

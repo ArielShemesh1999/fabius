@@ -1,4 +1,4 @@
-<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · release evidence: PROVENANCE.md · github.com/shear559/fabius -->
+<!-- © 2026 shear559 · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · release evidence: PROVENANCE.md · github.com/shear559/fabius -->
 # Fabius Corpus — the indexed body
 
 One fabius-branded index over the capability libraries owned by the fifteen public skills. The router holds this small map, resolves one owner, reads that owner's entry page, and pages in only the matching slice (routing-policy **M9 · R9 · M7**). Retrieval is symbolic by default (`rg`, catalog links, and exact paths); an owner may opt into a tested vector index when corpus size and semantic queries justify it. There is no universal runnable `fabius-vec` dependency. Research inputs and inspirations are recorded in [credits/](credits/README.md).

@@ -1,4 +1,4 @@
-<!-- © 2026 Ariel Shemesh · fabius · reference depth for skills/fabius-mercatus/SKILL.md -->
+<!-- © 2026 shear559 · fabius · reference depth for skills/fabius-mercatus/SKILL.md -->
 
 # GTM outreach — the sales.gtm capability
 

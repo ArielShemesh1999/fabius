@@ -1,4 +1,4 @@
-<!-- © 2026 Ariel Shemesh · fabius · reference depth for skills/fabius-archivum/SKILL.md -->
+<!-- © 2026 shear559 · fabius · reference depth for skills/fabius-archivum/SKILL.md -->
 
 # Meeting capture — from a raw transcript to a filed record
 

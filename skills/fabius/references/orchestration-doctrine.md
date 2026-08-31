@@ -1,4 +1,4 @@
-<!-- © 2026 Ariel Shemesh · fabius · reference depth for skills/fabius/SKILL.md -->
+<!-- © 2026 shear559 · fabius · reference depth for skills/fabius/SKILL.md -->
 
 # The orchestration doctrine — the goal is the user's; the machinery is fabius's
 

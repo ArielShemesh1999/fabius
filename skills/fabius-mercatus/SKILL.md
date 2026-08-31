@@ -15,9 +15,9 @@ when_to_use: >
   pricing-page or announcement copy.
 license: UNLICENSED
 metadata:
-  author: Ariel Shemesh
+  author: shear559
 ---
-<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · release evidence: PROVENANCE.md · github.com/shear559/fabius -->
+<!-- © 2026 shear559 · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · release evidence: PROVENANCE.md · github.com/shear559/fabius -->
 
 # Fabius Mercatus — make the value legible, make the next step obvious
 

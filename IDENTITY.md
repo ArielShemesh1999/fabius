@@ -1,4 +1,4 @@
-<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · release evidence: PROVENANCE.md · github.com/shear559/fabius -->
+<!-- © 2026 shear559 · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · release evidence: PROVENANCE.md · github.com/shear559/fabius -->
 # fabius — identity & evaluation alignment
 
 The canonical statement of **what fabius is** and **how it must be judged**. Every surface of the system — the fifteen skill contracts, the benchmark suite, the whitepaper, the landing — is required to agree with this page. Where a surface disagrees, this page wins and the surface is drift.

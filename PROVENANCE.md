@@ -47,7 +47,7 @@ At seal time, `provenance/sealed-commit.txt` records the full git commit hash an
 Every skill file carries a provenance marker:
 
 ```
-<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-… · release evidence: PROVENANCE.md -->
+<!-- © 2026 shear559 · fabius · provenance fab1-… · release evidence: PROVENANCE.md -->
 ```
 
 - **What it does.** It is a **tripwire** — but not a passive alarm: detection is not automatic. You (or a saved GitHub code-search alert) must periodically search for the token. It is high-entropy and unique to fabius, so a search surfaces any verbatim clone that is public, indexed, and still carries the comment — including the automated, "copy the whole repo and re-upload" theft that is by far the most common.

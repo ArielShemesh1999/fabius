@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// © 2026 Ariel Shemesh · fabius · provenance fab1- · github.com/shear559/fabius
+// © 2026 shear559 · fabius · provenance fab1- · github.com/shear559/fabius
 //
 // fabius-concilium — a runnable reference for the cross-model council.
 //

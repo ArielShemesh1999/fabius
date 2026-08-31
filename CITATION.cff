@@ -3,8 +3,7 @@ title: "Fabius: one set of operating rules across supported agent harnesses — 
 message: "If you cite this work, please cite the whitepaper in paper/fabius-as-a-system.pdf."
 type: software
 authors:
-  - family-names: Shemesh
-    given-names: Ariel
+  - name: shear559
 abstract: >-
   A fifteen-skill agent architecture with a router that dispatches by
   layer, machinery and model tier over an always-on lean core. The
@@ -23,7 +22,7 @@ abstract: >-
   quality panel across four Claude tiers, a mixed historical execution-score and
   model-graded factual-check track, and the versioned hundred-task FBS suite
   run BASE, FAB and FAB_MEMORY. Historical receipt limits are stated explicitly.
-version: 2.6.4
+version: 2.6.5
 repository-code: "https://github.com/shear559/fabius"
 url: "https://fabius-landing.vercel.app"
 license-url: "https://github.com/shear559/fabius/blob/main/LICENSE"

@@ -17,9 +17,9 @@ when_to_use: >
   portfolio allocation questions.
 license: UNLICENSED
 metadata:
-  author: Ariel Shemesh
+  author: shear559
 ---
-<!-- © 2026 Ariel Shemesh · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · release evidence: PROVENANCE.md · github.com/shear559/fabius -->
+<!-- © 2026 shear559 · fabius · provenance fab1-6bbf82d118bce2cee9d7ac71f034fa26 · release evidence: PROVENANCE.md · github.com/shear559/fabius -->
 
 # Fabius Fortuna — read the market with method, size the risk first
 
