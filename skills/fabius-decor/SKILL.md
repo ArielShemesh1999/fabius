@@ -15,7 +15,8 @@ description: >
 when_to_use: >
   "make it beautiful", "it looks amateur", "match the brand", "make it responsive", "fix the
   focus states", spacing/typography/color calls, dashboards, hero sections, dark mode, mobile
-  breakpoints, contrast checks.
+  breakpoints, contrast checks, "critique this UI", "audit the design", "does this look
+  AI-generated", "polish it before ship".
 license: UNLICENSED
 metadata:
   author: shear559
@@ -70,32 +71,36 @@ A chart is a design artifact, not a different discipline — the same tokens and
 4. **Label directly, title with the takeaway.** The title states the finding ("Signups doubled after launch"), not the dimensions ("Signups by month").
 5. **Reproducible, tokenized SVG.** Prefer generated SVG from data over a screenshot — versionable, themeable, crisp. The repo's `assets/charts/` (`svgplot.py` · `render_figures.py`) is the numpy→SVG path; figures re-render from source, never hand-edited.
 
-Figura depth — chart table, data-ink, color, and shipped SVG helpers — is `references/visualization.md`; no separate recipe library ships. Decks and reports → `references/decks-and-infographics.md`; diagram-as-code pairs with `fabius-disciplina`.
+Figura depth (chart table, data-ink, color, SVG helpers) → `references/visualization.md`. Decks and reports → `references/decks-and-infographics.md`; diagram-as-code pairs with `fabius-disciplina`.
 
 ## Explanatory diagrams — teach the system, don't just draw it
 
-A diagram that *explains* (a codebase, a domain, a flow) is a pedagogy problem, not a drawing one — repeatable in three moves: **extract deterministically, then add meaning** (a parser produces the reproducible facts; the model adds only semantic judgment, never re-deriving structure); **make the artifact a typed graph** (a small fixed vocabulary of node/edge types, stable ids, weighted edges); **order by topology, teach by narrative** (fan-in ranks importance, the entry point starts the tour, BFS depth maps to step order — a guided tour, not a node dump).
+A diagram that *explains* (a codebase, a domain, a flow) is pedagogy, not drawing — three moves: **extract deterministically, then add meaning** (a parser yields the reproducible facts; the model adds only semantic judgment); **make the artifact a typed graph** (a small fixed node/edge vocabulary, stable ids, weighted edges); **order by topology, teach by narrative** (fan-in ranks importance, the entry point opens the tour, BFS depth sets step order).
 
-The full method — concept-map structuring, the typed-graph schema, the topology-to-tour algorithm → `references/explanatory-diagrams.md`.
+Full method → `references/explanatory-diagrams.md`.
 
 ## Generative imagery — prompt the image, don't wish for it
 
-Generating an image is a *design* act under the same restraint — an image prompt is a **structured slot fill**, not a freeform sentence:
+An image prompt is a **structured slot fill** under the same restraint, not a freeform sentence:
 
-1. **Slots, not a sentence.** Fill ordered slots — subject → facial/detail → styling → expression → **lighting** → scene → technical/quality. Required slots get an intelligent default even when the user is silent; optional ones stay empty rather than padded.
-2. **Lighting is mandatory.** The single highest-leverage lever and the biggest amateur-vs-pro gap — always name a style ("cinematic" → cinematic, neon/cyberpunk → neon, unspecified → natural). Never omit it.
-3. **Cascade from one signal.** A high-level cue should propagate: era/setting sets makeup *and* hair *and* wardrobe together — derive the coupled attributes instead of asking for each.
-4. **Run a conflict pass before emitting.** Cultural, temporal, biological, stylistic — on a clash, explain it, show the auto-correction, let the user override. Keep *style* separate from *identity*: "anime" is a render technique, not an ethnicity.
-5. **Library + free-text.** Recombine a curated set (lighting recipes, camera/lens, palettes) with the open-set content only the model can supply (named characters, materials); end on a completeness check — subject, lighting, style, quality tags.
+1. **Slots, not a sentence.** Ordered: subject → detail → styling → expression → **lighting** → scene → technical/quality. Required slots get an intelligent default; optional ones stay empty, never padded.
+2. **Lighting is mandatory.** The highest-leverage lever and the widest amateur-vs-pro gap — always name a style (cinematic · neon · natural). Never omit it.
+3. **Cascade from one signal.** Era/setting sets makeup *and* hair *and* wardrobe together — derive coupled attributes, don't ask for each.
+4. **Conflict pass before emitting.** Cultural, temporal, biological, stylistic — explain the clash, show the correction, let the user override. *Style* ≠ *identity*: "anime" is a render technique, not an ethnicity.
+5. **Library + free-text.** Curated recipes (lighting, camera/lens, palettes) + the open-set content only the model supplies; end on a completeness check.
 
-The slot schema, the lighting/era mapping tables, the conflict-resolution rules, and the structured-palette recipe → `references/generative-imagery.md`.
+Slot schema, lighting/era tables, conflict rules, palette recipe → `references/generative-imagery.md`.
 
 ## Using a brand spec as a target
 
-1. Pick the closest brand in `references/design/` (69 systems — `DESIGN-apple.md`, `DESIGN-stripe.md`, `DESIGN-linear.app.md` …) as the visual DNA; the token contract is `references/design-tokens.md`. The fabius-design entry doc CORPUS.md designates — token vocabulary plus three worked brand reference points — is `references/design-system.md`; bundled libraries (`fabius-design`, `fabius-motion`, `fabius-frames`, `fabius-uiux`, `uiverse`) are reference corpora there, not public skills.
+1. Pick the closest brand in `references/design/` (69 systems — `DESIGN-apple.md`, `DESIGN-stripe.md` …) as the visual DNA; token contract → `references/design-tokens.md`; the entry doc CORPUS.md designates (vocabulary + three worked brands) → `references/design-system.md`. Bundled libraries there are reference corpora, not public skills.
 2. Lift its **principles**, not its pixels — the type ratios, the accent discipline, the spacing rhythm, the do/don'ts.
 3. Re-map to the project's own brand color and font. Keep the structure, swap the identity.
 4. Substitute fonts honestly: name the closest open-source match (Inter for SF Pro, Manrope for Gilroy) and nudge tracking and leading to match.
+
+## Review before ship — the censor's floor
+
+Review is a vocabulary, not a vibe. Name the surface mode (persuade · operate · read · experience), pick the verb (critique · audit · polish · bolder · quieter · distill · harden · clarify · adapt), run the **deterministic anti-pattern scan first** — the ~60 generated-UI tells (gray on color, nested cards, icon tiles, gradient text, bounce easing …) — then judge: heuristics /40, P0–P3, personas. **Bounded passes:** build fully → one batched desktop + mobile inspection → one fix batch → at most one more round → stop. Refinement preserves, redesign replaces, the brief wins → `references/design-critique.md`.
 
 ## Ship-quality checklist
 

@@ -65,7 +65,7 @@ test('numeric walls reject NaN, infinity, zero, negatives, and fractional step c
 test('--version is a real global flag and unknown flags fail nonzero', () => {
   const version = spawnSync(process.execPath, [CLI, '--version'], { encoding: 'utf8' });
   assert.equal(version.status, 0);
-  assert.equal(version.stdout.trim(), '2.6.5');
+  assert.equal(version.stdout.trim(), '2.7.0');
   const bad = spawnSync(process.execPath, [CLI, 'route', '--unknown', 'task'], { encoding: 'utf8' });
   assert.notEqual(bad.status, 0);
   assert.match(bad.stderr + bad.stdout, /unknown flag/);

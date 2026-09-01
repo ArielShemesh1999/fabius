@@ -68,14 +68,17 @@ Any output, any code change                 → fabius-parcus      (always-on, u
 "build X" · "fix the bug" · "refactor"       → fabius-disciplina  (impact map/repro/plan/debug)
 UI · landing page · component · brand look · → fabius-decor
   generate an image · deck / slides ·
-  infographic · visual report
+  infographic · visual report · critique /
+  audit / polish a UI
 chart · graph · diagram · visualize data     → fabius-decor       (the figura visualization concern)
 "build an agent" · subagent · swarm ·        → fabius-cohors
   orchestration · multi-agent · evaluate
   an agent · agent benchmark · durability
 "remember this" · a growing knowledge base · → fabius-archivum
   "stop re-deriving this" · meeting
-  transcript/notes into a filed record
+  transcript/notes into a filed record ·
+  watch a video / recording · ask a
+  source-grounded notebook
 copy · launch · positioning · ads · funnel · → fabius-mercatus
   outreach / leads (draft-only)
 "is this secure?" · threat-model · audit ·   → fabius-praesidium  (defensive only)

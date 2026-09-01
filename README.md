@@ -129,9 +129,9 @@ grok plugin enable fabius
 | `fabius` | the router — reads the job, picks the layers, the machinery rung, the model tier |
 | `fabius-parcus` | the always-on lean core — terse output, the YAGNI ladder, surgical change |
 | `fabius-disciplina` | engineering process — impact map → failing reproduction → minimal fix → prove, root-cause debugging |
-| `fabius-decor` | ship-grade design — tokens, one accent, data-viz, decks + infographics, RTL |
+| `fabius-decor` | ship-grade design — tokens, one accent, data-viz, decks + infographics, RTL, review against the generated-UI tells |
 | `fabius-cohors` | agent engineering — least privilege, orchestration up to a swarm |
-| `fabius-archivum` | permissioned memory — typed records, gated recall, append-only history, fresh-eyes routes |
+| `fabius-archivum` | permissioned memory — typed records, gated recall, append-only history, fresh-eyes routes; video and source-grounded notebooks as sources |
 | `fabius-mercatus` | go-to-market — positioning, converting copy, SEO, draft-only outreach |
 | `fabius-praesidium` | defensive security — STRIDE, OWASP, severity → fix → regression test |
 | `fabius-ludus` | game craft — core loop first, deliberate juice, jam-sized scope |

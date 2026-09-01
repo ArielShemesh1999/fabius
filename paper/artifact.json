@@ -1,10 +1,10 @@
 {
   "schema": "fabius-paper-artifact/v1",
-  "version": "2.6.5",
+  "version": "2.7.0",
   "file": "paper/fabius-as-a-system.pdf",
-  "sha256": "30664ce6c41b6280976196d9be4fbff5d8b6c0658d1aa95855e9f867b4ddecaa",
+  "sha256": "0c89d3a93859d78b2476d5d701d6d7c967ed1be325dd309ae54baae355fe04d6",
   "pages": 50,
-  "source_sha256": "871d9eca5eadad464003978b006c7ccfdd2b26ec7d17a08e9e3d9221f45e0533",
+  "source_sha256": "3bc5ed5404fc495d9b3d915b6772f22458bacf5809a6c2d44e67451ae83fe196",
   "sources": [
     {
       "file": "assets/architecture.svg",
@@ -68,7 +68,7 @@
     },
     {
       "file": "paper/template.html",
-      "sha256": "a8c64b97a5207190c01179494fafce7d9571ff69960bf5ae003cc19f8eb157f3"
+      "sha256": "e5c66e69baed2cb639899630ea0a0f03fc6ed5022b3d345a2c3b05cc30d9bf61"
     }
   ],
   "external_sources": [
@@ -79,8 +79,8 @@
     }
   ],
   "rendered_markers": [
-    "Whitepaper · v2.6.5",
-    "Version 2.6.5",
-    "Fabius v2.6.5"
+    "Whitepaper · v2.7.0",
+    "Version 2.7.0",
+    "Fabius v2.7.0"
   ]
 }

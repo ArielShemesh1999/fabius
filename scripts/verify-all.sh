@@ -28,6 +28,8 @@ run_gate "portable eval harness selftest" python3 evals/portable_eval.py --selft
 run_gate "runtime unit/integration tests" node --test runtime/test/*.test.mjs
 run_gate "Concilium deterministic protocol selftest" node skills/fabius-concilium/references/council.mjs --selftest
 run_gate "repo-local package truth" node scripts/verify-package.mjs
+run_gate "upstream registry coherence" node scripts/verify-upstream.mjs
+run_gate "upstream registry adversarial regression" node scripts/test-verify-upstream.mjs
 run_gate "paper artifact oracle" node scripts/verify-paper-artifact.mjs
 run_gate "paper artifact adversarial regression" node scripts/test-verify-paper-artifact.mjs
 run_gate "OpenTimestamps detached-proof binding" node scripts/test-verify-ots-binding.mjs

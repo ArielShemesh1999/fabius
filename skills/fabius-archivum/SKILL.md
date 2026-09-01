@@ -13,7 +13,8 @@ description: >
   references/external-recall.md.
 when_to_use: >
   "what did we decide last time", "save this for later", "set up project memory", "index the
-  vault", or before redoing research a past session covered.
+  vault", "watch this video", "what does this recording show", "ask my sources", or before
+  redoing research a past session covered.
 license: UNLICENSED
 metadata:
   author: shear559
@@ -39,7 +40,7 @@ Two navigation files keep hundreds of pages tractable:
 
 **Write boundary.** Archivum never turns a read-only task into a mutation. Ingest, capture, file-back, scaffold, and lint writes run only when the workspace has opted into Archivum memory **and** its contract authorizes those writes. Otherwise return a proposed record or diff without touching the store.
 
-**Ingest (WRITE).** A new source arrives → read it under `fabius-disciplina` → write a summary page → update the index and touched cross-references → append one log line. Mutate surgically; prove claims.
+**Ingest (WRITE).** A new source arrives → read it under `fabius-disciplina` → write a summary page → update the index and touched cross-references → append one log line. Mutate surgically; prove claims. A video is a source too — captions first, frames only as the question demands, every claim quoted at `t=MM:SS`, never "I watched" → `references/video-ingest.md`.
 
 **Query (READ).** Narrow through the index and symbolic filters → read the matching slice → synthesize a **cited** answer. File it back only under the write boundary above.
 
@@ -106,7 +107,7 @@ When an answer must be **source-true** (a domain spec, a contract, a curated bod
 - **Keep a source registry.** Store each external corpus as `{ name, description, topics }` and select by topic at query time — the connector remembers *which* corpus answers *which* question. To register an unknown corpus, ask it to summarize *itself* first, then use that as its metadata; never tag it generically.
 - **Loop until complete, then synthesize.** After each retrieved answer, diff it against the *original* request, identify the gaps, and re-query — only synthesize once nothing is missing. A single lookup is rarely the whole answer.
 
-Stay provider-agnostic (the connector pattern outlives any one product) and keep credentials and the registry **out of the repo**. Connector recipe + the when-to-reach-external decision table → `references/external-recall.md`.
+Stay provider-agnostic (the connector pattern outlives any one product) and keep credentials and the registry **out of the repo**. Connector recipe + the when-to-reach-external decision table → `references/external-recall.md`. The strongest current instance — a source-grounded notebook (Gemini Notebook, via an unofficial CLI/MCP): cited answers, artifacts as eval sets, autonomy and parallel-agent rules → `references/notebook-connector.md`.
 
 ## Memory discipline — page, don't stuff
 
@@ -117,6 +118,6 @@ The memory rules from the routing policy (MemGPT, Voyager, the memory surveys; f
 - **Promote verified solutions to skills (M6).** When skill writes are authorized, file a solved-and-verified sub-problem as a named reusable page; supersede, don't duplicate, and retain failed approaches as anti-pattern history. *(Voyager)*
 - **Tie-break by recency + load-bearingness (M8).** When index entries tie on relevance, surface the freshest decision-bearing pages first; fold a grown batch of log lines up into a synthesis page. *(Generative Agents, analogy)*
 
-**Live tier (optional).** The markdown index + log + grep needs nothing; auto-recall rides the harness's own memory where it has one and lifecycle hooks where it doesn't; where memory must be a *tool*, the Messages API ships a GA one (`memory_20250818`) whose handler you own — and must path-validate. An external-corpus connector is provider-agnostic (NotebookLM / `notebooklm-mcp` / a vector store) — you configure it. fabius bundles the *pattern*, not the service — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
+**Live tier (optional).** The markdown index + log + grep needs nothing; auto-recall rides the harness's own memory where it has one and lifecycle hooks where it doesn't; where memory must be a *tool*, the Messages API ships a GA one (`memory_20250818`) whose handler you own — and must path-validate. An external-corpus connector is provider-agnostic — you configure it. fabius bundles the *pattern*, not the service — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
 
 Pairs with: `fabius-disciplina` (resolved facts and post-mortems get filed here), `fabius-cohors` (grounding and cross-session memory for agents), `fabius-parcus` (don't build the heavy retrieval engine before the corpus demands it).

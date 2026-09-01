@@ -6,13 +6,13 @@
   "count": 18,
   "files": {
     "AGENTS.md": "b20b116220dad503f1ef87890ada60243e6c89ccbed1aa2f0ef235bafa4dfd8f",
-    "ARCHITECTURE.md": "3f346ca562b657d7661e77d07036e9e8bc15d485036ffd9b8dd1ce8556e484c4",
-    "CORPUS.md": "9ae54dadb53c36c997f3bc9df2b0d7d5fe9f6180df7246196452ada7cd0ddc18",
-    "skills/fabius-archivum/SKILL.md": "9cfd0f27a8e7da8b2a86ad779f83d2c27d022b83dcfcd3f851bad5a47481af42",
+    "ARCHITECTURE.md": "29f0b16160ddce20e713cfe3a5bd69906cc51102e8670806baf97b1b8cedd37b",
+    "CORPUS.md": "ff22d29589b3a06e5ab5dfd8e4cc6be15b1bbcbfe068c3cda8f51b039a5eb037",
+    "skills/fabius-archivum/SKILL.md": "b0fb3f7f33d9a96fe23e64845a5934c70baf4d105f0ee5c41af3adf814c30bac",
     "skills/fabius-catena/SKILL.md": "402a9018da941f310371d9ed880ebb1a162fa181a004809bb846e38a6bac05e0",
     "skills/fabius-cohors/SKILL.md": "904787c4bc833fe7ea0b3827196fd31ea3ffd25608d6539f5247a40d233dd244",
     "skills/fabius-concilium/SKILL.md": "2aa31ff68088e22494f99c04da5af3da45dd7a3e42199b109d0a0bfb853858f1",
-    "skills/fabius-decor/SKILL.md": "6203884cdae6995c362f0ab0e91a6c7b6932f1f37a0021deb228375498198f95",
+    "skills/fabius-decor/SKILL.md": "a87879c8c4a1c5729f7e0cb921e2e3e88e72a59c5f12a57d77389fb5ae10bf2b",
     "skills/fabius-disciplina/SKILL.md": "0376f121ff7f362401c42b83b6a968442a174ce82aaedc72369b4c863864c018",
     "skills/fabius-doctrina/SKILL.md": "f08d8f84a22908519e8f6d2cce67b424f095c764e47051dcc41ca77b7c67c4cc",
     "skills/fabius-fortuna/SKILL.md": "f8c8201ad102575538130e330cf819c2bd6da91553d384720b62b6956459276e",
@@ -22,7 +22,7 @@
     "skills/fabius-parcus/SKILL.md": "94892223cf9ef44fd14fce84e07a200e28aacc2e7577c6a46aa954c83ef38b76",
     "skills/fabius-praesidium/SKILL.md": "6d1a05de4ee43297649c0491ee319cef7de59ace8bc721056c3e004f34cb40a3",
     "skills/fabius-scientia/SKILL.md": "7d76d993f5e007cb30c05a43f47a177b383c13a072f82f18152a4cee118429f9",
-    "skills/fabius/SKILL.md": "f961934b53ff0fb439eea36871e768b4c8509d8414521a47b9c2f938106dcdd8"
+    "skills/fabius/SKILL.md": "15c2308659440cb4be691daaf111c0d4756f4a7df2f6e25c45d9ae8eef0b7c3f"
   },
-  "merkle_root": "e69d27478ad6d936c7db78f6cee30aee3c01cccbb069dad5a2ce36223c33df0c"
+  "merkle_root": "98a7be3f6ccb582eef449f11c497908f1fda8ec41909a79fb3422e1fa3f936bf"
 }

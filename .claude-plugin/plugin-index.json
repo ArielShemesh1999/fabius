@@ -10,7 +10,7 @@
           },
           {
             "name": "fabius-archivum",
-            "description": "Persistent memory: write learnings into an interlinked markdown knowledge base, retrieve cheaply, keep it healthy — knowledge compounds."
+            "description": "Persistent memory: write learnings into an interlinked markdown knowledge base, retrieve cheaply, keep it healthy — knowledge compounds; video and source-grounded notebooks enter as sources."
           },
           {
             "name": "fabius-catena",
@@ -26,7 +26,7 @@
           },
           {
             "name": "fabius-decor",
-            "description": "Ship-grade design: token vocabulary, the laws separating amateur UI from shipped UI, data-viz, diagrams, images, icons, motion, RTL."
+            "description": "Ship-grade design: token vocabulary, the laws separating amateur UI from shipped UI, data-viz, diagrams, images, icons, motion, RTL, and design review against the generated-UI tells."
           },
           {
             "name": "fabius-disciplina",
