@@ -13,7 +13,7 @@ description: >
   references/external-recall.md.
 when_to_use: >
   "what did we decide last time", "save this for later", "set up project memory", "index the
-  vault", "watch this video", "what does this recording show", "ask my sources", or before
+  vault", before work on a project that already has a record, "watch this video", "what does this recording show", "ask my sources", or before
   redoing research a past session covered.
 license: UNLICENSED
 metadata:
@@ -49,17 +49,12 @@ Two navigation files keep hundreds of pages tractable:
 ## Page hygiene
 
 - One page = one entity, concept, or decision. Link liberally with `[[other-page]]` — a link to a not-yet-written page is a valid forward marker, not an error.
-- Frontmatter for retrievability: a stable id/name, a one-line description (this is what the index shows), a type, and **absolute** dates (`2026-06-21`, never "last week").
+- Frontmatter for retrievability: a stable id/name, a one-line description (this is what the index shows), a type, and **absolute** dates (`2026-06-21`, never "last week"). A project page adds status, a repo/workspace pointer, a live URL — read, never guessed — and a last-push date.
 - Don't duplicate — update or supersede the existing page. Preserve decision history: tombstone/archive a wrong record and link its replacement; delete only an unambiguous current-run duplicate when the authorized scope and recovery path make that safe. Don't transcribe the source verbatim; record what was non-obvious.
 
 ## When to add vector retrieval
 
-Index + grep handles a few hundred pages fine — that's the lazy default (`fabius-parcus`: *does the vector store need to exist yet?*). Reach for a dense vector index (quantized embeddings, online ingest, in-kernel filtered search) only when:
-
-- the corpus outgrows what symbolic search and an index scan can handle, or
-- queries turn semantic ("things like X") rather than keyword.
-
-Then the pattern is **hybrid**: narrow symbolically by id or metadata first (project, date, layer), and dense-rerank only that narrowed slice. Online ingest — no retrain on each add — is what a forever-growing base needs.
+Index + grep handles a few hundred pages — the lazy default (`fabius-parcus`: *does the vector store need to exist yet?*). Add a dense index only once the corpus outgrows symbolic search, or queries turn semantic rather than keyword. Then retrieval is **hybrid**: narrow symbolically first, dense-rerank only that slice. Detail → `references/memory-schema.md`.
 
 ## The loop that compounds
 
@@ -69,28 +64,26 @@ ingest (write) → index (catalog/embed) → query (read, cite, file back) → l
 
 Inside the write boundary, the agent handles summarizing, cross-referencing, filing, and consistency checks. Schema and line formats → `references/memory-schema.md`. When the corpus outgrows grep, `references/knowledge/` is **design, not dependency**: renamed packages/imports leave its pins unresolved. Take the shape; wire a tested store from `references/retrieval-stack.md`. Meeting capture → `references/meeting-capture.md`.
 
-## Cross-session memory — authorized, per project
+## Cross-session memory — the project record
 
-The next session should start where the last one ended, but only inside a project that opted into a **per-project memory**.
+The next session starts where the last ended, but only inside a workspace that opted into a **record store**. The store is *declared*, not discovered from the repo: it may sit outside every repo and serve many projects, one page per project. Full contract → [`references/project-records.md`](references/project-records.md).
 
-- **Read on start when recall is enabled.** Read the existing index (`MEMORY.md` / `index.md`) before acting, subject to the fresh-eyes gate below. No memory yet → offer setup once; never create it implicitly.
-- **Write on milestone when authorized.** In an opted-in store whose contract authorizes ongoing memory writes, update current state and append one `log.md` line after a durable decision/fix. Preserve prior decisions and reasons; supersede them, never rewrite history.
-- **One layout, scaled to size.** Small project: a flat `MEMORY.md` index + `log.md` + a handful of topic pages. Large one: the full `wiki/` (entities / concepts / syntheses). Same conventions either way — schema in `references/memory-schema.md`.
+- **Resolve the store before testing for one.** A central hub (one page per project, shared index + log) or an in-project store — never both. Already opted in → the offer is spent: read every time, never re-ask, never scaffold a second store beside a declared one.
+- **Project-page gate — a precondition, not a dial.** Work that names a project reads that project's ONE page IN FULL first: brief · stack · decisions · health · open items · live URL. Not the index row, not a grep hit. No page for a named project in a declared store → propose the page; don't start blind.
+- **Cross-check the page against reality, not against itself.** An unversioned page's dates are a claim. Diff them against the tree's head and any live URL it names. Reality wins on facts, the page wins on intent; correct the page in the same session.
+- **One record, one owner.** Project state lives on the canonical page only; a harness store keeps cross-project behavior, never a copy. A fact in two stores eventually disagrees with itself.
+- **Sync is finishing, not follow-up.** Before reporting done, same session: dated decision lines, state fields bumped, open items rewritten to the next step, one appended log line.
+- **Assume a second writer.** Append at the END, append-only; read the tail, never rewrite a shared log; sign every entry and decision line. Never re-date or edit another writer's entry.
 
-What goes in: the things the *code doesn't say* — decisions and their why, rejected approaches, gotchas, live URLs, current goals, open threads. Not a transcript; the non-obvious and retrievable. One page = one thing, linked with `[[slug]]`.
+What goes in: the things the *code doesn't say* — decisions and their why, rejected approaches, gotchas, live URLs, current goals, open threads. One page = one thing, linked with `[[slug]]`.
 
-### Obsidian onboarding (offer once)
+### Onboarding (offer once)
 
-The wiki is plain markdown — works in any editor, best browsed in Obsidian (backlinks, graph, Dataview). On a project with no memory yet, offer the choice once:
-
-1. **Obsidian** (richer) — install from obsidian.md → *Open folder as vault* on `wiki/` → enable Graph + Dataview. After opt-in, fabius writes; they browse links live.
-2. **Plain md** (zero install) — just the `wiki/` dir of markdown. Same retrieval (`index.md` + grep), no app.
-
-Either way the human curates sources and asks; fabius maintains only after opt-in. Never block work for setup or scaffold without authorization.
+Plain markdown, best browsed in Obsidian (backlinks · graph · Dataview). Offer the choice once — Obsidian, or plain md with `index.md` + grep — then never re-ask. Steps, the store-root trap and the index exclusions → `references/project-records.md`. Never block work for setup; never scaffold without authorization.
 
 ## Auto-recall — surface memory without being asked
 
-Auto-recall is a dial, not a universal prepend. **Off** for trivial work; **off or dampened** for security, incident, debugging, and error-recovery fresh-eyes routes; index-only for ordinary continuation; deeper only when the task truly matches. On fresh-eyes routes, inspect current evidence first and compare memory afterward. Every retrieved record is a suspect candidate: verify that its situation matches and its outcome was proven before using it; prefer the newest verified value when records conflict.
+Auto-recall is a dial, not a universal prepend. **Off** for trivial work; **off or dampened** for security, incident, debugging, and error-recovery fresh-eyes routes; index-only for ordinary continuation; deeper only when the task truly matches. The dial governs prior *conclusions*, never a named project's own page — that read is a precondition, not a dial position. On fresh-eyes routes, inspect current evidence first and compare memory afterward. Every retrieved record is a suspect candidate: verify that its situation matches and its outcome was proven before using it; prefer the newest verified value when records conflict.
 
 When recall is enabled, keep its three stages separate:
 
@@ -98,26 +91,21 @@ When recall is enabled, keep its three stages separate:
 - **Compress** — turn the raw capture into a small, *typed and titled* record (a title + a type + a compact body), not a transcript dump. Typed-and-titled is what makes later filtering and progressive disclosure cheap.
 - **Re-inject** — when the recall dial permits, surface a compact index of matching recent records; do not dump it blindly into every task.
 
-Retrieve under **progressive disclosure**: when recall is on, inject titles/ids first and pull a full record only on demand. Check the harness before wiring anything; adopt its native per-repo index/topic pattern instead of a parallel store. Hand-wire only where the harness ships nothing (`references/external-recall.md`).
+Retrieve under **progressive disclosure**: when recall is on, inject titles/ids first and pull a full record only on demand. Check the harness before wiring anything: its native memory is the trigger/pointer tier, not a second record store — records land in the declared store and the harness index keeps the pointer. Hand-wire only where the harness ships nothing (`references/external-recall.md`).
 
 ## Ground in an external corpus — ask, don't guess
 
-When an answer must be **source-true** (a domain spec, a contract, a curated body of documents), route the question to an authoritative external knowledge base that answers **only** from its sources and signals uncertainty — instead of pattern-matching from the model's weights. Two rules make this reliable:
-
-- **Keep a source registry.** Store each external corpus as `{ name, description, topics }` and select by topic at query time — the connector remembers *which* corpus answers *which* question. To register an unknown corpus, ask it to summarize *itself* first, then use that as its metadata; never tag it generically.
-- **Loop until complete, then synthesize.** After each retrieved answer, diff it against the *original* request, identify the gaps, and re-query — only synthesize once nothing is missing. A single lookup is rarely the whole answer.
-
-Stay provider-agnostic (the connector pattern outlives any one product) and keep credentials and the registry **out of the repo**. Connector recipe + the when-to-reach-external decision table → `references/external-recall.md`. The strongest current instance — a source-grounded notebook (Gemini Notebook, via an unofficial CLI/MCP): cited answers, artifacts as eval sets, autonomy and parallel-agent rules → `references/notebook-connector.md`.
+When an answer must be **source-true** (a spec, a contract, a curated body of documents), route the question to an authoritative external corpus that answers **only** from its sources and signals uncertainty — never pattern-match from weights. Keep a source registry (`{ name, description, topics }`) and select by topic; to register an unknown corpus, ask it to summarize *itself* first. After each answer, diff it against the *original* request and re-query the gaps — synthesize only when nothing is missing. Stay provider-agnostic; keep credentials and the registry **out of the repo**. Connector recipe + the when-to-reach-external table → `references/external-recall.md`; the source-grounded notebook instance → `references/notebook-connector.md`.
 
 ## Memory discipline — page, don't stuff
 
 The memory rules from the routing policy (MemGPT, Voyager, the memory surveys; full set in [routing-policy.md](../fabius/references/routing-policy.md)):
 
-- **Retrieve on demand (R9).** Read the index, then the matched page fully when exact evidence requires it; never load an unrelated whole page or directory "just in case." If the matched set exceeds budget, summarize-then-link. *(MemGPT)*
+- **Retrieve on demand (R9).** Read the index, then the matched page fully when exact evidence requires it; never load an unrelated whole page or directory "just in case" — the page of the project in hand is not a candidate hit, it is the brief, and it is read whole. If the matched set exceeds budget, summarize-then-link. *(MemGPT)*
 - **Write only decision-changing facts (M7).** Authorized `write = EVICT` (durable fact → page + log); `read = RECALL` (index→page on a miss, logged as QUERY). Everything addressable by `[[slug]]`.
 - **Promote verified solutions to skills (M6).** When skill writes are authorized, file a solved-and-verified sub-problem as a named reusable page; supersede, don't duplicate, and retain failed approaches as anti-pattern history. *(Voyager)*
 - **Tie-break by recency + load-bearingness (M8).** When index entries tie on relevance, surface the freshest decision-bearing pages first; fold a grown batch of log lines up into a synthesis page. *(Generative Agents, analogy)*
 
-**Live tier (optional).** The markdown index + log + grep needs nothing; auto-recall rides the harness's own memory where it has one and lifecycle hooks where it doesn't; where memory must be a *tool*, the Messages API ships a GA one (`memory_20250818`) whose handler you own — and must path-validate. An external-corpus connector is provider-agnostic — you configure it. fabius bundles the *pattern*, not the service — the full map is in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
+**Live tier (optional).** Index + log + grep needs nothing; auto-recall rides the harness's own memory as a trigger tier where it has one, lifecycle hooks where it doesn't. Where memory must be a *tool*, the Messages API ships a GA one (`memory_20250818`) whose handler you own — and must path-validate. fabius bundles the *pattern*, not the service — full map in [ARCHITECTURE.md](../../ARCHITECTURE.md) (*External connections*).
 
 Pairs with: `fabius-disciplina` (resolved facts and post-mortems get filed here), `fabius-cohors` (grounding and cross-session memory for agents), `fabius-parcus` (don't build the heavy retrieval engine before the corpus demands it).

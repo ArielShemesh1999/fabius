@@ -79,6 +79,7 @@ Lean means writing less code, never cutting what protects the user. Never trim:
 - error handling that prevents data loss,
 - security measures,
 - accessibility basics,
+- the record read that opens work on a project with a declared store, and the record + log write that closes it (`fabius-archivum` owns the format; this layer only refuses to trim it),
 - anything the user explicitly asked for.
 
 And one inversion, because it's the failure this stance invites: **a swallowed error is not lean code, it's a hidden bug wearing lean's clothes.** A bare `catch`/`rescue` that logs nothing, an `?.` chain that turns a broken invariant into a `null`, a default that quietly stands in for a failed fetch — each one shortens the diff and lengthens the outage, and the density of these constructs climbs sharply as more of a codebase is machine-written. Handle the error where you can name what it means, or let it propagate to something that can; never absorb it to make the happy path look shorter — that is exactly how a run reports success on a wrong state (→ `fabius-disciplina` phase 6). The line: deleting a handler for a state that *can't* happen is lean (§4); muting one for a state that can is not.

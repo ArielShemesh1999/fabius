@@ -23,7 +23,7 @@ Scale this *down* for a small base: a flat folder of pages plus `index.md` and `
 
 ```yaml
 ---
-name: stable-kebab-slug          # the id; links use [[stable-kebab-slug]]
+name: stable-kebab-slug          # the id AND the filename: a wikilink resolves by filename, never by this field
 description: one line — this is what index.md shows for retrieval
 type: entity | concept | comparison | synthesis
 updated: 2026-06-21              # absolute dates only, never "last week"
@@ -65,7 +65,7 @@ Inside an authorized, opted-in store, the agent does the bookkeeping — summari
 
 ## Per-project opted-in memory (the cross-session contract)
 
-For a project that opted in, memory lives *with the project* and fabius tends it within the authorized contract:
+For a project that opted in, memory lives *with the project* and fabius tends it within the authorized contract. This is the in-project shape only — where one store serves many projects, the topology, the read gate and the write-back contract are in [`project-records.md`](project-records.md), and no second store is created beside it:
 
 ```
 <project>/
@@ -107,7 +107,7 @@ Small project → collapse `wiki/` into a flat folder beside `MEMORY.md`. Don't 
 ### Three session-memory hygiene rules
 
 - **Dump before compaction.** When a large tool output — a fetched page, an API response, a research result — will be needed later, write it to a memory file *immediately*: compaction/truncation destroys unpersisted tool results mid-session. This is the store-side twin of the pre-compaction lifeboat in [`external-recall.md`](external-recall.md).
-- **Bookkeeping files are internal.** The auto-index, description sidecars — hide them from the agent's ls/grep surface, so scaffolding is never confused for content.
+- **Bookkeeping files are marked, not hidden.** Prefix them (`_index.md`, `_meta/`) and skip that prefix in the store's read rule — nothing can hide a file from `ls`, so the convention has to be explicit.
 - **Cap the auto-maintained index** at a fixed entry count (~50); regenerate it and inject it every turn, so the model always knows *what memories exist* without reading them. Past the cap, consolidate rather than append.
 
 ### Obsidian onboarding steps (offer once, never block)

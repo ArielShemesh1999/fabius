@@ -86,7 +86,7 @@ prompt → fabius (router)   ── classify Memory/Tools/Planning + Domain; cho
          ├─ UI / design / brand            → fabius-decor      → references/design-tokens.md · references/design/ (69 brands)
          ├─ chart / graph / diagram        → fabius-decor      → references/visualization.md (figura entry)
          ├─ build / orchestrate agents     → fabius-cohors     → references/agent-patterns.md · references/agent-catalog.md
-         ├─ remember / knowledge base      → fabius-archivum   → references/memory-schema.md · references/knowledge/ (design references)
+         ├─ remember / knowledge base      → fabius-archivum   → references/memory-schema.md · references/project-records.md · references/knowledge/
          ├─ copy / launch / positioning    → fabius-mercatus   → references/marketing-playbook.md · corpus slot
          ├─ secure / threat-model / audit  → fabius-praesidium → references/security-playbook.md · references/ai-review.md · corpus slot
          ├─ game / loop / juice / playable → fabius-ludus      → references/game-playbook.md · corpus slot

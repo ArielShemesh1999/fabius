@@ -14,8 +14,9 @@ description: >
   fabius-doctrina, fabius-fortuna, and fabius-concilium. Use when the user says "fabius" or
   wants end-to-end capability from one place.
 when_to_use: >
-  "how should we approach this", "set up the way of working", "which layer handles this", or at
-  the start of any multi-step build before a specialist fires.
+  "how should we approach this", "set up the way of working", "which layer handles this", "work on
+  <project>", "continue where we left off", or at the start of any multi-step build before a
+  specialist fires.
 license: UNLICENSED
 metadata:
   author: shear559
@@ -39,6 +40,7 @@ These never fight, because they live on different axes: *how much you investigat
 
 ## Defaults — on without being asked
 
+- **Read the project record first** — a named project with a record: read it in full, diff it against the repo, before the first edit. → `fabius-archivum`
 - **Talk lean** — drop articles, filler, hedging, pleasantries. Fragments fine. → `fabius-parcus`
 - **Build lean** — climb the YAGNI ladder, stop at the first rung that holds. → `fabius-parcus`
 - **Think before cutting code** — state assumptions, name the forks, don't guess silently. → `fabius-parcus`
@@ -75,6 +77,8 @@ chart · graph · diagram · visualize data     → fabius-decor       (the figu
   orchestration · multi-agent · evaluate
   an agent · agent benchmark · durability
 "remember this" · a growing knowledge base · → fabius-archivum
+  work on / resume a named project —
+    the record is read BEFORE the domain skill
   "stop re-deriving this" · meeting
   transcript/notes into a filed record ·
   watch a video / recording · ask a
@@ -104,18 +108,18 @@ stock · market · economy · valuation ·       → fabius-fortuna     (analysi
 
 **Verticals run a studio.** A domain that needs a mini-pipeline (a game, a launch, a security review) composes its layers behind one goal — the domain skill leads, process plans, the execution layers follow, lean runs underneath (R13). Don't collapse a vertical to a single layer.
 
-**Scout the unknown before you strike.** On an unfamiliar or large codebase, *map it first* — build or read the index/graph (→ `fabius-archivum`), then route. Scouting wide is a real step, not a figure of speech (R4 · R9).
+**Read the ground before you strike.** A named project with a record: read that record IN FULL and diff it against the repo *before the first edit* — the page loses to reality on facts, and that delta is what the sync writes back. An unfamiliar or large codebase: map it (index/graph). No record: offer setup once, never block. → `fabius-archivum` (R1 · R4 · R9).
 
 **Long-horizon work runs a loop with a gate.** A task that needs many autonomous cycles (a big migration, a sweep) runs `step → verify` on repeat with a **dual exit gate** — stop only when the completion condition *and* an explicit done-signal both hold; cap the cycles and escalate on a stuck loop, never spin (R12).
 
 ## The loop — Sense, Classify, Route, Strike, Prove, Compound
 
-1. **Sense** — read context; on unknown ground, map it (index/graph) before deciding. (`fabius-archivum`)
+1. **Sense** — a gate, not a courtesy: no edit until the project record is read (or its absence stated) and unknown ground is mapped. (`fabius-archivum`)
 2. **Classify** — name the load on each axis and the right model tier; ambiguous? grill one question at a time, never assume. (`fabius-disciplina`)
 3. **Route** — pick the layer(s), the machinery rung, the tier. Multi-step work gets `step → verify` lines. (`fabius-disciplina`)
 4. **Strike** — climb the ladder, change surgically, match the surrounding style. (`fabius-parcus`)
 5. **Prove** — run it, show the evidence. No "should work". (`fabius-disciplina`)
-6. **Compound** — with explicit write authority, file a verified durable lesson so the next task starts ahead; otherwise emit the proposal without mutating memory. A route that failed in a way the policy did not prevent goes in the lesson log only when that write is authorized. (`fabius-archivum` · `references/failures.md`)
+6. **Compound** — with explicit write authority, file a verified durable lesson so the next task starts ahead; otherwise emit the proposal without mutating memory. On a project route the same authority syncs that project's record — decisions, state, dates — and appends one attributed log line; unauthorized → hand back the diff, unwritten. A route that failed in a way the policy did not prevent goes in the lesson log only when that write is authorized. (`fabius-archivum` · `references/failures.md`)
 
 ## Where fabius loads
 
