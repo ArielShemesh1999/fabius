@@ -1,10 +1,10 @@
 # Release integrity
 
-Repository version: **2.7.0**. The version string alone does not establish release status; the canonical signed tag and GitHub Release do. A release tag does not by itself establish Bitcoin confirmation.
+Repository version: **2.7.1**. The version string alone does not establish release status; the canonical signed tag and GitHub Release do. A release tag does not by itself establish Bitcoin confirmation.
 
 ## Three gates
 
-- `bash scripts/verify-all.sh --mode=dev` permits a dirty worktree, but requires every version field to be the exact next patch after the newest signed release and replays every committed aggregate the historical receipts can support.
+- `bash scripts/verify-all.sh --mode=dev` permits a dirty worktree. It requires a coherent version matrix that never regresses below the newest signed release, a `HEAD` that descends from that release, and — when the version is already bumped — a version that does not name a tag that already shipped; sitting at the released version between releases is the normal state, not a defect. It replays every committed aggregate the historical receipts can support.
 - `bash scripts/verify-all.sh --mode=release` is verification after sealing. It requires a clean `HEAD` exactly at the newest `vX.Y.Z-sealed` tag, validates the pinned historical tag object and key digest, verifies every canonical release tag against that unchanged root, validates the detached OTS structure and record digest without an external client, and binds a coherent version matrix plus a single-parent anchor commit that modifies exactly `provenance/sealed-commit.txt` and `provenance/sealed-commit.txt.ots`.
 - `bash scripts/verify-all.sh --mode=proof-upgrade` is only for a later Bitcoin-confirmed replacement of the detached `.ots` bytes. Before commit it accepts exactly one staged `.ots` modification with no divergent worktree bytes; after commit it accepts one clean, untagged, direct proof-only child. It requires trusted Bitcoin verification and rejects pending, unavailable, forged, mismatched or unrelated changes.
 
